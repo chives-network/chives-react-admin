@@ -1,0 +1,11 @@
+
+$MAP['Batch_Approval field not permisstion'] 	= 'Batch_Approval field not permisstion';
+$MAP['Batch_Approval field not permisstion'] 	= 'Batch_Approval field not permisstion';
+$MAP['Modify the password of the selected record at one time to 123654'] 	= 'Modify the password of the selected record at one time to 123654';
+$MAP['Modify the password of the selected record at one time to 123654'] 	= 'Modify the password of the selected record at one time to 123654';
+$MAP['Modify the password of the selected record at one time to 123654'] 	= 'Modify the password of the selected record at one time to 123654';
+$MAP['Change Password Success'] 	= 'Change Password Success';
+$MAP['Change Password Success'] 	= 'Change Password Success';
+$MAP['Change Password Success'] 	= 'Change Password Success';
+$MAP['Change Password Success'] 	= 'Change Password Success';
+$MAP['Change Password Success'] 	= 'Change Password Success';
