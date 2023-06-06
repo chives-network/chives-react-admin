@@ -35,32 +35,32 @@ Chives React Admin is a fast development tool based on React and PHP that allows
 
 <table>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/01.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/02.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/01.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/02.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/03.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/04.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/03.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/04.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/05.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/06.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/05.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/06.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/07.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/08.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/07.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/08.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/09.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/10.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/09.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/10.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/11.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/12.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/11.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/12.png?raw=true"/></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/13.png?raw=true"/></td>
-        <td><img src="https://github.com/chives-network/icampus-student-affairs-manage/blob/main/public/images/chives-react-admin/14.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/13.png?raw=true"/></td>
+        <td><img src="https://github.com/chives-network/chives-react-admin/blob/main/public/images/chives-react-admin/14.png?raw=true"/></td>
     </tr>
 </table>
 
