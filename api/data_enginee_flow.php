@@ -340,12 +340,35 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
     if(function_exists($functionNameIndividual))  {
         $functionNameIndividual($id);
     }
-    if($IsExecutionSQL)   {
-        //SystemLogRecord
-        if(in_array($SettingMap['OperationLogGrade'],["EditAndDeleteOperation","AddEditAndDeleteOperation","AllOperation"]))  {
-            $sql            = "select * from $TableName where ".$MetaColumnNames[0]." = '$id'";
-            $RecordOriginal = $db->Execute($sql);                
+    //Check Permission For This Record
+    //LimitEditAndDelete
+    $sql            = "select * from $TableName where ".$MetaColumnNames[0]." = '$id'";
+    $RecordOriginal = $db->Execute($sql); 
+    if($SettingMap['LimitEditAndDelete_Edit_Field_One']!="" && $SettingMap['LimitEditAndDelete_Edit_Field_One']!="None" && in_array($SettingMap['LimitEditAndDelete_Edit_Field_One'], $MetaColumnNames)) {
+        $LimitEditAndDelete_Edit_Value_One_Array = explode(',',$SettingMap['LimitEditAndDelete_Edit_Value_One']);
+        if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Edit_Field_One']],$LimitEditAndDelete_Edit_Value_One_Array)) {
+            $RS = [];
+            $RS['status'] = "ERROR";
+            $RS['msg'] = __("Error Id Value");
+            $RS['_GET'] = $_GET;
+            $RS['_POST'] = $_POST;
+            print json_encode($RS);
+            exit;
         }
+    }
+    if($SettingMap['LimitEditAndDelete_Edit_Field_Two']!="" && $SettingMap['LimitEditAndDelete_Edit_Field_Two']!="None" && in_array($SettingMap['LimitEditAndDelete_Edit_Field_Two'], $MetaColumnNames)) {
+        $LimitEditAndDelete_Edit_Value_Two_Array = explode(',',$SettingMap['LimitEditAndDelete_Edit_Value_Two']);
+        if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Edit_Field_Two']],$LimitEditAndDelete_Edit_Value_Two_Array)) {
+            $RS = [];
+            $RS['status'] = "ERROR";
+            $RS['msg'] = __("Error Id Value");
+            $RS['_GET'] = $_GET;
+            $RS['_POST'] = $_POST;
+            print json_encode($RS);
+            exit;
+        }
+    }
+    if($IsExecutionSQL)   {
         [$Record,$sql]  = InsertOrUpdateTableByArray($TableName,$FieldsArray,'id',0,"Update");
         if($Record->EOF) {
             UpdateOtherTableFieldAfterFormSubmit($FieldsArray['id']);
@@ -611,10 +634,36 @@ if($_GET['action']=="delete_array")  {
     foreach($selectedRows as $id) {
         $id     = intval(DecryptID($id));
         if($id>0)  {            
+            //Check Permission For This Record
+            //LimitEditAndDelete
+            $sql            = "select * from $TableName where ".$MetaColumnNames[0]." = '$id'";
+            $RecordOriginal = $db->Execute($sql);
+            if($SettingMap['LimitEditAndDelete_Delete_Field_One']!="" && $SettingMap['LimitEditAndDelete_Delete_Field_One']!="None" && in_array($SettingMap['LimitEditAndDelete_Delete_Field_One'], $MetaColumnNames)) {
+                $LimitEditAndDelete_Delete_Value_One_Array = explode(',',$SettingMap['LimitEditAndDelete_Delete_Value_One']);
+                if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Delete_Field_One']],$LimitEditAndDelete_Delete_Value_One_Array)) {
+                    $RS = [];
+                    $RS['status'] = "ERROR";
+                    $RS['msg'] = __("Error Id Value");
+                    $RS['_GET'] = $_GET;
+                    $RS['_POST'] = $_POST;
+                    print json_encode($RS);
+                    exit;
+                }
+            }
+            if($SettingMap['LimitEditAndDelete_Delete_Field_Two']!="" && $SettingMap['LimitEditAndDelete_Delete_Field_Two']!="None" && in_array($SettingMap['LimitEditAndDelete_Delete_Field_Two'], $MetaColumnNames)) {
+                $LimitEditAndDelete_Delete_Value_Two_Array = explode(',',$SettingMap['LimitEditAndDelete_Delete_Value_Two']);
+                if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Delete_Field_Two']],$LimitEditAndDelete_Delete_Value_Two_Array)) {
+                    $RS = [];
+                    $RS['status'] = "ERROR";
+                    $RS['msg'] = __("Error Id Value");
+                    $RS['_GET'] = $_GET;
+                    $RS['_POST'] = $_POST;
+                    print json_encode($RS);
+                    exit;
+                }
+            }
             if(in_array($SettingMap['OperationLogGrade'],["DeleteOperation","EditAndDeleteOperation","AddEditAndDeleteOperation","AllOperation"]))  {
-                $sql    = "select * from $TableName where $primary_key = '$id'";
-                $rs     = $db->Execute($sql);
-                SystemLogRecord("delete_array", '', json_encode($rs->fields));
+                SystemLogRecord("delete_array", '', json_encode($RecordOriginal->fields));
             }
             $sql    = "delete from $TableName where $primary_key = '$id'";
             $db->Execute($sql);
@@ -1153,7 +1202,7 @@ $RS['init_default']['params']   = ['FormGroup' => '', 'role' => '', 'status' => 
 $RS['init_default']['sql']      = $sql;
 
 $RS['init_default']['rowdelete']    = [];
-$RS['init_default']['rowdelete'][]  = ["text"=>$SettingMap['Tip_Title_When_Delete'],"action"=>"delete_array","title"=>$SettingMap['Tip_Title_When_Delete'],"content"=>$SettingMap['Tip_Content_When_Delete'],"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>$SettingMap['Tip_Button_When_Delete'],"cancel"=>"Cancel"];
+$RS['init_default']['rowdelete'][]  = ["text"=>$SettingMap['Tip_Title_When_Delete'],"action"=>"delete_array","title"=>$SettingMap['Tip_Title_When_Delete'],"content"=>$SettingMap['Tip_Content_When_Delete'],"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>$SettingMap['Tip_Button_When_Delete'],"cancel"=>__("Cancel")];
 
 //MultiReview
 $multireview = [];
