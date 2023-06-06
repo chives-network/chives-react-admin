@@ -483,6 +483,12 @@ $MAP['Modify the password of the selected record at one time to 123654'] = 'Batc
 $MAP['Modify the password of the selected record to the last six digits of the ID number, if no ID number is set, the password is 123654'] = 'Batch modify the passwords of selected records to the last six digits of their ID numbers. If no ID number is set, the password is 123654';
 $MAP['Change Password Success']                 = 'Password change successful';
 $MAP['Copy Item'] 						        = 'Copy Item';
+$MAP['Unique_Fields']    						= 'Unique Fields';
+$MAP['Unique_Fields_1']    						= 'Unique Field 1';
+$MAP['Unique_Fields_2']    						= 'Unique Field 2';
+$MAP['Unique_Fields_3']    						= 'Unique Field 3';
+$MAP['If exist, show text in the user end']     = 'If exist, show text in the user end';
+$MAP['Unique_Fields_Repeat_Text']    			= 'Repeat Show Text If Exist';
 
 
 

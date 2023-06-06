@@ -14,7 +14,7 @@ if($USER_TYPE=="User")    {
     $RS         = returntablefield("data_user","USER_ID",$USER_ID,"USER_PRIV,USER_PRIV_OTHER");
     $USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
     $sql        = "select * from data_role where id in ('".join("','",$USER_PRIV_Array)."')";
-    $rsf        = $db->Execute($sql);
+    $rsf        = $db->CacheExecute(10,$sql);
     $RoleRSA    = $rsf->GetArray();
     $RoleArray  = "";
     foreach($RoleRSA as $Item)  {
@@ -25,12 +25,12 @@ if($USER_TYPE=="User")    {
 
     //Menu From Database
     $sql    = "select * from data_menuone order by SortNumber asc, MenuOneName asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(10,$sql);
     $MenuOneRSA  = $rsf->GetArray();
 
     //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
     $sql    = "select * from data_menutwo where FaceTo='AuthUser' and id in ('".join("','",$RoleArray)."') order by MenuOneName asc,SortNumber asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(10,$sql);
     $MenuTwoRSA  = $rsf->GetArray();
     $MenuTwoArray = [];
     foreach($MenuTwoRSA as $Item)  {
@@ -63,7 +63,7 @@ if($USER_TYPE=="User")    {
                         if($Menu_Three_Icon=="")   {
                             $Menu_Three_Icon = "account-outline";
                         }
-                        $Tab["apps_".$Line3['id']] = ['group'=>$Name, 'value'=>"apps_".$Line3['id'], 'label'=>$Line3['MenuThreeName'], 'icon'=>$Menu_Three_Icon, 'backEndApi'=>'apps/apps_'.$Line3['id'].'.php', 'action'=>'init_default','id'=>1 ];
+                        $Tab["apps_".$Line3['id']] = ['group'=>$Name, 'value'=>"apps_".$Line3['id'], 'label'=>$Line3['MenuThreeName'], 'icon'=>$Menu_Three_Icon, 'backEndApi'=>'apps/apps_'.$Line3['id'].'.php', 'action'=>'init_default', 'id'=>$Line3['id'], 'Loading'=>__("Loading") ];
                     }
                 }
             }
@@ -76,7 +76,7 @@ if($USER_TYPE=="User")    {
 if($USER_TYPE=="Student")    {
     //$USER_ID    = "admin";
     $sql        = "select * from data_role where name='学生' ";
-    $rsf        = $db->Execute($sql);
+    $rsf        = $db->CacheExecute(10,$sql);
     $RoleRSA    = $rsf->GetArray();
     $RoleArray  = "";
     foreach($RoleRSA as $Item)  {
@@ -87,13 +87,13 @@ if($USER_TYPE=="Student")    {
 
     //Menu From Database
     $sql    = "select * from data_menuone order by SortNumber asc, MenuOneName asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(10,$sql);
     $MenuOneRSA  = $rsf->GetArray();
 
     //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
     // and id in ('".join("','",$RoleArray)."')
     $sql    = "select * from data_menutwo where FaceTo='Student' order by MenuOneName asc,SortNumber asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(10,$sql);
     $MenuTwoRSA  = $rsf->GetArray();
     $MenuTwoArray = [];
     foreach($MenuTwoRSA as $Item)  {
@@ -126,7 +126,7 @@ if($USER_TYPE=="Student")    {
                         if($Menu_Three_Icon=="")   {
                             $Menu_Three_Icon = "account-outline";
                         }
-                        $Tab["apps_".$Line3['id']] = ['group'=>$Name, 'value'=>"apps_".$Line3['id'], 'label'=>$Line3['MenuThreeName'], 'icon'=>$Menu_Three_Icon, 'backEndApi'=>'apps/apps_'.$Line3['id'].'.php', 'action'=>'init_default','id'=>1 ];
+                        $Tab["apps_".$Line3['id']] = ['group'=>$Name, 'value'=>"apps_".$Line3['id'], 'label'=>$Line3['MenuThreeName'], 'icon'=>$Menu_Three_Icon, 'backEndApi'=>'apps/apps_'.$Line3['id'].'.php', 'action'=>'init_default', 'id'=>$Line3['id'], 'Loading'=>__("Loading")  ];
                     }
                 }
             }

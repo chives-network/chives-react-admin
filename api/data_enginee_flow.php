@@ -216,6 +216,33 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
         if(function_exists($functionNameIndividual))  {
             $functionNameIndividual();
         }
+        //Unique Fields
+        $SQL_Unique_Fields = ['1=1'];
+        if($SettingMap['Unique_Fields_1']!="" && $SettingMap['Unique_Fields_1']!="None" && in_array($SettingMap['Unique_Fields_1'],$MetaColumnNames) ) {
+            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_1']." = '".$FieldsArray[$SettingMap['Unique_Fields_1']]."' ";
+        }
+        if($SettingMap['Unique_Fields_2']!="" && $SettingMap['Unique_Fields_2']!="None" && in_array($SettingMap['Unique_Fields_2'],$MetaColumnNames) ) {
+            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_2']." = '".$FieldsArray[$SettingMap['Unique_Fields_2']]."' ";
+        }
+        if($SettingMap['Unique_Fields_3']!="" && $SettingMap['Unique_Fields_3']!="None" && in_array($SettingMap['Unique_Fields_3'],$MetaColumnNames) ) {
+            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_3']." = '".$FieldsArray[$SettingMap['Unique_Fields_3']]."' ";
+        }
+        if(sizeof($SQL_Unique_Fields)>1) {
+            $sql    = "select COUNT(*) AS NUM from $TableName where ".join(" and ", $SQL_Unique_Fields)."";
+            $rsTemp = $db->Execute($sql);
+            if($rsTemp->fields['NUM']>=1) {
+                $RS = [];
+                $RS['status'] = "ERROR";
+                $RS['msg'] = $SettingMap['Unique_Fields_Repeat_Text'];
+                $RS['sql'] = $sql;
+                $RS['_GET'] = $_GET;
+                $RS['_POST'] = $_POST;
+                print json_encode($RS);
+                exit;
+            }
+        }
+
+        //Execute Insert SQL
         $KEYS			= array_keys($FieldsArray);
         $VALUES			= array_values($FieldsArray);
         $sql	        = "insert into $TableName(`".join('`,`',$KEYS)."`) values('".join("','",$VALUES)."')";
@@ -678,10 +705,10 @@ if(in_array('View',$Actions_In_List_Row_Array)) {
     $columnsactions[]   = ['action'=>'view_default','text'=>__('View'),'mdi'=>'mdi:eye-outline'];
 }
 if(in_array('Edit',$Actions_In_List_Row_Array)) {
-    $columnsactions[]   = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pencil-outline'];
+    $columnsactions[]   = ['action'=>'edit_default','text'=>$SettingMap['Rename_List_Edit_Button'],'mdi'=>'mdi:pencil-outline'];
 }
 if(in_array('Delete',$Actions_In_List_Row_Array)) {
-    $columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>'Do you want to delete this item?'];
+    $columnsactions[]   = ['action'=>'delete_array','text'=>$SettingMap['Rename_List_Delete_Button'],'mdi'=>'mdi:delete-outline','double_check'=>'Do you want to delete this item?'];
 }
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 
@@ -1094,7 +1121,7 @@ for($i=0;$i<sizeof($init_default_columns);$i++)    {
 }
 
 $RS['init_default']['button_search']    = __("Search");
-$RS['init_default']['button_add']       = __("Add");
+$RS['init_default']['button_add']       = $SettingMap['Rename_List_Add_Button'];
 $RS['init_default']['columns']          = $init_default_columns;
 $RS['init_default']['columnsactions']   = $columnsactions;
 

@@ -666,6 +666,12 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                             $AddSqlTemp = " and 班级 in ('".join("','",$班级表额外过滤条件)."')";
                         }
                         break;
+                    case 'data_student_jiangxuejin':
+                        global $班级表额外过滤条件;
+                        if(in_array("申请开始时间", $MetaColumnNamesTemp) && in_array("申请结束时间", $MetaColumnNamesTemp)) {
+                            $AddSqlTemp = " and 申请结束时间 >= '".date('Y-m-d')."'  and 申请开始时间 <= '".date('Y-m-d')."' ";
+                        }
+                        break;
                 }
                 if($TableNameTemp=="form_formdict" && sizeof($CurrentFieldTypeArray)==7)   {
                     $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label,ExtraControl from $TableNameTemp where 1=1 and $WhereField = '".$WhereValue."' order by SortNumber asc, `".$MetaColumnNamesTemp[$ValueField]."` asc";
@@ -730,6 +736,9 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                 }
                 else {
                     break;
+                }
+                if($CurrentFieldTypeArray[4]=="CurrentTerm")   {
+                    $DefaultValue = returntablefield("data_xueqi","当前学期","是","学期名称")['学期名称'];
                 }
                 $rs = $db->CacheExecute(10, $sql) or print($sql);
                 $FieldType = $rs->GetArray();

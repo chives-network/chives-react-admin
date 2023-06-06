@@ -508,6 +508,12 @@ $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Field", 'show'=>true,
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_FilterValue", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_FilterValue"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("Advanced operation, please do not operate if you do not understand"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 
 
+$edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_2"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_3", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_3"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_Repeat_Text", 'show'=>true, 'type'=>"input", 'label' => __("Unique_Fields_Repeat_Text"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("If exist, show text in the user end"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+
+
 $defaultValues_2 = [];
 foreach($edit_default_2 as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
@@ -523,6 +529,7 @@ $edit_default_2_mode[] = ['value'=>"OperationAfterSubmit", 'label'=>__("Operatio
 $edit_default_2_mode[] = ['value'=>"Columns_Pinned", 'label'=>__("Columns_Pinned")];
 $edit_default_2_mode[] = ['value'=>"Page_Sort", 'label'=>__("Page_Sort")];
 $edit_default_2_mode[] = ['value'=>"Init_Action", 'label'=>__("Init_Action")];
+$edit_default_2_mode[] = ['value'=>"Unique_Fields", 'label'=>__("Unique_Fields")];
 
 if($_GET['action']=="edit_default_2"&&$id!='')         {    
     $sql    = "select * from form_formflow where id = '$id'";
@@ -533,6 +540,31 @@ if($_GET['action']=="edit_default_2"&&$id!='')         {
     $FlowName   = $rs->fields['FlowName'];
     if(is_array($SettingMap))   {
         $defaultValues_2_keys = array_keys($defaultValues_2);
+        foreach($SettingMap as $value => $label)  {
+            if(in_array($value, $defaultValues_2_keys))  {
+                if($value=="Menu_Three" && strpos($label,"班主任")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-search";
+                }
+                else if($value=="Menu_Three" && strpos($label,"系部")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-settings";
+                }
+                else if($value=="Menu_Three" && strpos($label,"教务")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-multiple-plus";
+                }
+                else if($value=="Menu_Three" && strpos($label,"学工")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-settings-variant";
+                }
+                else if($value=="Menu_Three" && strpos($label,"分管校长")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-box-outline";
+                }
+                else if($value=="Menu_Three" && strpos($label,"校长")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "account-box";
+                }
+                else if($value=="Menu_Three" && strpos($label,"所有")!==false) {
+                    $SettingMap['Menu_Three_Icon'] = "table";
+                }
+            }
+        }
         foreach($SettingMap as $value => $label)  {
             if(in_array($value, $defaultValues_2_keys))  {
                 $defaultValues_2[$value] = $label;

@@ -63,6 +63,7 @@ const TabHeader = ({ tab, allTabs }: { tab: string; allTabs: {[key:string]:any} 
   }, [tab])
 
   const TabGroupValue = allTabs[activeTab]['group']
+  const LoadingValue = allTabs[activeTab]['Loading']
 
   return (
     <Grid container spacing={6}>
@@ -99,7 +100,7 @@ const TabHeader = ({ tab, allTabs }: { tab: string; allTabs: {[key:string]:any} 
               {isLoading || (activeTab!=tab) ? (
                 <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                   <CircularProgress sx={{ mb: 4 }} />
-                  <Typography>Loading...</Typography>
+                  <Typography>{LoadingValue}</Typography>
                 </Box>
               ) : (
                 <TabPanel sx={{ p: 0 }} value={activeTab}>

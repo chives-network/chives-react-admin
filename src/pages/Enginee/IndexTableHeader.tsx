@@ -242,7 +242,7 @@ const IndexTableHeader = (props: TableHeaderProps) => {
       {selectedRows && selectedRows.length > 0 ?
         <Box sx={{ pl: 5, pb: 2, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid container spacing={2}>
-            {multireview && multireview.multireview.map((Item: any, index: number) => {
+            {multireview && multireview.multireview && multireview.multireview.map((Item: any, index: number) => {
               
               return (
                 <Grid item key={"Grid_" + index}>

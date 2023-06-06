@@ -7,6 +7,9 @@ require_once("vendor/autoload.php");
 if(is_file("language_".$GLOBAL_LANGUAGE.".php")) {
 	require_once("language_".$GLOBAL_LANGUAGE.".php");
 }
+elseif(is_file("../language_".$GLOBAL_LANGUAGE.".php")) {
+	require_once("../language_".$GLOBAL_LANGUAGE.".php");
+}
 else {
 	require_once("language_enUS.php");
 }
