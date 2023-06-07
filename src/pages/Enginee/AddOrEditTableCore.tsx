@@ -294,6 +294,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 else if (FieldArray.type == "email" && FieldArray.rules && FieldArray.rules.required) {
                     yupCheckMap[FieldArray.name] = yup.string().email().required()
                 }
+                else if ( (FieldArray.type == "textarea" || FieldArray.type == "autocomplete" || FieldArray.type == "tablefilter" || FieldArray.type == "tablefiltercolor") || FieldArray.type == "radiogroup" && FieldArray.rules && FieldArray.rules.required) {
+                    yupCheckMap[FieldArray.name] = yup.string().required()
+                }
                 else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules) {
                     let yupCheck = yup.string().trim()
                     FieldArray.rules.required ? yupCheck = yupCheck.required() : '';

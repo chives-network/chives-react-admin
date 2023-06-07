@@ -16,6 +16,15 @@ switch($Page_Role_Name)  {
         elseif(in_array('学生学号',$MetaColumnNames))  {
             $AdditionalPermissionsSQL .= " and 学生学号 = '".$USER_ID."' ";
         }
+        elseif(in_array('班级',$MetaColumnNames))  {
+            $AdditionalPermissionsSQL .= " and 班级 = '".ForSqlInjection($GLOBAL_USER->班级)."' ";
+        }
+        elseif(in_array('班级名称',$MetaColumnNames))  {
+            $AdditionalPermissionsSQL .= " and 班级名称 = '".ForSqlInjection($GLOBAL_USER->班级)."' ";
+        }
+        elseif(in_array('所属班级',$MetaColumnNames))  {
+            $AdditionalPermissionsSQL .= " and 所属班级 = '".ForSqlInjection($GLOBAL_USER->班级)."' ";
+        }
         $AddSql .= $AdditionalPermissionsSQL;
         break;
     case 'ClassMaster':
