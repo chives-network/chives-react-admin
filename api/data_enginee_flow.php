@@ -764,10 +764,19 @@ $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false
 
 $ApprovalNodeFieldsArray        = explode(',',$SettingMap['ApprovalNodeFields']);
 $ApprovalNodeFieldsArrayFlip    = array_flip($ApprovalNodeFieldsArray);
-$RS['init_default']['ApprovalNodeFields']['AllNodes']       = $ApprovalNodeFieldsArray;
-$RS['init_default']['ApprovalNodeFields']['CurrentNode']    = $SettingMap['ApprovalNodeCurrentField'];
-$RS['init_default']['ApprovalNodeFields']['ActiveStep']     = $ApprovalNodeFieldsArrayFlip[$SettingMap['ApprovalNodeCurrentField']];
-$RS['init_default']['ApprovalNodeFields']['ApprovalNodeTitle']  = $SettingMap['ApprovalNodeTitle'];
+if($SettingMap['ApprovalNodeTitle']!="")   {
+    $RS['init_default']['ApprovalNodeFields']['AllNodes']       = $ApprovalNodeFieldsArray;
+    $RS['init_default']['ApprovalNodeFields']['CurrentNode']    = $SettingMap['ApprovalNodeCurrentField'];
+    $RS['init_default']['ApprovalNodeFields']['ActiveStep']     = $ApprovalNodeFieldsArrayFlip[$SettingMap['ApprovalNodeCurrentField']];
+    $RS['init_default']['ApprovalNodeFields']['ApprovalNodeTitle']  = $SettingMap['ApprovalNodeTitle'];
+}
+else    {
+    $RS['init_default']['ApprovalNodeFields']['AllNodes']       = [];
+    $RS['init_default']['ApprovalNodeFields']['CurrentNode']    = "";
+    $RS['init_default']['ApprovalNodeFields']['ActiveStep']     = 0;
+    $RS['init_default']['ApprovalNodeFields']['ApprovalNodeTitle']  = "";
+}
+
 
 
 $ApprovalNodeFieldsArray = explode(',',$SettingMap['ApprovalNodeFields']);
@@ -1260,13 +1269,13 @@ $RS['edit_default']['allFields']        = $allFieldsEdit;
 $RS['edit_default']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
 $RS['edit_default']['defaultValues']    = $defaultValuesEdit;
 $RS['edit_default']['dialogContentHeight']  = "90%";
-$RS['edit_default']['submitaction']  = "add_default_data";
-$RS['edit_default']['componentsize'] = "small";
-$RS['edit_default']['submittext']    = $SettingMap['Rename_Edit_Submit_Button'];
-$RS['edit_default']['canceltext']    = __("Cancel");
-$RS['edit_default']['titletext']    = $SettingMap['Edit_Title_Name'];
-$RS['edit_default']['titlememo']    = $SettingMap['Edit_Subtitle_Name'];
-$RS['edit_default']['tablewidth']   = 650;
+$RS['edit_default']['submitaction']     = "add_default_data";
+$RS['edit_default']['componentsize']    = "small";
+$RS['edit_default']['submittext']       = $SettingMap['Rename_Edit_Submit_Button'];
+$RS['edit_default']['canceltext']       = __("Cancel");
+$RS['edit_default']['titletext']        = $SettingMap['Edit_Title_Name'];
+$RS['edit_default']['titlememo']        = $SettingMap['Edit_Subtitle_Name'];
+$RS['edit_default']['tablewidth']       = 650;
 $RS['edit_default']['submitloading']    = __("SubmitLoading");
 $RS['edit_default']['loading']          = __("Loading");
 
@@ -1279,18 +1288,18 @@ $RS['view_default']['componentsize'] = "small";
 $RS['export_default'] = [];
 $RS['import_default'] = [];
 
-$RS['init_default']['delete_dialog_title']  = $SettingMap['Tip_Title_When_Delete'];
-$RS['init_default']['delete_dialog_content']  = $SettingMap['Tip_Content_When_Delete'];
-$RS['init_default']['delete_dialog_button']  = $SettingMap['Tip_Button_When_Delete'];
+$RS['init_default']['delete_dialog_title']      = $SettingMap['Tip_Title_When_Delete'];
+$RS['init_default']['delete_dialog_content']    = $SettingMap['Tip_Content_When_Delete'];
+$RS['init_default']['delete_dialog_button']     = $SettingMap['Tip_Button_When_Delete'];
 
-$RS['init_default']['rowHeight']  = $rowHeight;
+$RS['init_default']['rowHeight']    = $rowHeight;
 $RS['init_default']['dialogContentHeight']  = "90%";
-$RS['init_default']['timeline']  = time();
-$RS['init_default']['pageNumber']  = $pageSize;
+$RS['init_default']['timeline']     = time();
+$RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-$RS['init_default']['sql']  = $sql_list;
-$RS['init_default']['ApprovalNodeFields']['DebugSql']  = $sql_list;
-$RS['init_default']['ApprovalNodeFields']['Memo']  = "";
+$RS['init_default']['sql']          = $sql_list;
+$RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
+$RS['init_default']['ApprovalNodeFields']['Memo']       = "";
 
 
 if(sizeof($MetaColumnNames)>=5) {

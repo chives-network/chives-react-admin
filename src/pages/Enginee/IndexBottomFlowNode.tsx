@@ -30,32 +30,37 @@ const IndexBottomFlowNode = (props: IndexBottomFlowNodeType) => {
     
     return (
         <Fragment>
-            <Card>
-                <CardHeader title={ApprovalNodeTitle} />    
-                <CardContent>
-                    <StepperWrapper>
-                    <Stepper activeStep={ActiveStep}>
-                        {ApprovalNodeFields.map((node, index) => {
-                        const labelProps: {
-                            error?: boolean
-                        } = {}
-                        
-                        return (
-                            <Step key={index}>
-                            <StepLabel {...labelProps} StepIconComponent={IndexBottomFlowNodeDot}>
-                                <div className='step-label'>
-                                <Typography className='step-number'>{`0${index + 1}`}</Typography>
-                                <div>
-                                    <Typography className='step-title'>{node}</Typography>
-                                </div>
-                                </div>
-                            </StepLabel>
-                            </Step>
-                        )
-                        })}
-                    </Stepper>
-                    </StepperWrapper>
-                </CardContent>
+            <Card> 
+                { ApprovalNodeFields && ApprovalNodeTitle ? 
+                    <Fragment>
+                        <CardHeader title={ApprovalNodeTitle} />  
+                        <CardContent>
+                            <StepperWrapper>
+                            <Stepper activeStep={ActiveStep}>
+                                {ApprovalNodeFields.map((node, index) => {
+                                const labelProps: {
+                                    error?: boolean
+                                } = {}
+                                
+                                return (
+                                    <Step key={index}>
+                                    <StepLabel {...labelProps} StepIconComponent={IndexBottomFlowNodeDot}>
+                                        <div className='step-label'>
+                                        <Typography className='step-number'>{`0${index + 1}`}</Typography>
+                                        <div>
+                                            <Typography className='step-title'>{node}</Typography>
+                                        </div>
+                                        </div>
+                                    </StepLabel>
+                                    </Step>
+                                )
+                                })}
+                            </Stepper>
+                            </StepperWrapper>
+                        </CardContent>
+                    </Fragment>
+                    : '' 
+                }
                 { DebugSql ?
                         <CardContent>
                             <Typography >{DebugSql}</Typography>

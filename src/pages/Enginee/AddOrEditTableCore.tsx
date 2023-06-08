@@ -47,8 +47,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
 
 //import { fr } from 'yup-locales';
-//import { setLocale } from 'yup';
-//setLocale(fr);
+import { setLocale } from 'yup';
+import AddOrEditTableLanguage from 'src/types/forms/AddOrEditTableLanguage';
+
 
 import axios from 'axios'
 
@@ -99,11 +100,17 @@ interface AddOrEditTableType {
     IsGetStructureFromEditDefault: number
     AddtionalParams: {[key:string]:any}
     CSRF_TOKEN: string
+    dataGridLanguageCode: string
 }
 
 const AddOrEditTableCore = (props: AddOrEditTableType) => {
     // ** Props
-    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN } = props
+    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode } = props
+
+    //Yup Language
+    if(dataGridLanguageCode=="zhCN") {
+        setLocale(AddOrEditTableLanguage);
+    }
     
     // ** Hooks
     //const dispatch = useDispatch<AppDispatch>()
@@ -294,10 +301,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 else if (FieldArray.type == "email" && FieldArray.rules && FieldArray.rules.required) {
                     yupCheckMap[FieldArray.name] = yup.string().email().required()
                 }
-                else if ( (FieldArray.type == "textarea" || FieldArray.type == "autocomplete" || FieldArray.type == "tablefilter" || FieldArray.type == "tablefiltercolor") || FieldArray.type == "radiogroup" && FieldArray.rules && FieldArray.rules.required) {
+                else if ( (FieldArray.type == "textarea" || FieldArray.type == "autocomplete" || FieldArray.type == "tablefilter" || FieldArray.type == "tablefiltercolor" || FieldArray.type == "radiogroup") && FieldArray.rules && FieldArray.rules.required) {
                     yupCheckMap[FieldArray.name] = yup.string().required()
                 }
-                else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules) {
+                else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules && FieldArray.rules.required) {
                     let yupCheck = yup.string().trim()
                     FieldArray.rules.required ? yupCheck = yupCheck.required() : '';
                     
