@@ -761,6 +761,15 @@ if(in_array('Delete',$Actions_In_List_Row_Array)) {
 }
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 
+
+$ApprovalNodeFieldsArray        = explode(',',$SettingMap['ApprovalNodeFields']);
+$ApprovalNodeFieldsArrayFlip    = array_flip($ApprovalNodeFieldsArray);
+$RS['init_default']['ApprovalNodeFields']['AllNodes']       = $ApprovalNodeFieldsArray;
+$RS['init_default']['ApprovalNodeFields']['CurrentNode']    = $SettingMap['ApprovalNodeCurrentField'];
+$RS['init_default']['ApprovalNodeFields']['ActiveStep']     = $ApprovalNodeFieldsArrayFlip[$SettingMap['ApprovalNodeCurrentField']];
+$RS['init_default']['ApprovalNodeFields']['ApprovalNodeTitle']  = $SettingMap['ApprovalNodeTitle'];
+
+
 $ApprovalNodeFieldsArray = explode(',',$SettingMap['ApprovalNodeFields']);
 $ApprovalNodeFieldsHidden = [];
 $ApprovalNodeFieldsStatus = [];
@@ -1280,6 +1289,9 @@ $RS['init_default']['timeline']  = time();
 $RS['init_default']['pageNumber']  = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
 $RS['init_default']['sql']  = $sql_list;
+$RS['init_default']['ApprovalNodeFields']['DebugSql']  = $sql_list;
+$RS['init_default']['ApprovalNodeFields']['Memo']  = "";
+
 
 if(sizeof($MetaColumnNames)>=5) {
     $pinnedColumnsLeft = [];

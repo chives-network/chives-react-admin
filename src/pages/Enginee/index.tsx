@@ -46,6 +46,7 @@ import toast from 'react-hot-toast'
 import IndexTableHeader from 'src/pages/Enginee/IndexTableHeader'
 import AddOrEditTable from './AddOrEditTable'
 import ViewTable from './ViewTable'
+import IndexBottomFlowNode from './IndexBottomFlowNode'
 import { RootState, AppDispatch } from 'src/store/index'
 
 export type InvoiceLayoutProps = {
@@ -527,9 +528,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
     }
   })
   
-  //console.log("columns_for_datagrid",columns_for_datagrid)
-
-  console.log("addEditActionId-addEditActionId-addEditActionId",addEditActionId, addEditActionName)
+  //console.log("store.init_default.ApprovalNodeFields",store.init_default.ApprovalNodeFields)
+  //console.log("addEditActionId-addEditActionId-addEditActionId",addEditActionId, addEditActionName)
   
   return (
     <Grid container spacing={6}>
@@ -633,6 +633,14 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
             localeText={dataGridLanguageText['localeText']}
           />
         </Card>
+        {store.init_default.ApprovalNodeFields && store.init_default.ApprovalNodeFields.AllNodes && store.init_default.ApprovalNodeFields.CurrentNode && store.init_default.ApprovalNodeFields.ActiveStep && store.init_default.ApprovalNodeFields.ApprovalNodeTitle ? 
+          (
+          <Grid item xs={12} sx={{mt: 2}}>
+            <IndexBottomFlowNode ApprovalNodeFields={store.init_default.ApprovalNodeFields.AllNodes} ApprovalNodeCurrentField={store.init_default.ApprovalNodeFields.CurrentNode} ActiveStep={store.init_default.ApprovalNodeFields.ActiveStep} ApprovalNodeTitle={store.init_default.ApprovalNodeFields.ApprovalNodeTitle} DebugSql={store.init_default.ApprovalNodeFields.DebugSql} Memo={store.init_default.ApprovalNodeFields.Memo} />
+          </Grid>
+          )
+          : '' 
+        }
       </Grid>
       : '' }
       {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} /> : ''}

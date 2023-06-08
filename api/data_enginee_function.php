@@ -1196,7 +1196,13 @@ function UpdateOtherTableFieldAfterFormSubmit($id)  {
             )  {
                 $MetaColumnNamesTemp    = GLOBAL_MetaColumnNames($OperationAfterSubmit_Need_Update_Table_Name); 
                 if($OperationAfterSubmit_SameField_Other_Table!="" && in_array($OperationAfterSubmit_SameField_Other_Table,$MetaColumnNamesTemp))    {
+                    $sql    = "select * from $TableName where ".$MetaColumnNames[0]." = '$id'";
+                    $rs     = $db->Execute($sql);
+                    $Line   = $rs->fields;
                     $OperationAfterSubmit_Need_Update_Table_Field_Value = ParamsFilter($OperationAfterSubmit_Need_Update_Table_Field_Value);
+                    foreach($Line as $TempField=>$TempValue)  {
+                        $OperationAfterSubmit_Need_Update_Table_Field_Value = str_replace("[$TempField]",$TempValue,$OperationAfterSubmit_Need_Update_Table_Field_Value);
+                    }
                     $sql = "update `".$OperationAfterSubmit_Need_Update_Table_Name."` set `".$OperationAfterSubmit_Need_Update_Table_Field_Name."`='".$OperationAfterSubmit_Need_Update_Table_Field_Value."' where `".$OperationAfterSubmit_SameField_Other_Table."` = '".$CompareValueArray[$OperationAfterSubmit_SameField_This_Table]."' ";
                     if($OperationAfterSubmit_Update_Mode=="Update One Record")   {
                         $sql .= "limit 1";

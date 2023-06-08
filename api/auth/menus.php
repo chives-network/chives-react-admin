@@ -166,6 +166,11 @@ if($USER_TYPE=="Student")    {
             foreach($MenuTwoItemArray as $Name=>$Line)    {
                 $allpath = $TabMapCounter[$MenuOneName][$MenuTwoName];
                 if($TabMap[$MenuOneName][$Name]=="Tab")  {
+                    $allpathItems = $TabMapCounter[$MenuOneName][$Line[0]['MenuTwoName']];
+                    $allpath = [];
+                    foreach($allpathItems as $TempItem) {
+                        $allpath[] = '/tab/apps_'.$TempItem['id'];
+                    }
                     $Menu['children'][] = ['title' => $Name, 'path' => '/tab/apps_'.$Line[0]['id'] ,'allpath' =>$allpath ];
                 }
                 else if(strpos($Name,"SystemMenuTwo_")===0)  {

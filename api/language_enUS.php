@@ -489,6 +489,10 @@ $MAP['Unique_Fields_2']    						= 'Unique Field 2';
 $MAP['Unique_Fields_3']    						= 'Unique Field 3';
 $MAP['If exist, show text in the user end']     = 'If exist, show text in the user end';
 $MAP['Unique_Fields_Repeat_Text']    			= 'Repeat Show Text If Exist';
+$MAP['Approval Node Current Field']    			= 'Approval Node Current Field';
+$MAP['Approval Node Title']    					= 'Approval Node Title';
+$MAP['Memo']    							    = 'Memo';
+$MAP['DebugSql']    							= 'DebugSql';
 
 
 

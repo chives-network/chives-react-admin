@@ -114,10 +114,13 @@ const ViewTableCore = (props: ViewTableType) => {
                         //开始根据表单中每个字段的类型,进行不同的渲染,此部分比较复杂,注意代码改动.
                         if (FieldArray.type == "input"
                           || FieldArray.type == "email"
+                          || FieldArray.type == "number"
                           || FieldArray.type == "date"
+                          || FieldArray.type == "month"
                           || FieldArray.type == "time"
                           || FieldArray.type == "datetime"
                           || FieldArray.type == "slider"
+                          || FieldArray.type == "readonly"
                           || FieldArray.type == "autoincrement"
                           || FieldArray.type == "autoincrementdate"
                         ) {
@@ -127,7 +130,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -139,7 +142,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -148,7 +151,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -157,7 +160,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -166,7 +169,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -175,7 +178,7 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )
@@ -184,7 +187,29 @@ const ViewTableCore = (props: ViewTableType) => {
                           
                           return (
                             <TableRow key={FieldArray_index}>
-                              <MUITableCell>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
+                            </TableRow>
+                          )
+                        }    
+                        else if (FieldArray.type == "tablefiltercolor" ||
+                                FieldArray.type == "tablefilter" ||
+                                FieldArray.type == "radiogroup" ||
+                                FieldArray.type == "radiogroupcolor"
+                                ) {
+                          
+                          return (
+                            <TableRow key={FieldArray_index}>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
+                            </TableRow>
+                          )
+                        }                      
+                        else {
+                          
+                          return (
+                            <TableRow key={FieldArray_index}>
+                              <MUITableCell>{FieldArray.label}: {FieldArray.type} </MUITableCell>
                               <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
                             </TableRow>
                           )

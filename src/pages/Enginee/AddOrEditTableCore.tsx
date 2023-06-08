@@ -594,7 +594,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                         {allFieldsMode && allFieldsMode.map((allFieldsModeItem: any, allFieldsModeIndex: number) => {
                             
                             return (
-                                <Card key={"AllFieldsMode_" + allFieldsModeIndex}>
+                                <Card key={"AllFieldsMode_" + allFieldsModeIndex} sx={{ mb: 2 }}>
                                     {allFieldsModeItem.label ? <CardHeader title={allFieldsModeItem.label} /> : ''}
                                     <CardContent>
                                         <Grid container spacing={5}>
