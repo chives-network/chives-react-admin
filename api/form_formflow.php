@@ -459,6 +459,8 @@ $OperationLogGrade[] = ['value'=>"AddEditAndDeleteOperation", 'label'=>__("AddEd
 $OperationLogGrade[] = ['value'=>"AllOperation", 'label'=>__("AllOperation")];
 $edit_default_2['OperationAfterSubmit'][] = ['name' => "OperationLogGrade", 'show'=>true, 'type'=>'select', 'options'=>$OperationLogGrade, 'label' => __("OperationLogGrade"), 'value' => $OperationLogGrade[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
+$edit_default_2['OperationAfterSubmit'][] = ['name' => "AddPageSplitMultiRecords", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Add_Page_Split_Multi_Records"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+
 
 $Default_Order_Method_By_Desc = [];
 $Default_Order_Method_By_Desc[] = ['value'=>"Desc", 'label'=>__("Desc")];
@@ -1096,7 +1098,7 @@ if($_GET['action']=="delete_array")  {
 $AddSql = " where 1=1 and FormId='$externalId'";
 
 $columnsactions = [];
-$columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>'Do you want to delete this item?'];
+$columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 //$columnName = "ShortName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
@@ -1190,7 +1192,7 @@ $RS['init_default']['ApprovalNodeFields']['Memo']       = "";
 
 
 $RS['init_default']['rowdelete'] = [];
-$RS['init_default']['rowdelete'][] = ["text"=>"Delete Item","action"=>"delete_array","title"=>"Delete Item","content"=>"Do you really want to delete this item?\n This operation will delete table and data in Database.","memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>"Confirm Delete","cancel"=>"Cancel"];
+$RS['init_default']['rowdelete'][] = ["text"=>__("Delete Item"),"action"=>"delete_array","title"=>__("Delete Item"),"content"=>__("Do you really want to delete this item? This operation will delete table and data in Database."),"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>__("Confirm Delete"),"cancel"=>__("Cancel")];
 
 
 $RS['add_default']['allFields']     = $allFieldsAdd;

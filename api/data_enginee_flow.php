@@ -216,37 +216,53 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
         if(function_exists($functionNameIndividual))  {
             $functionNameIndividual();
         }
-        //Unique Fields
-        $SQL_Unique_Fields = ['1=1'];
-        if($SettingMap['Unique_Fields_1']!="" && $SettingMap['Unique_Fields_1']!="None" && in_array($SettingMap['Unique_Fields_1'],$MetaColumnNames) ) {
-            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_1']." = '".$FieldsArray[$SettingMap['Unique_Fields_1']]."' ";
-        }
-        if($SettingMap['Unique_Fields_2']!="" && $SettingMap['Unique_Fields_2']!="None" && in_array($SettingMap['Unique_Fields_2'],$MetaColumnNames) ) {
-            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_2']." = '".$FieldsArray[$SettingMap['Unique_Fields_2']]."' ";
-        }
-        if($SettingMap['Unique_Fields_3']!="" && $SettingMap['Unique_Fields_3']!="None" && in_array($SettingMap['Unique_Fields_3'],$MetaColumnNames) ) {
-            $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_3']." = '".$FieldsArray[$SettingMap['Unique_Fields_3']]."' ";
-        }
-        if(sizeof($SQL_Unique_Fields)>1) {
-            $sql    = "select COUNT(*) AS NUM from $TableName where ".join(" and ", $SQL_Unique_Fields)."";
-            $rsTemp = $db->Execute($sql);
-            if($rsTemp->fields['NUM']>=1) {
-                $RS = [];
-                $RS['status'] = "ERROR";
-                $RS['msg'] = $SettingMap['Unique_Fields_Repeat_Text'];
-                $RS['sql'] = $sql;
-                $RS['_GET'] = $_GET;
-                $RS['_POST'] = $_POST;
-                print json_encode($RS);
-                exit;
-            }
-        }
 
-        //Execute Insert SQL
-        $KEYS			= array_keys($FieldsArray);
-        $VALUES			= array_values($FieldsArray);
-        $sql	        = "insert into $TableName(`".join('`,`',$KEYS)."`) values('".join("','",$VALUES)."')";
-        $rs             = $db->Execute($sql);
+        //Split Multi Records
+        $Add_Page_Split_Multi_Records_Value_Array = [];
+        $Add_Page_Split_Multi_Records = $SettingMap['AddPageSplitMultiRecords'];
+        if($Add_Page_Split_Multi_Records!="" && $Add_Page_Split_Multi_Records!="None" && in_array($Add_Page_Split_Multi_Records,$MetaColumnNames) )      {
+            $Add_Page_Split_Multi_Records_Value_Array = explode(',', $FieldsArray[$Add_Page_Split_Multi_Records]);
+        }
+        else {
+            //Default a Value for Not Need To Split
+            $Add_Page_Split_Multi_Records = "id";
+            $Add_Page_Split_Multi_Records_Value_Array = [NULL];
+        }
+        //Begin to Split Multi Records
+        foreach($Add_Page_Split_Multi_Records_Value_Array as $Add_Page_Split_Multi_Records_Value)    {
+            $FieldsArray[$Add_Page_Split_Multi_Records] = $Add_Page_Split_Multi_Records_Value;
+            //Unique Fields
+            $SQL_Unique_Fields = ['1=1'];
+            if($SettingMap['Unique_Fields_1']!="" && $SettingMap['Unique_Fields_1']!="None" && in_array($SettingMap['Unique_Fields_1'],$MetaColumnNames) ) {
+                $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_1']." = '".$FieldsArray[$SettingMap['Unique_Fields_1']]."' ";
+            }
+            if($SettingMap['Unique_Fields_2']!="" && $SettingMap['Unique_Fields_2']!="None" && in_array($SettingMap['Unique_Fields_2'],$MetaColumnNames) ) {
+                $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_2']." = '".$FieldsArray[$SettingMap['Unique_Fields_2']]."' ";
+            }
+            if($SettingMap['Unique_Fields_3']!="" && $SettingMap['Unique_Fields_3']!="None" && in_array($SettingMap['Unique_Fields_3'],$MetaColumnNames) ) {
+                $SQL_Unique_Fields[] = $SettingMap['Unique_Fields_3']." = '".$FieldsArray[$SettingMap['Unique_Fields_3']]."' ";
+            }
+            if(sizeof($SQL_Unique_Fields)>1) {
+                $sql    = "select COUNT(*) AS NUM from $TableName where ".join(" and ", $SQL_Unique_Fields)."";
+                $rsTemp = $db->Execute($sql);
+                if($rsTemp->fields['NUM']>=1) {
+                    $RS = [];
+                    $RS['status'] = "ERROR";
+                    $RS['msg'] = $SettingMap['Unique_Fields_Repeat_Text'];
+                    $RS['sql'] = $sql;
+                    $RS['_GET'] = $_GET;
+                    $RS['_POST'] = $_POST;
+                    print json_encode($RS);
+                    exit;
+                }
+            }
+
+            //Execute Insert SQL
+            $KEYS			= array_keys($FieldsArray);
+            $VALUES			= array_values($FieldsArray);
+            $sql	        = "insert into $TableName(`".join('`,`',$KEYS)."`) values('".join("','",$VALUES)."')";
+            $rs             = $db->Execute($sql);
+        }
         if($rs->EOF) {
             $NewId = $db->Insert_ID();
             UpdateOtherTableFieldAfterFormSubmit($NewId);
@@ -757,7 +773,7 @@ if(in_array('Edit',$Actions_In_List_Row_Array)) {
     $columnsactions[]   = ['action'=>'edit_default','text'=>$SettingMap['Rename_List_Edit_Button'],'mdi'=>'mdi:pencil-outline'];
 }
 if(in_array('Delete',$Actions_In_List_Row_Array)) {
-    $columnsactions[]   = ['action'=>'delete_array','text'=>$SettingMap['Rename_List_Delete_Button'],'mdi'=>'mdi:delete-outline','double_check'=>'Do you want to delete this item?'];
+    $columnsactions[]   = ['action'=>'delete_array','text'=>$SettingMap['Rename_List_Delete_Button'],'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
 }
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 
@@ -1244,7 +1260,7 @@ if(in_array('Reset_Password_123654',$Bottom_Button_Actions_Array))   {
 if(in_array('Reset_Password_ID_Last6',$Bottom_Button_Actions_Array))   {
     $multireview['multireview'][] = ["text"=>__("Reset_Password_ID_Last6"),"action"=>"Reset_Password_ID_Last6","title"=>__("Modify user passwords in batches"),"content"=>__("Modify the password of the selected record to the last six digits of the ID number, if no ID number is set, the password is 123654"),"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>__("Submit"),"cancel"=>__("Cancel")];
 }
-//$multireview['multireview'][] = ["text"=>"Multi Change Status","action"=>"option_multi_change_status","title"=>"option_multi_change_status Item","content"=>"Do you really to delete this item?Do you really to delete this item?","memoname"=>"审核意见3","inputmust"=>false,"inputmusttip"=>"","submit"=>"Submit","cancel"=>"Cancel"];
+//$multireview['multireview'][] = ["text"=>"Multi Change Status","action"=>"option_multi_change_status","title"=>"option_multi_change_status Item","content"=>"Do you really to delete this item?Do you really to delete this item?","memoname"=>"审核意见3","inputmust"=>false,"inputmusttip"=>"","submit"=>"Submit","cancel"=>__("Cancel")];
 $RS['init_default']['multireview'] = $multireview;
 $RS['init_default']['checkboxSelection']  = is_array($multireview['multireview']) && count($multireview['multireview'])>0 ? true : false;
 

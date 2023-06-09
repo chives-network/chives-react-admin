@@ -78,6 +78,25 @@ if( $_GET['action']=="add_default_data" || $_GET['action']=="edit_default_data")
                 break;
             case 'HiddenStudentID':
                 $_POST[$Item['FieldName']] = $GLOBAL_USER->USER_ID;
+                if($_GET['action']=="add_default_data")  {
+                    $sql     = "select * from data_student where 学号 = '".ForSqlInjection($GLOBAL_USER->USER_ID)."'";
+                    $rsf     = $db->Execute($sql);
+                    $_POST['姓名']      = $rsf->fields['姓名'];
+                    $_POST['学号']      = $rsf->fields['学号'];
+                    $_POST['系部']      = $rsf->fields['系部'];
+                    $_POST['专业']      = $rsf->fields['专业'];
+                    $_POST['班级']      = $rsf->fields['班级'];
+                    $_POST['身份证号']  = $rsf->fields['身份证号'];
+                    $_POST['出生日期']  = $rsf->fields['出生日期'];
+                    $_POST['性别']      = $rsf->fields['性别'];
+                    $_POST['座号']      = $rsf->fields['座号'];
+                    $_POST['学生宿舍']  = $rsf->fields['学生宿舍'];
+                    $_POST['床位号']    = $rsf->fields['床位号'];
+                    $_POST['学生状态']  = $rsf->fields['学生状态'];
+                    $_POST['学生手机']  = $rsf->fields['学生手机'];
+                }
+                //print $sql;
+                //print_R($rsf->fields);
                 break;
             case 'HiddenStudentName':
                 $_POST[$Item['FieldName']] = $GLOBAL_USER->USER_NAME;

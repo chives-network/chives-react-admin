@@ -538,7 +538,19 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                 if($actionType=="ADD") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = $GLOBAL_USER->DEPT_ID;
                 break;
             case 'CurrentWeek':
+                $CurrentWeek = date("w");
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = date("w");
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>'readonly', 'label' => $ShowTextName, 'value' => $CurrentWeek, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => true,'min'=>$Min,'max'=>$Max]];
+                break;
+            case 'CurrentWeekEndDays':
+                $TodayWeek = date('w');
+                $today  = date('Y-m-d');
+                $Day6   = date('Y-m-d', strtotime($today . ' +'.(6-$TodayWeek).' day'));
+                $Day5   = date('Y-m-d', strtotime($today . ' +'.(5-$TodayWeek).' day'));
+                $CurrentWeekEndDays = [];
+                $CurrentWeekEndDays[] = ['value'=>strval($Day6), 'label'=>strval($Day6)];
+                $CurrentWeekEndDays[] = ['value'=>strval($Day5), 'label'=>strval($Day5)];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>'checkbox', 'options'=>$CurrentWeekEndDays, 'label' => $ShowTextName, 'value' => $Day5.",".$Day6, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false, 'min'=>$Min, 'max'=>$Max]];
                 break;
             case 'CurrentUnitName':
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = $GLOBAL_USER->UNIT_NAME;
@@ -667,6 +679,18 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                         }
                         break;
                     case 'data_student_jiangxuejin':
+                        global $班级表额外过滤条件;
+                        if(in_array("申请开始时间", $MetaColumnNamesTemp) && in_array("申请结束时间", $MetaColumnNamesTemp)) {
+                            $AddSqlTemp = " and 申请结束时间 >= '".date('Y-m-d')."'  and 申请开始时间 <= '".date('Y-m-d')."' ";
+                        }
+                        break;
+                    case 'data_student_zhuxuejin':
+                        global $班级表额外过滤条件;
+                        if(in_array("申请开始时间", $MetaColumnNamesTemp) && in_array("申请结束时间", $MetaColumnNamesTemp)) {
+                            $AddSqlTemp = " and 申请结束时间 >= '".date('Y-m-d')."'  and 申请开始时间 <= '".date('Y-m-d')."' ";
+                        }
+                        break;
+                    case 'data_student_qingongjianxue':
                         global $班级表额外过滤条件;
                         if(in_array("申请开始时间", $MetaColumnNamesTemp) && in_array("申请结束时间", $MetaColumnNamesTemp)) {
                             $AddSqlTemp = " and 申请结束时间 >= '".date('Y-m-d')."'  and 申请开始时间 <= '".date('Y-m-d')."' ";

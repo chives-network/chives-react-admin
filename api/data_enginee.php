@@ -369,7 +369,7 @@ $init_default_columns = [];
 $columnsactions     = [];
 $columnsactions[]   = ['action'=>'view_default','text'=>__('View'),'mdi'=>'mdi:eye-outline'];
 $columnsactions[]   = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pencil-outline'];
-$columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>'Do you want to delete this item?'];
+$columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 
 $searchField = [];
@@ -564,7 +564,7 @@ $RS['init_default']['ApprovalNodeFields']['Memo']       = "";
 
 
 $RS['init_default']['rowdelete'] = [];
-$RS['init_default']['rowdelete'][] = ["text"=>"Delete Item","action"=>"delete_array","title"=>"Delete Item","content"=>"Do you really want to delete this item?\n This operation will delete table and data in Database.","memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>"Confirm Delete","cancel"=>"Cancel"];
+$RS['init_default']['rowdelete'][] = ["text"=>__("Delete Item"),"action"=>"delete_array","title"=>__("Delete Item"),"content"=>__("Do you really want to delete this item? This operation will delete table and data in Database."),"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>__("Confirm Delete"),"cancel"=>__("Cancel")];
 
 
 $RS['add_default']['allFields']     = $allFieldsAdd;

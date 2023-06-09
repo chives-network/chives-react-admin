@@ -493,6 +493,8 @@ $MAP['Approval Node Current Field']    			= 'Approval Node Current Field';
 $MAP['Approval Node Title']    					= 'Approval Node Title';
 $MAP['Memo']    							    = 'Memo';
 $MAP['DebugSql']    							= 'DebugSql';
+$MAP['Add_Page_Split_Multi_Records']            = 'Add Page Split Multi Records';
+$MAP['Do you want to delete this item?']    	= 'Do you want to delete this item?';
 
 
 
