@@ -1,0 +1,21 @@
+
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';
+$MAP['Init_Action_Memo'] 	= 'Init_Action_Memo';

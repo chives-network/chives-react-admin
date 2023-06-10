@@ -1315,7 +1315,7 @@ $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
 $RS['init_default']['sql']          = $sql_list;
 $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
-$RS['init_default']['ApprovalNodeFields']['Memo']       = "";
+$RS['init_default']['ApprovalNodeFields']['Memo']       = $SettingMap['Init_Action_Memo'];
 
 
 if(sizeof($MetaColumnNames)>=5) {

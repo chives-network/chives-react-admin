@@ -1055,16 +1055,28 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     )
                                                 } 
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "autocomplete") {
+                                                    if(FieldArray.name!=FieldArray.code) {
+                                                        if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
+                                                            FieldArray.options.map((ItemValue: any) => {
+                                                                if(ItemValue.value==defaultValuesNew[FieldArray.code]) {
+                                                                    setValue(FieldArray.name, ItemValue.label)
+                                                                }
+                                                            })
+                                                        }
+                                                        if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]!=undefined)  {
+                                                            setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                        }
+                                                    }
+
+                                                    if(defaultValuesNew[FieldArray.code]==undefined)  {
+                                                        setValue(FieldArray.code, "")
+                                                    }
+                                                    else {                                                        
+                                                        setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
+                                                    }
+                                                    console.log("defaultValuesNew",defaultValuesNew)
                                                     
-                                                    //console.log("defaultValuesNew[FieldArray.name]***************autocomplete", FieldArray)
-                                                    //if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {                                                        
-                                                        //console.log("defaultValuesNew[FieldArray.name]--------------------------------", defaultValuesNew[FieldArray.name])
-                                                        //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
-                                                    //}
-                                                    setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
-                                                    setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
-                                                    
-                                                    //console.log("defaultValuesNew[FieldArray.name]", defaultValuesNew[FieldArray.name])
+
                                                     const options = FieldArray.options
                                                     
                                                     return (
@@ -1079,13 +1091,21 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             value={value}
                                                                             options={options}
                                                                             freeSolo={FieldArray.freeSolo}
+                                                                            id="controllable-states-demo"
+                                                                            isOptionEqualToValue={(option:any, value) => { return option.value === value; }}
+                                                                            renderInput={(params) => <TextField {...params} label={FieldArray.label} />}
                                                                             onChange={(event: any, newValue: any) => {
                                                                                 if (newValue != undefined) {
                                                                                     console.log("event", event);
                                                                                     console.log("FieldArray", FieldArray);
                                                                                     const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                    defaultValuesNewTemp[FieldArray.name] = newValue.label
-                                                                                    defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                    if(FieldArray.name!=FieldArray.code) {
+                                                                                        defaultValuesNewTemp[FieldArray.name] = newValue.label
+                                                                                        defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                    }
+                                                                                    else    {
+                                                                                        defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                    }
                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                     
                                                                                     //This field will control other fields show or not
@@ -1136,10 +1156,15 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         }
                                                                                     })
                                                                                 }
+                                                                                else {
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[FieldArray.name] = ""
+                                                                                    defaultValuesNewTemp[FieldArray.code] = ""
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                    setValue(FieldArray.name, "")
+                                                                                    setValue(FieldArray.code, "")
+                                                                                }
                                                                             }}
-                                                                            id="controllable-states-demo"
-                                                                            isOptionEqualToValue={(option:any, value) => { return option.value === value; }}
-                                                                            renderInput={(params) => <TextField {...params} label={FieldArray.label} />}
                                                                         />
                                                                     )}
                                                                 />
@@ -1229,8 +1254,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         })
                                                     }                                                    
                                                     setValue(FieldArray.name, DefaultValueForAutoComplete)
-                                                    
-                                                    
                                                     
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>

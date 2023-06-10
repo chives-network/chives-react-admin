@@ -30,6 +30,7 @@ $MAP['Parent'] = 'Parent';
 $MAP['ClassMaster'] = 'Class Master';
 $MAP['ClassTeacher'] = 'Class Teacher';
 $MAP['Faculty'] = 'Faculty';
+$MAP['Dormitory'] = 'Dormitory';
 $MAP['Department'] = 'Department';
 $MAP['Vice-president'] = 'Vice-president';
 $MAP['President'] = 'President';
@@ -495,6 +496,7 @@ $MAP['Memo']    							    = 'Memo';
 $MAP['DebugSql']    							= 'DebugSql';
 $MAP['Add_Page_Split_Multi_Records']            = 'Add Page Split Multi Records';
 $MAP['Do you want to delete this item?']    	= 'Do you want to delete this item?';
+$MAP['Init_Action_Memo']    					= 'Init Page Memo';
 
 
 

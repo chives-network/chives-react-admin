@@ -726,6 +726,9 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                 }
                 else if($TableNameTemp=="data_user"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("姓名","用户名",$FieldName);
+                    if($FieldName==$FieldCodeName) {
+                        $FieldName = $FieldName."_名称";
+                    }
                 }
                 else if($TableNameTemp=="data_course"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("名称","代码",$FieldName);

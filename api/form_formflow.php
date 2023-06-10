@@ -364,6 +364,7 @@ $Page_Role_Array[] = ['value'=>"Student", 'label'=>__("Student")];
 $Page_Role_Array[] = ['value'=>"ClassMaster", 'label'=>__("ClassMaster")];
 $Page_Role_Array[] = ['value'=>"ClassTeacher", 'label'=>__("ClassTeacher")];
 $Page_Role_Array[] = ['value'=>"Faculty", 'label'=>__("Faculty")];
+$Page_Role_Array[] = ['value'=>"Dormitory", 'label'=>__("Dormitory")];
 $Page_Role_Array[] = ['value'=>"Department", 'label'=>__("Department")];
 $Page_Role_Array[] = ['value'=>"Vice-president", 'label'=>__("Vice-president")];
 $Page_Role_Array[] = ['value'=>"President", 'label'=>__("President")];
@@ -508,6 +509,7 @@ $Init_Action_Value[] = ['value'=>"view_default", 'label'=>__("view_default")];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Value", 'show'=>true, 'type'=>'select', 'options'=>$Init_Action_Value, 'label' => __("Init_Action_Value"), 'value' => 'init_default', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Init_Action_Field"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_FilterValue", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_FilterValue"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("Advanced operation, please do not operate if you do not understand"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Memo", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_Memo"), 'value' => __(""), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 
 
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
