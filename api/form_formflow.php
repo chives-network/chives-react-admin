@@ -510,7 +510,11 @@ $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Value", 'show'=>true,
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Init_Action_Field"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_FilterValue", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_FilterValue"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("Advanced operation, please do not operate if you do not understand"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Memo", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_Memo"), 'value' => __(""), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
-
+$Init_Action_Page_Type      = [];
+$Init_Action_Page_Type[]    = ['value'=>"FunctionPage", 'label'=>__("FunctionPage")];
+$Init_Action_Page_Type[]    = ['value'=>"ConfigSetting", 'label'=>__("ConfigSetting")];
+$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Page_Type", 'show'=>true, 'type'=>'select', 'options'=>$Init_Action_Page_Type, 'label' => __("Init_Action_Page_Type"), 'value' => 'FunctionPage', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
+$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Page_ConfigSettingUrl", 'show'=>true, 'type'=>'buttonrouter', 'label' => __("ConfigSetting"), 'value' => '/form/configsetting/?FlowId='.$id, 'placeholder' => "", 'helptext' => "", 'target'=>'_blank', 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_2"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
@@ -1030,6 +1034,9 @@ require_once("../data_enginee_flow.php");
     $FieldsArray['Step']        = $Step;
     if($_POST['FaceTo']!="")   {
         $FieldsArray['FaceTo']  = $_POST['FaceTo'];
+    }
+    if($_POST['Init_Action_Page_Type']!="")   {
+        $FieldsArray['PageType']  = $_POST['Init_Action_Page_Type'];
     }
     $FieldsArray['Setting']     = base64_encode(serialize($SettingMap));
     $FieldsArray['Creator']     = "admin";

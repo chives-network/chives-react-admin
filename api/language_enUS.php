@@ -497,6 +497,15 @@ $MAP['DebugSql']    							= 'DebugSql';
 $MAP['Add_Page_Split_Multi_Records']            = 'Add Page Split Multi Records';
 $MAP['Do you want to delete this item?']    	= 'Do you want to delete this item?';
 $MAP['Init_Action_Memo']    					= 'Init Page Memo';
+$MAP['FunctionPage'] 	                        = 'Function Page';
+$MAP['ConfigSetting'] 	                        = 'Config Setting';
+$MAP['Init_Action_Page_Type'] 	                = 'Init Action Page Type';
+$MAP['Create Config Setting'] 	            = 'Create Config Setting';
+$MAP['Manage All Config Setting Fields'] 	= 'Manage All Config Setting Fields';
+$MAP['Edit Config Setting'] 	            = 'Edit Config Setting';
+$MAP['Manage All Config Setting Fields'] 	= 'Manage All Config Setting Fields';
+$MAP['View Config Setting'] 	            = 'View Config Setting';
+$MAP['View All Config Setting Fields'] 	    = 'View All Config Setting Fields';
 
 
 

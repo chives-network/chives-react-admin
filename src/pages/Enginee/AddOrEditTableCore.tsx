@@ -37,6 +37,8 @@ import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
+import { useRouter } from 'next/router'
+
 
 // ** Config
 import authConfig from 'src/configs/auth'
@@ -111,6 +113,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     if(dataGridLanguageCode=="zhCN") {
         setLocale(AddOrEditTableLanguage);
     }
+
+    const router = useRouter();
     
     // ** Hooks
     //const dispatch = useDispatch<AppDispatch>()
@@ -683,6 +687,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         {(errors[FieldArray.name]?.message as string)??''}
                                                                     </FormHelperText>
                                                                 )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "buttonrouter") {
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                            <Button variant='contained' onClick={() => router.push(defaultValuesNew[FieldArray.name])} >
+                                                                {FieldArray.label}
+                                                            </Button>
                                                             </FormControl>
                                                         </Grid>
                                                     )
