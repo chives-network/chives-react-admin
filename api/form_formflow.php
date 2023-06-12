@@ -506,14 +506,20 @@ $Init_Action_Value = [];
 $Init_Action_Value[] = ['value'=>"init_default", 'label'=>__("init_default")];
 $Init_Action_Value[] = ['value'=>"edit_default", 'label'=>__("edit_default")];
 $Init_Action_Value[] = ['value'=>"view_default", 'label'=>__("view_default")];
+$Init_Action_Value[] = ['value'=>"edit_default_configsetting", 'label'=>__("edit_default_configsetting")];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Value", 'show'=>true, 'type'=>'select', 'options'=>$Init_Action_Value, 'label' => __("Init_Action_Value"), 'value' => 'init_default', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Init_Action_Field"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_FilterValue", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_FilterValue"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("Advanced operation, please do not operate if you do not understand"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
-$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Memo", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_Memo"), 'value' => __(""), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
-$Init_Action_Page_Type      = [];
-$Init_Action_Page_Type[]    = ['value'=>"FunctionPage", 'label'=>__("FunctionPage")];
-$Init_Action_Page_Type[]    = ['value'=>"ConfigSetting", 'label'=>__("ConfigSetting")];
-$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Page_Type", 'show'=>true, 'type'=>'select', 'options'=>$Init_Action_Page_Type, 'label' => __("Init_Action_Page_Type"), 'value' => 'FunctionPage', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
+$edit_default_2['Init_Action'][] = ['name' => "Init_Action_Memo", 'show'=>true, 'type'=>"input", 'label' => __("Init_Action_Memo"), 'value' => __(""), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+
+$Init_Action_AddEditWidth = [];
+$Init_Action_AddEditWidth[] = ['value'=>"xs", 'label'=>__("Extra Small")];
+$Init_Action_AddEditWidth[] = ['value'=>"sm", 'label'=>__("Small")];
+$Init_Action_AddEditWidth[] = ['value'=>"md", 'label'=>__("Medium")];
+$Init_Action_AddEditWidth[] = ['value'=>"lg", 'label'=>__("Large")];
+$Init_Action_AddEditWidth[] = ['value'=>"xl", 'label'=>__("Extra Large")];
+$edit_default_2['Init_Action'][] = ['name' => "Init_Action_AddEditWidth", 'show'=>true, 'type'=>'select', 'options'=>$Init_Action_AddEditWidth, 'label' => __("Init_Action_AddEditWidth"), 'value' => 'md', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Page_ConfigSettingUrl", 'show'=>true, 'type'=>'buttonrouter', 'label' => __("ConfigSetting"), 'value' => '/form/configsetting/?FlowId='.$id, 'placeholder' => "", 'helptext' => "", 'target'=>'_blank', 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
@@ -574,7 +580,7 @@ if($_GET['action']=="edit_default_2"&&$id!='')         {
             }
         }
         foreach($SettingMap as $value => $label)  {
-            if(in_array($value, $defaultValues_2_keys))  {
+            if(in_array($value, $defaultValues_2_keys) && $value!="Init_Action_Page_ConfigSettingUrl")  {
                 $defaultValues_2[$value] = $label;
             }
         }
@@ -592,7 +598,6 @@ if($_GET['action']=="edit_default_2"&&$id!='')         {
     //$defaultValues_2['Menu_Two'] = $SettingMap['Menu_Two'];
     //$defaultValues_2['Menu_Three'] = $SettingMap['Menu_Three'];
     //$defaultValues_2['FaceTo'] = $SettingMap['FaceTo'];
-
     $edit_default['allFields']      = $edit_default_2;
     $edit_default['allFieldsMode']  = $edit_default_2_mode;
     $edit_default['defaultValues']  = $defaultValues_2;
@@ -1035,8 +1040,11 @@ require_once("../data_enginee_flow.php");
     if($_POST['FaceTo']!="")   {
         $FieldsArray['FaceTo']  = $_POST['FaceTo'];
     }
-    if($_POST['Init_Action_Page_Type']!="")   {
-        $FieldsArray['PageType']  = $_POST['Init_Action_Page_Type'];
+    if($_POST['Init_Action_Value']=="edit_default_configsetting")   {
+        $FieldsArray['PageType']  = "ConfigSetting";
+    }
+    else {
+        $FieldsArray['PageType']  = "FunctionPage";
     }
     $FieldsArray['Setting']     = base64_encode(serialize($SettingMap));
     $FieldsArray['Creator']     = "admin";
@@ -1290,6 +1298,7 @@ $RS['import_default'] = [];
 $RS['init_default']['returnButton']  = true;
 $RS['init_default']['rowHeight']  = 38;
 $RS['init_default']['dialogContentHeight']  = "850px";
+$RS['init_default']['dialogMaxWidth']  = "md";// xl lg md sm xs 
 $RS['init_default']['timeline']  = time();
 $RS['init_default']['pageNumber']  = $pageSize;
 $RS['init_default']['pageNumberArray']  = [10,20,30,40,50,100,200,500];

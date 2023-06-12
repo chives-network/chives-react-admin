@@ -402,7 +402,7 @@ function Msg_Reminder_Object_From_Add_Or_Edit($TableName, $id) {
     return $InsertSQLALL;
 }
 
-function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
+function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $FilterFlowSetting=true)  {
     global $db;
     global $SettingMap;
     global $InsertOrUpdateFieldArrayForSql;
@@ -441,8 +441,12 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
         $CurrentFieldTypeArray = explode(':',$CurrentFieldType);
         //Filter Field Type
         $FieldTypeInFlow = $SettingMap['FieldType_'.$FieldName];
-        $FieldTypeInFlow_Map = [];
+        $FieldTypeInFlow_Map = [];        
+        if($FilterFlowSetting==false)   {
+            $FieldTypeInFlow = 'FieldTypeFollowByFormSetting';
+        }
         //print_R($FieldName.$FieldTypeInFlow);print "\n";
+
         switch($FieldTypeInFlow)   {
             case 'FieldTypeFollowByFormSetting':
                 //Do Nothing

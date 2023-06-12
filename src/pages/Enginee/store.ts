@@ -42,6 +42,7 @@ export const appUsersSlice = createSlice({
     init_default: {searchtitle:'',pinnedColumns:{},rowdelete:[''],dataGridLanguageCode:'',ForbiddenViewRow:[''],ForbiddenEditRow:[''],ForbiddenDeleteRow:[''],ForbiddenSelectRow:'',returnButton:'',searchFieldText:'',rowHeight:'',checkboxSelection:'',searchFieldArray:[{value:''}],multireview:{multireview:[{}]},},
     add_default: {defaultValues:{},allFields:[],allFieldsMode:[],titletext:'',titlememo:'',},
     edit_default: {defaultValues:{}},
+    edit_default_configsetting: [],
     edit_default_1: [],
     edit_default_2: [],
     edit_default_3: [],
@@ -74,6 +75,7 @@ export const appUsersSlice = createSlice({
       state.view_default = action.payload.view_default
       state.export_default = action.payload.export_default
       state.import_default = action.payload.import_default
+      state.edit_default_configsetting = action.payload.edit_default_configsetting
       state.edit_default_1 = action.payload.edit_default_1
       state.edit_default_2 = action.payload.edit_default_2
       state.edit_default_3 = action.payload.edit_default_3

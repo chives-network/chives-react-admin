@@ -372,6 +372,7 @@ $MAP['USER NOT EXIST OR PASSWORD IS ERROR!'] = 'User does not exist or password 
 $MAP['No POST Infor'] 						 = 'No form submission data';
 $MAP['init_default'] 						= 'List page';
 $MAP['edit_default'] 						= 'Edit page';
+$MAP['edit_default_configsetting']          = 'Config Setting Page';
 $MAP['view_default'] 						= 'View page';
 $MAP['add_default'] 						= 'New page';
 $MAP['Init_Action'] 						= 'Initial page type';
@@ -506,7 +507,13 @@ $MAP['Edit Config Setting'] 	            = 'Edit Config Setting';
 $MAP['Manage All Config Setting Fields'] 	= 'Manage All Config Setting Fields';
 $MAP['View Config Setting'] 	            = 'View Config Setting';
 $MAP['View All Config Setting Fields'] 	    = 'View All Config Setting Fields';
-
+$MAP['Params Error!'] 	= 'Params Error!';
+$MAP['Extra Small'] 	= 'Extra Small';
+$MAP['Small'] 	= 'Small';
+$MAP['Medium'] 	= 'Medium';
+$MAP['Large'] 	= 'Large';
+$MAP['Extra Large'] 	= 'Extra Large';
+$MAP['Init_Action_AddEditWidth'] 	= 'Init_Action_AddEditWidth';
 
 
 ?>

@@ -31,9 +31,9 @@ $FaceTo  	= $FromInfo['FaceTo'];
 
 if($FaceTo=="AuthUser")         {
     //Check User Login or Not
-    CheckAuthUserLoginStatus();
-    CheckAuthUserRoleHaveMenu($FlowId);
-    CheckCsrsToken();
+    //CheckAuthUserLoginStatus();
+    //CheckAuthUserRoleHaveMenu($FlowId);
+    //CheckCsrsToken();
 }
 if($FaceTo=="Student")         {
     //Check User Login or Not
@@ -97,6 +97,9 @@ require_once('data_enginee_filter_role.php');
 global $InsertOrUpdateFieldArrayForSql;
 $InsertOrUpdateFieldArrayForSql['ADD'] = [];
 $InsertOrUpdateFieldArrayForSql['EDIT'] = [];
+
+$defaultValuesAdd = [];
+$defaultValuesEdit = [];
 
 $allFieldsAdd   = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'ADD');
 foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
@@ -451,6 +454,22 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         exit;
     }
 }
+
+if( $_GET['action']=="edit_default_configsetting_data" && $SettingMap['Init_Action_Value']=="edit_default_configsetting" && $_GET['id']!="")  {
+    $id = DecryptID($_GET['id']);
+    $ConfigSetting = base64_encode(serialize($_POST));
+    $sql = "update form_formflow set ConfigSetting='$ConfigSetting' where id='$id'";
+    $db->Execute($sql);
+    $RS = [];
+    $RS['status'] = "OK";
+    $RS['msg'] = __("Update Success");
+    $RS['sql'] = $sql;
+    $RS['_GET'] = $_GET;
+    $RS['_POST'] = $_POST;
+    print json_encode($RS);
+    exit;
+}
+
 
 if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Array))  ) && $_GET['id']!="")  {
     if($TableName=="data_user" && $SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']=="email") {
@@ -899,7 +918,7 @@ if($SettingMap['Init_Action_Value']=="") {
     $SettingMap['Init_Action_Value'] = "init_default";
 }
 $RS['init_action']['action']        = $SettingMap['Init_Action_Value'];
-$RS['init_action']['id']            = "999"; //NOT USE THIS VALUE IN FRONT END
+$RS['init_action']['id']            = EncryptID($FlowId); //NOT USE THIS VALUE IN FRONT END
 
 //Search Field
 $RS['init_default']['searchFieldArray'] = $searchField;
@@ -1310,12 +1329,50 @@ $RS['init_default']['delete_dialog_button']     = $SettingMap['Tip_Button_When_D
 
 $RS['init_default']['rowHeight']    = $rowHeight;
 $RS['init_default']['dialogContentHeight']  = "90%";
+$RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']?$SettingMap['Init_Action_AddEditWidth']:'md';// xl lg md sm xs 
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
 $RS['init_default']['sql']          = $sql_list;
 $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
 $RS['init_default']['ApprovalNodeFields']['Memo']       = $SettingMap['Init_Action_Memo'];
+
+
+if($SettingMap['Init_Action_Value']=="edit_default_configsetting")   {
+    //Get All Fields
+    $sql                    = "select * from form_configsetting where FlowId='$FlowId' and IsEnable='1' order by SortNumber asc, id asc";
+    $rs                     = $db->Execute($sql);
+    $AllFieldsFromTable     = $rs->GetArray();
+    $defaultValuesEdit      = [];
+    $allFieldsEdit          = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'EDIT', $FilterFlowSetting=false);
+    foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
+        foreach($allFieldItem as $ITEM) {
+            $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];
+        }
+    }
+    $ConfigSettingMap = returntablefield("form_formflow",'id',$FlowId,'ConfigSetting')['ConfigSetting'];
+    $ConfigSettingMap = unserialize(base64_decode($ConfigSettingMap));
+    if(is_array($ConfigSettingMap))   {
+        foreach($ConfigSettingMap as $ModeName=>$allFieldItem) {
+            $defaultValuesEdit[$ModeName] = $allFieldItem;
+        }
+    }
+    //print_R($AllShowTypesArray);
+    //print $sql;
+    $RS['edit_default_configsetting']['allFields']        = $allFieldsEdit;
+    $RS['edit_default_configsetting']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
+    $RS['edit_default_configsetting']['defaultValues']    = $defaultValuesEdit;
+    $RS['edit_default_configsetting']['dialogContentHeight']  = "90%";
+    $RS['edit_default_configsetting']['submitaction']     = "edit_default_configsetting_data";
+    $RS['edit_default_configsetting']['componentsize']    = "small";
+    $RS['edit_default_configsetting']['submittext']       = $SettingMap['Rename_Edit_Submit_Button'];
+    $RS['edit_default_configsetting']['canceltext']       = __("Cancel");
+    $RS['edit_default_configsetting']['titletext']        = $SettingMap['Edit_Title_Name'];
+    $RS['edit_default_configsetting']['titlememo']        = $SettingMap['Edit_Subtitle_Name'];
+    $RS['edit_default_configsetting']['tablewidth']       = 650;
+    $RS['edit_default_configsetting']['submitloading']    = __("SubmitLoading");
+    $RS['edit_default_configsetting']['loading']          = __("Loading");
+}
 
 
 if(sizeof($MetaColumnNames)>=5) {

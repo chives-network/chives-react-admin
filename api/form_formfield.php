@@ -564,6 +564,7 @@ $RS['import_default'] = [];
 $RS['init_default']['returnButton']  = true;
 $RS['init_default']['rowHeight']  = 38;
 $RS['init_default']['dialogContentHeight']  = "850px";
+$RS['init_default']['dialogMaxWidth']  = "md";// xl lg md sm xs 
 $RS['init_default']['timeline']  = time();
 $RS['init_default']['pageNumber']  = $pageSize;
 $RS['init_default']['pageNumberArray']  = [10,20,30,40,50,100,200,500];

@@ -135,15 +135,15 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         },
         params: newAllFilters
       })
-      if(response.data && response.data.init_action.action == 'view_default') {
-        setAddEditActionName('view_default')
+      if(response.data && response.data.init_action.action.indexOf("view_default") != -1) {
+        setAddEditActionName(response.data.init_action.action)
         setAddEditActionId(response.data.init_action.id)
         setViewActionOpen(!viewActionOpen)
         setEditViewCounter(0)
         setAddEditViewShowInWindow(true)
       }
-      if(response.data && response.data.init_action.action == 'edit_default') {
-        setAddEditActionName('edit_default')
+      if(response.data && response.data.init_action.action.indexOf("edit_default") != -1) {
+        setAddEditActionName(response.data.init_action.action)
         setAddEditActionId(response.data.init_action.id)
         setAddEditActionOpen(!addEditActionOpen)
         setAddEditViewShowInWindow(true)
@@ -529,7 +529,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   })
   
   //console.log("store.init_default.ApprovalNodeFields",store.init_default.ApprovalNodeFields)
-  //console.log("addEditActionId-addEditActionId-addEditActionId",addEditActionId, addEditActionName)
+  console.log("addEditActionId-addEditActionId-addEditActionId",store, addEditActionName)
   
   return (
     <Grid container spacing={6}>
@@ -643,8 +643,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         }
       </Grid>
       : '' }
-      {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} /> : ''}
-      {store && store.edit_default && store.edit_default.defaultValues && addEditActionName.indexOf("edit_default") != -1 && addEditActionId!='' ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store[addEditActionName]} open={addEditActionOpen} toggleAddTableDrawer={toggleEditTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} /> : ''}
+      {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} /> : ''}
+      {store && store[addEditActionName] && store[addEditActionName]['defaultValues'] && addEditActionName.indexOf("edit_default") != -1 && addEditActionId!='' ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store[addEditActionName]} open={addEditActionOpen} toggleAddTableDrawer={toggleEditTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} /> : ''}
       {store && store.view_default && store.view_default.defaultValues && addEditActionName.indexOf("view_default") != -1 && addEditActionId!='' ? <ViewTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} pageJsonInfor={store[addEditActionName]} open={viewActionOpen} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} addEditViewShowInWindow={addEditViewShowInWindow} CSRF_TOKEN={store.init_default.CSRF_TOKEN} /> : ''}
     </Grid >
   )

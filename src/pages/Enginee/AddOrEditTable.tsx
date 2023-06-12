@@ -7,6 +7,7 @@ import Dialog from '@mui/material/Dialog'
 import Grid from '@mui/material/Grid'
 import DialogContent from '@mui/material/DialogContent'
 import Fade, { FadeProps } from '@mui/material/Fade'
+import { Breakpoint } from '@mui/system';
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -33,11 +34,12 @@ interface AddOrEditTableType {
   addEditViewShowInWindow: boolean
   CSRF_TOKEN: string
   dataGridLanguageCode: string
+  dialogMaxWidth: Breakpoint
 }
 
 const AddOrEditTable = (props: AddOrEditTableType) => {
   // ** Props
-  const { externalId, id, action, addEditStructInfo, open, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, addEditViewShowInWindow, CSRF_TOKEN, dataGridLanguageCode } = props
+  const { externalId, id, action, addEditStructInfo, open, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, addEditViewShowInWindow, CSRF_TOKEN, dataGridLanguageCode, dialogMaxWidth } = props
   console.log("IsGetStructureFromEditDefault",IsGetStructureFromEditDefault)
   const handleClose = () => {
     toggleAddTableDrawer()
@@ -59,7 +61,7 @@ const AddOrEditTable = (props: AddOrEditTableType) => {
       <Dialog
         fullWidth
         open={open}
-        maxWidth='md'
+        maxWidth={dialogMaxWidth}
         scroll='body'
         onClose={handleClose}
         TransitionComponent={Transition}
