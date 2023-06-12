@@ -465,6 +465,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         const allFilesTemp:{[key:string]:any} = { ...allFiles }
         allFilesTemp[(e.target as HTMLInputElement).name] = undefined
         setAllFiles(allFilesTemp)
+        const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+        defaultValuesNewTemp[(e.target as HTMLInputElement).name] = ""
+        setDefaultValuesNew(defaultValuesNewTemp)
     }
 
     const ImgStyled = styled('img')(({ theme }) => ({
@@ -1937,8 +1940,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     )
                                                 }
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "avator") {
-                                                    
-                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
                                                     
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
@@ -1946,7 +1950,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                                     {avatorShowArea && avatorShowArea[FieldArray.name] ?
                                                                         (<ImgStyled src={avatorShowArea[FieldArray.name]} alt={FieldArray.helptext} />)
-                                                                        : (<ImgStyled src="/images/avatars/1.png" alt={FieldArray.helptext} />)
+                                                                        : (<ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} />)
                                                                     }
                                                                     <div>
                                                                         <ButtonStyled component='label' variant='contained' htmlFor={FieldArray.name}>

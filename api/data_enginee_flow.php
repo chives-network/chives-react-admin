@@ -31,9 +31,9 @@ $FaceTo  	= $FromInfo['FaceTo'];
 
 if($FaceTo=="AuthUser")         {
     //Check User Login or Not
-    //CheckAuthUserLoginStatus();
-    //CheckAuthUserRoleHaveMenu($FlowId);
-    //CheckCsrsToken();
+    CheckAuthUserLoginStatus();
+    CheckAuthUserRoleHaveMenu($FlowId);
+    CheckCsrsToken();
 }
 if($FaceTo=="Student")         {
     //Check User Login or Not
@@ -202,6 +202,16 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                         $NUM = $FROM."0".$NUM;
                     }
                     $_POST[$Item['FieldName']] = $NUM;
+                    break;
+                case 'avator':
+                    if(is_array($_FILES[$Item['FieldName']]))    {
+                        ImageUploadToDisk($Item['FieldName']);
+                        $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                    }
+                    elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                        //Delete this Key from FieldsArray
+                        $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                    }
                     break;
             }
         }
@@ -387,8 +397,25 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             exit;
         }
     }
+
+    foreach($AllFieldsFromTable as $Item)  {
+        $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
+        switch($CurrentFieldType) {
+            case 'avator':
+                if(is_array($_FILES[$Item['FieldName']]))    {
+                    ImageUploadToDisk($Item['FieldName']);
+                    $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                }
+                elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                    //Delete this Key from FieldsArray
+                    $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                }
+                break;
+        }
+    }
+
     if($IsExecutionSQL)   {
-        [$Record,$sql]  = InsertOrUpdateTableByArray($TableName,$FieldsArray,'id',0,"Update");
+        [$Record,$sql]  = InsertOrUpdateTableByArray($TableName, $FieldsArray, 'id', 0, "Update");
         if($Record->EOF) {
             UpdateOtherTableFieldAfterFormSubmit($FieldsArray['id']);
             $Msg_Reminder_Object_From_Add_Or_Edit_Result = Msg_Reminder_Object_From_Add_Or_Edit($TableName, $FieldsArray['id']);
@@ -500,10 +527,21 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
 
     //Get Row Data
     $sql    = "select * from `$TableName` where id = '$id'";
-    $rsf     = $db->Execute($sql);
+    $rsf    = $db->Execute($sql);
+    $data   = $rsf->fields;
+
+    foreach($AllFieldsFromTable as $Item)  {
+        $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
+        switch($CurrentFieldType) {
+            case 'avator':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avator');
+                break;
+        }
+    }
+
     $RS = [];
     $RS['status'] = "OK";
-    $RS['data'] = $rsf->fields;
+    $RS['data'] = $data;
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
     if($_GET['IsGetStructureFromEditDefault']==1)  {
@@ -543,10 +581,21 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
     }
 
     $sql    = "select * from `$TableName` where id = '$id'";
-    $rsf     = $db->Execute($sql);
+    $rsf    = $db->Execute($sql);
+    $data   = $rsf->fields;
+
+    foreach($AllFieldsFromTable as $Item)  {
+        $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
+        switch($CurrentFieldType) {
+            case 'avator':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avator');
+                break;
+        }
+    }
+
     $RS = [];
     $RS['status'] = "OK";
-    $RS['data'] = $rsf->fields;
+    $RS['data'] = $data;
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
     $view_default = [];

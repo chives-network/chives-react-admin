@@ -1,5 +1,43 @@
 <?php
 
+function ImageUploadToDisk($FieldName='图片') {
+    global $FileStorageLocation;
+    global $SettingMap;
+    global $_POST;
+    $FileStorageLocation = $FileStorageLocation."/".date("ym");
+    if(!is_dir($FileStorageLocation)) {
+        mkdir($FileStorageLocation);
+    }
+    $ImageInfor                 = $_FILES[$FieldName];
+    if(is_array($ImageInfor))    {
+        $ATTACHMENT_NAME            = ParamsFilter($ImageInfor['name']);
+        $ATTACHMENT_NAME		    = str_replace("=","",$ATTACHMENT_NAME);
+        $ATTACHMENT_NAME		    = str_replace(",","",$ATTACHMENT_NAME);
+        $ATTACHMENT_NAME		    = str_replace(" ","",$ATTACHMENT_NAME);
+        $ATTACHMENT_ID              = time();
+        $NewFileName                = $ATTACHMENT_ID.".".$ATTACHMENT_NAME;
+        $copyValue                  = copy($ImageInfor['tmp_name'], $FileStorageLocation."/".$NewFileName);
+        if($copyValue)  {
+            $_POST[$FieldName]      = $ATTACHMENT_NAME."||".$ATTACHMENT_ID;
+        }
+    }
+}
+
+function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type) {
+    global $FileStorageLocation;
+    global $SettingMap;
+    global $_POST;
+    $RS                     = [];
+    $RS['FieldName']        = $FieldName;
+    $RS['TableName']        = $TableName;
+    $RS['Id']               = $Id;
+    $RS['Type']             = $Type;
+    $RS['Time']             = time();
+    $DATA   = EncryptID(serialize($RS));
+    $URL    = "data_image.php?DATA=".$DATA;
+    return $URL;
+}
+
 function Msg_Reminder_Object_From_Add_Or_Edit($TableName, $id) {
     global $db;
     global $SettingMap;
@@ -407,6 +445,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
     global $SettingMap;
     global $InsertOrUpdateFieldArrayForSql;
     global $GLOBAL_USER;
+    global $TableName;
     $allFieldsMap = [];
     foreach($AllFieldsFromTable as $Item)  {
         $FieldName      = $Item['FieldName'];
@@ -777,7 +816,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 break;
             case 'avator':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false]];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false] ];
                 break;
             case 'ProvinceAndCity':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";

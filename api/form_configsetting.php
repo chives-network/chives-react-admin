@@ -3,8 +3,8 @@ header("Content-Type: application/json");
 require_once('cors.php');
 require_once('include.inc.php');
 
-//CheckAuthUserLoginStatus();
-//CheckAuthUserRoleHaveMenu(0, "/form/configsetting");
+CheckAuthUserLoginStatus();
+CheckAuthUserRoleHaveMenu(0, "/form/configsetting");
 
 $externalId = intval($_GET['externalId']);
 $FlowInfo   = returntablefield("form_formflow","id",$externalId,"FormId,FlowName,FaceTo");

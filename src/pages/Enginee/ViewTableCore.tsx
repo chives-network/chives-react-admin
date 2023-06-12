@@ -47,6 +47,13 @@ interface ViewTableType {
   CSRF_TOKEN: string
 }
 
+const ImgStyled = styled('img')(({ theme }) => ({
+  width: 120,
+  height: 120,
+  borderRadius: 4,
+  marginRight: theme.spacing(5)
+}))
+
 const ViewTableCore = (props: ViewTableType) => {
   // ** Props
   const { externalId, id, action, toggleViewTableDrawer, backEndApi, editViewCounter, CSRF_TOKEN } = props
@@ -174,12 +181,12 @@ const ViewTableCore = (props: ViewTableType) => {
                             </TableRow>
                           )
                         }
-                        else if (FieldArray.type == "avator") {
+                        else if (FieldArray.type == "avator" && defaultValuesView[FieldArray.name] != undefined) {
                           
                           return (
                             <TableRow key={FieldArray_index}>
                               <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                              <MUITableCell>{defaultValuesView[FieldArray.name]}</MUITableCell>
+                              <MUITableCell><ImgStyled src={authConfig.backEndApiHost+defaultValuesView[FieldArray.name]} alt={FieldArray.helptext} /></MUITableCell>
                             </TableRow>
                           )
                         }
