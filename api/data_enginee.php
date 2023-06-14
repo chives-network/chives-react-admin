@@ -149,7 +149,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                 $FieldType = $rs->GetArray();
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $EnglishName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
                 break;
-            case 'avator':
+            case 'avatar':
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'label' => $EnglishName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false]];
                 break;
             default:

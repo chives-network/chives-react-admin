@@ -53,7 +53,7 @@ if($_GET['action']=="login")                {
             $userData['专业']       = $StudentInfo['专业'];
             $userData['系部']       = $StudentInfo['系部'];
             $userData['PRIV_NAME']  = "学生";
-            $userData['avator']     = '/images/avatars/1.png';        
+            $userData['avatar']     = '/images/avatars/1.png';        
             $userData['username']   = $StudentInfo['学号'];
             $userData['role']       = "学生";
             $userData['type']       = "Student";
@@ -83,7 +83,7 @@ if($_GET['action']=="login")                {
         $userData['DEPT_ID']    = $UserInfo['DEPT_ID'];
         $userData['DEPT_NAME']  = returntablefield("data_department","id",$UserInfo['DEPT_ID'],"DEPT_NAME")['DEPT_NAME'];
         $userData['PRIV_NAME']  = returntablefield("data_role","id",$UserInfo['USER_PRIV'],"name")['name'];
-        $userData['avator']     = '/images/avatars/1.png';        
+        $userData['avatar']     = '/images/avatars/1.png';        
         $userData['username']   = $UserInfo['USER_ID'];
         $userData['email']      = $UserInfo['EMAIL'];
         $userData['role']       = $userData['PRIV_NAME'];

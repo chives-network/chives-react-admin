@@ -134,7 +134,7 @@ foreach($MetaColumnNamesTarget AS $Item) {
     if(strpos($Item,'审核状态')>0)   {
         $MetaColumnNamesOptionsOnlyShowStatus[] = ['value'=>$Item, 'label'=>$Item];
     }
-    if(strpos($Item,'审核人')>0)   {
+    if(strpos($Item,'审核人')>0 || strpos($Item,'用户名')>0)   {
         $MetaColumnNamesOptionsOnlyshowPerson[] = ['value'=>$Item, 'label'=>$Item];
     }
     if(strpos($Item,'审核时间')>0)   {
@@ -767,6 +767,13 @@ $edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Into_Value_When_Batch_Ca
 $edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Field_When_Batch_Cancel_6", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Cancel_6"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Into_Value_When_Batch_Cancel_6", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
 
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Field_When_Batch_Cancel_7", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Cancel_7"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Into_Value_When_Batch_Cancel_7", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
+
+
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Field_When_Batch_Cancel_8", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Cancel_8"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Change_Into_Value_When_Batch_Cancel_8", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
+
 $defaultValues_3 = [];
 foreach($edit_default_3 as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
@@ -776,8 +783,8 @@ foreach($edit_default_3 as $ModeName=>$allFieldItem) {
 
 $edit_default_3_mode[] = ['value'=>"Setting_Buttons", 'label'=>__("Setting_Buttons")];
 $edit_default_3_mode[] = ['value'=>"Batch_Approval", 'label'=>__("Batch_Approval")];
-$edit_default_3_mode[] = ['value'=>"Batch_Refuse", 'label'=>__("Batch_Refuse")];
 $edit_default_3_mode[] = ['value'=>"Batch_Cancel", 'label'=>__("Batch_Cancel")];
+$edit_default_3_mode[] = ['value'=>"Batch_Refuse", 'label'=>__("Batch_Refuse")];
 
 
 //#########################################################################################################################

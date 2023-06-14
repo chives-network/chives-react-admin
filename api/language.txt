@@ -1,0 +1,13 @@
+
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';
+$MAP['Change_Field_When_Batch_Cancel_7'] 	= 'Change_Field_When_Batch_Cancel_7';
+$MAP['Change_Field_When_Batch_Cancel_8'] 	= 'Change_Field_When_Batch_Cancel_8';

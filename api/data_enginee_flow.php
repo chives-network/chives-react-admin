@@ -203,9 +203,19 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                     }
                     $_POST[$Item['FieldName']] = $NUM;
                     break;
-                case 'avator':
+                case 'avatar':
                     if(is_array($_FILES[$Item['FieldName']]))    {
                         ImageUploadToDisk($Item['FieldName']);
+                        $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                    }
+                    elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                        //Delete this Key from FieldsArray
+                        $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                    }
+                    break;
+                case 'files':
+                    if(is_array($_FILES[$Item['FieldName']]))    {
+                        FilesUploadToDisk($Item['FieldName']);
                         $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
                     }
                     elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
@@ -401,9 +411,19 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
     foreach($AllFieldsFromTable as $Item)  {
         $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
         switch($CurrentFieldType) {
-            case 'avator':
+            case 'avatar':
                 if(is_array($_FILES[$Item['FieldName']]))    {
                     ImageUploadToDisk($Item['FieldName']);
+                    $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                }
+                elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                    //Delete this Key from FieldsArray
+                    $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                }
+                break;
+            case 'files':
+                if(is_array($_FILES[$Item['FieldName']]))    {
+                    FilesUploadToDisk($Item['FieldName']);
                     $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
                 }
                 elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
@@ -427,6 +447,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                 global $GLOBAL_EXEC_KEY_SQL;
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
+            $RS['_FILES'] = $_FILES;  
             //Batch_Approval
             $Batch_Approval_Status_Field    = $SettingMap['Batch_Approval_Status_Field'];
             $Batch_Approval_Status_Value    = $SettingMap['Batch_Approval_Status_Value'];
@@ -533,8 +554,11 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
     foreach($AllFieldsFromTable as $Item)  {
         $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
         switch($CurrentFieldType) {
-            case 'avator':
-                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avator');
+            case 'avatar':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avatar');
+                break;
+            case 'files':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'files',$data[$Item['FieldName']]);
                 break;
         }
     }
@@ -587,8 +611,11 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
     foreach($AllFieldsFromTable as $Item)  {
         $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['EDIT'];
         switch($CurrentFieldType) {
-            case 'avator':
-                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avator');
+            case 'avatar':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'avatar');
+                break;
+            case 'files':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'files',$data[$Item['FieldName']]);
                 break;
         }
     }

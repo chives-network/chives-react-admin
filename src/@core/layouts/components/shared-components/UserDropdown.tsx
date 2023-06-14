@@ -120,7 +120,7 @@ const UserDropdown = (props: Props) => {
                 horizontal: 'right'
               }}
             >
-              <Avatar alt='John Doe' src={user.avator} sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src={user.avatar} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.USER_NAME}</Typography>

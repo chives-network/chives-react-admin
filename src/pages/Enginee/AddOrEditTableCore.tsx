@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, MouseEvent, ChangeEvent, Fragment } from 'react'
+import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, useCallback } from 'react'
 import { ElementType,MouseEventHandler } from 'react'
 
 // ** MUI Imports
@@ -12,6 +12,8 @@ import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
@@ -83,6 +85,9 @@ import toast from 'react-hot-toast'
 import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
 
+import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
+import { useDropzone } from 'react-dropzone'
+
 // ** Styles
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
@@ -130,6 +135,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const addEditorDefault:{[key:string]:EditorState} = {}
     const [allEditorValues, setAllEditorValues] = useState(addEditorDefault)
     const [allFields, setAllFields] = useState(addEditStructInfo.allFields)
+    const [uploadFiles, setUploadFiles] = useState<File[]>([])
+    const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -197,7 +204,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         console.log("TempSelectedCheckbox",TempSelectedCheckbox)
                                         setSelectedCheckbox(TempSelectedCheckbox)
                                         setSelectedMenuOneNameForSubmit(FieldArray.name)                                        
-                                    }
+                                    }                                    
+                                    if (FieldArray.type == "files") {
+                                        setUploadFileFieldName(FieldArray.name)
+                                    } 
                                     
                                     //处理身份证件类型为非居民身份证时,需要自动修改身份证件号的类型为input                       
                                     if(action!="edit_default_1" && action!="edit_default_2" && FieldArray.name.includes("身份证件类型") && res.data.data[FieldArray.name]!="居民身份证") {
@@ -239,6 +249,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                         setSelectedCheckbox(TempSelectedCheckbox)
                         setSelectedMenuOneNameForSubmit(FieldArray.name)
                     }
+                    if (FieldArray.type == "files") {
+                        setUploadFileFieldName(FieldArray.name)
+                    }                    
                 })
             })
         }
@@ -344,6 +357,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
             
             return
         }
+        console.log("allFiles", allFiles)
+        console.log("uploadFiles", uploadFiles)
+        
 
         //upload file 
         const formData = new FormData();
@@ -381,6 +397,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
             formData.append(selectedMenuOneNameForSubmit, selectedCheckboxResult.join(','));
             console.log("formData",formData)
         }
+        if(uploadFileFieldName!=undefined && uploadFileFieldName!="" && uploadFiles!=undefined && uploadFiles.length>0) {
+            uploadFiles.forEach((file) => {
+                formData.append(`${uploadFileFieldName}[]`, file);
+            });
+        }
 
         const postUrl = authConfig.backEndApiHost + backEndApi + "?action=" + action + "_data&id=" + id + "&externalId=" + externalId
         fetch(
@@ -407,7 +428,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 console.error('Error:', error);
             });
 
-        // clear avator and files
+        // clear avatar and files
         setAvatorShowArea({})
         setAllFiles({})
         setAllDates({})
@@ -444,9 +465,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         const { files } = e.target as HTMLInputElement
         if (files && files.length !== 0) {
             reader.onloadend = () => {
-                
-                //console.log("e.target.name",e.target.name)
-                //console.log("reader.result as string",reader.result as string)
                 const avatorShowAreaTemp:{[key:string]:any} = { ...avatorShowArea }
                 avatorShowAreaTemp[(e.target as HTMLInputElement).name] = reader.result as string
                 setAvatorShowArea(avatorShowAreaTemp)
@@ -471,8 +489,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     }
 
     const ImgStyled = styled('img')(({ theme }) => ({
-        width: 120,
-        height: 120,
+        width: 110,
+        height: 110,
         borderRadius: 4,
         marginRight: theme.spacing(5)
     }))
@@ -583,6 +601,34 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
     const { i18n } = useTranslation()
     registerLocale(i18n.language, langObj[i18n.language])
+
+    //File Uploader
+    interface FileProp {
+    name: string
+    type: string
+    size: number
+    }
+    const fieldName = "fieldName"
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: (acceptedFiles: File[]) => {
+            console.log("acceptedFiles",acceptedFiles)
+            setUploadFiles( acceptedFiles.map((file: File) => Object.assign(file)) )
+        }
+    })
+    const renderFilePreview = (file: FileProp) => {
+        if (file.type.startsWith('image')) {
+        return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file as any)} />
+        } else {
+        return <Icon icon='mdi:file-document-outline' />
+        }
+    }
+    const handleRemoveFile = (file: FileProp) => {
+        const filtered = uploadFiles.filter((i: FileProp) => i.name !== file.name)
+        setUploadFiles([...filtered])
+    }
+    const handleRemoveAllFiles = () => {
+        setUploadFiles([])
+    }
 
     return (
         <Fragment>
@@ -1939,7 +1985,71 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         </Grid>
                                                     )
                                                 }
-                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "avator") {
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "files") {
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <DropzoneWrapper>
+                                                                    <div {...getRootProps({ className: 'dropzone' })}>
+                                                                        <input {...getInputProps()} />
+                                                                        <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
+                                                                        <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+                                                                        <Typography color='textSecondary'>附件:</Typography>
+                                                                        </Box>
+                                                                        </Box>
+                                                                    </div>
+                                                                    {uploadFiles && uploadFiles.length ? (
+                                                                        <Fragment>
+                                                                        <List>
+                                                                        {uploadFiles.map((fileInfor: File) => {
+
+                                                                            return (
+                                                                                    <ListItem key={fileInfor.name}>
+                                                                                    <div className='file-details'>
+                                                                                        <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
+                                                                                        <div>
+                                                                                        <Typography className='file-name'>{fileInfor.name}</Typography>
+                                                                                        <Typography className='file-size' variant='body2'>
+                                                                                            {Math.round(fileInfor.size / 100) / 10 > 1000
+                                                                                            ? `${(Math.round(fileInfor.size / 100) / 10000).toFixed(1)} mb`
+                                                                                            : `${(Math.round(fileInfor.size / 100) / 10).toFixed(1)} kb`}
+                                                                                        </Typography>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <IconButton onClick={() => handleRemoveFile(fileInfor)}>
+                                                                                        <Icon icon='mdi:close' fontSize={20} />
+                                                                                    </IconButton>
+                                                                                    </ListItem>
+                                                                                    )
+                                                                        })}
+                                                                        </List>
+                                                                        <div className='buttons'>
+                                                                            <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
+                                                                            Remove All
+                                                                            </Button>
+                                                                        </div>
+                                                                        </Fragment>
+                                                                    ) : null}
+                                                                </DropzoneWrapper>
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "avatar") {
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
@@ -1971,6 +2081,34 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             Allowed PNG or JPEG. Max size of 800K.
                                                                         </Typography>
                                                                     </div>
+                                                                </Box>
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "readonlyavatar") {
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                    {avatorShowArea && avatorShowArea[FieldArray.name] ?
+                                                                        (<ImgStyled src={avatorShowArea[FieldArray.name]} alt={FieldArray.helptext} />)
+                                                                        : (<ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} />)
+                                                                    }
                                                                 </Box>
                                                                 {FieldArray.helptext && (
                                                                     <FormHelperText>

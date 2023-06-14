@@ -1,5 +1,73 @@
 <?php
 
+function FilesUploadToDisk($FieldName='图片') {
+    global $FileStorageLocation;
+    global $SettingMap;
+    global $_POST;
+    $FileStorageLocation = $FileStorageLocation."/".date("ym");
+    if(!is_dir($FileStorageLocation)) {
+        mkdir($FileStorageLocation);
+    }
+    $ImageInfor                 = $_FILES[$FieldName];
+    if(is_array($ImageInfor) && is_array($ImageInfor['name']))    {
+        $ATTACHMENT_NAME_LIST = [];
+        $ATTACHMENT_ID_LIST = [];
+        for($i=0;$i<sizeof($ImageInfor['name']);$i++)    {
+            $ATTACHMENT_NAME            = ParamsFilter($ImageInfor['name'][$i]);
+            $ATTACHMENT_NAME		    = str_replace("=","",$ATTACHMENT_NAME);
+            $ATTACHMENT_NAME		    = str_replace(",","",$ATTACHMENT_NAME);
+            $ATTACHMENT_NAME		    = str_replace(" ","",$ATTACHMENT_NAME);
+            $ATTACHMENT_ID              = time();
+            $NewFileName                = $ATTACHMENT_ID.".".$ATTACHMENT_NAME;
+            $copyValue                  = copy($ImageInfor['tmp_name'][$i], $FileStorageLocation."/".$NewFileName);
+            if($copyValue)  {
+                $ATTACHMENT_NAME_LIST[] = $ATTACHMENT_NAME;
+                $ATTACHMENT_ID_LIST[]   = date("ym")."_".$ATTACHMENT_ID;
+            }
+        }
+        if($copyValue)  {
+            $_POST[$FieldName]          = join("*",$ATTACHMENT_NAME_LIST)."||".join("*",$ATTACHMENT_ID_LIST);
+        }
+    }
+}
+
+function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
+    global $FileStorageLocation;
+    global $SettingMap;
+    global $_POST;
+    $FieldValueArray        = explode("||",$FieldValue);
+    $FieldValueArray        = explode("*",$FieldValueArray[0]);
+    if($FieldValueArray>1)  {
+        $Element    = [];
+        $Index      = 0;
+        foreach($FieldValueArray as $Item) {
+            $RS                     = [];
+            $RS['FieldName']        = $FieldName;
+            $RS['TableName']        = $TableName;
+            $RS['Id']               = $Id;
+            $RS['Index']            = $Index;
+            $RS['Type']             = $Type;
+            $RS['Time']             = time();
+            $DATA   = EncryptID(serialize($RS));
+            $URL    = "data_image.php?DATA=".$DATA;
+            $Element[] = $URL;
+            $Index ++;
+        }
+        return $Element;
+    }
+    else {
+        $RS                     = [];
+        $RS['FieldName']        = $FieldName;
+        $RS['TableName']        = $TableName;
+        $RS['Id']               = $Id;
+        $RS['Type']             = $Type;
+        $RS['Time']             = time();
+        $DATA   = EncryptID(serialize($RS));
+        $URL    = "data_image.php?DATA=".$DATA;
+        return $URL;
+    }
+}
+
 function ImageUploadToDisk($FieldName='图片') {
     global $FileStorageLocation;
     global $SettingMap;
@@ -485,7 +553,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
             $FieldTypeInFlow = 'FieldTypeFollowByFormSetting';
         }
         //print_R($FieldName.$FieldTypeInFlow);print "\n";
-
+        //print_R($CurrentFieldTypeArray)."\n";
         switch($FieldTypeInFlow)   {
             case 'FieldTypeFollowByFormSetting':
                 //Do Nothing
@@ -500,16 +568,34 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $FieldTypeInFlow_Map['edit_default'] = "Disable";
                 break;
             case 'View_Use_ListAddEdit_NotUse':
-                $FieldTypeInFlow_Map['add_default'] = "readonly";
-                $FieldTypeInFlow_Map['edit_default'] = "readonly";
+                if($CurrentFieldTypeArray[0]=="avatar")  {
+                    $FieldTypeInFlow_Map['add_default'] = "readonlyavatar";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
+                }
+                else {
+                    $FieldTypeInFlow_Map['add_default'] = "readonly";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonly";                    
+                }
                 break;
             case 'ListAddView_Use_Edit_Readonly':
-                $FieldTypeInFlow_Map['edit_default'] = "readonly";
-                $FieldTypeInFlow_Map['view_default'] = "input";
+                if($CurrentFieldTypeArray[0]=="avatar")  {
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
+                    $FieldTypeInFlow_Map['view_default'] = "avatar";
+                }
+                else {
+                    $FieldTypeInFlow_Map['edit_default'] = "readonly";
+                    $FieldTypeInFlow_Map['view_default'] = "input";                  
+                }
                 break;
             case 'ListView_Use_AddEdit_Readonly':
-                $FieldTypeInFlow_Map['add_default'] = "readonly";
-                $FieldTypeInFlow_Map['edit_default'] = "readonly";
+                if($CurrentFieldTypeArray[0]=="avatar")  {
+                    $FieldTypeInFlow_Map['add_default'] = "readonlyavatar";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
+                }
+                else {
+                    $FieldTypeInFlow_Map['add_default'] = "readonly";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonly";                    
+                }
                 break;
             case 'ListAddEdit_Use_View_NotUse':
                 $FieldTypeInFlow_Map['view_default'] = "readonly";
@@ -814,7 +900,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $FieldType = $rs->GetArray();
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
                 break;
-            case 'avator':
+            case 'avatar':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false] ];
                 break;

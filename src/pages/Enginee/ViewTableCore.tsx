@@ -181,7 +181,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             </TableRow>
                           )
                         }
-                        else if (FieldArray.type == "avator" && defaultValuesView[FieldArray.name] != undefined) {
+                        else if (FieldArray.type == "avatar" && defaultValuesView[FieldArray.name] != undefined) {
                           
                           return (
                             <TableRow key={FieldArray_index}>
