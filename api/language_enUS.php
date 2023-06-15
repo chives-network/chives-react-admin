@@ -511,11 +511,12 @@ $MAP['View Config Setting'] 	            = 'View Config Setting';
 $MAP['View All Config Setting Fields'] 	    = 'View All Config Setting Fields';
 $MAP['Params Error!'] 	= 'Params Error!';
 $MAP['Extra Small'] 	= 'Extra Small';
-$MAP['Small'] 	= 'Small';
-$MAP['Medium'] 	= 'Medium';
-$MAP['Large'] 	= 'Large';
+$MAP['Small'] 	        = 'Small';
+$MAP['Medium'] 	        = 'Medium';
+$MAP['Large'] 	        = 'Large';
 $MAP['Extra Large'] 	= 'Extra Large';
 $MAP['Init_Action_AddEditWidth'] 	= 'Init_Action_AddEditWidth';
+$MAP['RemoveAll']       = 'Remove All';
 
 
 ?>

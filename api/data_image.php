@@ -12,36 +12,84 @@ $DATA = unserialize($DATA);
 $AttachName = $DATA['FieldName'];
 $Type       = $DATA['Type'];
 $TableName  = $DATA['TableName'];
-$id         = $DATA['Id'];
+$Index      = intval($DATA['Index']);
+$id         = intval($DATA['Id']);
 $FilePath   = "";
 $AttachValue = returntablefield($TableName,"id",$id,$AttachName)[$AttachName];
-if($AttachValue!="")    {
-    $AttachArray = explode("||",$AttachValue);
-    $YM          = date('ym',$AttachArray[1]);
-    $FileStorageLocation = $FileStorageLocation."/".$YM;
-    $FilePath = $FileStorageLocation."/".$AttachArray[1].".".$AttachArray[0];
-}
-if (!file_exists($FilePath)) {
-    $FilePath = "./images/avatars/2.png";
+
+
+if($Type=="files")              {
+    if($AttachValue!="")    {
+        $AttachArray    = explode("||",$AttachValue);
+        $FieldName      = explode("*",$AttachArray[0])[$Index];
+        $FieldId        = explode(",",$AttachArray[1])[$Index];
+        $FieldIdArray   = explode("_",$FieldId);
+
+        $YM             = $FieldIdArray[0];
+        $FileStorageLocation = $FileStorageLocation."/".$YM;
+        $FilePath = $FileStorageLocation."/".$FieldIdArray[1].".".$FieldName;
+    }
+    if (!file_exists($FilePath)) {
+        $FilePath = "./images/avatars/2.png";
+    }
+    $imageType = exif_imagetype($FilePath);
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            header('Content-Type: image/jpeg');
+            readfile($FilePath);
+            break;
+        case IMAGETYPE_PNG:
+            header('Content-Type: image/png');
+            readfile($FilePath);
+            break;
+        case IMAGETYPE_GIF:
+            header('Content-Type: image/gif');
+            readfile($FilePath);
+            break;
+        default:
+            //Download File
+            header("Content-Type: application/octet-stream");
+            header("Content-Disposition: attachment; filename=" . $FieldName);
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate");
+            header("Pragma: public");
+            header("Content-Length: " . filesize($FilePath));
+            readfile($FilePath);
+            break;
+    }
+    exit;
 }
 
-$imageType = exif_imagetype($FilePath);
-switch ($imageType) {
-    case IMAGETYPE_JPEG:
-        header('Content-Type: image/jpeg');
-        break;
-    case IMAGETYPE_PNG:
-        header('Content-Type: image/png');
-        break;
-    case IMAGETYPE_GIF:
-        header('Content-Type: image/gif');
-        break;
-    default:
-        header('Content-Type: image/png');
-        break;
+
+if($Type=="avatar")             {
+    if($AttachValue!="")    {
+        $AttachArray = explode("||",$AttachValue);
+        $YM          = date('ym',$AttachArray[1]);
+        $FileStorageLocationYM = $FileStorageLocation."/".$YM;
+        $FilePath = $FileStorageLocationYM."/".$AttachArray[1].".".$AttachArray[0];
+    }
+    if (!file_exists($FilePath)) {
+        $FilePath = "./images/avatars/2.png";
+    }
+
+    $imageType = exif_imagetype($FilePath);
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            header('Content-Type: image/jpeg');
+            break;
+        case IMAGETYPE_PNG:
+            header('Content-Type: image/png');
+            break;
+        case IMAGETYPE_GIF:
+            header('Content-Type: image/gif');
+            break;
+        default:
+            header('Content-Type: image/png');
+            break;
+    }
+    readfile($FilePath);
+    exit;
 }
-readfile($FilePath);
-exit;
 
 
 /*

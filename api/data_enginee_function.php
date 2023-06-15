@@ -26,21 +26,53 @@ function FilesUploadToDisk($FieldName='图片') {
             }
         }
         if($copyValue)  {
-            $_POST[$FieldName]          = join("*",$ATTACHMENT_NAME_LIST)."||".join("*",$ATTACHMENT_ID_LIST);
+            $_POST[$FieldName]          = join("*",$ATTACHMENT_NAME_LIST)."||".join(",",$ATTACHMENT_ID_LIST)."||".join(",",$ImageInfor['size']);
         }
     }
 }
 
-function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
+function AttachValueMinusOneFile($OriginalValue, $ExistFileNameArray, $UploadFiles)      {
+    //Only Add Exists
+    $FieldValueArray        = explode("||",$OriginalValue);
+    $FieldNameArray         = explode("*",$FieldValueArray[0]);
+    $FieldIdArray           = explode(",",$FieldValueArray[1]);
+    $FieldSizeArray         = explode(",",$FieldValueArray[2]);
+    $FieldNameArrayNew = [];
+    $FieldIdArrayNew = [];
+    $FieldSizeArrayNew = [];
+    for($i=0;$i<sizeof($FieldNameArray);$i++)               {
+        if(in_array($FieldNameArray[$i],$ExistFileNameArray))       {
+            $FieldNameArrayNew[]    = $FieldNameArray[$i];
+            $FieldIdArrayNew[]      = $FieldIdArray[$i];
+            $FieldSizeArrayNew[]    = $FieldSizeArray[$i];
+        }
+    }
+    //Upload Files
+    $FieldValueArray        = explode("||",$UploadFiles);
+    $FieldNameArray         = explode("*",$FieldValueArray[0]);
+    $FieldIdArray           = explode(",",$FieldValueArray[1]);
+    $FieldSizeArray         = explode(",",$FieldValueArray[2]);
+    for($i=0;$i<sizeof($FieldNameArray);$i++)               {
+        $FieldNameArrayNew[]    = $FieldNameArray[$i];
+        $FieldIdArrayNew[]      = $FieldIdArray[$i];
+        $FieldSizeArrayNew[]    = $FieldSizeArray[$i];
+    }
+    return join("*",$FieldNameArrayNew)."||".join(",",$FieldIdArrayNew)."||".join(",",$FieldSizeArrayNew);;
+}
+function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue="") {
     global $FileStorageLocation;
     global $SettingMap;
     global $_POST;
+    if($FieldValue=="")    {
+        return "";
+    }
     $FieldValueArray        = explode("||",$FieldValue);
-    $FieldValueArray        = explode("*",$FieldValueArray[0]);
-    if($FieldValueArray>1)  {
+    $FieldNameArray        = explode("*",$FieldValueArray[0]);
+    $FieldSizeArray        = explode(",",$FieldValueArray[2]);
+    if($FieldNameArray>1)  {
         $Element    = [];
         $Index      = 0;
-        foreach($FieldValueArray as $Item) {
+        foreach($FieldNameArray as $Item) {
             $RS                     = [];
             $RS['FieldName']        = $FieldName;
             $RS['TableName']        = $TableName;
@@ -50,7 +82,20 @@ function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
             $RS['Time']             = time();
             $DATA   = EncryptID(serialize($RS));
             $URL    = "data_image.php?DATA=".$DATA;
-            $Element[] = $URL;
+            if(in_array(substr($Item,-4),[".png",".gif",".jpg","jpeg","webm"])) {
+                $TypeItem = "image";
+            }
+            else {
+                $TypeItem = "file";
+            }
+            $FieldRow = [];
+            $FieldRow['name']   = $Item;
+            $FieldRow['webkitRelativePath']    = $URL;
+            $FieldRow['type']   = $TypeItem;
+            $FieldRow['size']   = $FieldSizeArray[$Index];
+            if($Item!="")  {
+                $Element[]      = $FieldRow;
+            }
             $Index ++;
         }
         return $Element;
@@ -89,21 +134,6 @@ function ImageUploadToDisk($FieldName='图片') {
             $_POST[$FieldName]      = $ATTACHMENT_NAME."||".$ATTACHMENT_ID;
         }
     }
-}
-
-function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type) {
-    global $FileStorageLocation;
-    global $SettingMap;
-    global $_POST;
-    $RS                     = [];
-    $RS['FieldName']        = $FieldName;
-    $RS['TableName']        = $TableName;
-    $RS['Id']               = $Id;
-    $RS['Type']             = $Type;
-    $RS['Time']             = time();
-    $DATA   = EncryptID(serialize($RS));
-    $URL    = "data_image.php?DATA=".$DATA;
-    return $URL;
 }
 
 function Msg_Reminder_Object_From_Add_Or_Edit($TableName, $id) {
@@ -572,6 +602,10 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                     $FieldTypeInFlow_Map['add_default'] = "readonlyavatar";
                     $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
                 }
+                else if($CurrentFieldTypeArray[0]=="files")  {
+                    $FieldTypeInFlow_Map['add_default'] = "readonlyfiles";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyfiles";
+                }
                 else {
                     $FieldTypeInFlow_Map['add_default'] = "readonly";
                     $FieldTypeInFlow_Map['edit_default'] = "readonly";                    
@@ -582,6 +616,10 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                     $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
                     $FieldTypeInFlow_Map['view_default'] = "avatar";
                 }
+                elseif($CurrentFieldTypeArray[0]=="files")  {
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyfiles";
+                    $FieldTypeInFlow_Map['view_default'] = "files";
+                }
                 else {
                     $FieldTypeInFlow_Map['edit_default'] = "readonly";
                     $FieldTypeInFlow_Map['view_default'] = "input";                  
@@ -591,6 +629,10 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 if($CurrentFieldTypeArray[0]=="avatar")  {
                     $FieldTypeInFlow_Map['add_default'] = "readonlyavatar";
                     $FieldTypeInFlow_Map['edit_default'] = "readonlyavatar";
+                }
+                else if($CurrentFieldTypeArray[0]=="files")  {
+                    $FieldTypeInFlow_Map['add_default'] = "readonlyfiles";
+                    $FieldTypeInFlow_Map['edit_default'] = "readonlyfiles";
                 }
                 else {
                     $FieldTypeInFlow_Map['add_default'] = "readonly";
@@ -903,6 +945,10 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
             case 'avatar':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false] ];
+                break;
+            case 'files':
+                if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'RemoveAll'=>__('RemoveAll') ];
                 break;
             case 'ProvinceAndCity':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";

@@ -426,9 +426,12 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                     FilesUploadToDisk($Item['FieldName']);
                     $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
                 }
-                elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
-                    //Delete this Key from FieldsArray
-                    $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                if(is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))  {
+                    $OriginalValue = $RecordOriginal->fields[$Item['FieldName']];
+                    $FieldsArray[$Item['FieldName']]    = AttachValueMinusOneFile($OriginalValue, $_POST[$Item['FieldName']."_OriginalFieldValue"], $FieldsArray[$Item['FieldName']]);
+                }
+                if(!is_array($_FILES[$Item['FieldName']]) && !is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))    {
+                    $FieldsArray[$Item['FieldName']]    = "";
                 }
                 break;
         }
@@ -447,6 +450,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                 global $GLOBAL_EXEC_KEY_SQL;
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
+            $RS['_POST'] = $_POST;  
             $RS['_FILES'] = $_FILES;  
             //Batch_Approval
             $Batch_Approval_Status_Field    = $SettingMap['Batch_Approval_Status_Field'];
@@ -969,6 +973,9 @@ foreach($AllFieldsFromTable as $Item)  {
         case 'radiogroupcolor':
             $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
             break;
+        case 'files':            
+            $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
+            break;
         default:
             $FieldType = "string";
             if(in_array($FieldName,$ApprovalNodeFieldsStatus))  {
@@ -1227,6 +1234,12 @@ foreach ($rs_a as $Line) {
                 $Line[$FieldName] = join(',',$MultiValueRS);
                 $FieldDataColorValue[$FieldName][$Line[$FieldName]] = "#";
                 //print "TIME EXCEUTE 13:".(time()-$TIME_BEGIN)."<BR>\n";
+                break;
+            case 'avatar':
+                $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'avatar');
+                break;
+            case 'files':
+                $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'files',$Line[$FieldName]);
                 break;
         }
         // filter data to show on the list page -- begin

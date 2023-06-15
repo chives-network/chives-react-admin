@@ -13,6 +13,11 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
+import ListItem from '@mui/material/ListItem'
+import Link from "@mui/material/Link"
+
+// ** Icon Imports
+import Icon from 'src/@core/components/icon'
 
 // ** Config
 import authConfig from 'src/configs/auth'
@@ -53,6 +58,11 @@ const ImgStyled = styled('img')(({ theme }) => ({
   borderRadius: 4,
   marginRight: theme.spacing(5)
 }))
+
+const CustomLink = styled(Link)({
+  textDecoration: "none",
+  color: "inherit",
+});
 
 const ViewTableCore = (props: ViewTableType) => {
   // ** Props
@@ -187,6 +197,42 @@ const ViewTableCore = (props: ViewTableType) => {
                             <TableRow key={FieldArray_index}>
                               <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
                               <MUITableCell><ImgStyled src={authConfig.backEndApiHost+defaultValuesView[FieldArray.name]} alt={FieldArray.helptext} /></MUITableCell>
+                            </TableRow>
+                          )
+                        }
+                        else if (FieldArray.type == "files" && defaultValuesView[FieldArray.name] != undefined) {
+                          return (
+                            <TableRow key={FieldArray_index}>
+                              <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
+                              <MUITableCell>
+                                {defaultValuesView[FieldArray.name] && defaultValuesView[FieldArray.name].length>0 && defaultValuesView[FieldArray.name].map((FileUrl: any)=>{
+                                  return (
+                                    <ListItem key={FileUrl['name']} style={{padding: "3px"}}>
+                                    <div className='file-details' style={{display: "flex"}}>
+                                        <div style={{padding: "0 3px 0 0"}}>
+                                        {FileUrl.type.startsWith('image') ? <img width={45} height={45} alt={FileUrl['name']} src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} /> : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
+                                        </div>
+                                        <div>
+                                        {FileUrl['type']=="file" ? 
+                                          <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']}>{FileUrl['name']}</CustomLink></Typography>
+                                        :
+                                          <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']} target="_blank">{FileUrl['name']}</CustomLink></Typography>
+                                        }
+                                        
+                                        {FileUrl['size']>0 ? 
+                                          <Typography className='file-size' variant='body2'>
+                                              {Math.round(FileUrl['size'] / 100) / 10 > 1000
+                                              ? `${(Math.round(FileUrl['size'] / 100) / 10000).toFixed(1)} mb`
+                                              : `${(Math.round(FileUrl['size'] / 100) / 10).toFixed(1)} kb`}
+                                          </Typography>
+                                          : ''
+                                        }                                        
+                                        </div>
+                                    </div>
+                                    </ListItem>
+                                    )
+                                })}                                
+                              </MUITableCell>
                             </TableRow>
                           )
                         }

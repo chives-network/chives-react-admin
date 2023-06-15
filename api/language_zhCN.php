@@ -513,7 +513,7 @@ $MAP['Large'] 	        = '大';
 $MAP['Extra Large'] 	= '超大';
 $MAP['Init_Action_AddEditWidth'] 	= '新建和编辑页面宽度';
 
-$MAP['NULL']    							= '空值';
+$MAP['RemoveAll']       = '删除全部';
 $MAP['NULL']    							= '空值';
 $MAP['NULL']    							= '空值';
 
