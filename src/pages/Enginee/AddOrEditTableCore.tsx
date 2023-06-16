@@ -2028,7 +2028,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
                                                                             return (
                                                                                     <ListItem key={fileInfor.name}>
-                                                                                        <div className='file-details'>
+                                                                                        <div className='file-details' style={{ display: 'flex', overflow: hidden}}>
                                                                                             <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
                                                                                             <div>
                                                                                             {fileInfor['type']=="file" ? 
@@ -2103,7 +2103,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
                                                                             return (
                                                                                     <ListItem key={fileInfor.name} style={{padding: "3px"}}>
-                                                                                        <div className='file-details' style={{ display: 'flex'}}>
+                                                                                        <div className='file-details' style={{ display: 'flex', overflow: 'hidden'}}>
                                                                                             <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
                                                                                             <div>
                                                                                             {fileInfor['type']=="file" ? 
