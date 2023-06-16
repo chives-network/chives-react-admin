@@ -47,6 +47,7 @@ import toast from 'react-hot-toast'
 import IndexTableHeader from 'src/pages/Enginee/IndexTableHeader'
 import AddOrEditTable from './AddOrEditTable'
 import ViewTable from './ViewTable'
+import ImagesPreview from './ImagesPreview'
 import IndexBottomFlowNode from './IndexBottomFlowNode'
 import { RootState, AppDispatch } from 'src/store/index'
 
@@ -84,6 +85,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   const [addEditActionId, setAddEditActionId] = useState<string>('')
   const [editViewCounter, setEditViewCounter] = useState<number>(1)
   const [addEditViewShowInWindow, setAddEditViewShowInWindow] = useState<boolean>(false)
+  const [imagesPreviewOpen, setImagesPreviewOpen] = useState<boolean>(false)
+  const [imagesPreviewList, setImagesPreviewList] = useState<string[]>([])
 
   const [filterMultiColumns, setFilterMultiColumns] = useState<GridFilterModel>()
   const [searchOneFieldName, setSearchOneFieldName] = useState<string>('')
@@ -260,6 +263,15 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   const toggleViewTableDrawer = () => {
     setAddEditActionName('view_default')
     setViewActionOpen(!viewActionOpen)
+  }
+
+  const toggleImagesPreviewDrawer = () => {
+    setImagesPreviewOpen(!imagesPreviewOpen)
+  }
+
+  const toggleImagesPreviewListDrawer = (imagesPreviewList: string[]) => {
+    setImagesPreviewOpen(!imagesPreviewOpen)
+    setImagesPreviewList(imagesPreviewList)
   }
 
   const togglePageActionDrawer = (action: string, id: string) => {
@@ -461,6 +473,22 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
           </Tooltip>
         </Box>
       )
+      columns_for_datagrid[column_index] = columnRenderCell
+    }
+    else if (column && column.type == "avatar") {
+      const columnRenderCell = { ...column }
+      columnRenderCell['renderCell'] = ({ row }: any) => {
+        return (
+          row[column.field] != "" ?
+            (
+              <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }}  onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+row[column.field]])}>
+                <CustomAvatar src={authConfig.backEndApiHost+row[column.field]} sx={{ mr: 3, width: 30, height: 30 }} />
+              </Box>
+            )
+            :
+            null
+        )
+      }
       columns_for_datagrid[column_index] = columnRenderCell
     }
     else if (column && column.type == "approvalnode") {
@@ -686,9 +714,10 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         }
       </Grid>
       : '' }
-      {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} /> : ''}
-      {store && store[addEditActionName] && store[addEditActionName]['defaultValues'] && addEditActionName.indexOf("edit_default") != -1 && addEditActionId!='' ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store[addEditActionName]} open={addEditActionOpen} toggleAddTableDrawer={toggleEditTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} /> : ''}
-      {store && store.view_default && store.view_default.defaultValues && addEditActionName.indexOf("view_default") != -1 && addEditActionId!='' ? <ViewTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} pageJsonInfor={store[addEditActionName]} open={viewActionOpen} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} addEditViewShowInWindow={addEditViewShowInWindow} CSRF_TOKEN={store.init_default.CSRF_TOKEN} /> : ''}
+      {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth}  toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} /> : ''}
+      {store && store[addEditActionName] && store[addEditActionName]['defaultValues'] && addEditActionName.indexOf("edit_default") != -1 && addEditActionId!='' ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store[addEditActionName]} open={addEditActionOpen} toggleAddTableDrawer={toggleEditTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth}  toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} /> : ''}
+      {store && store.view_default && store.view_default.defaultValues && addEditActionName.indexOf("view_default") != -1 && addEditActionId!='' ? <ViewTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} pageJsonInfor={store[addEditActionName]} open={viewActionOpen} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} addEditViewShowInWindow={addEditViewShowInWindow} CSRF_TOKEN={store.init_default.CSRF_TOKEN} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} /> : ''}
+      <ImagesPreview open={imagesPreviewOpen} toggleImagesPreviewDrawer={toggleImagesPreviewDrawer} imagesList={imagesPreviewList} />
     </Grid >
   )
 }

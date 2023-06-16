@@ -34,11 +34,12 @@ interface ViewTableType {
   pageJsonInfor: {}
   addEditViewShowInWindow: boolean
   CSRF_TOKEN: string
+  toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
 }
 
 const ViewTable = (props: ViewTableType) => {
   // ** Props
-  const { externalId, id, action, pageJsonInfor, open, toggleViewTableDrawer, backEndApi, editViewCounter, addEditViewShowInWindow, CSRF_TOKEN } = props
+  const { externalId, id, action, pageJsonInfor, open, toggleViewTableDrawer, backEndApi, editViewCounter, addEditViewShowInWindow, CSRF_TOKEN, toggleImagesPreviewListDrawer } = props
   
   const handleClose = () => {
     toggleViewTableDrawer()
@@ -48,7 +49,7 @@ const ViewTable = (props: ViewTableType) => {
     <Fragment>
     {addEditViewShowInWindow ? 
       <Grid sx={{ pb: 8, px: { xs: 8, sm: 15 }, pt: { xs: 8, sm: 12.5 }, position: 'relative' }} style={{ width: '100%' }}>
-        <ViewTableCore externalId={Number(externalId)} id={id} action={action} pageJsonInfor={pageJsonInfor} open={open} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} CSRF_TOKEN={CSRF_TOKEN}/>
+        <ViewTableCore externalId={Number(externalId)} id={id} action={action} pageJsonInfor={pageJsonInfor} open={open} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} CSRF_TOKEN={CSRF_TOKEN} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} />
       </Grid>
       :
       <Dialog
@@ -67,7 +68,7 @@ const ViewTable = (props: ViewTableType) => {
           >
             <Icon icon='mdi:close' />
           </IconButton>
-          <ViewTableCore externalId={Number(externalId)} id={id} action={action} pageJsonInfor={pageJsonInfor} open={open} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} CSRF_TOKEN={CSRF_TOKEN}/>
+          <ViewTableCore externalId={Number(externalId)} id={id} action={action} pageJsonInfor={pageJsonInfor} open={open} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} CSRF_TOKEN={CSRF_TOKEN} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} />
         </DialogContent>
       </Dialog >
     }

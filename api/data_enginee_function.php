@@ -59,7 +59,7 @@ function AttachValueMinusOneFile($OriginalValue, $ExistFileNameArray, $UploadFil
     }
     return join("*",$FieldNameArrayNew)."||".join(",",$FieldIdArrayNew)."||".join(",",$FieldSizeArrayNew);;
 }
-function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue="") {
+function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
     global $FileStorageLocation;
     global $SettingMap;
     global $_POST;
@@ -69,7 +69,7 @@ function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue="") {
     $FieldValueArray        = explode("||",$FieldValue);
     $FieldNameArray        = explode("*",$FieldValueArray[0]);
     $FieldSizeArray        = explode(",",$FieldValueArray[2]);
-    if($FieldNameArray>1)  {
+    if($FieldNameArray[0]!="")  {
         $Element    = [];
         $Index      = 0;
         foreach($FieldNameArray as $Item) {
@@ -82,6 +82,12 @@ function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue="") {
             $RS['Time']             = time();
             $DATA   = EncryptID(serialize($RS));
             $URL    = "data_image.php?DATA=".$DATA;
+
+            //Return Avatar 
+            if($Type=="avatar")  {
+                return $URL;
+            }
+
             if(in_array(substr($Item,-4),[".png",".gif",".jpg","jpeg","webm"])) {
                 $TypeItem = "image";
             }
@@ -99,17 +105,6 @@ function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue="") {
             $Index ++;
         }
         return $Element;
-    }
-    else {
-        $RS                     = [];
-        $RS['FieldName']        = $FieldName;
-        $RS['TableName']        = $TableName;
-        $RS['Id']               = $Id;
-        $RS['Type']             = $Type;
-        $RS['Time']             = time();
-        $DATA   = EncryptID(serialize($RS));
-        $URL    = "data_image.php?DATA=".$DATA;
-        return $URL;
     }
 }
 
@@ -131,7 +126,7 @@ function ImageUploadToDisk($FieldName='图片') {
         $NewFileName                = $ATTACHMENT_ID.".".$ATTACHMENT_NAME;
         $copyValue                  = copy($ImageInfor['tmp_name'], $FileStorageLocation."/".$NewFileName);
         if($copyValue)  {
-            $_POST[$FieldName]      = $ATTACHMENT_NAME."||".$ATTACHMENT_ID;
+            $_POST[$FieldName]      = $ATTACHMENT_NAME."||".date("ym")."_".$ATTACHMENT_ID;
         }
     }
 }

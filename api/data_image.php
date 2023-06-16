@@ -64,9 +64,10 @@ if($Type=="files")              {
 if($Type=="avatar")             {
     if($AttachValue!="")    {
         $AttachArray = explode("||",$AttachValue);
-        $YM          = date('ym',$AttachArray[1]);
-        $FileStorageLocationYM = $FileStorageLocation."/".$YM;
-        $FilePath = $FileStorageLocationYM."/".$AttachArray[1].".".$AttachArray[0];
+        $IdArray     = explode('_',$AttachArray[1]);
+        
+        $FileStorageLocationYM = $FileStorageLocation."/".$IdArray[0];
+        $FilePath = $FileStorageLocationYM."/".$IdArray[1].".".$AttachArray[0];
     }
     if (!file_exists($FilePath)) {
         $FilePath = "./images/avatars/2.png";

@@ -50,6 +50,7 @@ interface ViewTableType {
   externalId: number
   pageJsonInfor: {}
   CSRF_TOKEN: string
+  toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
 }
 
 const ImgStyled = styled('img')(({ theme }) => ({
@@ -66,7 +67,7 @@ const CustomLink = styled(Link)({
 
 const ViewTableCore = (props: ViewTableType) => {
   // ** Props
-  const { externalId, id, action, toggleViewTableDrawer, backEndApi, editViewCounter, CSRF_TOKEN } = props
+  const { externalId, id, action, toggleViewTableDrawer, backEndApi, editViewCounter, CSRF_TOKEN,toggleImagesPreviewListDrawer } = props
   console.log("externalId props", externalId)
   
   // ** Hooks
@@ -196,7 +197,11 @@ const ViewTableCore = (props: ViewTableType) => {
                           return (
                             <TableRow key={FieldArray_index}>
                               <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                              <MUITableCell><ImgStyled src={authConfig.backEndApiHost+defaultValuesView[FieldArray.name]} alt={FieldArray.helptext} /></MUITableCell>
+                              <MUITableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesView[FieldArray.name]])}>
+                                <ImgStyled src={authConfig.backEndApiHost+defaultValuesView[FieldArray.name]} alt={FieldArray.helptext} />
+                              </Box>
+                              </MUITableCell>
                             </TableRow>
                           )
                         }

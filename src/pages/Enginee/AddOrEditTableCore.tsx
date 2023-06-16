@@ -109,11 +109,12 @@ interface AddOrEditTableType {
     AddtionalParams: {[key:string]:any}
     CSRF_TOKEN: string
     dataGridLanguageCode: string
+    toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
 }
 
 const AddOrEditTableCore = (props: AddOrEditTableType) => {
     // ** Props
-    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode } = props
+    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode, toggleImagesPreviewListDrawer } = props
 
     //Yup Language
     if(dataGridLanguageCode=="zhCN") {
@@ -629,13 +630,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     })
     const renderFilePreview = (file: File | FileUrl) => {
         if (file && 'webkitRelativePath' in file && file['webkitRelativePath']!="" && file['type']=="image") {
-            return <img width={38} height={38} alt={file.name} src={authConfig.backEndApiHost+file['webkitRelativePath']} />
+            return <img width={38} height={38} alt={file.name} style={{padding: "3px 3px 0 0"}} src={authConfig.backEndApiHost+file['webkitRelativePath']} />
         }
         else if (file && 'webkitRelativePath' in file && file['webkitRelativePath']!="" && file['type']!="image") {
             return <Icon icon='mdi:file-document-outline' />
         }
         else if (file.type.startsWith('image')) {
-            return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file as any)} />
+            return <img width={38} height={38} alt={file.name} style={{padding: "3px 3px 0 0"}} src={URL.createObjectURL(file as any)} />
         } 
         else {
             return <Icon icon='mdi:file-document-outline' />
@@ -2028,7 +2029,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
                                                                             return (
                                                                                     <ListItem key={fileInfor.name}>
-                                                                                        <div className='file-details' style={{ display: 'flex', overflow: hidden}}>
+                                                                                        <div className='file-details' style={{overflow: 'hidden'}}>
                                                                                             <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
                                                                                             <div>
                                                                                             {fileInfor['type']=="file" ? 
@@ -2107,17 +2108,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
                                                                                             <div>
                                                                                             {fileInfor['type']=="file" ? 
-                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']}>{fileInfor['name']}</CustomLink></Typography>
+                                                                                                <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']}>{fileInfor['name']}</CustomLink></Typography>
                                                                                             :
                                                                                             ''
                                                                                             }
                                                                                             {fileInfor['type']=="image" ? 
-                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']} target="_blank">{fileInfor['name']}</CustomLink></Typography>
+                                                                                                <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']} target="_blank">{fileInfor['name']}</CustomLink></Typography>
                                                                                             :
                                                                                             ''
                                                                                             }
                                                                                             {(fileInfor['type']!="file" && fileInfor['type']!="image") ? 
-                                                                                            <Typography className='file-name'>{fileInfor['name']}</Typography>
+                                                                                                <Typography className='file-name'>{fileInfor['name']}</Typography>
                                                                                             :
                                                                                             ''
                                                                                             }
@@ -2160,7 +2161,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                                     {avatorShowArea && avatorShowArea[FieldArray.name] ?
                                                                         (<ImgStyled src={avatorShowArea[FieldArray.name]} alt={FieldArray.helptext} />)
-                                                                        : (<ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} />)
+                                                                        : (<Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]])}><ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} /></Box>)
                                                                     }
                                                                     <div>
                                                                         <ButtonStyled component='label' variant='contained' htmlFor={FieldArray.name}>
