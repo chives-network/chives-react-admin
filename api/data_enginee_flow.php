@@ -95,11 +95,12 @@ require_once('data_enginee_filter_role.php');
 //print "TIME EXCEUTE 6:".(time()-$TIME_BEGIN)."<BR>\n";
 
 global $InsertOrUpdateFieldArrayForSql;
-$InsertOrUpdateFieldArrayForSql['ADD'] = [];
+$InsertOrUpdateFieldArrayForSql['ADD']  = [];
 $InsertOrUpdateFieldArrayForSql['EDIT'] = [];
 
-$defaultValuesAdd = [];
+$defaultValuesAdd  = [];
 $defaultValuesEdit = [];
+
 
 $allFieldsAdd   = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'ADD');
 foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
@@ -121,6 +122,30 @@ foreach($allFieldsView as $ModeName=>$allFieldItem) {
         $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];
     }
 }
+
+//Import Page Structure
+$Import_Rule_Method = [];
+$Import_Rule_Method[] = ['value'=>"BothInsertAndUpdate", 'label'=>__("BothInsertAndUpdate")];
+$Import_Rule_Method[] = ['value'=>"OnlyUpdate", 'label'=>__("OnlyUpdate")];
+$Import_Rule_Method[] = ['value'=>"OnlyInsert", 'label'=>__("OnlyInsert")];
+$allFieldsImport['Default'][] = ['name' => "Import_Rule_Method", 'show'=>true, 'type'=>'select', 'options'=>$Import_Rule_Method, 'label' => __("Step1_Choose_Import_Rule"), 'value' => $Import_Rule_Method[0]['value'], 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+
+$Import_Fields          = [];
+$Import_Fields_Default  = [];
+foreach($AllFieldsFromTable as $Item)  {
+    $Import_Fields[]            = ['value'=>$Item['FieldName'], 'label'=>$Item['ChineseName']];
+    $Import_Fields_Default[]    = $Item['FieldName'];
+}
+$allFieldsImport['Default'][] = ['name' => "Import_Fields", 'show'=>true, 'type'=>'checkbox', 'options'=>$Import_Fields, 'label' => __("Step2_Choose_Import_Fields"), 'value' => join(',', $Import_Fields_Default), 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+
+$allFieldsImport['Default'][] = ['name' => "Import_File", 'show'=>true, 'FieldTypeArray'=>[], 'type'=>'files', 'label' => __("Step3_Upload_Excel_File"), 'value' => "", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false], 'RemoveAll'=>__('RemoveAll') ];
+
+foreach($allFieldsImport as $ModeName=>$allFieldItem) {
+    foreach($allFieldItem as $ITEM) {
+        $defaultValuesImport[$ITEM['name']] = $ITEM['value'];
+    }
+}
+
 
 //print "TIME EXCEUTE 7:".(time()-$TIME_BEGIN)."<BR>\n";
 //UpdateOtherTableFieldAfterFormSubmit($id);
@@ -1319,6 +1344,8 @@ for($i=0;$i<sizeof($init_default_columns);$i++)    {
 
 $RS['init_default']['button_search']    = __("Search");
 $RS['init_default']['button_add']       = $SettingMap['Rename_List_Add_Button'];
+$RS['init_default']['button_import']    = $SettingMap['Rename_List_Import_Button']?$SettingMap['Rename_List_Import_Button']:__("Import");
+$RS['init_default']['button_export']    = $SettingMap['Rename_List_Export_Button']?$SettingMap['Rename_List_Export_Button']:__("Export");
 $RS['init_default']['columns']          = $init_default_columns;
 $RS['init_default']['columnsactions']   = $columnsactions;
 
@@ -1378,6 +1405,19 @@ if(in_array('Reset_Password_ID_Last6',$Bottom_Button_Actions_Array))   {
 $RS['init_default']['multireview'] = $multireview;
 $RS['init_default']['checkboxSelection']  = is_array($multireview['multireview']) && count($multireview['multireview'])>0 ? true : false;
 
+$RS['import_default']['allFields']        = $allFieldsImport;
+$RS['import_default']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
+$RS['import_default']['defaultValues']    = $defaultValuesImport;
+$RS['import_default']['dialogContentHeight']  = "90%";
+$RS['import_default']['submitaction']     = "import_default_data";
+$RS['import_default']['componentsize']    = "small";
+$RS['import_default']['submittext']       = $SettingMap['Rename_Import_Submit_Button'];
+$RS['import_default']['canceltext']       = __("Cancel");
+$RS['import_default']['titletext']        = $SettingMap['Import_Title_Name'];
+$RS['import_default']['titlememo']        = $SettingMap['Import_Subtitle_Name'];
+$RS['import_default']['tablewidth']       = 650;
+$RS['import_default']['submitloading']    = __("SubmitLoading");
+$RS['import_default']['loading']          = __("Loading");
 
 $RS['add_default']['allFields']     = $allFieldsAdd;
 $RS['add_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
@@ -1393,13 +1433,11 @@ $RS['add_default']['tablewidth']    = 650;
 $RS['add_default']['submitloading'] = __("SubmitLoading");
 $RS['add_default']['loading']       = __("Loading");
 
-$RS['edit_default'] = $RS['add_default'];
-
 $RS['edit_default']['allFields']        = $allFieldsEdit;
 $RS['edit_default']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
 $RS['edit_default']['defaultValues']    = $defaultValuesEdit;
 $RS['edit_default']['dialogContentHeight']  = "90%";
-$RS['edit_default']['submitaction']     = "add_default_data";
+$RS['edit_default']['submitaction']     = "edit_default_data";
 $RS['edit_default']['componentsize']    = "small";
 $RS['edit_default']['submittext']       = $SettingMap['Rename_Edit_Submit_Button'];
 $RS['edit_default']['canceltext']       = __("Cancel");
@@ -1416,7 +1454,6 @@ $RS['view_default']['titlememo']  = $SettingMap['View_Subtitle_Name'];
 $RS['view_default']['componentsize'] = "small";
 
 $RS['export_default'] = [];
-$RS['import_default'] = [];
 
 $RS['init_default']['delete_dialog_title']      = $SettingMap['Tip_Title_When_Delete'];
 $RS['init_default']['delete_dialog_content']    = $SettingMap['Tip_Content_When_Delete'];

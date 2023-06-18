@@ -142,7 +142,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
-    //console.log("AddtionalParams======================================",AddtionalParams)
+    console.log("AddtionalParams======================================",action)
 
     useEffect(() => {
         if (action.indexOf("edit_default") != -1 && editViewCounter > 0) {
@@ -238,7 +238,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     console.log("axios.get editUrl return")
                 })
         }
-        else if (action == "add_default") {
+        else if (action == "add_default" || action == "import_default") {
             setDefaultValuesNew(addEditStructInfo.defaultValues)
             setIsLoading(false)
             const allFieldsMode = addEditStructInfo.allFieldsMode;

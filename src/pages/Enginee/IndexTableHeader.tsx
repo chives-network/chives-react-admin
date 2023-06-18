@@ -30,7 +30,9 @@ interface TableHeaderProps {
   filter: any[]
   handleFilterChange: (field: any, value: string) => void
   handleFilter: (val: string) => void
-  toggle: () => void
+  toggleAddTableDrawer: () => void
+  toggleImportTableDrawer: () => void
+  toggleExportTableDrawer: () => void
   value: string
   searchFieldText: string
   searchFieldArray: { value: string; }[]
@@ -39,14 +41,18 @@ interface TableHeaderProps {
   multiReviewHandleFilter: (action: string, multiReviewInputValue: string, selectedRows: GridRowId[], CSRF_TOKEN: string) => void
   button_search: string
   button_add: string
+  button_import: string
+  button_export: string
   isAddButton: boolean
+  isImportButton: boolean
+  isExportButton: boolean
   CSRF_TOKEN: string
 }
 
 const IndexTableHeader = (props: TableHeaderProps) => {
   
   // ** Props
-  const { filter, handleFilterChange, handleFilter, toggle, value, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, isAddButton, CSRF_TOKEN } = props
+  const { filter, handleFilterChange, handleFilter, toggleAddTableDrawer, toggleImportTableDrawer, toggleExportTableDrawer, value, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, button_import, button_export, isAddButton, isImportButton, isExportButton, CSRF_TOKEN } = props
   const defaultValuesInitial = { "searchOneFieldName": searchFieldArray && searchFieldArray[0] && searchFieldArray[0].value ? searchFieldArray[0].value : undefined, "searchOneFieldValue": "", "multiReviewInputName": "" }
   console.log("value tableHeader",value)
   
@@ -57,11 +63,15 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   useEffect(() => {
     
     //Mousetrap.bind(['alt+f', 'command+f'], handleSubmit(onSubmit));
-    Mousetrap.bind(['alt+a', 'command+a'], toggle);
+    Mousetrap.bind(['alt+a', 'command+a'], toggleAddTableDrawer);
+    Mousetrap.bind(['alt+i', 'command+i'], toggleImportTableDrawer);
+    Mousetrap.bind(['alt+e', 'command+e'], toggleExportTableDrawer);
     
     return () => {
       Mousetrap.unbind(['alt+f', 'command+f']);
       Mousetrap.unbind(['alt+a', 'command+a']);
+      Mousetrap.unbind(['alt+i', 'command+i']);
+      Mousetrap.unbind(['alt+e', 'command+e']);
     }
   });
 
@@ -227,11 +237,23 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                   </FormControl>
                 </Grid>
                 : ''}
-              {isAddButton ?
+              {isAddButton || isImportButton || isExportButton ?
                 <Grid item sm={3} xs={12}>
+                  {isAddButton ? 
                   <Tooltip title="Alt+a">
-                    <Button sx={{ ml: 3, mb: 2 }} onClick={toggle} variant='contained'>{button_add}</Button>
+                    <Button sx={{ ml: 3, mb: 2 }} onClick={toggleAddTableDrawer} variant='contained'>{button_add}</Button>
                   </Tooltip>
+                  : ''}
+                  {isImportButton ? 
+                  <Tooltip title="Alt+i">
+                    <Button sx={{ ml: 3, mb: 2 }} onClick={toggleImportTableDrawer} variant='contained'>{button_import}</Button>
+                  </Tooltip>
+                  : ''}
+                  {isExportButton ? 
+                  <Tooltip title="Alt+e">
+                    <Button sx={{ ml: 3, mb: 2 }} onClick={toggleExportTableDrawer} variant='contained'>{button_export}</Button>
+                  </Tooltip>
+                  : ''}
                 </Grid>
                 : ''}
             </Grid>

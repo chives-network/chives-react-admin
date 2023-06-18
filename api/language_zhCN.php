@@ -511,10 +511,22 @@ $MAP['Small'] 	        = '小';
 $MAP['Medium'] 	        = '中等';
 $MAP['Large'] 	        = '大';
 $MAP['Extra Large'] 	= '超大';
-$MAP['Init_Action_AddEditWidth'] 	= '新建和编辑页面宽度';
+$MAP['Init_Action_AddEditWidth'] 	        = '新建和编辑页面宽度';
 
-$MAP['RemoveAll']       = '删除全部';
+$MAP['RemoveAll']                           = '删除全部';
+$MAP['Import_Rule_Method']                  = '导入规则';
+$MAP['Import_Fields']    				    = '导入字段';
+$MAP['Import_File']    						= '导入文件';
+$MAP['Step1_Choose_Import_Rule']    		= '第一步:选择导入规则';
+$MAP['Step2_Choose_Import_Fields']    		= '第二步:选择导入字段';
+$MAP['Step3_Upload_Excel_File']    		    = '第三步:上传EXCEL文件';
+$MAP['BothInsertAndUpdate']    				= '记录存在时更新和记录不存在时新增';
+$MAP['OnlyUpdate']    						= '记录存在时更新和记录不存在时不新增(只更新)';
+$MAP['OnlyInsert']    						= '记录存在时不更新和记录不存在时新增(只新增)';
 $MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
+
+
+
+
 
 ?>

@@ -515,8 +515,17 @@ $MAP['Small'] 	        = 'Small';
 $MAP['Medium'] 	        = 'Medium';
 $MAP['Large'] 	        = 'Large';
 $MAP['Extra Large'] 	= 'Extra Large';
-$MAP['Init_Action_AddEditWidth'] 	= 'Init_Action_AddEditWidth';
-$MAP['RemoveAll']       = 'Remove All';
+$MAP['Init_Action_AddEditWidth'] 	        = 'Init_Action_AddEditWidth';
+$MAP['RemoveAll']                           = 'Remove All';
+$MAP['Import_Rule_Method']                  = 'Import_Rule_Method';
+$MAP['Import_Fields']    				    = 'Import_Fields';
+$MAP['Import_File']    						= 'Import_File';
+$MAP['Step1_Choose_Import_Rule']    		= 'Step1_Choose_Import_Rule';
+$MAP['Step2_Choose_Import_Fields']    		= 'Step2_Choose_Import_Fields';
+$MAP['Step3_Upload_Excel_File']    		    = 'Step3_Upload_Excel_File';
+$MAP['BothInsertAndUpdate']    				= 'Both Insert And Update Record';
+$MAP['OnlyUpdate']    						= 'Only Update Record';
+$MAP['OnlyInsert']    						= 'Only Insert Record';
 
 
 ?>
