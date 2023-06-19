@@ -321,7 +321,7 @@ $edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_List_Edit_Button", 's
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_List_Delete_Button", 'show'=>true, 'type'=>"input", 'label' => __("Rename_List_Delete_Button"), 'value' => __("Delete"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_List_Import_Button", 'show'=>true, 'type'=>"input", 'label' => __("Rename_List_Import_Button"), 'value' => __("Import"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_List_Export_Button", 'show'=>true, 'type'=>"input", 'label' => __("Rename_List_Export_Button"), 'value' => __("Export"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
-$edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_Import_Submit_Button", 'show'=>true, 'type'=>"input", 'label' => __("Rename_Import_Submit_Button"), 'value' => __("Submit"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
+$edit_default_2['Tip_In_Interface'][] = ['name' => "Rename_Import_Submit_Button", 'show'=>true, 'type'=>"input", 'label' => __("Rename_Import_Submit_Button"), 'value' => __("Import"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
 
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Tip_When_Add_Success", 'show'=>true, 'type'=>"input", 'label' => __("Tip_When_Add_Success"), 'value' => __("Add Data Success!"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Tip_When_Edit_Success", 'show'=>true, 'type'=>"input", 'label' => __("Tip_When_Edit_Success"), 'value' => __("Edit Data Success!"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
@@ -525,10 +525,16 @@ $edit_default_2['Init_Action'][] = ['name' => "Init_Action_AddEditWidth", 'show'
 
 $edit_default_2['Init_Action'][] = ['name' => "Init_Action_Page_ConfigSettingUrl", 'show'=>true, 'type'=>'buttonrouter', 'label' => __("ConfigSetting"), 'value' => '/form/configsetting/?FlowId='.$id, 'placeholder' => "", 'helptext' => "", 'target'=>'_blank', 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
+//Unique_Fields
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_2"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_3", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Unique_Fields_3"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Unique_Fields'][] = ['name' => "Unique_Fields_Repeat_Text", 'show'=>true, 'type'=>"input", 'label' => __("Unique_Fields_Repeat_Text"), 'value' => __(""), 'placeholder' => "", 'helptext' => __("If exist, show text in the user end"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+
+//Import_Fields_Unique
+$edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Import_Fields_Unique_1"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Import_Fields_Unique_2"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_3", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Import_Fields_Unique_3"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
 
 $defaultValues_2 = [];
@@ -547,6 +553,7 @@ $edit_default_2_mode[] = ['value'=>"Columns_Pinned", 'label'=>__("Columns_Pinned
 $edit_default_2_mode[] = ['value'=>"Page_Sort", 'label'=>__("Page_Sort")];
 $edit_default_2_mode[] = ['value'=>"Init_Action", 'label'=>__("Init_Action")];
 $edit_default_2_mode[] = ['value'=>"Unique_Fields", 'label'=>__("Unique_Fields")];
+$edit_default_2_mode[] = ['value'=>"Import_Fields_Unique", 'label'=>__("Import_Fields_Unique")];
 
 if($_GET['action']=="edit_default_2"&&$id!='')         {    
     $sql    = "select * from form_formflow where id = '$id'";

@@ -434,9 +434,10 @@ function InsertOrUpdateTableByArray($Tablename, $Element, $primarykey="username,
 	for($i=0;$i<sizeof($VALUES);$i++)						{
 		$VALUES[$i] = str_replace("'","&#039;",$VALUES[$i]);
 	}
+	$WHERESQL 			= [];
 	$primarykey_ARRAY	= explode(',',$primarykey);
 	for($i=0;$i<sizeof($KEYS);$i++)						{
-		$KEY		= $KEYS[$i];
+		$KEY			= $KEYS[$i];
 		if(in_array($KEY,$primarykey_ARRAY))				{
 			$WHERESQL[]		= "`".$KEY."` ='".$Element[$KEY]."'";
 		}
@@ -457,12 +458,12 @@ function InsertOrUpdateTableByArray($Tablename, $Element, $primarykey="username,
                 return [$rs, $sql];
 			}
 			else	{
-				print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
+				//print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
 				return [null, $sql];
 			}
 		}
 		else	{
-			print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
+			//print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
 			return [null, $sql];
 		}
 	}
@@ -481,7 +482,7 @@ function InsertOrUpdateTableByArray($Tablename, $Element, $primarykey="username,
 				}
 			}
 			else	{
-				print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
+				//print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
 				return [null, $sql];
 			}
 		}
@@ -494,7 +495,7 @@ function InsertOrUpdateTableByArray($Tablename, $Element, $primarykey="username,
                 }
 			}
 			else	{
-				print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
+				//print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
 				return [null, $sql];
 			}
 		}

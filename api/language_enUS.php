@@ -111,11 +111,14 @@ $MAP['Rename_Edit_Submit_Button'] 	        = 'Rename edit submit button';
 $MAP['Rename_List_Add_Button'] 	            = 'Rename list add button';
 $MAP['Rename_List_Edit_Button'] 	        = 'Rename list edit button';
 $MAP['Rename_List_Delete_Button'] 	        = 'Rename list delete button';
+$MAP['Rename_List_Import_Button'] 	        = 'Rename List Import Button';
+$MAP['Rename_List_Export_Button']           = 'Rename List Export Button';
+$MAP['Rename_Import_Submit_Button'] 	    = 'Rename Import Submit Button';
 $MAP['Tip_When_Add_Success'] 	            = 'Tip when add success';
 $MAP['Tip_When_Edit_Success'] 	            = 'Tip when edit success';
 $MAP['Tip_When_Delete_Success'] 	        = 'Tip when delete success';
 $MAP['Tip_Title_When_Delete'] 	            = 'Tip title when delete';
-$MAP['Tip_Content_When_Delete'] 	            = 'Tip content when delete';
+$MAP['Tip_Content_When_Delete'] 	        = 'Tip content when delete';
 $MAP['Tip_Button_When_Delete'] 	            = 'Tip button when delete';
 $MAP['Import_And_Export'] 	        = 'Import and export';
 $MAP['Only_Import'] 	            = 'Only import';
@@ -526,6 +529,21 @@ $MAP['Step3_Upload_Excel_File']    		    = 'Step3_Upload_Excel_File';
 $MAP['BothInsertAndUpdate']    				= 'Both Insert And Update Record';
 $MAP['OnlyUpdate']    						= 'Only Update Record';
 $MAP['OnlyInsert']    						= 'Only Insert Record';
+
+$MAP['Import_Fields_Unique_1'] 	            = 'Import Fields Unique 1';
+$MAP['Import_Fields_Unique_2'] 	            = 'Import Fields _Unique 2';
+$MAP['Import_Fields_Unique_3'] 	            = 'Import Fields Unique 3';
+$MAP['Import_Fields_Unique'] 	            = 'Import Fields Unique';
+$MAP['ImportTemplate']    					= 'Import Template';
+$MAP['Import_Template_File']    			= 'Import Template File';
+$MAP['Import Fields Is Too Less']    		= 'Import Fields Is Too Less';
+$MAP['Import Data Success']    				= 'Import Data Success';
+$MAP['Upload File Not Exist']    			= 'Upload File Not Exist';
+
+
+
+
+
 
 
 ?>

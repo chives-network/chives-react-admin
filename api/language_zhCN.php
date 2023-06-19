@@ -107,6 +107,9 @@ $MAP['Rename_Edit_Submit_Button'] 	= '重命名编辑提交按钮';
 $MAP['Rename_List_Add_Button'] 	    = '重命名列表新建按钮';
 $MAP['Rename_List_Edit_Button'] 	= '重命名列表编辑按钮';
 $MAP['Rename_List_Delete_Button'] 	= '重命名列表删除按钮';
+$MAP['Rename_List_Import_Button']   = '重命名列表导入按钮';
+$MAP['Rename_List_Export_Button']   = '重命名列表导出按钮';
+$MAP['Rename_Import_Submit_Button'] = '重命名导入提交按钮';
 $MAP['Tip_When_Add_Success'] 	= '新建成功后提示';
 $MAP['Tip_When_Edit_Success'] 	= '编辑成功后提示';
 $MAP['Tip_When_Delete_Success'] 	= '删除成功后提示';
@@ -523,6 +526,20 @@ $MAP['Step3_Upload_Excel_File']    		    = '第三步:上传EXCEL文件';
 $MAP['BothInsertAndUpdate']    				= '记录存在时更新和记录不存在时新增';
 $MAP['OnlyUpdate']    						= '记录存在时更新和记录不存在时不新增(只更新)';
 $MAP['OnlyInsert']    						= '记录存在时不更新和记录不存在时新增(只新增)';
+$MAP['Import_Fields_Unique_1'] 	            = '导入唯一字段1';
+$MAP['Import_Fields_Unique_2'] 	            = '导入唯一字段2';
+$MAP['Import_Fields_Unique_3'] 	            = '导入唯一字段3';
+$MAP['Import_Fields_Unique'] 	            = '导入唯一字段';
+
+$MAP['ImportTemplate']    					= '导入模板';
+$MAP['Import_Template_File']    			= '下载导入模板文件';
+$MAP['Import Fields Is Too Less']    		= '导入字段太少，请重新整理文件以后再次导入';
+$MAP['Import Data Success']    				= '导入数据成功';
+$MAP['Upload File Not Exist']    			= '上传文件不存在';
+$MAP['NULL']    							= '空值';
+$MAP['NULL']    							= '空值';
+$MAP['NULL']    							= '空值';
+$MAP['NULL']    							= '空值';
 $MAP['NULL']    							= '空值';
 
 

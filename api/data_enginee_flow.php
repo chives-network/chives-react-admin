@@ -138,7 +138,18 @@ foreach($AllFieldsFromTable as $Item)  {
 }
 $allFieldsImport['Default'][] = ['name' => "Import_Fields", 'show'=>true, 'type'=>'checkbox', 'options'=>$Import_Fields, 'label' => __("Step2_Choose_Import_Fields"), 'value' => join(',', $Import_Fields_Default), 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
 
-$allFieldsImport['Default'][] = ['name' => "Import_File", 'show'=>true, 'FieldTypeArray'=>[], 'type'=>'files', 'label' => __("Step3_Upload_Excel_File"), 'value' => "", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false], 'RemoveAll'=>__('RemoveAll') ];
+$TEMPARRAY                      = [];
+$TEMPARRAY['TableName']         = $TableName;
+$TEMPARRAY['Action']            = "export_template";
+$TEMPARRAY['FormId']            = $FormId;
+$TEMPARRAY['FileName']          = $FormName;
+$TEMPARRAY['Time']              = time();
+$DATATEMP                       = EncryptID(serialize($TEMPARRAY));
+$URLTEMP                        = "data_export.php?DATA=".$DATATEMP;
+$allFieldsImport['Default'][] = ['name' => "Import_Template", 'show'=>true, 'FieldTypeArray'=>[], 'type'=>'buttonurl', 'label' => __("Import_Template_File"), 'value' => $URLTEMP, 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false] ];
+
+$allFieldsImport['Default'][] = ['name' => "Import_File", 'show'=>true, 'FieldTypeArray'=>[], 'type'=>'xlsx', 'label' => __("Step3_Upload_Excel_File"), 'value' => "", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false] ];
+
 
 foreach($allFieldsImport as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
@@ -166,6 +177,115 @@ if($_GET['action']=="option_multi_cancel")  {
     $option_multi_cancel = option_multi_cancel_exection($_POST['selectedRows'], $_POST['multiReviewInputValue'], $Reminder=1, $UpdateOtherTableField=1);
     print $option_multi_cancel;
     exit;
+}
+
+if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List_Header_Array) && $TableName!="")  {
+    
+    //Filter data when do add save operation
+    require_once('data_enginee_filter_post.php');    
+    $MetaColumnNames    = GLOBAL_MetaColumnNames($TableName);
+    
+    $filePath = $_FILES['Import_File']['tmp_name']['0'];
+    if(!is_file($filePath))  {
+        $RS             = [];
+        $RS['status']   = "ERROR";
+        $RS['msg']      = __("Upload File Not Exist");
+        $RS['data']     = $data;
+        print json_encode($RS);
+        exit;
+    }
+
+    //Read Data From Excel
+    $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+    $worksheet = $spreadsheet->getActiveSheet();
+    $highestRow = $worksheet->getHighestRow();
+    $highestColumn = $worksheet->getHighestColumn();
+    $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+    $data = [];
+    for ($row = 1; $row <= $highestRow; $row++) {
+        $rowData = [];
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $cellValue = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+            $rowData[] = $cellValue;
+        }
+        $data[] = $rowData;
+    }
+    $Header         = $data[0];
+    $FieldToIndex   = array_flip($Header);
+
+    //Import Parse Data
+    $Import_Fields_Unique_1 = $SettingMap['Import_Fields_Unique_1'];
+    $Import_Fields_Unique_2 = $SettingMap['Import_Fields_Unique_2'];
+    $Import_Fields_Unique_3 = $SettingMap['Import_Fields_Unique_3'];
+    $ImportUniqueFields = [];
+    if($Import_Fields_Unique_1!="Disabled" && $Import_Fields_Unique_1!="" && $Import_Fields_Unique_1!="id")  {
+        $ImportUniqueFields[] = $Import_Fields_Unique_1;
+    }
+    if($Import_Fields_Unique_2!="Disabled" && $Import_Fields_Unique_2!="" && $Import_Fields_Unique_2!="id")  {
+        $ImportUniqueFields[] = $Import_Fields_Unique_2;
+    }
+    if($Import_Fields_Unique_3!="Disabled" && $Import_Fields_Unique_3!="" && $Import_Fields_Unique_3!="id")  {
+        $ImportUniqueFields[] = $Import_Fields_Unique_3;
+    }
+    if(sizeof($ImportUniqueFields)==0)   {
+        $RS             = [];
+        $RS['status']   = "OK";
+        $RS['msg']      = __("Import Unique Fields Not Config");
+        print json_encode($RS);
+        exit;
+    }
+    //Body Data
+    $Import_Fields_Array = explode(',',$_POST['Import_Fields']);
+    for ($row = 1; $row < sizeof($data); $row++) {
+        $Element        = [];
+        for ($column = 0; $column < sizeof($Header); $column++) {
+            $FieldName  = $Header[$column];
+            if(in_array($FieldName, $MetaColumnNames)&&in_array($FieldName,$Import_Fields_Array))  {
+                $Element[$FieldName] = $data[$row][$column];
+            }
+        }
+        if(sizeof(array_keys($Element))<=sizeof($ImportUniqueFields)) {
+            $RS             = [];
+            $RS['status']   = "ERROR";
+            $RS['msg']      = __("Import Fields Is Too Less");
+            $RS['_GET']     = $_GET;
+            $RS['_POST']    = $_POST;
+            $RS['_FILES']   = $_FILES;
+            $RS['sql']      = $sqlList;
+            print json_encode($RS);
+            exit;
+        }
+        $Import_Rule_Method = $_POST['Import_Rule_Method'];
+        switch($Import_Rule_Method) {
+            case 'BothInsertAndUpdate':
+                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'InsertOrUpdate');
+                $sqlList[] = $sql;
+                break;
+            case 'OnlyUpdate':
+                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Update');
+                $sqlList[] = $sql;
+                break;
+            case 'OnlyInsert':
+                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Insert');
+                $sqlList[] = $sql;
+                break;
+        }
+        if($rs->EOF) {
+        }
+    }
+
+    if(1)   {
+        $RS             = [];
+        $RS['status']   = "OK";
+        $RS['msg']      = __("Import Data Success");
+        $RS['_GET']     = $_GET;
+        $RS['_POST']    = $_POST;
+        $RS['_FILES']   = $_FILES;
+        $RS['sql']      = $sqlList;
+        print json_encode($RS);
+        exit;
+    }
+
 }
 
 //编辑页面时的启用字段列表
@@ -239,6 +359,26 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                     }
                     break;
                 case 'files':
+                    if(is_array($_FILES[$Item['FieldName']]))    {
+                        FilesUploadToDisk($Item['FieldName']);
+                        $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                    }
+                    elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                        //Delete this Key from FieldsArray
+                        $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                    }
+                    break;
+                case 'file':
+                    if(is_array($_FILES[$Item['FieldName']]))    {
+                        FilesUploadToDisk($Item['FieldName']);
+                        $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                    }
+                    elseif(strpos($_POST[$Item['FieldName']], "data_image.php?")!==false)  {
+                        //Delete this Key from FieldsArray
+                        $FieldsArray = array_diff_key($FieldsArray,[$Item['FieldName']=>""]);
+                    }
+                    break;
+                case 'xlsx':
                     if(is_array($_FILES[$Item['FieldName']]))    {
                         FilesUploadToDisk($Item['FieldName']);
                         $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
@@ -459,6 +599,32 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                     $FieldsArray[$Item['FieldName']]    = "";
                 }
                 break;
+            case 'file':
+                if(is_array($_FILES[$Item['FieldName']]))    {
+                    FilesUploadToDisk($Item['FieldName']);
+                    $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                }
+                if(is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))  {
+                    $OriginalValue = $RecordOriginal->fields[$Item['FieldName']];
+                    $FieldsArray[$Item['FieldName']]    = AttachValueMinusOneFile($OriginalValue, $_POST[$Item['FieldName']."_OriginalFieldValue"], $FieldsArray[$Item['FieldName']]);
+                }
+                if(!is_array($_FILES[$Item['FieldName']]) && !is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))    {
+                    $FieldsArray[$Item['FieldName']]    = "";
+                }
+                break;
+            case 'xlsx':
+                if(is_array($_FILES[$Item['FieldName']]))    {
+                    FilesUploadToDisk($Item['FieldName']);
+                    $FieldsArray[$Item['FieldName']]    = addslashes($_POST[$Item['FieldName']]);
+                }
+                if(is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))  {
+                    $OriginalValue = $RecordOriginal->fields[$Item['FieldName']];
+                    $FieldsArray[$Item['FieldName']]    = AttachValueMinusOneFile($OriginalValue, $_POST[$Item['FieldName']."_OriginalFieldValue"], $FieldsArray[$Item['FieldName']]);
+                }
+                if(!is_array($_FILES[$Item['FieldName']]) && !is_array($_POST[$Item['FieldName']."_OriginalFieldValue"]))    {
+                    $FieldsArray[$Item['FieldName']]    = "";
+                }
+                break;
         }
     }
 
@@ -589,6 +755,12 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
             case 'files':
                 $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'files',$data[$Item['FieldName']]);
                 break;
+            case 'file':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'file',$data[$Item['FieldName']]);
+                break;
+            case 'xlsx':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'xlsx',$data[$Item['FieldName']]);
+                break;
         }
     }
 
@@ -645,6 +817,12 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
                 break;
             case 'files':
                 $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'files',$data[$Item['FieldName']]);
+                break;
+            case 'file':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'file',$data[$Item['FieldName']]);
+                break;
+            case 'xlsx':
+                $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'xlsx',$data[$Item['FieldName']]);
                 break;
         }
     }
@@ -1007,6 +1185,12 @@ foreach($AllFieldsFromTable as $Item)  {
         case 'files':            
             $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
             break;
+        case 'file':            
+            $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
+            break;
+        case 'xlsx':            
+            $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
+            break;
         default:
             $FieldType = "string";
             if(in_array($FieldName,$ApprovalNodeFieldsStatus))  {
@@ -1271,6 +1455,12 @@ foreach ($rs_a as $Line) {
                 break;
             case 'files':
                 $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'files',$Line[$FieldName]);
+                break;
+            case 'file':
+                $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'file',$Line[$FieldName]);
+                break;
+            case 'xlsx':
+                $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'xlsx',$Line[$FieldName]);
                 break;
         }
         // filter data to show on the list page -- begin

@@ -207,7 +207,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         setSelectedCheckbox(TempSelectedCheckbox)
                                         setSelectedMenuOneNameForSubmit(FieldArray.name)                                        
                                     }                                    
-                                    if (FieldArray.type == "files" || FieldArray.type == "readonlyfiles") {
+                                    if (FieldArray.type == "files" || FieldArray.type == "readonlyfiles" || FieldArray.type == "file" || FieldArray.type == "readonlyfile" || FieldArray.type == "xlsx" || FieldArray.type == "readonlyxlsx") {
                                         setUploadFileFieldName(FieldArray.name)
                                         if(res.data.data[FieldArray.name] && res.data.data[FieldArray.name].length>0) {
                                             setUploadFiles(res.data.data[FieldArray.name])
@@ -256,7 +256,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     }
                     if (FieldArray.type == "files") {
                         setUploadFileFieldName(FieldArray.name)
-                    }                    
+                    }
+                    if (FieldArray.type == "file") {
+                        setUploadFileFieldName(FieldArray.name)
+                    }
+                    if (FieldArray.type == "xlsx") {
+                        setUploadFileFieldName(FieldArray.name)
+                    }
                 })
             })
         }
@@ -328,10 +334,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 }
                 else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules && FieldArray.rules.required) {
                     let yupCheck = yup.string().trim()
-                    FieldArray.rules.required ? yupCheck = yupCheck.required() : '';
-                    
+                    FieldArray.rules.required ? yupCheck = yupCheck.required() : '';                    
                     //FieldArray.rules.nullable ? yupCheck = yupCheck.nullable() : '';
                     yupCheckMap[FieldArray.name] = yupCheck
+                }
+                else if (FieldArray.type == "avatar" && FieldArray.rules && FieldArray.rules.required)  {
+                    //yupCheckMap[FieldArray.name] = yup.string().required()
+                }
+                else if (FieldArray.type == "file" && FieldArray.rules && FieldArray.rules.required)    {
+                    //yupCheckMap[FieldArray.name] = yup.string().required()
+                }
+                else if (FieldArray.type == "xlsx" && FieldArray.rules && FieldArray.rules.required)    {
+                    //yupCheckMap[FieldArray.name] = yup.array().of(yup.string().required('Array elements cannot be empty'))
                 }
             })
         })
@@ -620,12 +634,42 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         url: string;
     }
 
-    const { getRootProps, getInputProps } = useDropzone({
+    const { getRootProps: getRootPropsFiles, getInputProps: getInputPropsFiles } = useDropzone({
         onDrop: (acceptedFiles: File[]) => {
             console.log("uploadFiles",uploadFiles)
             const filtered = uploadFiles
             acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
             setUploadFiles([...filtered])
+        }
+    })
+
+    const { getRootProps: getRootPropsFile, getInputProps: getInputPropsFile } = useDropzone({
+        maxFiles: 1,
+        onDrop: (acceptedFiles: File[]) => {
+            console.log("uploadFiles",uploadFiles)
+            const filtered = uploadFiles
+            acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
+            setUploadFiles([...filtered])
+        }
+    })
+
+    const { getRootProps: getRootPropsXlsx, getInputProps: getInputPropsXlsx } = useDropzone({
+        maxFiles: 1,
+        maxSize: 20000000,
+        accept: {
+        'application/vnd.ms-excel': ['.xls'],
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
+        },
+        onDrop: (acceptedFiles: File[]) => {
+            console.log("uploadFiles",uploadFiles)
+            const filtered = uploadFiles
+            acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
+            setUploadFiles([...filtered])
+        },
+        onDropRejected: () => {
+            toast.error('You can only upload 1 Excel file & maximum size of 20 MB.', {
+            duration: 2000
+            })
         }
     })
     const renderFilePreview = (file: File | FileUrl) => {
@@ -768,6 +812,20 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             <Button variant='contained' onClick={() => router.push(defaultValuesNew[FieldArray.name])} >
                                                                 {FieldArray.label}
                                                             </Button>
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "buttonurl") {
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <CustomLink href={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} download={FieldArray.label}>
+                                                                    <Button variant='contained'>
+                                                                        {FieldArray.label}
+                                                                    </Button>
+                                                                </CustomLink>
                                                             </FormControl>
                                                         </Grid>
                                                     )
@@ -1474,7 +1532,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "checkbox") {
                                                     
                                                     //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
-                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                    if ((action.indexOf("edit_default") != -1 || action.indexOf("import_default") != -1) && defaultValuesNew[FieldArray.name] != undefined) {
                                                         
                                                         //console.log("defaultValuesNew[FieldArray.name]--------------------------------", defaultValuesNew[FieldArray.name])
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
@@ -1523,10 +1581,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     const TempValue = defaultValuesNewTemp[FieldArray.name].split(",")
                                                                                                     if (TempValue && TempValue.indexOf(ItemArray.value) != -1) {
                                                                                                         //Exist, will remove
-                                                                                                        console.log("TempValue------------------00-----", TempValue)
                                                                                                         TempValue.splice(TempValue.indexOf(ItemArray.value), 1)
                                                                                                         defaultValuesNewTemp[FieldArray.name] = TempValue.join(',')
-                                                                                                        console.log("TempValue------------------00-----", TempValue)
+                                                                                                        console.log("TempValue------------------00-----", defaultValuesNewTemp[FieldArray.name])
                                                                                                     }
                                                                                                 }
                                                                                                 setDefaultValuesNew(defaultValuesNewTemp)
@@ -2005,6 +2062,152 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         </Grid>
                                                     )
                                                 }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "xlsx") {
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <DropzoneWrapper>
+                                                                    <div {...getRootPropsXlsx({ className: 'dropzone' })}>
+                                                                        <input {...getInputPropsXlsx()} />
+                                                                        <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
+                                                                        <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+                                                                        <Typography color='textSecondary'>{FieldArray.label}:</Typography>
+                                                                        </Box>
+                                                                        </Box>
+                                                                    </div>
+                                                                    {uploadFiles && uploadFiles.length ? (
+                                                                        <Fragment>
+                                                                        <List>
+                                                                        {uploadFiles.map((fileInfor: File | FileUrl) => {
+
+                                                                            return (
+                                                                                    <ListItem key={fileInfor.name}>
+                                                                                        <div className='file-details' style={{overflow: 'hidden'}}>
+                                                                                            <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
+                                                                                            <div>
+                                                                                            {fileInfor['type']=="file" ? 
+                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']}>{fileInfor['name']}</CustomLink></Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            {fileInfor['type']=="image" ? 
+                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']} target="_blank">{fileInfor['name']}</CustomLink></Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            {(fileInfor['type']!="file" && fileInfor['type']!="image") ? 
+                                                                                            <Typography className='file-name'>{fileInfor['name']}</Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            <Typography className='file-size' variant='body2'>
+                                                                                                {Math.round(fileInfor.size / 100) / 10 > 1000
+                                                                                                ? `${(Math.round(fileInfor.size / 100) / 10000).toFixed(1)} mb`
+                                                                                                : `${(Math.round(fileInfor.size / 100) / 10).toFixed(1)} kb`}
+                                                                                            </Typography>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <IconButton onClick={() => handleRemoveFile(fileInfor)}>
+                                                                                            <Icon icon='mdi:close' fontSize={20} />
+                                                                                        </IconButton>
+                                                                                    </ListItem>
+                                                                                    )
+                                                                        })}
+                                                                        </List>
+                                                                        </Fragment>
+                                                                    ) : null}
+                                                                </DropzoneWrapper>
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "file") {
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <DropzoneWrapper>
+                                                                    <div {...getRootPropsFile({ className: 'dropzone' })}>
+                                                                        <input {...getInputPropsFile()} />
+                                                                        <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
+                                                                        <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+                                                                        <Typography color='textSecondary'>{FieldArray.label}:</Typography>
+                                                                        </Box>
+                                                                        </Box>
+                                                                    </div>
+                                                                    {uploadFiles && uploadFiles.length ? (
+                                                                        <Fragment>
+                                                                        <List>
+                                                                        {uploadFiles.map((fileInfor: File | FileUrl) => {
+
+                                                                            return (
+                                                                                    <ListItem key={fileInfor.name}>
+                                                                                        <div className='file-details' style={{overflow: 'hidden'}}>
+                                                                                            <div className='file-preview'>{renderFilePreview(fileInfor)}</div>
+                                                                                            <div>
+                                                                                            {fileInfor['type']=="file" ? 
+                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']}>{fileInfor['name']}</CustomLink></Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            {fileInfor['type']=="image" ? 
+                                                                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+fileInfor['webkitRelativePath']} download={fileInfor['name']} target="_blank">{fileInfor['name']}</CustomLink></Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            {(fileInfor['type']!="file" && fileInfor['type']!="image") ? 
+                                                                                            <Typography className='file-name'>{fileInfor['name']}</Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            <Typography className='file-size' variant='body2'>
+                                                                                                {Math.round(fileInfor.size / 100) / 10 > 1000
+                                                                                                ? `${(Math.round(fileInfor.size / 100) / 10000).toFixed(1)} mb`
+                                                                                                : `${(Math.round(fileInfor.size / 100) / 10).toFixed(1)} kb`}
+                                                                                            </Typography>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <IconButton onClick={() => handleRemoveFile(fileInfor)}>
+                                                                                            <Icon icon='mdi:close' fontSize={20} />
+                                                                                        </IconButton>
+                                                                                    </ListItem>
+                                                                                    )
+                                                                        })}
+                                                                        </List>
+                                                                        </Fragment>
+                                                                    ) : null}
+                                                                </DropzoneWrapper>
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "files") {
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
@@ -2014,8 +2217,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                             <FormControl fullWidth sx={{ mb: 0 }}>
                                                                 <DropzoneWrapper>
-                                                                    <div {...getRootProps({ className: 'dropzone' })}>
-                                                                        <input {...getInputProps()} />
+                                                                    <div {...getRootPropsFiles({ className: 'dropzone' })}>
+                                                                        <input {...getInputPropsFiles()} />
                                                                         <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
                                                                         <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
                                                                         <Typography color='textSecondary'>{FieldArray.label}:</Typography>
