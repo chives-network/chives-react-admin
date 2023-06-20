@@ -106,6 +106,9 @@ $allFieldsAdd   = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'ADD');
 foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
         $defaultValuesAdd[$ITEM['name']] = $ITEM['value'];
+        if($ITEM['code']!="") {
+            $defaultValuesAdd[$ITEM['code']] = $ITEM['value'];
+        }
     }
 }
 
@@ -1736,6 +1739,9 @@ $RS['init_default']['pinnedColumns']  = $pinnedColumns;
 $RS['init_default']['dataGridLanguageCode']  = $GLOBAL_LANGUAGE;
 
 //Check Add Action In List Header
+if(!in_array('Import',$Actions_In_List_Header_Array))  {
+    $RS['import_default'] = [];
+}
 if(!in_array('Add',$Actions_In_List_Header_Array))  {
     $RS['add_default'] = [];
 }

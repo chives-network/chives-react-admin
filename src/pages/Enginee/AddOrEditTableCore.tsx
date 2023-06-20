@@ -335,7 +335,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules && FieldArray.rules.required) {
                     let yupCheck = yup.string().trim()
                     FieldArray.rules.required ? yupCheck = yupCheck.required() : '';                    
-                    //FieldArray.rules.nullable ? yupCheck = yupCheck.nullable() : '';
                     yupCheckMap[FieldArray.name] = yupCheck
                 }
                 else if (FieldArray.type == "avatar" && FieldArray.rules && FieldArray.rules.required)  {
@@ -376,7 +375,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
             
             return
         }
-
+        
         //upload file 
         const formData = new FormData();
 
@@ -1203,6 +1202,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             FieldArray.options.map((ItemValue: any) => {
                                                                 if(ItemValue.value==defaultValuesNew[FieldArray.code]) {
                                                                     setValue(FieldArray.name, ItemValue.label)
+                                                                    setValue(FieldArray.code, ItemValue.value)
                                                                 }
                                                             })
                                                         }
@@ -1388,8 +1388,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     FieldArray.options.map((ItemValue: any) => {
                                                         DefaultValueForAutoCompleteMap[ItemValue['value']] = ItemValue['label'];
                                                     })
-                                                    if(defaultValuesNew[FieldArray.name] != null) {
-                                                        const TempArray = defaultValuesNew[FieldArray.name].split(',')
+                                                    if(defaultValuesNew[FieldArray.code] != null) {
+                                                        const TempArray = defaultValuesNew[FieldArray.code].split(',')
                                                         TempArray.map((ItemValue: any) => {
                                                             if (ItemValue != '' && ItemValue != undefined) {
                                                                 DefaultValueForAutoComplete.push({ "value": ItemValue, "label": DefaultValueForAutoCompleteMap[ItemValue] })
@@ -1397,6 +1397,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         })
                                                     }                                                    
                                                     setValue(FieldArray.name, DefaultValueForAutoComplete)
+                                                    if(FieldArray.code!=FieldArray.name)  {
+                                                        setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
+                                                    }
                                                     
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
@@ -1431,10 +1434,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             setAutoCompleteMulti(autoCompleteMultiTemp)
         
                                                                                             const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                            defaultValuesNewTemp[FieldArray.name] = newValueArray.join(',');
+                                                                                            defaultValuesNewTemp[FieldArray.code] = newValueArray.join(',');
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
         
-                                                                                            console.log("autoCompleteMultiTemp[FieldArray.name]-------------------------newValue-------", autoCompleteMultiTemp[FieldArray.name])
+                                                                                            console.log("defaultValuesNewTemp[FieldArray.code]-------------------------newValue-------", defaultValuesNewTemp[FieldArray.code],FieldArray.code)
                                                                                         }
                                                                                         else {
                                                                                             const autoCompleteMultiTemp:{[key:string]:any} = { ...autoCompleteMulti }
@@ -1442,7 +1445,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             setAutoCompleteMulti(autoCompleteMultiTemp)
         
                                                                                             const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                            defaultValuesNewTemp[FieldArray.name] = "";
+                                                                                            defaultValuesNewTemp[FieldArray.code] = "";
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }
         

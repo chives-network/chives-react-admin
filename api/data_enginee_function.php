@@ -892,15 +892,15 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 }
                 else if($TableNameTemp=="data_user"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("姓名","用户名",$FieldName);
-                    if($FieldName==$FieldCodeName) {
-                        $FieldName = $FieldName."_名称";
-                    }
                 }
                 else if($TableNameTemp=="data_course"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("名称","代码",$FieldName);
                 }
                 else    {
                     $FieldCodeName = $FieldName;
+                }
+                if($FieldCodeName==$FieldName) {
+                    $FieldName = $FieldName."_名称";
                 }
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValueTemp, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false]];
                 break;
