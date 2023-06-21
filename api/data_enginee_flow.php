@@ -258,6 +258,13 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
             print json_encode($RS);
             exit;
         }
+        
+        //functionNameIndividual
+        $functionNameIndividual = "plugin_".$TableName."_".$Step."_import_default_data_before_submit";
+        if(function_exists($functionNameIndividual))  {
+            $Element = $functionNameIndividual($Element);
+        }
+
         $Import_Rule_Method = $_POST['Import_Rule_Method'];
         switch($Import_Rule_Method) {
             case 'BothInsertAndUpdate':
@@ -275,6 +282,12 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
         }
         if($rs->EOF) {
         }
+    }
+
+    //functionNameIndividual
+    $functionNameIndividual = "plugin_".$TableName."_".$Step."_import_default_data_after_submit";
+    if(function_exists($functionNameIndividual))  {
+        $functionNameIndividual();
     }
 
     if(1)   {
@@ -422,6 +435,24 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
         //Begin to Split Multi Records
         foreach($Add_Page_Split_Multi_Records_Value_Array as $Add_Page_Split_Multi_Records_Value)    {
             $FieldsArray[$Add_Page_Split_Multi_Records] = $Add_Page_Split_Multi_Records_Value;
+            //Syncing To Other Fields
+            if($Add_Page_Split_Multi_Records=="学号" || $Add_Page_Split_Multi_Records=="学生学号") {
+                $sql     = "select * from data_student where 学号 = '".ForSqlInjection($Add_Page_Split_Multi_Records_Value)."'";
+                $rsf     = $db->Execute($sql);
+                in_array("系部",$MetaColumnNames) ? $FieldsArray['系部'] = $rsf->fields['系部'] : '';
+                in_array("专业",$MetaColumnNames) ? $FieldsArray['专业'] = $rsf->fields['专业'] : '';
+                in_array("班级",$MetaColumnNames) ? $FieldsArray['班级'] = $rsf->fields['班级'] : '';
+                in_array("姓名",$MetaColumnNames) ? $FieldsArray['姓名'] = $rsf->fields['姓名'] : '';
+                in_array("学生班级",$MetaColumnNames) ? $FieldsArray['学生班级'] = $rsf->fields['学生班级'] : '';
+                in_array("学生姓名",$MetaColumnNames) ? $FieldsArray['学生姓名'] = $rsf->fields['学生姓名'] : '';
+                in_array("身份证号",$MetaColumnNames) ? $FieldsArray['身份证号'] = $rsf->fields['身份证号'] : '';
+                in_array("出生日期",$MetaColumnNames) ? $FieldsArray['出生日期'] = $rsf->fields['出生日期'] : '';
+                in_array("性别",$MetaColumnNames) ? $FieldsArray['性别'] = $rsf->fields['性别'] : '';
+                in_array("座号",$MetaColumnNames) ? $FieldsArray['座号'] = $rsf->fields['座号'] : '';
+                in_array("学生宿舍",$MetaColumnNames) ? $FieldsArray['学生宿舍'] = $rsf->fields['学生宿舍'] : '';
+                in_array("学生状态",$MetaColumnNames) ? $FieldsArray['学生状态'] = $rsf->fields['学生状态'] : '';
+                in_array("学生手机",$MetaColumnNames) ? $FieldsArray['学生手机'] = $rsf->fields['学生手机'] : '';
+            }
             //Unique Fields
             $SQL_Unique_Fields = ['1=1'];
             if($SettingMap['Unique_Fields_1']!="" && $SettingMap['Unique_Fields_1']!="None" && in_array($SettingMap['Unique_Fields_1'],$MetaColumnNames) ) {
@@ -529,6 +560,13 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
     $IsExecutionSQL     = 0;
     //Filter data when do edit save operation
     require_once('data_enginee_filter_post.php');
+
+    //functionNameIndividual
+    $functionNameIndividual = "plugin_".$TableName."_".$Step."_edit_default_data_before_submit";
+    if(function_exists($functionNameIndividual))  {
+        $functionNameIndividual($id);
+    }
+
     global $InsertOrUpdateFieldArrayForSql; //Define in data_enginee_function.php
     //print_R($InsertOrUpdateFieldArrayForSql);exit;
     foreach($InsertOrUpdateFieldArrayForSql['EDIT'] as $FieldName=>$FieldValue)  {
@@ -541,11 +579,6 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         if($_POST[$FieldName]!="") {
             $IsExecutionSQL = 1;
         }
-    }
-    //functionNameIndividual
-    $functionNameIndividual = "plugin_".$TableName."_".$Step."_edit_default_data_before_submit";
-    if(function_exists($functionNameIndividual))  {
-        $functionNameIndividual($id);
     }
     //Check Permission For This Record
     //LimitEditAndDelete
@@ -1354,10 +1387,10 @@ if($_REQUEST['sortColumn']=="")   {
     }
 }
 else {
-    if($_REQUEST['sortMethod']=="desc") {
+    if($_REQUEST['sortMethod']=="desc"&&in_array($_REQUEST['sortColumn'], $MetaColumnNames)) {
         $orderby = "order by `".$_REQUEST['sortColumn']."` desc";
     }
-    else {
+    elseif(in_array($_REQUEST['sortColumn'], $MetaColumnNames)) {
         $orderby = "order by `".$_REQUEST['sortColumn']."` asc";
     }
 }
@@ -1658,9 +1691,11 @@ $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-$RS['init_default']['sql']          = $sql_list;
-$RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
-$RS['init_default']['ApprovalNodeFields']['Memo']       = $SettingMap['Init_Action_Memo'];
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
+    $RS['init_default']['sql']                              = $sql_list;
+    $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
+}
+$RS['init_default']['ApprovalNodeFields']['Memo']           = $SettingMap['Init_Action_Memo'];
 
 
 if($SettingMap['Init_Action_Value']=="edit_default_configsetting")   {

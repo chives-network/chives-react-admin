@@ -60,6 +60,15 @@ if( $_GET['action']=="add_default_data" || $_GET['action']=="edit_default_data")
                         $_POST[$Item['FieldName']] = password_make($_POST[$Item['FieldName']]);
                     }
                     break;
+                case '德育量化:积分项目':
+                    $sql     = "select * from data_deyu_geren_gradethree where 积分编码 = '".ForSqlInjection($_POST[$Item['FieldName']])."'";
+                    $rsf     = $db->CacheExecute(10,$sql);
+                    $_POST['积分编码']      = $rsf->fields['积分编码'];
+                    $_POST['积分项目']      = $rsf->fields['积分项目'];
+                    $_POST['一级指标']      = $rsf->fields['一级指标'];
+                    $_POST['二级指标']      = $rsf->fields['二级指标'];
+                    $_POST['积分分值']      = $rsf->fields['积分分值'];
+                    break;
             }
         }
         //Reset Value By System Setting

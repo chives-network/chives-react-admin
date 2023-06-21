@@ -682,6 +682,9 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
             case 'Disable':
                 //Do Nothing
                 break;
+            case 'hidden':
+                if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                break;
             case 'system_datetime':
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = date("Y-m-d H:i:s");
                 break;
@@ -887,7 +890,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                     $DefaultValueTemp = "";
                 }
                 //一次性同时赋值名称和代码
-                if($TableNameTemp=="data_student"&&$KeyField=="1"&&$ValueField=="2") {
+                if($TableNameTemp=="data_student") {
                     $FieldCodeName = str_replace("姓名","学号",$FieldName);
                 }
                 else if($TableNameTemp=="data_user"&&$KeyField=="1"&&$ValueField=="2") {
