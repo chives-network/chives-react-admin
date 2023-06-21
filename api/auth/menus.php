@@ -15,15 +15,13 @@ CheckAuthUserLoginStatus();
 
 $Menu = [];
 $Menu['icon'] = 'mdi:home-outline';
-$Menu['title'] = 'Dashboards';
-$Menu['children'][] = ['title' => 'CRM', 'icon' => 'mdi:chart-donut', 'path' => '/dashboards/crm'];
-$Menu['children'][] = ['title' => 'Analytics', 'icon' => 'mdi:chart-variant', 'path' => '/dashboards/analytics'];
-$Menu['children'][] = ['title' => 'eCommerce', 'icon' => 'mdi:chart-outline', 'path' => '/dashboards/ecommerce'];
+$Menu['title'] = '快捷面板';
+$Menu['children'][] = ['title' => '我的面板', 'icon' => 'mdi:chart-donut', 'path' => '/dashboards/analytics'];
 
 $Menus[] = $Menu;
 
 $Menu = [];
-$Menu['sectionTitle'] = "Apps & Pages";
+$Menu['sectionTitle'] = "应用程序";
 $Menus[] = $Menu;
 
 //Get User Role
@@ -35,7 +33,7 @@ if($USER_TYPE=="User")    {
     $RS         = returntablefield("data_user","USER_ID",$USER_ID,"USER_PRIV,USER_PRIV_OTHER");
     $USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
     $sql        = "select * from data_role where id in ('".join("','",$USER_PRIV_Array)."')";
-    $rsf        = $db->Execute($sql);
+    $rsf        = $db->CacheExecute(180,$sql);
     $RoleRSA    = $rsf->GetArray();
     $RoleArray  = "";
     foreach($RoleRSA as $Item)  {
@@ -46,12 +44,12 @@ if($USER_TYPE=="User")    {
 
     //Menu From Database
     $sql    = "select * from data_menuone order by SortNumber asc, MenuOneName asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(180,$sql);
     $MenuOneRSA  = $rsf->GetArray();
 
     //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
     $sql    = "select * from data_menutwo where FaceTo='AuthUser' and id in ('".join("','",$RoleArray)."') order by MenuOneName asc,SortNumber asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(180,$sql);
     $MenuTwoRSA  = $rsf->GetArray();
     $MenuTwoArray = [];
     $TabMap = [];
@@ -117,7 +115,7 @@ if($USER_TYPE=="User")    {
 if($USER_TYPE=="Student")    {
     //$USER_ID    = "admin";
     $sql        = "select * from data_role where name='学生' ";
-    $rsf        = $db->Execute($sql);
+    $rsf        = $db->CacheExecute(180,$sql);
     $RoleRSA    = $rsf->GetArray();
     $RoleArray  = "";
     foreach($RoleRSA as $Item)  {
@@ -128,13 +126,13 @@ if($USER_TYPE=="Student")    {
 
     //Menu From Database
     $sql    = "select * from data_menuone order by SortNumber asc, MenuOneName asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(180,$sql);
     $MenuOneRSA  = $rsf->GetArray();
 
     //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
     // and id in ('".join("','",$RoleArray)."')
     $sql    = "select * from data_menutwo where FaceTo='Student' order by MenuOneName asc,SortNumber asc";
-    $rsf    = $db->Execute($sql);
+    $rsf    = $db->CacheExecute(180,$sql);
     $MenuTwoRSA  = $rsf->GetArray();
     $MenuTwoArray = [];
     $TabMap = [];

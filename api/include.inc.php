@@ -208,6 +208,10 @@ function CheckCsrsToken() {
 	$HTTP_CSRF_TOKEN_DATA = DecryptID($HTTP_CSRF_TOKEN);
 	$HTTP_CSRF_TOKEN_DATA = unserialize($HTTP_CSRF_TOKEN_DATA);
 	//print_R($HTTP_CSRF_TOKEN_DATA);
+	global $ExceptCsrf;
+	if(in_array($_SERVER['PHP_SELF'],$ExceptCsrf)) {
+		return;
+	}
 	switch($_GET['action'])  {
 		case 'view_default':
 			$DiffTime = time() - $HTTP_CSRF_TOKEN_DATA['Time'];

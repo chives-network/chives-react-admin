@@ -29,6 +29,11 @@ $Step  		= $FromInfo['Step'];
 $Setting  	= $FromInfo['Setting'];
 $FaceTo  	= $FromInfo['FaceTo'];
 
+//Except CSRS
+global $ExceptCsrf;
+$ExceptCsrf[] = "/apps/apps_19.php";
+$ExceptCsrf[] = "/apps/apps_19.php";
+
 if($FaceTo=="AuthUser")         {
     //Check User Login or Not
     CheckAuthUserLoginStatus();
@@ -539,6 +544,10 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         $EMAIL  = $GLOBAL_USER->email;
         $id     = returntablefield($TableName,"EMAIL",$EMAIL,"id")["id"];
     }
+    else if($TableName=="data_user" && $SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']=="USER_ID") {
+        $USER_ID  = $GLOBAL_USER->USER_ID;
+        $id     = returntablefield($TableName,"USER_ID",$USER_ID,"id")["id"];
+    }
     else if($SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']!="") {
         $id     = intval($SettingMap['Init_Action_FilterValue']);
     }
@@ -673,7 +682,6 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             $RS['msg'] = $SettingMap['Tip_When_Edit_Success'];
             $RS['Msg_Reminder_Object_From_Add_Or_Edit_Result'] = $Msg_Reminder_Object_From_Add_Or_Edit_Result;
             if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
-                $RS['sql'] = $sql;  
                 global $GLOBAL_EXEC_KEY_SQL;
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
@@ -754,7 +762,11 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
     if($TableName=="data_user" && $SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']=="email") {
         $EMAIL  = $GLOBAL_USER->email;
         $id     = returntablefield("data_user","EMAIL",$EMAIL,"id")["id"];
-    }    
+    } 
+    else if($TableName=="data_user" && $SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']=="USER_ID") {
+        $USER_ID  = $GLOBAL_USER->USER_ID;
+        $id     = returntablefield($TableName,"USER_ID",$USER_ID,"id")["id"];
+    }   
     else if($SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']!="") {
         $id     = intval($SettingMap['Init_Action_FilterValue']);
     }

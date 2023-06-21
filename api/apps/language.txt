@@ -46,3 +46,5 @@ $MAP['Import Data Success'] 	= 'Import Data Success';
 $MAP['Import Data Success'] 	= 'Import Data Success';
 $MAP['Import Data Success'] 	= 'Import Data Success';
 $MAP['Import Data Success'] 	= 'Import Data Success';
+$MAP['ID is invalid00000'] 	= 'ID is invalid00000';
+$MAP['ID is invalid00000'] 	= 'ID is invalid00000';

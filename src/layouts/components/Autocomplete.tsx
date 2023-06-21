@@ -33,6 +33,9 @@ import Icon from 'src/@core/components/icon'
 // ** Configs Imports
 import themeConfig from 'src/configs/themeConfig'
 
+// ** Config
+import authConfig from 'src/configs/auth'
+
 interface Props {
   hidden: boolean
   settings: Settings
@@ -56,116 +59,9 @@ interface DefaultSuggestionsType {
   }[]
 }
 
-const defaultSuggestionsData: DefaultSuggestionsType[] = [
-  {
-    category: 'Popular Searches',
-    suggestions: [
-      {
-        icon: 'mdi:chart-donut',
-        suggestion: 'Analytics',
-        link: '/dashboards/crm'
-      },
-      {
-        icon: 'mdi:poll',
-        suggestion: 'Analytics',
-        link: '/dashboards/analytics'
-      },
-      {
-        icon: 'mdi:chart-bubble',
-        suggestion: 'eCommerce',
-        link: '/dashboards/ecommerce'
-      },
-      {
-        icon: 'mdi:account-group',
-        suggestion: 'User List',
-        link: '/apps/user/list'
-      }
-    ]
-  },
-  {
-    category: 'Apps & Pages',
-    suggestions: [
-      {
-        icon: 'mdi:calendar-blank',
-        suggestion: 'Calendar',
-        link: '/apps/calendar'
-      },
-      {
-        icon: 'mdi:format-list-numbered',
-        suggestion: 'Invoice List',
-        link: '/apps/invoice/list'
-      },
-      {
-        icon: 'mdi:currency-usd',
-        suggestion: 'Pricing',
-        link: '/pages/pricing'
-      },
-      {
-        icon: 'mdi:account-cog-outline',
-        suggestion: 'Account Settings',
-        link: '/pages/account-settings/account'
-      }
-    ]
-  },
-  {
-    category: 'User Interface',
-    suggestions: [
-      {
-        icon: 'mdi:format-text-variant-outline',
-        suggestion: 'Typography',
-        link: '/ui/typography'
-      },
-      {
-        icon: 'mdi:tab',
-        suggestion: 'Tabs',
-        link: '/components/tabs'
-      },
-      {
-        icon: 'mdi:gesture-tap-button',
-        suggestion: 'Buttons',
-        link: '/components/buttons'
-      },
-      {
-        icon: 'mdi:card-bulleted-settings-outline',
-        suggestion: 'Advanced Cards',
-        link: '/ui/cards/advanced'
-      }
-    ]
-  },
-  {
-    category: 'Forms & Tables',
-    suggestions: [
-      {
-        icon: 'mdi:format-list-checkbox',
-        suggestion: 'Select',
-        link: '/forms/form-elements/select'
-      },
-      {
-        icon: 'mdi:lastpass',
-        suggestion: 'Autocomplete',
-        link: '/forms/form-elements/autocomplete'
-      },
-      {
-        icon: 'mdi:view-grid-outline',
-        suggestion: 'Table',
-        link: '/tables/mui'
-      },
-      {
-        icon: 'mdi:calendar-range',
-        suggestion: 'Date Pickers',
-        link: '/forms/form-elements/pickers'
-      }
-    ]
-  }
-]
+const defaultSuggestionsData: DefaultSuggestionsType[] = []
 
-const categoryTitle: { [k: string]: string } = {
-  dashboards: 'Dashboards',
-  appsPages: 'Apps & Pages',
-  userInterface: 'User Interface',
-  formsTables: 'Forms & Tables',
-  chartsMisc: 'Charts & Misc'
-}
+const categoryTitle: { [k: string]: string } = {}
 
 // ** Styled Autocomplete component
 const Autocomplete = styled(MuiAutocomplete)(({ theme }) => ({
@@ -251,20 +147,20 @@ const NoResult = ({ value, setOpenDialog }: NoResultProps) => {
         <Icon icon='mdi:file-remove-outline' fontSize='5rem' />
       </Box>
       <Typography variant='h6' sx={{ mb: 11.5, wordWrap: 'break-word' }}>
-        No results for{' '}
+        没有结果: {' '}
         <Typography variant='h6' component='span' sx={{ wordWrap: 'break-word' }}>
           {`"${value}"`}
         </Typography>
       </Typography>
 
       <Typography variant='body2' sx={{ mb: 2.5, color: 'text.disabled' }}>
-        Try searching for
+        尝试搜索
       </Typography>
       <List sx={{ py: 0 }}>
         <ListItem sx={{ py: 2 }} disablePadding onClick={() => setOpenDialog(false)}>
           <Box
             component={Link}
-            href='/dashboards/ecommerce'
+            href='/dashboards/analytics'
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -276,14 +172,14 @@ const NoResult = ({ value, setOpenDialog }: NoResultProps) => {
               <Icon icon='mdi:cart-outline' fontSize={20} />
             </Box>
             <Typography variant='body2' sx={{ color: 'text.primary' }}>
-              eCommerce Dashboard
+              我的面板
             </Typography>
           </Box>
         </ListItem>
         <ListItem sx={{ py: 2 }} disablePadding onClick={() => setOpenDialog(false)}>
           <Box
             component={Link}
-            href='/pages/user-profile/profile'
+            href='/apps/19'
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -295,26 +191,7 @@ const NoResult = ({ value, setOpenDialog }: NoResultProps) => {
               <Icon icon='mdi:account-outline' fontSize={20} />
             </Box>
             <Typography variant='body2' sx={{ color: 'text.primary' }}>
-              User Profile
-            </Typography>
-          </Box>
-        </ListItem>
-        <ListItem sx={{ py: 2 }} disablePadding onClick={() => setOpenDialog(false)}>
-          <Box
-            component={Link}
-            href='/pages/account-settings/account'
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              '&:hover > *': { color: 'primary.main' }
-            }}
-          >
-            <Box sx={{ mr: 2.5, display: 'flex', color: 'text.primary' }}>
-              <Icon icon='mdi:account-cog-outline' fontSize={20} />
-            </Box>
-            <Typography variant='body2' sx={{ color: 'text.primary' }}>
-              Account Settings
+              个人档案
             </Typography>
           </Box>
         </ListItem>
@@ -378,7 +255,7 @@ const AutocompleteComponent = ({ hidden, settings }: Props) => {
   // Get all data using API
   useEffect(() => {
     axios
-      .get('/app-bar/search', {
+      .get(authConfig.backEndApiHost + 'menu_search.php', {
         params: { q: searchValue }
       })
       .then(response => {

@@ -37,7 +37,7 @@ const FooterContent = () => {
         {footerContent && footerContent.FOOTER_CONTENT}
         {' '}
         {footerContent && footerContent.FOOTER_URL1_TEXT && footerContent.FOOTER_URL1_LINK ?
-          <Link target='_blank' href='footerContent.FOOTER_URL1_LINK'>
+          <Link target='_blank' href={footerContent.FOOTER_URL1_LINK}>
             {footerContent.FOOTER_URL1_TEXT}
           </Link>
           : ''

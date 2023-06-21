@@ -20,6 +20,9 @@ import Icon from 'src/@core/components/icon'
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
 
+// ** Config
+import authConfig from 'src/configs/auth'
+
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 
@@ -96,10 +99,10 @@ const UserDropdown = (props: Props) => {
         }}
       >
         <Avatar
-          alt='John Doe'
+          alt={user.USER_NAME}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          src='/images/avatars/1.png'
+          src={authConfig.backEndApiHost + user.avatar}
         />
       </Badge>
       <Menu
@@ -120,7 +123,7 @@ const UserDropdown = (props: Props) => {
                 horizontal: 'right'
               }}
             >
-              <Avatar alt='John Doe' src={user.avatar} sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt={user.USER_NAME} src={authConfig.backEndApiHost + user.avatar} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.USER_NAME}</Typography>
@@ -131,17 +134,31 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: '0 !important' }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/user-profile/profile')}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
           <Box sx={styles}>
             <Icon icon='mdi:account-outline' />
-            Profile
+            个人档案
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/account-settings/account')}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
           <Box sx={styles}>
-            <Icon icon='mdi:cog-outline' />
-            Settings
+            <Icon icon='mdi:security' />
+            修改密码
+          </Box>
+        </MenuItem>
+        <Divider />
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
+          <Box sx={styles}>
+            <Icon icon='mdi:database-plus' />
+            操作日志
+          </Box>
+        </MenuItem>
+        <Divider />
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
+          <Box sx={styles}>
+            <Icon icon='mdi:tumblr-reblog' />
+            登录日志
           </Box>
         </MenuItem>
         <Divider />
@@ -150,7 +167,7 @@ const UserDropdown = (props: Props) => {
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}
         >
           <Icon icon='mdi:logout-variant' />
-          Logout
+          退出
         </MenuItem>
       </Menu>
     </Fragment>

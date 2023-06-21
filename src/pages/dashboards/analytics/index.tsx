@@ -12,7 +12,7 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
 import AnalyticsTrophy from 'src/views/dashboards/analytics/AnalyticsTrophy'
-import AnalyticsPerformance from 'src/views/dashboards/analytics/AnalyticsPerformance'
+import AnalyticsSalesByCountries from 'src/views/dashboards/analytics/AnalyticsSalesByCountries'
 import AnalyticsDepositWithdraw from 'src/views/dashboards/analytics/AnalyticsDepositWithdraw'
 import AnalyticsTransactionsCard from 'src/views/dashboards/analytics/AnalyticsTransactionsCard'
 
@@ -20,6 +20,7 @@ import axios from 'axios'
 
 // ** Config
 import authConfig from 'src/configs/auth'
+import { useAuth } from 'src/hooks/useAuth'
 
 
 const AnalyticsDashboard = () => {
@@ -27,21 +28,37 @@ const AnalyticsDashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const dataDefault:{[key:string]:any} = {}
   const [dashboardData, setDashboardData] = useState(dataDefault)
+  const [className, setClassName] = useState<string>("")
+  const auth = useAuth()
 
-  const backEndApi = "dashboard_jifen.php"
-  const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+  const toggleSetClassName = (classNameTemp: string) => {
+    setClassName(classNameTemp)
+  }
+  console.log("auth",auth)
 
   useEffect(() => {
-    axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: {} })
-        .then(res => {
-            setDashboardData(res.data);
-            setIsLoading(false)
-        })
-        .catch(() => {
-            console.log("axios.get editUrl return")
-        })
-    }, [])
-  
+    if (auth.user && auth.user.type=="Student") {
+      const backEndApi = "dashboard_jifen_student.php"
+      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className } })
+      .then(res => {
+          setDashboardData(res.data);
+          setIsLoading(false)
+          setClassName(res.data.defaultValue)
+      })
+    }
+    else if (auth.user && auth.user.type=="User") {
+      const backEndApi = "dashboard_jifen_banji.php"
+      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className } })
+      .then(res => {
+          setDashboardData(res.data);
+          setIsLoading(false)
+          setClassName(res.data.defaultValue)
+      })
+    }    
+  }, [className, auth])
+
+  const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+
   console.log("dashboardData",dashboardData)
 
   return (
@@ -56,13 +73,13 @@ const AnalyticsDashboard = () => {
                 ) : (
                   <Grid container spacing={6}>
                     <Grid item xs={12} md={4}>
-                      <AnalyticsTrophy data={dashboardData['AnalyticsTrophy']}/>
+                      <AnalyticsTrophy data={dashboardData['AnalyticsTrophy']} toggleSetClassName={toggleSetClassName} />
                     </Grid>
                     <Grid item xs={12} md={8}>
                       <AnalyticsTransactionsCard data={dashboardData['AnalyticsTransactionsCard']}/>
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
-                      <AnalyticsPerformance />
+                      <AnalyticsSalesByCountries data={dashboardData['AnalyticsSalesByCountries']}/>
                     </Grid>
                     <Grid item xs={12} md={8}>
                       <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']}/>

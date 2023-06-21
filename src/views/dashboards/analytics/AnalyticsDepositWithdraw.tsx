@@ -6,13 +6,17 @@ import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import MuiDivider, { DividerProps } from '@mui/material/Divider'
+import { useRouter } from 'next/router'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
+// ** Types
+import { ThemeColor } from 'src/@core/layouts/types'
+
 interface DataType2 {
-  图标颜色: string
+  图标颜色: ThemeColor
   项目图标: string
   积分项目: string
   二级指标: string
@@ -37,6 +41,7 @@ interface DataType {
 const AnalyticsDepositWithdraw = (props: DataType) => {
 
   const { data } = props
+  const router = useRouter();
   console.log("datadatadatadatadata",data)
   
   return (
@@ -45,13 +50,13 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
         <CardHeader
           title={data['加分']['Title']}
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant='caption'>{data['加分']['TopRightButton']['name']}</Typography>}
+          action={<Typography variant='caption' onClick={() => router.push(data['加分']['TopRightButton']['url'])} style={{ cursor: 'pointer' }}>{data['加分']['TopRightButton']['name']}</Typography>}
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
           }}
         />
-        <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
+        <CardContent sx={{ pb: theme => `${theme.spacing(9)} !important` }}>
           {data['加分']['data'].map((item: DataType2, index: number) => {
             return (
               <Box
@@ -97,7 +102,7 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
         <CardHeader
           title={data['扣分']['Title']}
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant='caption'>{data['扣分']['TopRightButton']['name']}</Typography>}
+          action={<Typography variant='caption' onClick={() => router.push(data['扣分']['TopRightButton']['url'])} style={{ cursor: 'pointer' }}>{data['扣分']['TopRightButton']['name']}</Typography>}
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }

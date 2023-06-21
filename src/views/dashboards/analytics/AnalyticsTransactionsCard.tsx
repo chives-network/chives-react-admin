@@ -6,6 +6,7 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import { useRouter } from 'next/router'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -31,6 +32,8 @@ interface DataType {
 const AnalyticsTransactionsCard = (props: DataType) => {
   
   const { data } = props
+  const router = useRouter();
+  console.log("router",router)
 
   return (
     <Card>
@@ -38,7 +41,7 @@ const AnalyticsTransactionsCard = (props: DataType) => {
         title={data.Title}
         action={
           <OptionsMenu
-            options={['Last 28 Days', 'Last Month', 'Last Year']}
+            options={data.TopRightOptions}
             iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
           />
         }

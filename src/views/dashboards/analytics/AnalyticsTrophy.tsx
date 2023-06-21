@@ -4,6 +4,9 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled, useTheme } from '@mui/material/styles'
+import { useRouter } from 'next/router'
+
+import ButtonGroupSplit from 'src/views/dashboards/analytics/ButtonGroupSplit'
 
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')(({ theme }) => ({
@@ -24,11 +27,14 @@ const TrophyImg = styled('img')({
 
 interface DataType {
   data: {[key:string]:any}
+  toggleSetClassName: (arg0: string) => void
 }
 
 const AnalyticsTrophy = (props: DataType) => {
 
-  const { data } = props
+  const { data, toggleSetClassName } = props
+
+  const router = useRouter();
 
   // ** Hook
   const theme = useTheme()
@@ -45,9 +51,14 @@ const AnalyticsTrophy = (props: DataType) => {
         <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
           {data.TotalScore}
         </Typography>
-        <Button size='small' variant='contained'>
-          {data.ViewButton.name}
-        </Button>
+        {data.TopRightOptions ? 
+          <ButtonGroupSplit data={data.TopRightOptions} toggleSetClassName={toggleSetClassName} />
+        :
+          <Button size='small' variant='contained' onClick={() => router.push(data.ViewButton.url)}>
+            {data.ViewButton.name}
+          </Button>
+        }
+        
         <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
         <TrophyImg alt='trophy' src='/images/misc/trophy.png' />
       </CardContent>

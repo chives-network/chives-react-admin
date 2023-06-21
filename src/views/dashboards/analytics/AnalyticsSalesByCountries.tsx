@@ -5,9 +5,6 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
 
@@ -15,82 +12,39 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
-interface DataType {
-  title: string
-  sales: string
-  trendDir: string
-  subtitle: string
-  avatarText: string
-  trendNumber: string
-  avatarColor: ThemeColor
+interface DataType2 {
+  学号: string
+  姓名: string
+  班级: string
+  图标颜色: ThemeColor
+  积分分值: string
 }
 
-const data: DataType[] = [
-  {
-    sales: '894k',
-    trendDir: 'up',
-    subtitle: 'USA',
-    title: '$8,656k',
-    avatarText: 'US',
-    trendNumber: '25.8%',
-    avatarColor: 'success'
-  },
-  {
-    sales: '645k',
-    subtitle: 'UK',
-    trendDir: 'down',
-    title: '$2,415k',
-    avatarText: 'UK',
-    trendNumber: '6.2%',
-    avatarColor: 'error'
-  },
-  {
-    sales: '148k',
-    title: '$865k',
-    trendDir: 'up',
-    avatarText: 'IN',
-    subtitle: 'India',
-    trendNumber: '12.4%',
-    avatarColor: 'warning'
-  },
-  {
-    sales: '86k',
-    title: '$745k',
-    trendDir: 'down',
-    avatarText: 'JA',
-    subtitle: 'Japan',
-    trendNumber: '11.9%',
-    avatarColor: 'secondary'
-  },
-  {
-    sales: '42k',
-    title: '$45k',
-    trendDir: 'up',
-    avatarText: 'KO',
-    subtitle: 'Korea',
-    trendNumber: '16.2%',
-    avatarColor: 'error'
-  }
-]
+interface DataType {
+  data: {[key:string]:any}
+}
 
-const AnalyticsSalesByCountries = () => {
+const AnalyticsSalesByCountries = (props: DataType) => {
+
+  const { data } = props
+
   return (
     <Card>
       <CardHeader
-        title='Sales by Countries'
+        title={data.Title}
         titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         action={
           <OptionsMenu
-            options={['Last 28 Days', 'Last Month', 'Last Year']}
+            options={data.TopRightOptions}
             iconButtonProps={{ size: 'small', className: 'card-more-options', sx: { color: 'text.primary' } }}
           />
         }
       />
       <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
-        {data.map((item: DataType, index: number) => {
+        {data.data.map((item: DataType2, index: number) => {
           return (
             <Box
-              key={item.title}
+              key={index}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -99,12 +53,11 @@ const AnalyticsSalesByCountries = () => {
             >
               <CustomAvatar
                 skin='light'
-                color={item.avatarColor}
+                color={item.图标颜色}
                 sx={{ width: 38, height: 38, mr: 3, fontSize: '1rem' }}
               >
-                {item.avatarText}
+              {item.姓名.substring(0,1)}
               </CustomAvatar>
-
               <Box
                 sx={{
                   width: '100%',
@@ -116,38 +69,19 @@ const AnalyticsSalesByCountries = () => {
               >
                 <Box sx={{ mr: 2, display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex' }}>
-                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item.title}</Typography>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& svg': { fontWeight: 600, color: item.trendDir === 'down' ? 'error.main' : 'success.main' }
-                      }}
-                    >
-                      <Icon icon={item.trendDir === 'down' ? 'mdi:chevron-down' : 'mdi:chevron-up'} />
-                      <Typography
-                        variant='caption'
-                        sx={{
-                          fontWeight: 600,
-                          lineHeight: 1.5,
-                          color: item.trendDir === 'down' ? 'error.main' : 'success.main'
-                        }}
-                      >
-                        {item.trendNumber}
-                      </Typography>
-                    </Box>
+                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item.姓名}</Typography>
                   </Box>
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    {item.subtitle}
+                    {item.学号}
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', textAlign: 'end', flexDirection: 'column' }}>
                   <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.72, letterSpacing: '0.22px' }}>
-                    {item.sales}
+                    {item.积分分值}
                   </Typography>
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    Sales
+                  {index+1}
                   </Typography>
                 </Box>
               </Box>
