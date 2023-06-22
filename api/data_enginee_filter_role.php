@@ -137,4 +137,29 @@ switch($Page_Role_Name)  {
         break;
 }
 
+//Add HiddenUser Sql Filter
+foreach($AllFieldsFromTable as $Item)  {
+    $FieldName      = $Item['FieldName'];
+    $FieldTypeInFlow = $SettingMap['FieldType_'.$FieldName];
+    switch($FieldTypeInFlow)   {
+        case 'HiddenUserID':
+            $AdditionalPermissionsSQL .= " and $FieldName = '".$USER_ID."' ";
+            $AddSql .= $AdditionalPermissionsSQL;
+            break;
+        case 'HiddenUsername':
+            break;
+        case 'HiddenDeptID':
+            break;
+        case 'HiddenDeptName':
+            break;
+        case 'HiddenStudentID':
+            break;
+        case 'HiddenStudentName':
+            break;
+        case 'HiddenStudentClass':
+            break;
+    }
+}
+
+
 ?>

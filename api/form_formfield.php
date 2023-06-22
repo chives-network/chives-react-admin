@@ -44,7 +44,7 @@ foreach ($ShowType as $Line) {
     $EnableFields[$Line['value']] = explode(',',$Line['EnableFields']);
     $DisableFields[$Line['value']] = explode(',',$Line['DisableFields']);
 }
-$allFieldsAdd[] = ['name' => 'ShowType', 'show'=>true, 'type'=>'autocomplete', 'options'=>$ShowType, 'label' => __('Show Type'), 'value' => $ShowType[0]['value'], 'placeholder' => __('Show Type in UI'), 'helptext' => __('Show Type in UI'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>5,'disabled' => false], 'freeSolo'=>false, 'EnableFields'=>$EnableFields, 'DisableFields'=>$DisableFields];
+$allFieldsAdd[] = ['name' => 'ShowType_名称', 'code' => 'ShowType', 'show'=>true, 'type'=>'autocomplete', 'options'=>$ShowType, 'label' => __('Show Type'), 'value' => $ShowType[0]['value'], 'placeholder' => __('Show Type in UI'), 'helptext' => __('Show Type in UI'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>5,'disabled' => false], 'freeSolo'=>false, 'EnableFields'=>$EnableFields, 'DisableFields'=>$DisableFields];
 $allFieldsAdd[] = ['name' => 'SortNumber', 'show'=>true, 'type'=>'number', 'label' => __('SortNumber'), 'value' => '0', 'placeholder' => __('Sort number in form'), 'helptext' => __('Sort number'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>2,'disabled' => false]];
 $allFieldsAdd[] = ['name' => 'FieldDefault', 'show'=>true, 'type'=>'input', 'label' => __('Default'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>2,'disabled' => false]];
 
@@ -457,7 +457,23 @@ if ($searchOneFieldName != "" && $searchOneFieldValue != "" && in_array($searchO
     $AddSql .= " and ($searchOneFieldName like '%" . $searchOneFieldValue . "%')";
 }
 
-$RS['init_default']['filter'] = [];
+$sql        = "select count(*) as NUM from form_formfield $AddSql ";
+$rs         = $db->CacheExecute(10, $sql);
+$ALL_NUM    = intval($rs->fields['NUM']);
+
+$sql = "select FieldType as name, FieldType as value, count(*) AS num from form_formfield $AddSql group by FieldType";
+$rs = $db->CacheExecute(10, $sql);
+$rs_a = $rs->GetArray();
+array_unshift($rs_a,['name'=>__('All Data'), 'value'=>'All Data', 'num'=>$ALL_NUM]);
+$RS['init_default']['filter'][] = ['name' => 'FieldType', 'text' => __('FieldType'), 'list' => $rs_a, 'selected' => "All Data"];
+
+$FieldType = ForSqlInjection($_REQUEST['FieldType']);
+if ($FieldType != "" && $FieldType != "All Data") {
+    $AddSql .= " and (FieldType = '" . $FieldType . "')";
+}
+else if ($FieldType == "") {
+    //$AddSql .= " and (FormGroup = '" . $rs_a[1]['name'] . "')";
+}
 
 $page       = intval($_REQUEST['page']);
 $pageSize   = intval($_REQUEST['pageSize']);

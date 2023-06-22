@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, useEffect, SyntheticEvent, Fragment } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -22,6 +22,7 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** Config
 import authConfig from 'src/configs/auth'
+import axios from 'axios'
 
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
@@ -45,6 +46,7 @@ const UserDropdown = (props: Props) => {
 
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [isLogout, setIsLogout] = useState<boolean>(false)
 
   // ** Hooks
   const router = useRouter()
@@ -60,6 +62,12 @@ const UserDropdown = (props: Props) => {
   }
 
   const handleDropdownClose = (url?: string) => {
+    if(url=='/apps/200' && user.type=="Student")  {
+      url = '/apps/203'
+    }
+    if(url=='/apps/201' && user.type=="Student")  {
+      url = '/apps/202'
+    }    
     if (url) {
       router.push(url)
     }
@@ -82,9 +90,19 @@ const UserDropdown = (props: Props) => {
   }
 
   const handleLogout = () => {
+    setIsLogout(true)
     logout()
     handleDropdownClose()
   }
+
+  const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+  useEffect(() => {
+    if(isLogout) {
+      axios
+      .get(authConfig.logoutEndpoint, { headers: { Authorization: storedToken} })
+      .then()
+    }
+  }, [isLogout])
 
   return (
     <Fragment>
@@ -134,33 +152,40 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: '0 !important' }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
-          <Box sx={styles}>
-            <Icon icon='mdi:account-outline' />
-            个人档案
-          </Box>
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
-          <Box sx={styles}>
-            <Icon icon='mdi:security' />
-            修改密码
-          </Box>
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
-          <Box sx={styles}>
-            <Icon icon='mdi:database-plus' />
-            操作日志
-          </Box>
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/19')}>
-          <Box sx={styles}>
-            <Icon icon='mdi:tumblr-reblog' />
-            登录日志
-          </Box>
-        </MenuItem>
+        {user.type=="User" ?
+          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/user/profile')}>
+            <Box sx={styles}>
+              <Icon icon='mdi:account-outline' />
+              个人档案
+            </Box>
+          </MenuItem>
+        :
+        ''}
+        {user.type=="User" ?
+          <Divider />
+        :
+        ''}
+          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/user/password')}>
+            <Box sx={styles}>
+              <Icon icon='mdi:security' />
+              修改密码
+            </Box>
+          </MenuItem>
+          <Divider />
+          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/200')}>
+            <Box sx={styles}>
+              <Icon icon='mdi:database-plus' />
+              操作日志
+            </Box>
+          </MenuItem>
+          <Divider />
+          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/201')}>
+            <Box sx={styles}>
+              <Icon icon='mdi:tumblr-reblog' />
+              登录日志
+            </Box>
+          </MenuItem>
+
         <Divider />
         <MenuItem
           onClick={handleLogout}

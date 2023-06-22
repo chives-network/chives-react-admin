@@ -842,9 +842,9 @@ for($i=1;$i<=$MaxMsgSections;$i++)     {
     }
     $rs = $db->CacheExecute(10, $sql) or print($sql);
     $FieldType = $rs->GetArray();
-    $DefaultValueTemp = "";
+    $DefaultValueTemp = $SettingMap["Msg_Reminder_Object_Select_Users_{$i}"];
     $FieldCodeName = $FieldName;
-    $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "Msg_Reminder_Object_Select_Users_{$i}", 'code' => $FieldCodeName, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>"autocompletemulti", 'options'=>$FieldType, 'label' => __("Msg_Reminder_Object_Select_Users"), 'value' => $DefaultValueTemp, 'placeholder' => __(""), 'helptext' => __(""), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
+    $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "Msg_Reminder_Object_Select_Users_{$i}", 'code' => "Msg_Reminder_Object_Select_Users_{$i}", 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>"autocompletemulti", 'options'=>$FieldType, 'label' => __("Msg_Reminder_Object_Select_Users"), 'value' => $DefaultValueTemp, 'placeholder' => __(""), 'helptext' => __(""), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
     $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "divider", 'show'=>true, 'type'=>"divider", 'label' => __("divider"), 'value' => "", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 
     $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "Msg_Reminder_Rule_Storage_StudentCode_{$i}", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Msg_Reminder_Rule_Storage_StudentCode"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];

@@ -1612,8 +1612,6 @@ $RS['init_default']['CSRF_DATA']    = $CSRF_DATA;
 
 $RS['init_default']['params']   = ['FormGroup' => '', 'role' => '', 'status' => '', 'q' => ''];
 
-$RS['init_default']['sql']      = $sql;
-
 $RS['init_default']['rowdelete']    = [];
 $RS['init_default']['rowdelete'][]  = ["text"=>$SettingMap['Tip_Title_When_Delete'],"action"=>"delete_array","title"=>$SettingMap['Tip_Title_When_Delete'],"content"=>$SettingMap['Tip_Content_When_Delete'],"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>$SettingMap['Tip_Button_When_Delete'],"cancel"=>__("Cancel")];
 

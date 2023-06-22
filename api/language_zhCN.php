@@ -536,10 +536,11 @@ $MAP['Import_Template_File']    			= '下载导入模板文件';
 $MAP['Import Fields Is Too Less']    		= '导入字段太少，请重新整理文件以后再次导入';
 $MAP['Import Data Success']    				= '导入数据成功';
 $MAP['Upload File Not Exist']    			= '上传文件不存在';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
+
+$MAP['USER NOT EXIST']    					= '用户不存在';
+$MAP['PASSWORD IS ERROR']    				= '密码错误';
+$MAP['Success']    							= '成功';
+$MAP['Failed']    							= '失败';
 $MAP['NULL']    							= '空值';
 
 

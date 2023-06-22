@@ -223,7 +223,23 @@ if ($searchOneFieldName != "" && $searchOneFieldValue != "" && in_array($searchO
     $AddSql .= " and ($searchOneFieldName like '%" . $searchOneFieldValue . "%')";
 }
 
-$RS['init_default']['filter'] = [];
+$sql        = "select count(*) as NUM from form_formdict $AddSql ";
+$rs         = $db->CacheExecute(10, $sql);
+$ALL_NUM    = intval($rs->fields['NUM']);
+
+$sql = "select DictMark as name, DictMark as value, count(*) AS num from form_formdict $AddSql group by DictMark";
+$rs = $db->CacheExecute(10, $sql);
+$rs_a = $rs->GetArray();
+array_unshift($rs_a,['name'=>__('All Data'), 'value'=>'All Data', 'num'=>$ALL_NUM]);
+$RS['init_default']['filter'][] = ['name' => 'DictMark', 'text' => __('DictMark'), 'list' => $rs_a, 'selected' => "All Data"];
+
+$DictMark = ForSqlInjection($_REQUEST['DictMark']);
+if ($DictMark != "" && $DictMark != "All Data") {
+    $AddSql .= " and (DictMark = '" . $DictMark . "')";
+}
+else if ($DictMark == "") {
+    //$AddSql .= " and (FormGroup = '" . $rs_a[1]['name'] . "')";
+}
 
 $page       = intval($_REQUEST['page']);
 $pageSize   = intval($_REQUEST['pageSize']);

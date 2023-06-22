@@ -540,6 +540,10 @@ $MAP['Import Fields Is Too Less']    		= 'Import Fields Is Too Less';
 $MAP['Import Data Success']    				= 'Import Data Success';
 $MAP['Upload File Not Exist']    			= 'Upload File Not Exist';
 
+$MAP['USER NOT EXIST']    					= 'USER NOT EXIST';
+$MAP['PASSWORD IS ERROR']    				= 'PASSWORD IS ERROR';
+$MAP['Success']    							= 'Success';
+$MAP['Failed']    							= 'Failed';
 
 
 

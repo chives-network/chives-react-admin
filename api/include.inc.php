@@ -535,7 +535,7 @@ function GLOBAL_MetaTables() {
 	}
 }
 
-function SystemLogRecord($LogAction,$BeforeRecord='',$AfterRecord='') {
+function SystemLogRecord($LogAction,$BeforeRecord='',$AfterRecord='',$LoginUser='') {
 	global $db,$GLOBAL_USER;
 	global $FormId,$FormName,$FlowId,$FlowName;
 	$Element 					= [];
@@ -546,7 +546,7 @@ function SystemLogRecord($LogAction,$BeforeRecord='',$AfterRecord='') {
 	$Element['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 	$Element['QUERY_STRING'] 	= $_SERVER['QUERY_STRING'];
 	$Element['SCRIPT_NAME'] 	= $_SERVER['SCRIPT_NAME'];
-	$Element['USERID'] 			= $GLOBAL_USER->USER_ID;
+	$Element['USERID'] 			= $LoginUser?$LoginUser:$GLOBAL_USER->USER_ID;
 	$Element['BeforeRecord'] 	= addslashes($BeforeRecord);
 	$Element['AfterRecord'] 	= addslashes($AfterRecord);
 	$Element['FormId'] 			= $FormId;
