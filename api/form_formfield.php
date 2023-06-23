@@ -11,6 +11,7 @@ $sql        = "select * from form_formname where id='$externalId'";
 $rs         = $db->CacheExecute(10, $sql);
 $FromInfo   = $rs->fields;
 $TableName  = $FromInfo['TableName'];
+$ShortName  = $FromInfo['ShortName'];
 
 $columnNames = [];
 $sql = "show columns from form_formfield";
@@ -35,18 +36,21 @@ $rs = $db->CacheExecute(10, $sql);
 $FieldType = $rs->GetArray();
 $allFieldsAdd[] = ['name' => 'FieldType', 'show'=>true, 'type'=>'select', 'options'=>$FieldType, 'label' => __('Field Type'), 'value' => $FieldType[2]['value'], 'placeholder' => __('Field Type in Database'), 'helptext' => __('Field Type in Database'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>3,'disabled' => false]];
 
-$sql = "select `Name` as value, `Name` as label, EnableFields, DisableFields from form_formfield_showtype order by SortNumber asc, id asc";
-$rs = $db->CacheExecute(10, $sql);
-$ShowType = $rs->GetArray();
-$EnableFields = [];
-$DisableFields = [];
+$sql            = "select `Name` as value, `Name` as label, EnableFields, DisableFields from form_formfield_showtype order by SortNumber asc, id asc";
+$rs             = $db->CacheExecute(10, $sql);
+$ShowType       = $rs->GetArray();
+array_unshift($ShowType, ['value'=>'NewDict','label'=>__('NewDict'),'EnableFields'=>'NewDict','DisableFields'=>'']);
+$EnableFields   = [];
+$DisableFields  = [];
 foreach ($ShowType as $Line) {
     $EnableFields[$Line['value']] = explode(',',$Line['EnableFields']);
     $DisableFields[$Line['value']] = explode(',',$Line['DisableFields']);
 }
-$allFieldsAdd[] = ['name' => 'ShowType_名称', 'code' => 'ShowType', 'show'=>true, 'type'=>'autocomplete', 'options'=>$ShowType, 'label' => __('Show Type'), 'value' => $ShowType[0]['value'], 'placeholder' => __('Show Type in UI'), 'helptext' => __('Show Type in UI'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>5,'disabled' => false], 'freeSolo'=>false, 'EnableFields'=>$EnableFields, 'DisableFields'=>$DisableFields];
+$allFieldsAdd[] = ['name' => 'ShowType_名称', 'code' => 'ShowType', 'show'=>true, 'type'=>'autocomplete', 'options'=>$ShowType, 'label' => __('Show Type'), 'value' => $ShowType[1]['value'], 'placeholder' => __('Show Type in UI'), 'helptext' => __('Show Type in UI'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>5,'disabled' => false], 'freeSolo'=>false, 'EnableFields'=>$EnableFields, 'DisableFields'=>$DisableFields];
 $allFieldsAdd[] = ['name' => 'SortNumber', 'show'=>true, 'type'=>'number', 'label' => __('SortNumber'), 'value' => '0', 'placeholder' => __('Sort number in form'), 'helptext' => __('Sort number'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>2,'disabled' => false]];
 $allFieldsAdd[] = ['name' => 'FieldDefault', 'show'=>true, 'type'=>'input', 'label' => __('Default'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>2,'disabled' => false]];
+
+$allFieldsAdd[] = ['name' => 'NewDict', 'show'=>false, 'type'=>'input', 'label' => __('NewDict'), 'value' => '', 'placeholder' => __('Create New Dict Type From Here, use comma to split'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false,'min'=>0,'max'=>999]];
 
 $allFieldsAdd[] = ['name' => 'Max', 'show'=>false, 'type'=>'number', 'label' => __('Max'), 'value' => '', 'placeholder' => __('Maximum input'), 'helptext' => __('Value length maximum, or leave it blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false,'min'=>0,'max'=>4]];
 $allFieldsAdd[] = ['name' => 'Min', 'show'=>false, 'type'=>'number', 'label' => __('Min'), 'value' => '', 'placeholder' => __('Minimum input'), 'helptext' => __('Value length maximum, or leave it blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false,'min'=>0,'max'=>4]];
@@ -234,7 +238,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     $FieldsArray['ShowType']        = $_POST['ShowType'];
     $FieldsArray['FieldDefault']    = $_POST['FieldDefault'];
     $FieldsArray['IsMustFill']      = $_POST['IsMustFill'];
-    $FieldsArray['IsFullWidth']      = $_POST['IsFullWidth'];
+    $FieldsArray['IsFullWidth']     = $_POST['IsFullWidth'];
     $FieldsArray['Max']             = $_POST['Max'];
     $FieldsArray['Min']             = $_POST['Min'];
     $FieldsArray['IsSearch']        = $_POST['IsSearch'];
@@ -242,12 +246,46 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     $FieldsArray['IsDbIndex']       = $_POST['IsDbIndex'];
     $FieldsArray['IsEnable']        = $_POST['IsEnable'];
     $FieldsArray['SortNumber']      = intval($_POST['SortNumber']);
-    $FieldsArray['EnglishName']    = $_POST['EnglishName'];
-    $FieldsArray['ChineseName']    = $_POST['ChineseName'];
+    $FieldsArray['EnglishName']     = $_POST['EnglishName'];
+    $FieldsArray['ChineseName']     = $_POST['ChineseName'];
     $FieldsArray['Placeholder']     = $_POST['Placeholder'];
     $FieldsArray['Helptext']        = $_POST['Helptext'];
     $FieldsArray['ColumnWidth']     = $_POST['ColumnWidth'];
     $FieldsArray['Setting']         = json_encode($_POST);
+
+    //处理额外数据字典同步生成的功能
+    if($FieldsArray['ShowType']=="NewDict"&&$_POST['NewDict']!="")     {
+        $NewDictArray   = explode(',',$_POST['NewDict']);
+        $SortNumber     = 0;
+        $DefaultValue   = "";
+        foreach($NewDictArray as $Item) {
+            $ElementX   = [];
+            $ElementX['DictMark']       = $ShortName."_".$FieldsArray['FieldName'];
+            $ElementX['EnglishName']    = $Item;
+            $ElementX['ChineseName']    = $Item;
+            $ElementX['Code']           = $SortNumber;
+            $ElementX['SortNumber']     = $SortNumber;
+            $ElementX['IsEnable']       = 1;
+            if($SortNumber==0) {
+                $DefaultValue = $Item;
+            }
+            if($Item!="")   {
+                InsertOrUpdateTableByArray("form_formdict",$ElementX,"DictMark,ChineseName",0);
+                $SortNumber ++;
+            }
+        }
+        if($ElementX['DictMark']!="")   {
+            $ElementT                   = [];
+            $ElementT['Name']           = $ShortName.":".$FieldsArray['FieldName'];;
+            $ElementT['LIST']           = "autocomplete:form_formdict:3:3:".$DefaultValue.":DictMark:".$ElementX['DictMark'];
+            $ElementT['ADD']            = $ElementT['LIST'];
+            $ElementT['EDIT']           = $ElementT['LIST'];
+            $ElementT['VIEW']           = $ElementT['LIST'];
+            $ElementT['SortNumber']     = 999;
+            InsertOrUpdateTableByArray("form_formfield_showtype",$ElementT,"Name",0);
+            $FieldsArray['ShowType']    = $ElementT['Name'];
+        }
+    }
 
     if($FieldsArray['IsDbIndex']==1)    {
         $sql = "ALTER TABLE `".$TableName."` ADD INDEX `".$FieldsArray['FieldName']."`(`".$FieldsArray['FieldName']."`);";

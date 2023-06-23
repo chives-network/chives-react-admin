@@ -1,3 +1,0 @@
-
-$MAP['Success'] 	= 'Success';
-$MAP['Success'] 	= 'Success';

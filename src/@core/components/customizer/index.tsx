@@ -110,9 +110,9 @@ const Customizer = () => {
           }}
         >
           <Typography variant='h6' sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-            Theme Customizer
+          主题自定义
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Customize & Preview in Real Time</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>自定义设置主题和界面</Typography>
           <IconButton
             onClick={() => setOpen(false)}
             sx={{
@@ -133,43 +133,43 @@ const Customizer = () => {
               variant='caption'
               sx={{ mb: 4, color: 'text.disabled', textTransform: 'uppercase' }}
             >
-              Theming
+              主题化
             </Typography>
 
             {/* Skin */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Skin</Typography>
+              <Typography>皮肤</Typography>
               <RadioGroup
                 row
                 value={settings['skin']}
                 onChange={e => handleChange('skin', e.target.value as Settings['skin'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='default' label='Default' control={<Radio />} />
-                <FormControlLabel value='bordered' label='Bordered' control={<Radio />} />
+                <FormControlLabel value='default' label='默认' control={<Radio />} />
+                <FormControlLabel value='bordered' label='边线' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* Mode */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Mode</Typography>
+              <Typography>模式</Typography>
               <RadioGroup
                 row
                 value={settings['mode']}
                 onChange={e => handleChange('mode', e.target.value as any)}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='light' label='Light' control={<Radio />} />
-                <FormControlLabel value='dark' label='Dark' control={<Radio />} />
+                <FormControlLabel value='light' label='明亮' control={<Radio />} />
+                <FormControlLabel value='dark' label='暗色' control={<Radio />} />
                 {layout === 'horizontal' ? null : (
-                  <FormControlLabel value='semi-dark' label='Semi Dark' control={<Radio />} />
+                  <FormControlLabel value='semi-dark' label='左暗右亮' control={<Radio />} />
                 )}
               </RadioGroup>
             </Box>
 
             {/* Color Picker */}
             <div>
-              <Typography sx={{ mb: 2.5 }}>Primary Color</Typography>
+              <Typography sx={{ mb: 2.5 }}>主要颜色</Typography>
               <Box sx={{ display: 'flex' }}>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'primary')}
@@ -239,58 +239,58 @@ const Customizer = () => {
               variant='caption'
               sx={{ mb: 4, color: 'text.disabled', textTransform: 'uppercase' }}
             >
-              Layout
+              布局
             </Typography>
 
             {/* Content Width */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Content Width</Typography>
+              <Typography>内容宽度</Typography>
               <RadioGroup
                 row
                 value={contentWidth}
                 onChange={e => handleChange('contentWidth', e.target.value as Settings['contentWidth'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='full' label='Full' control={<Radio />} />
-                <FormControlLabel value='boxed' label='Boxed' control={<Radio />} />
+                <FormControlLabel value='full' label='全部' control={<Radio />} />
+                <FormControlLabel value='boxed' label='边框' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* AppBar */}
             <Box sx={{ mb: 4 }}>
-              <Typography>AppBar Type</Typography>
+              <Typography>应用栏类型</Typography>
               <RadioGroup
                 row
                 value={appBar}
                 onChange={e => handleChange('appBar', e.target.value as Settings['appBar'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='fixed' label='Fixed' control={<Radio />} />
-                <FormControlLabel value='static' label='Static' control={<Radio />} />
+                <FormControlLabel value='fixed' label='固定' control={<Radio />} />
+                <FormControlLabel value='static' label='静态' control={<Radio />} />
                 {layout === 'horizontal' ? null : (
-                  <FormControlLabel value='hidden' label='Hidden' control={<Radio />} />
+                  <FormControlLabel value='hidden' label='隐藏' control={<Radio />} />
                 )}
               </RadioGroup>
             </Box>
 
             {/* Footer */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Footer Type</Typography>
+              <Typography>底部布局</Typography>
               <RadioGroup
                 row
                 value={footer}
                 onChange={e => handleChange('footer', e.target.value as Settings['footer'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='fixed' label='Fixed' control={<Radio />} />
-                <FormControlLabel value='static' label='Static' control={<Radio />} />
-                <FormControlLabel value='hidden' label='Hidden' control={<Radio />} />
+                <FormControlLabel value='fixed' label='固定' control={<Radio />} />
+                <FormControlLabel value='static' label='静态' control={<Radio />} />
+                <FormControlLabel value='hidden' label='隐藏' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* AppBar Blur */}
             <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>AppBar Blur</Typography>
+              <Typography>应用栏模糊</Typography>
               <Switch
                 name='appBarBlur'
                 checked={appBarBlur}
@@ -308,13 +308,13 @@ const Customizer = () => {
               variant='caption'
               sx={{ mb: 4, color: 'text.disabled', textTransform: 'uppercase' }}
             >
-              Menu
+              菜单
             </Typography>
 
             {/* Menu Toggle */}
             {navHidden || layout === 'horizontal' ? null : (
               <Box sx={{ mb: 4 }}>
-                <Typography>Menu Toggle</Typography>
+                <Typography>菜单切换</Typography>
                 <RadioGroup
                   row
                   value={verticalNavToggleType}
@@ -323,8 +323,8 @@ const Customizer = () => {
                   }
                   sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
                 >
-                  <FormControlLabel value='accordion' label='Accordion' control={<Radio />} />
-                  <FormControlLabel value='collapse' label='Collapse' control={<Radio />} />
+                  <FormControlLabel value='accordion' label='手风琴' control={<Radio />} />
+                  <FormControlLabel value='collapse' label='菜单折叠' control={<Radio />} />
                 </RadioGroup>
               </Box>
             )}
@@ -332,7 +332,7 @@ const Customizer = () => {
             {/* Menu Collapsed */}
             {navHidden || layout === 'horizontal' ? null : (
               <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography>Menu Collapsed</Typography>
+                <Typography>菜单折叠</Typography>
                 <Switch
                   name='navCollapsed'
                   checked={navCollapsed}
@@ -344,7 +344,7 @@ const Customizer = () => {
             {/* Menu Hidden */}
             {layout === 'horizontal' && appBar === 'hidden' ? null : (
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography>Menu Hidden</Typography>
+                <Typography>菜单隐藏</Typography>
                 <Switch
                   name='navHidden'
                   checked={navHidden}

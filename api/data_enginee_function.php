@@ -947,7 +947,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 break;
             case 'avatar':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false] ];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'Reset'=>__('Reset'), 'AvatarFormatTip'=>__('AvatarFormatTip'), 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false] ];
                 break;
             case 'files':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
@@ -968,7 +968,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $rsf    = $db->Execute($sql);
                 $MenuOneRSA  = $rsf->GetArray();
                 //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
-                $sql    = "select * from data_menutwo where FaceTo='AuthUser' order by MenuOneName asc,SortNumber asc";
+                $sql    = "select * from data_menutwo where FaceTo='AuthUser' order by SortNumber asc";
                 $rsf    = $db->Execute($sql);
                 $MenuTwoRSA  = $rsf->GetArray();
                 $MenuTwoArray = [];

@@ -964,7 +964,7 @@ if($_GET['action']=="updateone")  {
     $value  = ParamsFilter($_POST['value']);
     $primary_key = $MetaColumnNames[0];
     //Check Field Valid
-    if($id>0&&$field!=""&&in_array($field,$MetaColumnNames)&&$primary_key!=$field&&$SettingMap['FieldEditable_'.$field]=='true') {
+    if($id>0&&$field!=""&&in_array($field,$MetaColumnNames)&&$primary_key!=$field&&($SettingMap['FieldEditable_'.$field]=='true' || $SettingMap['FieldEditable_'.$field]=='1')) {
         $sql    = "update $TableName set $field = '$value' where $primary_key = '$id'";
         $db->Execute($sql);
         //functionNameIndividual
@@ -1191,7 +1191,7 @@ foreach($AllFieldsFromTable as $Item)  {
     }
     
     $editable = false;
-    if($SettingMap['FieldEditable_'.$FieldName]=='true')   {
+    if($SettingMap['FieldEditable_'.$FieldName]=='true' || $SettingMap['FieldEditable_'.$FieldName]=='1')   {
         $editable = true;
         $UpdateFields[] = $FieldName;
     }
@@ -1701,7 +1701,7 @@ $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1 )  {
     $RS['init_default']['sql']                              = $sql_list;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
 }

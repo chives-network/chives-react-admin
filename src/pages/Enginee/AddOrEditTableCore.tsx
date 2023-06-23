@@ -305,7 +305,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         allFieldsMode && allFieldsMode.map((allFieldsModeItem: any) => {
             allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArray: any) => {
                 if (FieldArray.type == "input" && FieldArray.rules) {
-                    let yupCheck = yup.string().trim()
+                    let yupCheck = yup.string().trim().label(FieldArray.label)
                     FieldArray.rules.required ? yupCheck = yupCheck.required() : '';
                     FieldArray.rules.min > 0 ? yupCheck = yupCheck.min(FieldArray.rules.min) : '';
                     FieldArray.rules.max > 0 ? yupCheck = yupCheck.max(FieldArray.rules.max) : '';
@@ -327,24 +327,30 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     yupCheckMap[FieldArray.name] = yupCheck
                 }
                 else if (FieldArray.type == "email" && FieldArray.rules && FieldArray.rules.required) {
-                    yupCheckMap[FieldArray.name] = yup.string().email().required()
+                    yupCheckMap[FieldArray.name] = yup.string().email().required().label(FieldArray.label)
                 }
                 else if ( (FieldArray.type == "textarea" || FieldArray.type == "autocomplete" || FieldArray.type == "tablefilter" || FieldArray.type == "tablefiltercolor" || FieldArray.type == "radiogroup") && FieldArray.rules && FieldArray.rules.required) {
-                    yupCheckMap[FieldArray.name] = yup.string().required()
+                    yupCheckMap[FieldArray.name] = yup.string().required().label(FieldArray.label).nullable()
                 }
                 else if ((FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2" || FieldArray.type == "datetime" || FieldArray.type == "month" || FieldArray.type == "year" || FieldArray.type == "monthrange" || FieldArray.type == "yearrange" || FieldArray.type == "quarter") && FieldArray.rules && FieldArray.rules.required) {
-                    let yupCheck = yup.string().trim()
+                    let yupCheck = yup.string().trim().label(FieldArray.label)
                     FieldArray.rules.required ? yupCheck = yupCheck.required() : '';                    
                     yupCheckMap[FieldArray.name] = yupCheck
                 }
                 else if (FieldArray.type == "avatar" && FieldArray.rules && FieldArray.rules.required)  {
-                    //yupCheckMap[FieldArray.name] = yup.string().required()
+                    //yupCheckMap[FieldArray.name] = yup.string().required().label(FieldArray.label)
                 }
                 else if (FieldArray.type == "file" && FieldArray.rules && FieldArray.rules.required)    {
-                    //yupCheckMap[FieldArray.name] = yup.string().required()
+                    //yupCheckMap[FieldArray.name] = yup.string().required().label(FieldArray.label)
                 }
                 else if (FieldArray.type == "xlsx" && FieldArray.rules && FieldArray.rules.required)    {
-                    //yupCheckMap[FieldArray.name] = yup.array().of(yup.string().required('Array elements cannot be empty'))
+                    //yupCheckMap[FieldArray.name] = yup.array().of(yup.string().required('Array elements cannot be empty')).label(FieldArray.label)
+                }
+                else if (FieldArray.type == "password" && FieldArray.rules && FieldArray.rules.required)  {
+                    yupCheckMap[FieldArray.name] = yup.string().required().label(FieldArray.label)
+                }
+                else if (FieldArray.type == "comfirmpassword" && FieldArray.rules && FieldArray.rules.required)  {
+                    yupCheckMap[FieldArray.name] = yup.string().required().min(6).matches(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/, FieldArray.rules.invalidtext).label(FieldArray.label)
                 }
             })
         })
@@ -877,12 +883,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     )
                                                 }
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "password") {
-                                                    
-                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
-                                                    
+                                                                                                      
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                             <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <InputLabel htmlFor='input-confirm-new-password' error={Boolean(errors[FieldArray.name])}>
+                                                                {FieldArray.label}
+                                                                </InputLabel>
                                                                 <Controller
                                                                     name={FieldArray.name}
                                                                     control={control}
@@ -936,6 +943,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                             <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <InputLabel htmlFor='input-confirm-new-password' error={Boolean(errors[FieldArray.name])}>
+                                                                {FieldArray.label}
+                                                                </InputLabel>
                                                                 <Controller
                                                                     name={FieldArray.name}
                                                                     control={control}
@@ -2360,14 +2370,14 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
-                                                    
+
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                             <FormControl fullWidth sx={{ mb: 0 }}>
                                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                                     {avatorShowArea && avatorShowArea[FieldArray.name] ?
                                                                         (<ImgStyled src={avatorShowArea[FieldArray.name]} alt={FieldArray.helptext} />)
-                                                                        : (<Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]])}><ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} /></Box>)
+                                                                        : ( defaultValuesNew[FieldArray.name] ? <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]])}><ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} /></Box> : <Box sx={{ display: 'flex', alignItems: 'center',}} ><ImgStyled src={'/images/avatars/1.png'} alt={FieldArray.helptext} /></Box> )
                                                                     }
                                                                     <div>
                                                                         <ButtonStyled component='label' variant='contained' htmlFor={FieldArray.name}>
@@ -2382,10 +2392,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             />
                                                                         </ButtonStyled>
                                                                         <ResetButtonStyled color='secondary' variant='outlined' name={FieldArray.name} onClick={handleAvatorReset}>
-                                                                            Reset
+                                                                        {FieldArray.Reset}
                                                                         </ResetButtonStyled>
                                                                         <Typography variant='caption' sx={{ mt: 4, display: 'block', color: 'text.disabled' }}>
-                                                                            Allowed PNG or JPEG. Max size of 800K.
+                                                                        {FieldArray.AvatarFormatTip}
                                                                         </Typography>
                                                                     </div>
                                                                 </Box>

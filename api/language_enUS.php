@@ -544,8 +544,22 @@ $MAP['USER NOT EXIST']    					= 'USER NOT EXIST';
 $MAP['PASSWORD IS ERROR']    				= 'PASSWORD IS ERROR';
 $MAP['Success']    							= 'Success';
 $MAP['Failed']    							= 'Failed';
+$MAP['Reset']    							= 'Reset';
+$MAP['AvatarFormatTip']    					= 'Allow png or jpg file';
+$MAP['Create New Dict Type From Here']      = 'Create New Dict Type From Here';
 
-
+$MAP['USER_NAME']    						= 'Username';
+$MAP['Old_Password']    					= 'Original Password';
+$MAP['New_Password']    					= 'New Password';
+$MAP['Confirm_Password']    				= 'Confirm New Password';
+$MAP['Minimum 6 characters long - the more, the better']    = 'Minimum 6 characters long - the more, the better';
+$MAP['Change Your Password']    			                = 'Change Your Password';
+$MAP['The two new passwords you entered do not match']      = 'The two new passwords you entered do not match';
+$MAP['Incorrect original password']    						= 'Incorrect original password';
+$MAP['Change Password Success']    							= 'Change Password Success';
+$MAP['The new password cannot be the same as the old password'] = 'The new password cannot be the same as the old password';
+$MAP['OLD PASSWORD IS ERROR']    			= 'Original Password Is Error';
+$MAP['ChangePassword']    					= 'Change Password';
 
 
 
