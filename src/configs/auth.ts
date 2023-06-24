@@ -1,5 +1,5 @@
 
-const APP_URL = 'http://react.admin.test/'
+const APP_URL = 'http://localhost/api/'
 
 export default {
   meEndpoint: APP_URL+'jwt.php?action=refresh',

@@ -1,4 +1,4 @@
-<?
+<?php
 
 function plugin_data_student_jiangxuejin_奖学金申请时间和范围过滤()   {
     global $db;

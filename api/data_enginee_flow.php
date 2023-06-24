@@ -1060,13 +1060,19 @@ if($_GET['action']=="Reset_Password_123654")  {
                 SystemLogRecord("Reset_Password_123654", '', json_encode($rs->fields));
             }
             $密码       = password_make("123654");
-            $sql        = "update $TableName set 密码='$密码' where $primary_key = '$id'";
-            $db->Execute($sql);
-            //functionNameIndividual
-            $functionNameIndividual = "plugin_".$TableName."_".$Step."_delete_array";
-            if(function_exists($functionNameIndividual))  {
-                $functionNameIndividual($id);
+            if(in_array("密码",$MetaColumnNames)) {
+                $sql        = "update $TableName set 密码='$密码' where $primary_key = '$id'";
+                $db->Execute($sql);
             }
+            if(in_array("PASSWORD",$MetaColumnNames)) {
+                $sql        = "update $TableName set `PASSWORD`='$密码' where $primary_key = '$id'";
+                $db->Execute($sql);
+            }
+            //functionNameIndividual
+            //$functionNameIndividual = "plugin_".$TableName."_".$Step."_delete_array";
+            //if(function_exists($functionNameIndividual))  {
+            //    $functionNameIndividual($id);
+            //}
         }
     }
     $RS = [];
@@ -1095,13 +1101,19 @@ if($_GET['action']=="Reset_Password_ID_Last6")  {
                 $身份证件号6 = "123654";
             }
             $密码       = password_make($身份证件号6);
-            $sql        = "update $TableName set 密码='$密码' where $primary_key = '$id'";
-            $db->Execute($sql);
-            //functionNameIndividual
-            $functionNameIndividual = "plugin_".$TableName."_".$Step."_delete_array";
-            if(function_exists($functionNameIndividual))  {
-                $functionNameIndividual($id);
+            if(in_array("密码",$MetaColumnNames)) {
+                $sql        = "update $TableName set 密码='$密码' where $primary_key = '$id'";
+                $db->Execute($sql);
             }
+            if(in_array("PASSWORD",$MetaColumnNames)) {
+                $sql        = "update $TableName set `PASSWORD`='$密码' where $primary_key = '$id'";
+                $db->Execute($sql);
+            }
+            //functionNameIndividual
+            //$functionNameIndividual = "plugin_".$TableName."_".$Step."_delete_array";
+            //if(function_exists($functionNameIndividual))  {
+            //    $functionNameIndividual($id);
+            //}
         }
     }
     $RS = [];

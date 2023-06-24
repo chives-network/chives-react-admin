@@ -207,9 +207,6 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   }, [])
 
   const multiReviewHandleFilter = useCallback((action: string, multiReviewInputValue: string, selectedRows: GridRowId[], CSRF_TOKEN:string) => {
-    console.log("action", action)
-    console.log("multiReviewInputValue", multiReviewInputValue)
-    console.log("selectedRows", selectedRows)
     const formData = new FormData();
     formData.append('multiReviewInputValue', multiReviewInputValue);
     formData.append('selectedRows', selectedRows.join(','));
@@ -297,7 +294,6 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         setEditViewCounter(0)
         break;
       case 'delete_array':
-        console.log("id------------",id)
         setSelectedRows([id])
         handleMultiOpenDialog("delete_array")
         break;
@@ -610,7 +606,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   })
   
   //console.log("store.init_default.ApprovalNodeFields",store.init_default.ApprovalNodeFields)
-  console.log("addEditActionId-addEditActionId-addEditActionId",store, addEditActionName)
+  //console.log("addEditActionId-addEditActionId-addEditActionId",store, addEditActionName)
   
   return (
     <Grid container spacing={6}>

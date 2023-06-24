@@ -26,7 +26,7 @@ const ButtonGroupSplit = (props: DataType) => {
 
   // ** States
   const [open, setOpen] = useState<boolean>(false)
-  const [selectedIndex, setSelectedIndex] = useState<number>(1)
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
 
   // ** Ref
   const anchorRef = useRef<HTMLDivElement | null>(null)

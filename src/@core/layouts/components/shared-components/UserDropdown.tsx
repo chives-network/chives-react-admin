@@ -152,19 +152,6 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: '0 !important' }} />
-        {user.type=="User" ?
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/user/profile')}>
-            <Box sx={styles}>
-              <Icon icon='mdi:account-outline' />
-              个人档案
-            </Box>
-          </MenuItem>
-        :
-        ''}
-        {user.type=="User" ?
-          <Divider />
-        :
-        ''}
           <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/user/password')}>
             <Box sx={styles}>
               <Icon icon='mdi:security' />

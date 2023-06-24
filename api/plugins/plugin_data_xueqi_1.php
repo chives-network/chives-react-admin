@@ -1,4 +1,4 @@
-<?
+<?php
 
 //FlowName: 学期
 

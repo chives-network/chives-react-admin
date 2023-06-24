@@ -142,13 +142,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
-    console.log("AddtionalParams======================================",action)
+    ///console.log("AddtionalParams======================================",action)
 
     useEffect(() => {
         if (action.indexOf("edit_default") != -1 && editViewCounter > 0) {
             
             //setIsLoading(true)
-            const params = { action, id, editViewCounter, IsGetStructureFromEditDefault }
+            const params = { action, id, editViewCounter, IsGetStructureFromEditDefault, externalId }
             
             //for (const Item in AddtionalParams) {
             //    params[Item] = AddtionalParams[Item]
@@ -184,7 +184,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                     }
                                     if (FieldArray.type == "UserRoleMenuDetail") {
                                         const UserRoleSelect = res.data.data[FieldArray.name].split(',')
-                                        console.log(UserRoleSelect)
                                         setUserRoleMenuDetail(FieldArray.MenuTwoArray)
                                         setMenuTwoCount(FieldArray.MenuTwoCount)
                                         const TempSelectedCheckbox:{[key:string]:any[]} = {}
@@ -194,16 +193,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         Object.keys(FieldArray.MenuTwoArray).map((MenuOneName: string) => {
                                             const MenuTwoArray = FieldArray.MenuTwoArray[MenuOneName]
                                             Object.keys(MenuTwoArray).map((MenuTwoName: string) => {
-                                                console.log("MenuTwoArray[MenuTwoName]",MenuTwoArray[MenuTwoName])
                                                 MenuTwoArray[MenuTwoName] && MenuTwoArray[MenuTwoName].map((MenuThreeRecord: any) => {
                                                     if(UserRoleSelect.includes(MenuThreeRecord.id)) {
-                                                        console.log("TempSelectedCheckbox[MenuThreeRecord.MenuOneName]",TempSelectedCheckbox[MenuThreeRecord.MenuOneName])
                                                         TempSelectedCheckbox[MenuThreeRecord.MenuOneName].push(MenuThreeRecord.id)
                                                     }
                                                 })
                                             })
                                         })
-                                        console.log("TempSelectedCheckbox",TempSelectedCheckbox)
                                         setSelectedCheckbox(TempSelectedCheckbox)
                                         setSelectedMenuOneNameForSubmit(FieldArray.name)                                        
                                     }                                    
@@ -218,13 +214,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                     if(action!="edit_default_1" && action!="edit_default_2" && FieldArray.name.includes("身份证件类型") && res.data.data[FieldArray.name]!="居民身份证") {
                                         allFieldsTemp[allFieldsModeItem.value][FieldArray_index+1]['type'] = "input"
                                         allFieldsTemp[allFieldsModeItem.value][FieldArray_index+1]['rules']['format'] = ""
-                                        console.log("allFieldsTemp----2", allFieldsTemp[allFieldsModeItem.value][FieldArray_index+1]['rules']['format'])
-                                        console.log("defaultValuesNew[FieldArray.name]", res.data.data[FieldArray.name])  
                                     }
                                     
                                 })
                             })
-                            console.log("allFieldsTemp", allFieldsTemp)
                             setAllFields(allFieldsTemp)
                             setAllEditorValues(allEditorValuesTemp)
                             setAutoCompleteMulti(autoCompleteMultiTemp)
@@ -488,7 +481,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     }
 
     const handleAvatorChange = (e: ChangeEvent) => {
-        console.log("e.target-------------------", e.target)
         const reader = new FileReader()
         const { files } = e.target as HTMLInputElement
         if (files && files.length !== 0) {
@@ -641,7 +633,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
     const { getRootProps: getRootPropsFiles, getInputProps: getInputPropsFiles } = useDropzone({
         onDrop: (acceptedFiles: File[]) => {
-            console.log("uploadFiles",uploadFiles)
             const filtered = uploadFiles
             acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
             setUploadFiles([...filtered])
@@ -651,7 +642,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const { getRootProps: getRootPropsFile, getInputProps: getInputPropsFile } = useDropzone({
         maxFiles: 1,
         onDrop: (acceptedFiles: File[]) => {
-            console.log("uploadFiles",uploadFiles)
             const filtered = uploadFiles
             acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
             setUploadFiles([...filtered])
@@ -666,7 +656,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
         },
         onDrop: (acceptedFiles: File[]) => {
-            console.log("uploadFiles",uploadFiles)
             const filtered = uploadFiles
             acceptedFiles.map((file: File) => filtered.push(Object.assign(file)))
             setUploadFiles([...filtered])
@@ -734,9 +723,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 //this part is more complicated, pay attention to the code changes.
                                                 //console.log("defaultValuesNew[FieldArray.name]-----", FieldArray.name)
                                                 if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
-                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
-                                                        //console.log("defaultValuesNew[FieldArray.name]--------------------------------", defaultValuesNew[FieldArray.name])
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
                                                     
@@ -837,10 +824,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 }
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "readonly") {
                                                     
-                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         
-                                                        //console.log("defaultValuesNew[FieldArray.name]--------------------------------", defaultValuesNew[FieldArray.name])
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
                                                     
@@ -1227,9 +1212,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     else {                                                        
                                                         setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
                                                     }
-                                                    console.log("defaultValuesNew",defaultValuesNew)
                                                     
-
                                                     const options = FieldArray.options
                                                     
                                                     return (
@@ -1249,8 +1232,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             renderInput={(params) => <TextField {...params} label={FieldArray.label} />}
                                                                             onChange={(event: any, newValue: any) => {
                                                                                 if (newValue != undefined) {
-                                                                                    console.log("event", event);
-                                                                                    console.log("FieldArray", FieldArray);
                                                                                     const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
                                                                                     if(FieldArray.name!=FieldArray.code) {
                                                                                         defaultValuesNewTemp[FieldArray.name] = newValue.label
@@ -1280,11 +1261,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         if(ItemValue['ExtraControl']) {
                                                                                             const TempFieldNameAndType = ItemValue['ExtraControl'].split(":")
                                                                                             if(TempFieldNameAndType.length > 1 && TempFieldNameAndType[1] && newValue.value==ItemValue['value']) {
-                                                                                                console.log("TempFieldNameAndType", TempFieldNameAndType)
                                                                                                 allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArrayChild: any, FieldArrayChild_index: number) => {
                                                                                                     if(FieldArrayChild.name == TempFieldNameAndType[0]) {
                                                                                                         const allFieldsTemp:{[key:string]:any} = JSON.parse(JSON.stringify(allFields))
-                                                                                                        console.log("***************", allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'])
                                                                                                         if(TempFieldNameAndType[1]=='chinaidcard') {
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['format'] = TempFieldNameAndType[1]
@@ -1292,7 +1271,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生年月'] = FieldArrayChild.name.replace("身份证件号","出生年月")
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['性别'] = FieldArrayChild.name.replace("身份证件号","性别")
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['年龄'] = FieldArrayChild.name.replace("身份证件号","年龄")
-                                                                                                            console.log("allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']",FieldArrayChild)
                                                                                                         }
                                                                                                         else {
                                                                                                             allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
@@ -1358,8 +1336,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             freeSolo={FieldArray.freeSolo}
                                                                             onChange={(event: any, newValue: any) => {
                                                                                 if (newValue != undefined) {
-                                                                                    console.log("event", event);
-                                                                                    console.log("FieldArray", FieldArray.name);
                                                                                     const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
                                                                                     defaultValuesNewTemp[FieldArray.name] = newValue.value
                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
@@ -1432,8 +1408,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     filterSelectedOptions
                                                                                     isOptionEqualToValue={(option:any, value) => { return option.value === value.value; }}
                                                                                     onChange={(event: any, newValue: any) => {
-                                                                                        console.log("event--------------------------------", event.target)
-                                                                                        console.log("newValue--------------------------------", newValue)
                                                                                         if (newValue && newValue.length > 0) {
                                                                                             const newValueArray = []
                                                                                             for (const fieldItem of newValue) {
@@ -1447,7 +1421,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             defaultValuesNewTemp[FieldArray.code] = newValueArray.join(',');
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
         
-                                                                                            console.log("defaultValuesNewTemp[FieldArray.code]-------------------------newValue-------", defaultValuesNewTemp[FieldArray.code],FieldArray.code)
                                                                                         }
                                                                                         else {
                                                                                             const autoCompleteMultiTemp:{[key:string]:any} = { ...autoCompleteMulti }
@@ -1586,7 +1559,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                         else {
                                                                                                             defaultValuesNewTemp[FieldArray.name] += "," + ItemArray.value
                                                                                                         }
-                                                                                                        console.log("clickOrNot------------------1-----", defaultValuesNewTemp[FieldArray.name])
                                                                                                     }
                                                                                                 }
                                                                                                 else {
@@ -1596,7 +1568,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                         //Exist, will remove
                                                                                                         TempValue.splice(TempValue.indexOf(ItemArray.value), 1)
                                                                                                         defaultValuesNewTemp[FieldArray.name] = TempValue.join(',')
-                                                                                                        console.log("TempValue------------------00-----", defaultValuesNewTemp[FieldArray.name])
                                                                                                     }
                                                                                                 }
                                                                                                 setDefaultValuesNew(defaultValuesNewTemp)

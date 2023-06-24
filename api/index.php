@@ -1,3 +1,3 @@
 <?php
-Print_R($_SERVER);
+print date("Y-m-d H:is");
 ?>

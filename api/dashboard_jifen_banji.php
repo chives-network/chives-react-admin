@@ -36,6 +36,9 @@ elseif($班级名称Array[0]!="") {
 else {
     $班级 = "计算机三班";
 }
+if(sizeof($TopRightOptions)==0)  {
+    $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
+}
 
 //奖杯模块
 $sql = "select SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' and 学期='$学期' ";
