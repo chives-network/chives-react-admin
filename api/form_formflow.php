@@ -238,9 +238,12 @@ for($i=1;$i<sizeof($MetaColumnNamesTarget);$i++)   {
         
         $defaultValues_1["FieldImport_".$FieldName] = false;
         $edit_default_1['Default'][] = ['name' => "FieldImport_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("Import"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>1]];
+
+        $defaultValues_1["FieldExport_".$FieldName] = true;
+        $edit_default_1['Default'][] = ['name' => "FieldExport_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("Export"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>1]];
         
         $defaultValues_1["FieldEditable_".$FieldName] = false;
-        $edit_default_1['Default'][] = ['name' => "FieldEditable_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("List Editable"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>2]];
+        $edit_default_1['Default'][] = ['name' => "FieldEditable_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("List Editable"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>1]];
     }
 }
 

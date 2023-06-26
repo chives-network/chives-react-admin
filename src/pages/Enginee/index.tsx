@@ -253,8 +253,10 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   }
 
   const toggleExportTableDrawer = () => {
-    setAddEditActionName('add_default')
-    setAddEditActionOpen(!addEditActionOpen)
+    const link = document.createElement('a')
+    link.href = authConfig.backEndApiHost + store.export_default.exportUrl
+    link.download = store.export_default.titletext
+    link.click()
   }
 
   const toggleAddTableDrawer = () => {

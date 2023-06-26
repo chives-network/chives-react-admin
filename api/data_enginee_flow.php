@@ -87,6 +87,8 @@ $AllFieldsFromTable   = $rs->GetArray();
 $AllFieldsMap = [];
 foreach($AllFieldsFromTable as $Item)  {
     $AllFieldsMap[$Item['FieldName']] = $Item;
+    $LocaleFieldArray[$Item['EnglishName']] = $Item['FieldName'];
+    $LocaleFieldArray[$Item['ChineseName']] = $Item['FieldName'];
 }
 //print "TIME EXCEUTE 4:".(time()-$TIME_BEGIN)."<BR>\n";
 
@@ -141,8 +143,10 @@ $allFieldsImport['Default'][] = ['name' => "Import_Rule_Method", 'show'=>true, '
 $Import_Fields          = [];
 $Import_Fields_Default  = [];
 foreach($AllFieldsFromTable as $Item)  {
-    $Import_Fields[]            = ['value'=>$Item['FieldName'], 'label'=>$Item['ChineseName']];
-    $Import_Fields_Default[]    = $Item['FieldName'];
+    if($SettingMap["FieldImport_".$Item['FieldName']]=="true" || $SettingMap["FieldImport_".$Item['FieldName']]=="1")   {
+        $Import_Fields[]            = ['value'=>$Item['FieldName'], 'label'=>$Item['ChineseName']];
+        $Import_Fields_Default[]    = $Item['FieldName'];
+    }
 }
 $allFieldsImport['Default'][] = ['name' => "Import_Fields", 'show'=>true, 'type'=>'checkbox', 'options'=>$Import_Fields, 'label' => __("Step2_Choose_Import_Fields"), 'value' => join(',', $Import_Fields_Default), 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
 
@@ -150,6 +154,7 @@ $TEMPARRAY                      = [];
 $TEMPARRAY['TableName']         = $TableName;
 $TEMPARRAY['Action']            = "export_template";
 $TEMPARRAY['FormId']            = $FormId;
+$TEMPARRAY['FlowId']            = $FlowId;
 $TEMPARRAY['FileName']          = $FormName;
 $TEMPARRAY['Time']              = time();
 $DATATEMP                       = EncryptID(serialize($TEMPARRAY));
@@ -165,6 +170,14 @@ foreach($allFieldsImport as $ModeName=>$allFieldItem) {
     }
 }
 
+$allFieldsExport        = [];
+foreach($allFieldsView as $ModeName=>$allFieldItem) {
+    foreach($allFieldItem as $ITEM) {
+        if($SettingMap["FieldExport_".$ITEM['name']]=="true" || $SettingMap["FieldExport_".$ITEM['name']]=="1" || $SettingMap["FieldExport_".$ITEM['code']]=="true" || $SettingMap["FieldExport_".$ITEM['code']]=="1")   {
+            $allFieldsExport[$ModeName][] = $ITEM;
+        }
+    }
+}
 
 //print "TIME EXCEUTE 7:".(time()-$TIME_BEGIN)."<BR>\n";
 //UpdateOtherTableFieldAfterFormSubmit($id);
@@ -246,10 +259,14 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
     $Import_Fields_Array = explode(',',$_POST['Import_Fields']);
     for ($row = 1; $row < sizeof($data); $row++) {
         $Element        = [];
-        for ($column = 0; $column < sizeof($Header); $column++) {
-            $FieldName  = $Header[$column];
-            if(in_array($FieldName, $MetaColumnNames)&&in_array($FieldName,$Import_Fields_Array))  {
+        $IsExecutionSQL = 0;
+        for ($column = 0; $column < sizeof($Header); $column++)         {
+            $FieldName  = $LocaleFieldArray[$Header[$column]];
+            if( in_array($FieldName, $MetaColumnNames) && in_array($FieldName,$Import_Fields_Array))  {
                 $Element[$FieldName] = $data[$row][$column];
+                if($Element[$FieldName]!="")   {
+                    $IsExecutionSQL = 1;
+                }
             }
         }
         if(sizeof(array_keys($Element))<=sizeof($ImportUniqueFields)) {
@@ -263,29 +280,33 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
             print json_encode($RS);
             exit;
         }
-        
-        //functionNameIndividual
-        $functionNameIndividual = "plugin_".$TableName."_".$Step."_import_default_data_before_submit";
-        if(function_exists($functionNameIndividual))  {
-            $Element = $functionNameIndividual($Element);
+        if($IsExecutionSQL)    {
+            //functionNameIndividual
+            $functionNameIndividual = "plugin_".$TableName."_".$Step."_import_default_data_before_submit";
+            if(function_exists($functionNameIndividual))  {
+                $Element = $functionNameIndividual($Element);
+            }
+            
+            $Import_Rule_Method = $_POST['Import_Rule_Method'];
+            switch($Import_Rule_Method) {
+                case 'BothInsertAndUpdate':
+                    [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'InsertOrUpdate');
+                    $sqlList[] = $sql;
+                    break;
+                case 'OnlyUpdate':
+                    [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Update');
+                    $sqlList[] = $sql;
+                    break;
+                case 'OnlyInsert':
+                    [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Insert');
+                    $sqlList[] = $sql;
+                    break;
+            }
+            if($rs->EOF) {
+            }
         }
-
-        $Import_Rule_Method = $_POST['Import_Rule_Method'];
-        switch($Import_Rule_Method) {
-            case 'BothInsertAndUpdate':
-                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'InsertOrUpdate');
-                $sqlList[] = $sql;
-                break;
-            case 'OnlyUpdate':
-                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Update');
-                $sqlList[] = $sql;
-                break;
-            case 'OnlyInsert':
-                [$rs,$sql] = InsertOrUpdateTableByArray($TableName,$Element,join(',',$ImportUniqueFields),0,'Insert');
-                $sqlList[] = $sql;
-                break;
-        }
-        if($rs->EOF) {
+        else {
+            //Empty Row
         }
     }
 
@@ -1667,6 +1688,34 @@ $RS['import_default']['tablewidth']       = 650;
 $RS['import_default']['submitloading']    = __("SubmitLoading");
 $RS['import_default']['loading']          = __("Loading");
 
+
+$TEMPARRAY                      = [];
+$TEMPARRAY['TableName']         = $TableName;
+$TEMPARRAY['Action']            = "export_data";
+$TEMPARRAY['FormId']            = $FormId;
+$TEMPARRAY['FlowId']            = $FlowId;
+$TEMPARRAY['FileName']          = $FormName;
+$TEMPARRAY['AddSql']            = $AddSql;
+$TEMPARRAY['orderby']           = $orderby;
+$TEMPARRAY['Time']              = time();
+$DATATEMP                       = EncryptID(serialize($TEMPARRAY));
+$exportUrl                      = "data_export.php?DATA=".$DATATEMP;
+$RS['export_default']['allFields']        = $allFieldsExport;
+$RS['export_default']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
+$RS['export_default']['defaultValues']    = [];
+$RS['export_default']['dialogContentHeight']  = "90%";
+$RS['export_default']['submitaction']     = "export_default_data";
+$RS['export_default']['componentsize']    = "small";
+$RS['export_default']['submittext']       = $SettingMap['Rename_Export_Submit_Button'];
+$RS['export_default']['canceltext']       = __("Cancel");
+$RS['export_default']['titletext']        = $SettingMap['Export_Title_Name'];
+$RS['export_default']['titlememo']        = $SettingMap['Export_Subtitle_Name'];
+$RS['export_default']['tablewidth']       = 650;
+$RS['export_default']['submitloading']    = __("SubmitLoading");
+$RS['export_default']['loading']          = __("Loading");
+$RS['export_default']['exportUrl']        = $exportUrl;
+
+
 $RS['add_default']['allFields']     = $allFieldsAdd;
 $RS['add_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
 $RS['add_default']['defaultValues'] = $defaultValuesAdd;
@@ -1700,8 +1749,6 @@ $RS['view_default']['allFields']  = $allFieldsView;
 $RS['view_default']['titletext']  = $SettingMap['View_Title_Name'];
 $RS['view_default']['titlememo']  = $SettingMap['View_Subtitle_Name'];
 $RS['view_default']['componentsize'] = "small";
-
-$RS['export_default'] = [];
 
 $RS['init_default']['delete_dialog_title']      = $SettingMap['Tip_Title_When_Delete'];
 $RS['init_default']['delete_dialog_content']    = $SettingMap['Tip_Content_When_Delete'];
