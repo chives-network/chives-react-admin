@@ -560,6 +560,10 @@ $MAP['Change Password Success']    							= 'Change Password Success';
 $MAP['The new password cannot be the same as the old password'] = 'The new password cannot be the same as the old password';
 $MAP['OLD PASSWORD IS ERROR']    			= 'Original Password Is Error';
 $MAP['ChangePassword']    					= 'Change Password';
+$MAP['Create New Dict Type From Here, use comma to split']  = 'Create New Dict Type From Here, use comma to split';
+$MAP['NewDict']    							= 'New Dict';
+$MAP['return']    							= 'Return';
+$MAP['FormName is null']    				= 'FormName is null';
 
 
 

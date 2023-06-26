@@ -1312,7 +1312,8 @@ $RS['view_default']['titlememo']  = __("View All Form Fields in Table");
 $RS['export_default'] = [];
 $RS['import_default'] = [];
 
-$RS['init_default']['returnButton']  = true;
+$RS['init_default']['returnButton']['status']  = true;
+$RS['init_default']['returnButton']['text']  = __("return");
 $RS['init_default']['rowHeight']  = 38;
 $RS['init_default']['dialogContentHeight']  = "850px";
 $RS['init_default']['dialogMaxWidth']  = "md";// xl lg md sm xs 

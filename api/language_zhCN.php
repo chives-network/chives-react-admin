@@ -558,8 +558,8 @@ $MAP['OLD PASSWORD IS ERROR']    			= '原密码错误';
 $MAP['ChangePassword']    					= '修改密码';
 $MAP['Create New Dict Type From Here, use comma to split']  = '创建新的数据字典类型,多个值请用半角逗号隔开';
 $MAP['NewDict']    							= '创建新的数字字典';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
+$MAP['return']    							= '返回';
+$MAP['FormName is null']    				= '表单名称不能为空';
 $MAP['NULL']    							= '空值';
 $MAP['NULL']    							= '空值';
 

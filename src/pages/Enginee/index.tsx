@@ -613,11 +613,11 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
       {store && store.init_action.action == 'init_default' ? 
       <Grid item xs={12}>
         <Card>
-          {store.init_default.returnButton ?
+          {store.init_default.returnButton && store.init_default.returnButton.status ?
             <Grid sx={{ pr: 3, pb: 0, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
               <CardHeader title={store.init_default.searchtitle} />
               <Grid sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                <Button sx={{ mb: 2 }} variant='outlined' size='small' onClick={() => { window.history.back(); }}>Return</Button>
+                <Button sx={{ mb: 2 }} variant='outlined' size='small' onClick={() => { window.history.back(); }}>{store.init_default.returnButton.text}</Button>
               </Grid>
             </Grid>
             :

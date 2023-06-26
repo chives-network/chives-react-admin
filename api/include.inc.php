@@ -557,3 +557,16 @@ function SystemLogRecord($LogAction,$BeforeRecord='',$AfterRecord='',$LoginUser=
 	$db->Execute($sql);
 }
 
+//修复数据();
+function 修复数据() {
+	global $db;
+	$sql = "select distinct FormId,FormName from form_formfield where FormName=''";
+	$rs = $db->Execute($sql);
+	$rs_a = $rs->GetArray();
+	foreach($rs_a as $Item) {
+		$FormId = $Item['FormId'];
+		$TableName = returntablefield("form_formname","id",$FormId,"TableName")['TableName'];
+		$sql = "update form_formfield set FormName='$TableName' where FormId='$FormId' ";
+		//$db->Execute($sql);
+	}
+}

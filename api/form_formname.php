@@ -197,7 +197,7 @@ function CopyFormAndFlowByID($ID)  {
         foreach($rs_a as $Element)  {
             $Element['id']          = null;
             $Element['FormId']      = $NewFormId;
-            $Element['FormName']    = $Element['TableName'];
+            $Element['FormName']    = $_POST['TableName'];
             [$rs,$sql] = InsertOrUpdateTableByArray("form_formfield",$Element,'id',0,"Insert");
             if($rs->EOF) {
                 //OK
