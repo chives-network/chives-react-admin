@@ -496,7 +496,7 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                 if($rsTemp->fields['NUM']>=1) {
                     $RS = [];
                     $RS['status'] = "ERROR";
-                    $RS['msg'] = $SettingMap['Unique_Fields_Repeat_Text'];
+                    $RS['msg'] = $SettingMap['Unique_Fields_Repeat_Text']?$SettingMap['Unique_Fields_Repeat_Text']:__('Unique_Fields_Repeat_Text');
                     $RS['sql'] = $sql;
                     $RS['_GET'] = $_GET;
                     $RS['_POST'] = $_POST;

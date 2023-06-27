@@ -35,7 +35,7 @@ if($USER_TYPE=="User")    {
     $MenuTwoArray = [];
     foreach($MenuTwoRSA as $Item)  {
         if($Item['MenuThreeName']!="")   {
-            $MenuTwoArray[$Item['MenuOneName']][$Item['MenuTwoName']][] = $Item;
+            $MenuTwoArray[$Item['MenuOneName']][$Item['MenuOneName']."____".$Item['MenuTwoName']][] = $Item;
         }
         else { 
             $MenuTwoArray[$Item['MenuOneName']]['SystemMenuTwo_'.$Item['id']][] = $Item;
@@ -98,7 +98,7 @@ if($USER_TYPE=="Student")    {
     $MenuTwoArray = [];
     foreach($MenuTwoRSA as $Item)  {
         if($Item['MenuThreeName']!="")   {
-            $MenuTwoArray[$Item['MenuOneName']][$Item['MenuTwoName']][] = $Item;
+            $MenuTwoArray[$Item['MenuOneName']][$Item['MenuOneName']."____".$Item['MenuTwoName']][] = $Item;
         }
         else { 
             $MenuTwoArray[$Item['MenuOneName']]['SystemMenuTwo_'.$Item['id']][] = $Item;
