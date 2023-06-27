@@ -29,17 +29,23 @@ const AnalyticsDashboard = () => {
   const dataDefault:{[key:string]:any} = {}
   const [dashboardData, setDashboardData] = useState(dataDefault)
   const [className, setClassName] = useState<string>("")
+  const [optionsMenuItem, setOptionsMenuItem] = useState<string>("")
   const auth = useAuth()
 
   const toggleSetClassName = (classNameTemp: string) => {
     setClassName(classNameTemp)
   }
+  
+  const handleOptionsMenuItemClick = (Item: string) => {
+    setOptionsMenuItem(Item)
+  }
+
   console.log("auth",auth)
 
   useEffect(() => {
     if (auth.user && auth.user.type=="Student") {
       const backEndApi = "dashboard_jifen_student.php"
-      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className } })
+      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data);
           setIsLoading(false)
@@ -48,14 +54,14 @@ const AnalyticsDashboard = () => {
     }
     else if (auth.user && auth.user.type=="User") {
       const backEndApi = "dashboard_jifen_banji.php"
-      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className } })
+      axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data);
           setIsLoading(false)
           setClassName(res.data.defaultValue)
       })
     }    
-  }, [className, auth])
+  }, [className, auth, optionsMenuItem])
 
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -76,13 +82,13 @@ const AnalyticsDashboard = () => {
                       <AnalyticsTrophy data={dashboardData['AnalyticsTrophy']} toggleSetClassName={toggleSetClassName} />
                     </Grid>
                     <Grid item xs={12} md={8}>
-                      <AnalyticsTransactionsCard data={dashboardData['AnalyticsTransactionsCard']}/>
+                      <AnalyticsTransactionsCard data={dashboardData['AnalyticsTransactionsCard']} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
-                      <AnalyticsSalesByCountries data={dashboardData['AnalyticsSalesByCountries']}/>
+                      <AnalyticsSalesByCountries data={dashboardData['AnalyticsSalesByCountries']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                     <Grid item xs={12} md={8}>
-                      <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']}/>
+                      <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                   </Grid>
                 )}

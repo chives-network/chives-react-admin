@@ -1,3 +1,4 @@
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -36,14 +37,15 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 
 interface DataType {
   data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
 }
 
 const AnalyticsDepositWithdraw = (props: DataType) => {
-
-  const { data } = props
-  const router = useRouter();
-  console.log("datadatadatadatadata",data)
   
+  const { data, handleOptionsMenuItemClick } = props
+  const router = useRouter();
+  console.log("handleOptionsMenuItemClick",handleOptionsMenuItemClick)
+
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'] }}>
       <Box sx={{ width: '100%' }}>

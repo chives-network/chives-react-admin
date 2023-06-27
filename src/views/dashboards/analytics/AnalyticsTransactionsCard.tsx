@@ -1,3 +1,5 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -27,13 +29,23 @@ interface DataType2 {
 
 interface DataType {
   data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
 }
 
 const AnalyticsTransactionsCard = (props: DataType) => {
   
-  const { data } = props
+  const { data, handleOptionsMenuItemClick } = props
   const router = useRouter();
   console.log("router",router)
+  const [selectedItem, setSelectedItem] = useState<string>("")
+
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
 
   return (
     <Card>
@@ -41,7 +53,21 @@ const AnalyticsTransactionsCard = (props: DataType) => {
         title={data.Title}
         action={
           <OptionsMenu
-            options={data.TopRightOptions}
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
             iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
           />
         }

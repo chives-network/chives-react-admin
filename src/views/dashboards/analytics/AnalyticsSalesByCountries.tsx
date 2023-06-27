@@ -1,3 +1,6 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -22,11 +25,21 @@ interface DataType2 {
 
 interface DataType {
   data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
 }
 
 const AnalyticsSalesByCountries = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
 
-  const { data } = props
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
 
   return (
     <Card>
@@ -35,8 +48,22 @@ const AnalyticsSalesByCountries = (props: DataType) => {
         titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         action={
           <OptionsMenu
-            options={data.TopRightOptions}
-            iconButtonProps={{ size: 'small', className: 'card-more-options', sx: { color: 'text.primary' } }}
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
+            iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
           />
         }
       />
