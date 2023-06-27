@@ -20,6 +20,9 @@ import Icon from 'src/@core/components/icon'
 // ** Types
 import { DateType } from 'src/types/forms/reactDatepickerTypes'
 
+// ** Date Style Imports
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
 // ** Component Import
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
@@ -172,16 +175,18 @@ const ApexAreaChart = () => {
           '& .MuiCardHeader-content': { mb: [2, 0] }
         }}
         action={
-          <DatePicker
-            selectsRange
-            endDate={endDate}
-            id='apexchart-area'
-            selected={startDate}
-            startDate={startDate}
-            onChange={handleOnChange}
-            placeholderText='Click to select a date'
-            customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
-          />
+          <DatePickerWrapper>
+            <DatePicker
+              selectsRange
+              endDate={endDate}
+              id='apexchart-area'
+              selected={startDate}
+              startDate={startDate}
+              onChange={handleOnChange}
+              placeholderText='Click to select a date'
+              customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
+            />
+          </DatePickerWrapper>
         }
       />
       <CardContent>
