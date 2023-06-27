@@ -11,7 +11,7 @@ import Box from '@mui/material/Box'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import ApexAreaChart from 'src/views/charts/apex-charts/ApexAreaChart'
+import ApexLineChart from 'src/views/charts/apex-charts/ApexLineChart'
 import AnalyticsTrophy from 'src/views/dashboards/analytics/AnalyticsTrophy'
 import AnalyticsSalesByCountries from 'src/views/dashboards/analytics/AnalyticsSalesByCountries'
 import AnalyticsDepositWithdraw from 'src/views/dashboards/analytics/AnalyticsDepositWithdraw'
@@ -92,7 +92,7 @@ const AnalyticsDashboard = () => {
                       <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                     <Grid item xs={12} md={12}>
-                      <ApexAreaChart />
+                      <ApexLineChart data={dashboardData['ApexLineChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                   </Grid>
                 )}

@@ -1,30 +1,20 @@
 // ** React Imports
-import { forwardRef, useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
-import TextField from '@mui/material/TextField'
 import { useTheme } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Third Party Imports
-import format from 'date-fns/format'
 import { ApexOptions } from 'apexcharts'
-import DatePicker from 'react-datepicker'
-
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
-// ** Types
-import { DateType } from 'src/types/forms/reactDatepickerTypes'
-
-// ** Date Style Imports
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Component Import
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
+
+// ** Custom Components Imports
+import OptionsMenu from 'src/@core/components/option-menu'
 
 const areaColors = {
   series1: '#ab7efd',
@@ -32,30 +22,23 @@ const areaColors = {
   series3: '#e0cffe'
 }
 
-interface PickerProps {
-  start: Date | number
-  end: Date | number
+interface DataType {
+  data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
 }
 
-const series = [
-  {
-    name: 'Visits',
-    data: [100, 120, 90, 170, 130, 160, 140, 240, 220, 180, 270, 280, 375]
-  },
-  {
-    name: 'Clicks',
-    data: [60, 80, 70, 110, 80, 100, 90, 180, 160, 140, 200, 220, 275]
-  },
-  {
-    name: 'Sales',
-    data: [20, 40, 30, 70, 40, 60, 50, 140, 120, 100, 140, 180, 220]
-  }
-]
+const ApexAreaChart = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
 
-const ApexAreaChart = () => {
-  // ** States
-  const [endDate, setEndDate] = useState<DateType>(null)
-  const [startDate, setStartDate] = useState<DateType>(null)
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
 
   // ** Hook
   const theme = useTheme()
@@ -110,63 +93,15 @@ const ApexAreaChart = () => {
       labels: {
         style: { colors: theme.palette.text.disabled }
       },
-      categories: [
-        '7/12',
-        '8/12',
-        '9/12',
-        '10/12',
-        '11/12',
-        '12/12',
-        '13/12',
-        '14/12',
-        '15/12',
-        '16/12',
-        '17/12',
-        '18/12',
-        '19/12'
-      ]
+      categories: data.dataX
     }
-  }
-
-  const CustomInput = forwardRef((props: PickerProps, ref) => {
-    const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''
-    const endDate = props.end !== null ? ` - ${format(props.end, 'MM/dd/yyyy')}` : null
-
-    const value = `${startDate}${endDate !== null ? endDate : ''}`
-
-    return (
-      <TextField
-        {...props}
-        size='small'
-        value={value}
-        inputRef={ref}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position='start'>
-              <Icon icon='mdi:bell-outline' />
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position='end'>
-              <Icon icon='mdi:chevron-down' />
-            </InputAdornment>
-          )
-        }}
-      />
-    )
-  })
-
-  const handleOnChange = (dates: any) => {
-    const [start, end] = dates
-    setStartDate(start)
-    setEndDate(end)
   }
 
   return (
     <Card>
       <CardHeader
-        title='Line Chart'
-        subheader='Commercial networks'
+        title={data.Title}
+        subheader={data.SubTitle}
         subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
         sx={{
           flexDirection: ['column', 'row'],
@@ -175,22 +110,28 @@ const ApexAreaChart = () => {
           '& .MuiCardHeader-content': { mb: [2, 0] }
         }}
         action={
-          <DatePickerWrapper>
-            <DatePicker
-              selectsRange
-              endDate={endDate}
-              id='apexchart-area'
-              selected={startDate}
-              startDate={startDate}
-              onChange={handleOnChange}
-              placeholderText='Click to select a date'
-              customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
-            />
-          </DatePickerWrapper>
+          <OptionsMenu
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
+            iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
+          />
         }
       />
       <CardContent>
-        <ReactApexcharts type='area' height={400} options={options} series={series} />
+        <ReactApexcharts type='area' height={400} options={options} series={data.dataY} />
       </CardContent>
     </Card>
   )

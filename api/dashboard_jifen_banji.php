@@ -133,6 +133,74 @@ $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'最近一月','se
 $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
 
+/*
+//ApexAreaChart
+$sql = "select 一级指标,积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标,积分时间 order by 积分时间 asc";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据 = [];
+$一级指标Array = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据[$rs_a[$i]['积分时间']][$rs_a[$i]['一级指标']] = $rs_a[$i]['NUM'];
+    $一级指标Array[$rs_a[$i]['一级指标']] = $rs_a[$i]['一级指标'];
+}
+$dataY = [];
+$dataX = array_keys($输出数据);
+$一级指标Array = array_keys($一级指标Array);
+foreach($一级指标Array as $一级指标)  {
+    $ItemY = [];
+    $ItemYDate = [];
+    foreach($dataX as $Date) {
+        $ItemYDate[] = intval($输出数据[$Date][$一级指标]);
+    }
+    $dataY[] = ["name"=>$一级指标,"data"=>$ItemYDate];
+}
+
+$ApexAreaChart['Title']       = "班级学生积分之和";
+$ApexAreaChart['SubTitle']    = "按天统计班级学生积分之和";
+$ApexAreaChart['dataX']       = $dataX;
+$ApexAreaChart['dataY']       = $dataY;
+$ApexAreaChart['sql']       = $sql;
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+*/
+
+//ApexAreaChart
+$sql = "select 积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 积分时间 order by 积分时间 asc";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据 = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据[$rs_a[$i]['积分时间']] = $rs_a[$i]['NUM'];
+}
+$dataY = [];
+$dataX = array_keys($输出数据);
+$dataY[] = ["name"=>"班级总积分","data"=>array_values($输出数据)];
+
+$ApexAreaChart['Title']       = "班级学生积分之和";
+$ApexAreaChart['SubTitle']    = "按天统计班级学生积分之和";
+$ApexAreaChart['dataX']       = $dataX;
+$ApexAreaChart['dataY']       = $dataY;
+$ApexAreaChart['sql']       = $sql;
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$ApexAreaChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+
+
+
+$ApexLineChart['Title']       = "班级学生积分之和";
+$ApexLineChart['SubTitle']    = "按天统计班级学生积分之和";
+$ApexLineChart['dataX']       = $dataX;
+$ApexLineChart['dataY']       = $dataY;
+$ApexLineChart['sql']       = $sql;
+$ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$ApexLineChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$ApexLineChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+
 
 
 $RS                                 = [];
@@ -142,7 +210,9 @@ $RS['AnalyticsTrophy']              = $AnalyticsTrophy;
 $RS['AnalyticsTransactionsCard']    = $AnalyticsTransactionsCard;
 $RS['AnalyticsDepositWithdraw']     = $AnalyticsDepositWithdraw;
 $RS['AnalyticsSalesByCountries']    = $AnalyticsSalesByCountries;
-$RS['AnalyticsTrophy'] = $AnalyticsTrophy;
+$RS['ApexAreaChart']                = $ApexAreaChart;
+$RS['ApexLineChart']                = $ApexLineChart;
+
 $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
 $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
 
