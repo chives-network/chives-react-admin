@@ -5,6 +5,11 @@ require_once('include.inc.php');
 
 CheckAuthUserLoginStatus();
 
+$optionsMenuItem = $_GET['optionsMenuItem'];
+if($optionsMenuItem=="")  {
+    $optionsMenuItem = "当前学期";
+}
+
 $学期 = returntablefield("data_xueqi","当前学期","是","学期名称")['学期名称'];
 
 $USER_ID    = ForSqlInjection($GLOBAL_USER->USER_ID);
@@ -40,8 +45,23 @@ if(sizeof($TopRightOptions)==0)  {
     $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
 }
 
+switch($optionsMenuItem) {
+    case '最近一周':
+        $whereSql = " and 积分时间 >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)";
+        break;
+    case '最近一月':
+        $whereSql = " and 积分时间 >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)";
+        break;
+    case '当前学期':
+        $whereSql = " and 学期='$学期'";
+        break;
+    case '所有学期':
+        $whereSql = "";
+        break;
+}
+
 //奖杯模块
-$sql = "select SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' and 学期='$学期' ";
+$sql = "select SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql";
 $rs = $db->CacheExecute(180,$sql);
 $AnalyticsTrophy['Welcome']     = "您好,".$GLOBAL_USER->USER_NAME."!🥳";
 $AnalyticsTrophy['SubTitle']    = $班级."总积分";
@@ -51,7 +71,7 @@ $AnalyticsTrophy['ViewButton']['url']   = "/tab/apps_180";
 $AnalyticsTrophy['TopRightOptions']     = $TopRightOptions;
 
 //按一级指标统计积分
-$sql = "select 一级指标 AS title, SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' and 学期='$学期' group by 一级指标 order by 一级指标 asc";
+$sql = "select 一级指标 AS title, SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标 order by 一级指标 asc";
 $rs = $db->CacheExecute(180,$sql);
 $rs_a = $rs->GetArray();
 $Item = [];
@@ -64,12 +84,14 @@ foreach($rs_a as $Element)   {
 $AnalyticsTransactionsCard['Title']       = "德育量化";
 $AnalyticsTransactionsCard['SubTitle']    = "按一级指标统计";
 $AnalyticsTransactionsCard['data']        = $data;
-$AnalyticsTransactionsCard['TopRightOptions']    = ['最近一周','最近一个月','整个学期'];
-$AnalyticsTransactionsCard['TopRightOptions']    = [];
+$AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
 
 
 //得到最新加分或是扣分的几条记录
-$sql = "select 一级指标,二级指标,积分项目,积分分值 from data_deyu_geren_record where 班级='$班级' and 学期='$学期' and 积分分值>0 order by id desc limit 5";
+$sql = "select 一级指标,二级指标,积分项目,积分分值 from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 order by id desc limit 5";
 $rs = $db->CacheExecute(180,$sql);
 $rs_a = $rs->GetArray();
 for($i=0;$i<sizeof($rs_a);$i++) {
@@ -80,7 +102,7 @@ $AnalyticsDepositWithdraw['加分']['Title']             = "加分";
 $AnalyticsDepositWithdraw['加分']['TopRightButton']    = ['name'=>'查看所有','url'=>'/tab/apps_180'];
 $AnalyticsDepositWithdraw['加分']['data']              = $rs_a;
 
-$sql = "select 一级指标,二级指标,积分项目,积分分值 from data_deyu_geren_record where 班级='$班级' and 学期='$学期' and 积分分值<0 order by id desc limit 5";
+$sql = "select 一级指标,二级指标,积分项目,积分分值 from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值<0 order by id desc limit 5";
 $rs = $db->CacheExecute(180,$sql);
 $rs_a = $rs->GetArray();
 for($i=0;$i<sizeof($rs_a);$i++) {
@@ -95,7 +117,7 @@ $AnalyticsDepositWithdraw['扣分']['data']              = $rs_a;
 //本班积分排行 
 $colorArray = ['primary','success','warning','info','info'];
 $iconArray  = ['mdi:trending-up','mdi:account-outline','mdi:cellphone-link','mdi:currency-usd','mdi:currency-usd','mdi:currency-usd'];
-$sql    = "select 学号, 姓名, SUM(积分分值) AS 积分分值 from data_deyu_geren_record where 班级='$班级' and 学期='$学期' group by 学号 order by 积分分值 desc limit 5";
+$sql    = "select 学号, 姓名, SUM(积分分值) AS 积分分值 from data_deyu_geren_record where 班级='$班级' $whereSql group by 学号 order by 积分分值 desc limit 5";
 $rs     = $db->CacheExecute(180,$sql);
 $rs_a   = $rs->GetArray();
 $Item   = [];
@@ -106,12 +128,16 @@ for($i=0;$i<sizeof($rs_a);$i++) {
 $AnalyticsSalesByCountries['Title']       = "班级排行";
 $AnalyticsSalesByCountries['SubTitle']    = "本班积分最高学生";
 $AnalyticsSalesByCountries['data']        = $rs_a;
-$AnalyticsSalesByCountries['TopRightOptions']    = ['最近一周','最近一个月','整个学期'];
-$AnalyticsSalesByCountries['TopRightOptions']    = [];
+$AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+
 
 
 $RS                                 = [];
 $RS['defaultValue']                 = $班级;
+$RS['optionsMenuItem']              = $optionsMenuItem;
 $RS['AnalyticsTrophy']              = $AnalyticsTrophy;
 $RS['AnalyticsTransactionsCard']    = $AnalyticsTransactionsCard;
 $RS['AnalyticsDepositWithdraw']     = $AnalyticsDepositWithdraw;
@@ -121,18 +147,6 @@ $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
 $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
 
 print_R(json_encode($RS));
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
