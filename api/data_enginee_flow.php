@@ -1713,7 +1713,9 @@ $RS['export_default']['titlememo']        = $SettingMap['Export_Subtitle_Name'];
 $RS['export_default']['tablewidth']       = 650;
 $RS['export_default']['submitloading']    = __("SubmitLoading");
 $RS['export_default']['loading']          = __("Loading");
-$RS['export_default']['exportUrl']        = $exportUrl;
+if(sizeof(array_keys($allFieldsExport))>0 && in_array('Export',$Actions_In_List_Header_Array)) {
+    $RS['export_default']['exportUrl']        = $exportUrl;
+}
 
 
 $RS['add_default']['allFields']     = $allFieldsAdd;

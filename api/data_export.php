@@ -124,9 +124,14 @@ if($Action=="export_data"&&$FormId!=""&&$FlowId!=""&&$DATA['AddSql']!=""&&$DATA[
     $orderby = str_replace("GROUP BY","",$orderby);
     $orderby = str_replace("HAVING","",$orderby);
     $orderby = str_replace("UNION","",$orderby);
-    $sql    = "select ".join(",",$FieldNameArray)." from $TableName $AddSql $orderby";
-    $rs     = $db->CacheExecute(180, $sql);
-    $rs_a   = $rs->GetArray();
+    if(sizeof($FieldNameArray)>0 && $TableName!="")    {
+        $sql    = "select ".join(",",$FieldNameArray)." from $TableName $AddSql $orderby";
+        $rs     = $db->CacheExecute(180, $sql) or print $sql;
+        $rs_a   = $rs->GetArray();
+    }
+    else {
+        $rs_a   = [];
+    }
 
     $filename = $FileName."-".__("Export").".xlsx";
     $filetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
