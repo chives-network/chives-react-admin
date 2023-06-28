@@ -69,6 +69,8 @@ $AnalyticsTrophy['TotalScore']  = $rs->fields['NUM'];
 $AnalyticsTrophy['ViewButton']['name']  = "查看明细";
 $AnalyticsTrophy['ViewButton']['url']   = "/tab/apps_180";
 $AnalyticsTrophy['TopRightOptions']     = $TopRightOptions;
+$AnalyticsTrophy['grid']        = 4;
+$AnalyticsTrophy['type']        = "AnalyticsTrophy";
 
 //按一级指标统计积分
 $sql = "select 一级指标 AS title, SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标 order by 一级指标 asc";
@@ -88,6 +90,8 @@ $AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'最近一周','se
 $AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $AnalyticsTransactionsCard['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$AnalyticsTransactionsCard['grid']                 = 8;
+$AnalyticsTransactionsCard['type']                 = "AnalyticsTransactionsCard";
 
 
 //得到最新加分或是扣分的几条记录
@@ -109,9 +113,11 @@ for($i=0;$i<sizeof($rs_a);$i++) {
     $rs_a[$i]['项目图标'] = "mdi:".$图标和颜色[$rs_a[$i]['一级指标']]['图标'];
     $rs_a[$i]['图标颜色'] = $图标和颜色[$rs_a[$i]['一级指标']]['颜色'];
 }
-$AnalyticsDepositWithdraw['扣分']['Title']             = "扣分";
-$AnalyticsDepositWithdraw['扣分']['TopRightButton']    = ['name'=>'查看所有','url'=>'/tab/apps_180'];
-$AnalyticsDepositWithdraw['扣分']['data']              = $rs_a;
+$AnalyticsDepositWithdraw['扣分']['Title']              = "扣分";
+$AnalyticsDepositWithdraw['扣分']['TopRightButton']     = ['name'=>'查看所有','url'=>'/tab/apps_180'];
+$AnalyticsDepositWithdraw['扣分']['data']               = $rs_a;
+$AnalyticsDepositWithdraw['grid']                       = 8;
+$AnalyticsDepositWithdraw['type']                       = "AnalyticsDepositWithdraw";
 
 
 //本班积分排行 
@@ -132,6 +138,8 @@ $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'最近一周','se
 $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $AnalyticsSalesByCountries['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$AnalyticsSalesByCountries['grid']                 = 4;
+$AnalyticsSalesByCountries['type']                 = "AnalyticsSalesByCountries";
 
 /*
 //ApexAreaChart
@@ -188,6 +196,8 @@ $ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$op
 $ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexAreaChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexAreaChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$ApexAreaChart['grid']                  = 8;
+$ApexAreaChart['type']                  = "ApexAreaChart";
 
 $ApexLineChart['Title']         = "班级学生积分之和";
 $ApexLineChart['SubTitle']      = "按天统计班级学生积分之和";
@@ -198,6 +208,8 @@ $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$op
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$ApexLineChart['grid']                  = 8;
+$ApexLineChart['type']                  = "ApexLineChart";
 
 
 //AnalyticsWeeklyOverview
@@ -226,6 +238,8 @@ $AnalyticsWeeklyOverview['BottomText']['Right']     = "最近一周总积分为"
 
 $AnalyticsWeeklyOverview['ViewButton']['name']  = "明细";
 $AnalyticsWeeklyOverview['ViewButton']['url']   = "/tab/apps_180";
+$AnalyticsWeeklyOverview['grid']                = 4;
+$AnalyticsWeeklyOverview['type']                = "AnalyticsWeeklyOverview";
 
 
 //AnalyticsPerformance
@@ -250,6 +264,8 @@ $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一周','selecte
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$AnalyticsPerformance['grid']                 = 4;
+$AnalyticsPerformance['type']                 = "AnalyticsPerformance";
 
 
 //ApexDonutChart
@@ -274,6 +290,8 @@ $ApexDonutChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$o
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$ApexDonutChart['grid']                 = 4;
+$ApexDonutChart['type']                 = "ApexDonutChart";
 
 
 //ApexRadialBarChart
@@ -298,24 +316,25 @@ $ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'
 $ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+$ApexRadialBarChart['grid']                 = 4;
+$ApexRadialBarChart['type']                 = "ApexRadialBarChart";
 
 
-$RS                                 = [];
-$RS['defaultValue']                 = $班级;
-$RS['optionsMenuItem']              = $optionsMenuItem;
-$RS['AnalyticsTrophy']              = $AnalyticsTrophy;
-$RS['AnalyticsTransactionsCard']    = $AnalyticsTransactionsCard;
-$RS['AnalyticsDepositWithdraw']     = $AnalyticsDepositWithdraw;
-$RS['AnalyticsSalesByCountries']    = $AnalyticsSalesByCountries;
-$RS['ApexAreaChart']                = $ApexAreaChart;
-$RS['ApexLineChart']                = $ApexLineChart;
-$RS['AnalyticsWeeklyOverview']      = $AnalyticsWeeklyOverview;
-$RS['AnalyticsPerformance']         = $AnalyticsPerformance;
-$RS['ApexDonutChart']               = $ApexDonutChart;
-$RS['ApexRadialBarChart']           = $ApexRadialBarChart;
+$RS                             = [];
+$RS['defaultValue']             = $班级;
+$RS['optionsMenuItem']          = $optionsMenuItem;
 
-$RS['ApexRadialBarChart']              = $ApexRadialBarChart;
-$RS['ApexRadialBarChart']              = $ApexRadialBarChart;
+$RS['charts'][]       = $AnalyticsTrophy;
+$RS['charts'][]       = $AnalyticsTransactionsCard;
+$RS['charts'][]       = $AnalyticsSalesByCountries;
+$RS['charts'][]       = $AnalyticsDepositWithdraw;
+$RS['charts'][]       = $AnalyticsWeeklyOverview;
+//$RS['charts'][]       = $ApexAreaChart;
+$RS['charts'][]       = $ApexLineChart;
+$RS['charts'][]       = $AnalyticsPerformance;
+$RS['charts'][]       = $ApexDonutChart;
+$RS['charts'][]       = $ApexRadialBarChart;
+
 
 print_R(json_encode($RS));
 

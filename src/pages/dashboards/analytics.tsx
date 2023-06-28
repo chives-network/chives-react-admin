@@ -56,7 +56,7 @@ const AnalyticsDashboard = () => {
       const backEndApi = "charts/dashboard_deyu_geren_student.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
-          setDashboardData(res.data);
+          setDashboardData(res.data.charts);
           setIsLoading(false)
           setClassName(res.data.defaultValue)
       })
@@ -65,7 +65,7 @@ const AnalyticsDashboard = () => {
       const backEndApi = "charts/dashboard_deyu_geren_banji.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
-          setDashboardData(res.data);
+          setDashboardData(res.data.charts);
           setIsLoading(false)
           setClassName(res.data.defaultValue)
       })
@@ -87,34 +87,75 @@ const AnalyticsDashboard = () => {
                     </Grid>
                 ) : (
                   <Grid container spacing={6}>
-                    <Grid item xs={12} md={4}>
-                      <AnalyticsTrophy data={dashboardData['AnalyticsTrophy']} toggleSetClassName={toggleSetClassName} />
-                    </Grid>
-                    <Grid item xs={12} md={8}>
-                      <AnalyticsTransactionsCard data={dashboardData['AnalyticsTransactionsCard']} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <AnalyticsSalesByCountries data={dashboardData['AnalyticsSalesByCountries']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={8}>
-                      <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <AnalyticsWeeklyOverview data={dashboardData['AnalyticsWeeklyOverview']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={8}>
-                      <ApexLineChart data={dashboardData['ApexLineChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <AnalyticsPerformance data={dashboardData['AnalyticsPerformance']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <ApexDonutChart data={dashboardData['ApexDonutChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <ApexRadialBarChart data={dashboardData['ApexRadialBarChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
-                    </Grid>
-                    
+                    {dashboardData && dashboardData.map( (item: any)=> {
+                      if(item.type=="AnalyticsTrophy") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="AnalyticsTransactionsCard") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsTransactionsCard data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="AnalyticsSalesByCountries") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsSalesByCountries data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="AnalyticsDepositWithdraw") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsDepositWithdraw data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="AnalyticsWeeklyOverview") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsWeeklyOverview data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="ApexLineChart") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <ApexLineChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="ApexDonutChart") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <ApexDonutChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="ApexRadialBarChart") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <ApexRadialBarChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else if(item.type=="AnalyticsPerformance") {
+                        return (
+                          <Grid item xs={12} md={item.grid}>
+                            <AnalyticsPerformance data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
+                          </Grid>
+                        )
+                      }
+                      else  {
+                        console.log("Unknown Chart Type")
+                      }
+
+                    })}
                     
                   </Grid>
                 )}
