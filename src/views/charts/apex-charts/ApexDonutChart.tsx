@@ -1,3 +1,6 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
+
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import { useTheme } from '@mui/material/styles'
@@ -10,6 +13,9 @@ import { ApexOptions } from 'apexcharts'
 // ** Component Import
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
+// ** Custom Components Imports
+import OptionsMenu from 'src/@core/components/option-menu'
+
 const donutColors = {
   series1: '#fdd835',
   series2: '#00d4bd',
@@ -18,14 +24,31 @@ const donutColors = {
   series5: '#ffa1a1'
 }
 
-const ApexDonutChart = () => {
+interface DataType {
+  data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
+}
+
+const ApexDonutChart = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
+
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
+
   // ** Hook
   const theme = useTheme()
 
   const options: ApexOptions = {
     stroke: { width: 0 },
-    labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
-    colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
+    labels: data.dataX,
+    colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2, donutColors.series4],
     dataLabels: {
       enabled: true,
       formatter: (val: string) => `${parseInt(val, 10)}%`
@@ -55,8 +78,8 @@ const ApexDonutChart = () => {
             total: {
               show: true,
               fontSize: '1.2rem',
-              label: 'Operational',
-              formatter: () => '31%',
+              label: data.dataX[0],
+              formatter: () => data.dataY[0].data[0],
               color: theme.palette.text.primary
             }
           }
@@ -104,15 +127,36 @@ const ApexDonutChart = () => {
     ]
   }
 
+  console.log(data.dataY[0].data)
   return (
     <Card>
       <CardHeader
-        title='Expense Ratio'
-        subheader='Spending on various categories'
+        title={data.Title}
+        subheader={data.SubTitle}
         subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
+        action={
+          <OptionsMenu
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
+            iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
+          />
+        }
       />
       <CardContent>
-        <ReactApexcharts type='donut' height={400} options={options} series={[85, 16, 50, 50]} />
+        <ReactApexcharts type='donut' height={333} options={options} series={data.dataY[0].data} />
       </CardContent>
     </Card>
   )

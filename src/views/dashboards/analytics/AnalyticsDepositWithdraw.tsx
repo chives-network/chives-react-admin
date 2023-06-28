@@ -85,7 +85,7 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
                   }}
                 >
                   <Box sx={{ mr: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ 'fontWeight': 600, 'fontSize': '0.875rem', 'display': 'inline-block', 'width': '240px', 'white-space': 'nowrap', 'overflow': 'hidden', 'text-overflow': 'ellipsis' }}>{item.积分项目}</Typography>
+                    <Typography sx={{ 'fontWeight': 600, 'fontSize': '0.875rem', 'display': 'inline-block', 'width': '240px', 'whiteSpace': 'nowrap', 'overflow': 'hidden', 'textOverflow': 'ellipsis' }}>{item.积分项目}</Typography>
                     <Typography variant='caption'>{item.二级指标}</Typography>
                   </Box>
                   <Typography variant='subtitle2' sx={{ fontWeight: 600, color: 'success.main' }}>
@@ -137,7 +137,7 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
                   }}
                 >
                   <Box sx={{ mr: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ 'fontWeight': 600, 'fontSize': '0.875rem', 'display': 'inline-block', 'width': '240px', 'white-space': 'nowrap', 'overflow': 'hidden', 'text-overflow': 'ellipsis' }}>{item.积分项目}</Typography>
+                    <Typography sx={{ 'fontWeight': 600, 'fontSize': '0.875rem', 'display': 'inline-block', 'width': '240px', 'whiteSpace': 'nowrap', 'overflow': 'hidden', 'textOverflow': 'ellipsis' }}>{item.积分项目}</Typography>
                     <Typography variant='caption'>{item.二级指标}</Typography>
                   </Box>
                   <Typography variant='subtitle2' sx={{ fontWeight: 600, color: 'error.main' }}>
