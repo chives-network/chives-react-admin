@@ -90,13 +90,16 @@ const AnalyticsDashboard = () => {
                     <Grid item xs={12} md={8}>
                       <AnalyticsTransactionsCard data={dashboardData['AnalyticsTransactionsCard']} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={4}>
+                    <Grid item xs={12} md={4}>
                       <AnalyticsSalesByCountries data={dashboardData['AnalyticsSalesByCountries']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                     <Grid item xs={12} md={8}>
                       <AnalyticsDepositWithdraw data={dashboardData['AnalyticsDepositWithdraw']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12} md={4}>
+                      <AnalyticsWeeklyOverview data={dashboardData['AnalyticsWeeklyOverview']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
                       <ApexLineChart data={dashboardData['ApexLineChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                   </Grid>

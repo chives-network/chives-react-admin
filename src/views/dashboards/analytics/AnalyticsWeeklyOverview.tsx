@@ -1,3 +1,6 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -6,6 +9,7 @@ import { useTheme } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import { useRouter } from 'next/router'
 
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
@@ -14,7 +18,26 @@ import { ApexOptions } from 'apexcharts'
 import OptionsMenu from 'src/@core/components/option-menu'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const AnalyticsWeeklyOverview = () => {
+interface DataType {
+  data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
+}
+
+const AnalyticsWeeklyOverview = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
+
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
+
+  const router = useRouter();
+  
   // ** Hook
   const theme = useTheme()
 
@@ -65,7 +88,7 @@ const AnalyticsWeeklyOverview = () => {
       }
     },
     xaxis: {
-      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      categories: data.dataX,
       tickPlacement: 'on',
       labels: { show: false },
       axisTicks: { show: false },
@@ -77,8 +100,7 @@ const AnalyticsWeeklyOverview = () => {
       labels: {
         offsetY: 2,
         offsetX: -17,
-        style: { colors: theme.palette.text.disabled },
-        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`
+        style: { colors: theme.palette.text.disabled }
       }
     }
   }
@@ -86,27 +108,41 @@ const AnalyticsWeeklyOverview = () => {
   return (
     <Card>
       <CardHeader
-        title='Weekly Overview'
+        title={data.Title}
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
         action={
           <OptionsMenu
-            options={['Refresh', 'Update', 'Delete']}
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
             iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
           />
         }
       />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
-        <ReactApexcharts type='bar' height={205} options={options} series={[{ data: [37, 57, 45, 75, 57, 40, 65] }]} />
+        <ReactApexcharts type='bar' height={205} options={options} series={data.dataY} />
         <Box sx={{ mb: 7, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h5' sx={{ mr: 4 }}>
-            45%
+            {data.BottomText.Left}
           </Typography>
-          <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
+          <Typography variant='body2'>{data.BottomText.Right}</Typography>
         </Box>
-        <Button fullWidth variant='contained'>
-          Details
+        <Button fullWidth variant='contained' onClick={() => router.push(data.ViewButton.url)}>
+        {data.ViewButton.name}
         </Button>
       </CardContent>
     </Card>

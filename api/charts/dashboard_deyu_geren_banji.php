@@ -189,18 +189,43 @@ $ApexAreaChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$op
 $ApexAreaChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexAreaChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
 
-
-
-$ApexLineChart['Title']       = "班级学生积分之和";
-$ApexLineChart['SubTitle']    = "按天统计班级学生积分之和";
-$ApexLineChart['dataX']       = $dataX;
-$ApexLineChart['dataY']       = $dataY;
-$ApexLineChart['sql']       = $sql;
+$ApexLineChart['Title']         = "班级学生积分之和";
+$ApexLineChart['SubTitle']      = "按天统计班级学生积分之和";
+$ApexLineChart['dataX']         = $dataX;
+$ApexLineChart['dataY']         = $dataY;
+$ApexLineChart['sql']           = $sql;
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
 
+
+//AnalyticsWeeklyOverview
+$sql = "select 积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 积分时间 order by 积分时间 desc limit 7";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据 = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据[$rs_a[$i]['积分时间']] = $rs_a[$i]['NUM'];
+}
+ksort($输出数据);
+$dataY = [];
+$dataX = array_keys($输出数据);
+$dataYItem = array_values($输出数据);
+$dataY[] = ["name"=>"班级总积分","data"=>$dataYItem];
+
+$AnalyticsWeeklyOverview['Title']         = "班级学生积分周报";
+$AnalyticsWeeklyOverview['SubTitle']      = "最近一周班级学生积分之和";
+$AnalyticsWeeklyOverview['dataX']         = $dataX;
+$AnalyticsWeeklyOverview['dataY']         = $dataY;
+$AnalyticsWeeklyOverview['sql']           = $sql;
+$AnalyticsWeeklyOverview['TopRightOptions'][]       = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+
+$AnalyticsWeeklyOverview['BottomText']['Left']      = array_sum($dataYItem);
+$AnalyticsWeeklyOverview['BottomText']['Right']     = "最近一周总积分为".array_sum($dataYItem).", 比上周增加13%";
+
+$AnalyticsWeeklyOverview['ViewButton']['name']  = "明细";
+$AnalyticsWeeklyOverview['ViewButton']['url']   = "/tab/apps_180";
 
 
 $RS                                 = [];
@@ -212,6 +237,7 @@ $RS['AnalyticsDepositWithdraw']     = $AnalyticsDepositWithdraw;
 $RS['AnalyticsSalesByCountries']    = $AnalyticsSalesByCountries;
 $RS['ApexAreaChart']                = $ApexAreaChart;
 $RS['ApexLineChart']                = $ApexLineChart;
+$RS['AnalyticsWeeklyOverview']      = $AnalyticsWeeklyOverview;
 
 $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
 $RS['AnalyticsTrophy'] = $AnalyticsTrophy;
