@@ -12,10 +12,15 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
 import ApexLineChart from 'src/views/charts/apex-charts/ApexLineChart'
+
 import AnalyticsTrophy from 'src/views/dashboards/analytics/AnalyticsTrophy'
 import AnalyticsSalesByCountries from 'src/views/dashboards/analytics/AnalyticsSalesByCountries'
 import AnalyticsDepositWithdraw from 'src/views/dashboards/analytics/AnalyticsDepositWithdraw'
 import AnalyticsTransactionsCard from 'src/views/dashboards/analytics/AnalyticsTransactionsCard'
+
+import AnalyticsWeeklyOverview from 'src/views/dashboards/analytics/AnalyticsWeeklyOverview'
+
+
 
 import axios from 'axios'
 

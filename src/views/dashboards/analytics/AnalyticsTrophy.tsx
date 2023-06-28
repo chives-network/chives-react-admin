@@ -48,7 +48,7 @@ const AnalyticsTrophy = (props: DataType) => {
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
         {data.SubTitle}
         </Typography>
-        <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
+        <Typography variant='h5' sx={{ my: 3.5, color: 'primary.main' }}>
           {data.TotalScore}
         </Typography>
         {data.TopRightOptions ? 
@@ -58,8 +58,6 @@ const AnalyticsTrophy = (props: DataType) => {
             {data.ViewButton.name}
           </Button>
         }
-        
-        <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
         <TrophyImg alt='trophy' src='/images/misc/trophy.png' />
       </CardContent>
     </Card>
