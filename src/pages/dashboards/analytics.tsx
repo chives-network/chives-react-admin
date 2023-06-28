@@ -19,6 +19,7 @@ import AnalyticsDepositWithdraw from 'src/views/dashboards/analytics/AnalyticsDe
 import AnalyticsTransactionsCard from 'src/views/dashboards/analytics/AnalyticsTransactionsCard'
 
 import AnalyticsWeeklyOverview from 'src/views/dashboards/analytics/AnalyticsWeeklyOverview'
+import AnalyticsPerformance from 'src/views/dashboards/analytics/AnalyticsPerformance'
 
 
 
@@ -101,6 +102,9 @@ const AnalyticsDashboard = () => {
                     </Grid>
                     <Grid item xs={12} md={8}>
                       <ApexLineChart data={dashboardData['ApexLineChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <AnalyticsPerformance data={dashboardData['AnalyticsPerformance']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
                   </Grid>
                 )}

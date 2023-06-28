@@ -1,3 +1,6 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
+
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import { useTheme } from '@mui/material/styles'
@@ -11,18 +14,25 @@ import { ApexOptions } from 'apexcharts'
 import OptionsMenu from 'src/@core/components/option-menu'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const series = [
-  {
-    name: 'Income',
-    data: [70, 90, 90, 90, 80, 90]
-  },
-  {
-    name: 'Net Worth',
-    data: [120, 80, 100, 80, 100, 80]
-  }
-]
 
-const CardWidgetsPerformance = () => {
+interface DataType {
+  data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
+}
+
+const AnalyticsPerformance = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
+
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
+
   // ** Hook
   const theme = useTheme()
 
@@ -60,12 +70,19 @@ const CardWidgetsPerformance = () => {
         stops: [0, 100]
       }
     },
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    labels: data.dataX,
     markers: { size: 0 },
     legend: {
       labels: { colors: theme.palette.text.secondary }
     },
     grid: { show: false },
+    tooltip: {
+      custom(data: any) {
+        return `<div class='bar-chart'>
+          <span>${data.series[data.seriesIndex][data.dataPointIndex]}</span>
+        </div>`
+      }
+    },
     xaxis: {
       labels: {
         show: true,
@@ -88,22 +105,37 @@ const CardWidgetsPerformance = () => {
   return (
     <Card>
       <CardHeader
-        title='Performance'
+        title={data.Title}
+        subheader={data.SubTitle}
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
         action={
           <OptionsMenu
-            options={['Last 28 Days', 'Last Month', 'Last Year']}
-            iconButtonProps={{ size: 'small', className: 'card-more-options', sx: { color: 'text.primary' } }}
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
+            iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
           />
         }
       />
       <CardContent>
-        <ReactApexcharts type='radar' height={305} series={series} options={options} />
+        <ReactApexcharts type='radar' height={305} options={options} series={data.dataY} />
       </CardContent>
     </Card>
   )
 }
 
-export default CardWidgetsPerformance
+export default AnalyticsPerformance

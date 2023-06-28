@@ -228,6 +228,29 @@ $AnalyticsWeeklyOverview['ViewButton']['name']  = "明细";
 $AnalyticsWeeklyOverview['ViewButton']['url']   = "/tab/apps_180";
 
 
+//AnalyticsPerformance
+$sql = "select 一级指标,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标 order by 一级指标 asc";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据 = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据[$rs_a[$i]['一级指标']] = $rs_a[$i]['NUM'];
+}
+$dataY = [];
+$dataX = array_keys($输出数据);
+$dataY[] = ["name"=>"班级总积分","data"=>array_values($输出数据)];
+
+$AnalyticsPerformance['Title']       = "按一级指标统计积分之和";
+$AnalyticsPerformance['SubTitle']    = "按一级指标统计班级学生积分之和";
+$AnalyticsPerformance['dataX']       = $dataX;
+$AnalyticsPerformance['dataY']       = $dataY;
+$AnalyticsPerformance['sql']       = $sql;
+$AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+
+
 $RS                                 = [];
 $RS['defaultValue']                 = $班级;
 $RS['optionsMenuItem']              = $optionsMenuItem;
@@ -238,9 +261,9 @@ $RS['AnalyticsSalesByCountries']    = $AnalyticsSalesByCountries;
 $RS['ApexAreaChart']                = $ApexAreaChart;
 $RS['ApexLineChart']                = $ApexLineChart;
 $RS['AnalyticsWeeklyOverview']      = $AnalyticsWeeklyOverview;
+$RS['AnalyticsPerformance']         = $AnalyticsPerformance;
 
-$RS['AnalyticsTrophy'] = $AnalyticsTrophy;
-$RS['AnalyticsTrophy'] = $AnalyticsTrophy;
+$RS['AnalyticsTrophy']              = $AnalyticsTrophy;
 
 print_R(json_encode($RS));
 
