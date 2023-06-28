@@ -1,3 +1,6 @@
+// ** React Imports
+import { useState, useEffect } from 'react'
+
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import { useTheme } from '@mui/material/styles'
@@ -13,21 +16,34 @@ import ReactApexcharts from 'src/@core/components/react-apexcharts'
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
-const radialBarColors = {
-  series1: '#fdd835',
-  series2: '#32baff',
-  series3: '#00d4bd',
-  series4: '#7367f0',
-  series5: '#FFA1A1'
+// ** Custom Components Imports
+import OptionsMenu from 'src/@core/components/option-menu'
+
+
+interface DataType {
+  data: {[key:string]:any}
+  handleOptionsMenuItemClick: (Item: string) => void
 }
 
-const ApexRadialBarChart = () => {
+const ApexRadialBarChart = (props: DataType) => {
+  
+  const { data, handleOptionsMenuItemClick } = props
+  const [selectedItem, setSelectedItem] = useState<string>("")
+
+  useEffect(() => {
+    data.TopRightOptions.map((item:{[key:string]:any})=>{
+      if(item.selected) {
+        setSelectedItem(item.name)
+      }
+    })
+  }, [])
+
   // ** Hook
   const theme = useTheme()
 
   const options: ApexOptions = {
     stroke: { lineCap: 'round' },
-    labels: ['Comments', 'Replies', 'Shares'],
+    labels: data.dataX,
     legend: {
       show: true,
       position: 'bottom',
@@ -42,7 +58,7 @@ const ApexRadialBarChart = () => {
         horizontal: 10
       }
     },
-    colors: [radialBarColors.series1, radialBarColors.series2, radialBarColors.series4],
+    colors: data.colors,
     plotOptions: {
       radialBar: {
         hollow: { size: '30%' },
@@ -61,7 +77,7 @@ const ApexRadialBarChart = () => {
           total: {
             show: true,
             fontWeight: 400,
-            label: 'Comments',
+            label: data.dataX[0],
             fontSize: '1.125rem',
             color: theme.palette.text.primary,
             formatter: function (w) {
@@ -90,9 +106,33 @@ const ApexRadialBarChart = () => {
 
   return (
     <Card>
-      <CardHeader title='Statistics' />
+      <CardHeader 
+        title={data.Title}
+        subheader={data.SubTitle}
+        subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
+        action={
+          <OptionsMenu
+            options={
+              data.TopRightOptions.map((item:{[key:string]:any})=>{
+                return {
+                  text: item.name,
+                  menuItemProps: {
+                    sx: { py: 2 },
+                    selected: selectedItem === item.name,
+                    onClick: () => {
+                      handleOptionsMenuItemClick(item.name)
+                      console.log(item)
+                      setSelectedItem(item.name)
+                    }
+                  }
+                }
+              })}
+            iconButtonProps={{ size: 'small', sx: { color: 'text.primary' } }}
+          />
+        }
+      />
       <CardContent>
-        <ReactApexcharts type='radialBar' height={400} options={options} series={[80, 50, 35]} />
+        <ReactApexcharts type='radialBar' height={333} options={options} series={data.dataY[0].data} />
       </CardContent>
     </Card>
   )

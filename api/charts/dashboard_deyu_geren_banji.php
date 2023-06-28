@@ -244,7 +244,8 @@ $AnalyticsPerformance['Title']       = "按一级指标统计积分之和";
 $AnalyticsPerformance['SubTitle']    = "按一级指标统计班级学生积分之和";
 $AnalyticsPerformance['dataX']       = $dataX;
 $AnalyticsPerformance['dataY']       = $dataY;
-$AnalyticsPerformance['sql']       = $sql;
+$AnalyticsPerformance['sql']         = $sql;
+$AnalyticsPerformance['colors']      = ['#fdd835','#32baff','#00d4bd','#7367f0','#FFA1A1'];
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $AnalyticsPerformance['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
@@ -264,14 +265,39 @@ $dataX = array_keys($输出数据);
 $dataY[] = ["name"=>"班级总积分百分比","data"=>array_values($输出数据)];
 
 $ApexDonutChart['Title']       = "按一级指标统计百分比";
-$ApexDonutChart['SubTitle']    = "按一级指标统计班级学生加分之和的百分比";
+$ApexDonutChart['SubTitle']    = "按一级指标统计加分之和的百分比";
 $ApexDonutChart['dataX']       = $dataX;
 $ApexDonutChart['dataY']       = $dataY;
-$ApexDonutChart['sql']       = $sql;
+$ApexDonutChart['sql']         = $sql;
+$ApexDonutChart['colors']      = ['#fdd835','#32baff','#00d4bd','#7367f0','#FFA1A1'];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexDonutChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
+
+
+//ApexRadialBarChart
+$sql = "select 一级指标,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 一级指标 order by 一级指标 asc limit 5";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据 = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据[$rs_a[$i]['一级指标']] = intval($rs_a[$i]['NUM']);
+}
+$dataY = [];
+$dataX = array_keys($输出数据);
+$dataY[] = ["name"=>"班级总积分百分比","data"=>array_values($输出数据)];
+
+$ApexRadialBarChart['Title']       = "按一级指标统计百分比";
+$ApexRadialBarChart['SubTitle']    = "按一级指标统计加分之和的百分比";
+$ApexRadialBarChart['dataX']       = $dataX;
+$ApexRadialBarChart['dataY']       = $dataY;
+$ApexRadialBarChart['sql']         = $sql;
+$ApexRadialBarChart['colors']      = ['#fdd835','#32baff','#00d4bd','#7367f0','#FFA1A1'];
+$ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
+$ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
+$ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
+$ApexRadialBarChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
 
 
 $RS                                 = [];
@@ -286,8 +312,10 @@ $RS['ApexLineChart']                = $ApexLineChart;
 $RS['AnalyticsWeeklyOverview']      = $AnalyticsWeeklyOverview;
 $RS['AnalyticsPerformance']         = $AnalyticsPerformance;
 $RS['ApexDonutChart']               = $ApexDonutChart;
+$RS['ApexRadialBarChart']           = $ApexRadialBarChart;
 
-$RS['AnalyticsTrophy']              = $AnalyticsTrophy;
+$RS['ApexRadialBarChart']              = $ApexRadialBarChart;
+$RS['ApexRadialBarChart']              = $ApexRadialBarChart;
 
 print_R(json_encode($RS));
 

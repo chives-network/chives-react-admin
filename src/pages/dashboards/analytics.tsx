@@ -13,6 +13,7 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 // ** Demo Components Imports
 import ApexLineChart from 'src/views/charts/apex-charts/ApexLineChart'
 import ApexDonutChart from 'src/views/charts/apex-charts/ApexDonutChart'
+import ApexRadialBarChart from 'src/views/charts/apex-charts/ApexRadialBarChart'
 
 import AnalyticsTrophy from 'src/views/dashboards/analytics/AnalyticsTrophy'
 import AnalyticsSalesByCountries from 'src/views/dashboards/analytics/AnalyticsSalesByCountries'
@@ -104,13 +105,16 @@ const AnalyticsDashboard = () => {
                     <Grid item xs={12} md={8}>
                       <ApexLineChart data={dashboardData['ApexLineChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                       <AnalyticsPerformance data={dashboardData['AnalyticsPerformance']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                       <ApexDonutChart data={dashboardData['ApexDonutChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
                     </Grid>
-
+                    <Grid item xs={12} md={4}>
+                      <ApexRadialBarChart data={dashboardData['ApexRadialBarChart']} handleOptionsMenuItemClick={handleOptionsMenuItemClick}/>
+                    </Grid>
+                    
                     
                   </Grid>
                 )}

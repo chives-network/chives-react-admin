@@ -16,14 +16,6 @@ import ReactApexcharts from 'src/@core/components/react-apexcharts'
 // ** Custom Components Imports
 import OptionsMenu from 'src/@core/components/option-menu'
 
-const donutColors = {
-  series1: '#fdd835',
-  series2: '#00d4bd',
-  series3: '#826bf8',
-  series4: '#32baff',
-  series5: '#ffa1a1'
-}
-
 interface DataType {
   data: {[key:string]:any}
   handleOptionsMenuItemClick: (Item: string) => void
@@ -48,7 +40,7 @@ const ApexDonutChart = (props: DataType) => {
   const options: ApexOptions = {
     stroke: { width: 0 },
     labels: data.dataX,
-    colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2, donutColors.series4],
+    colors: data.colors,
     dataLabels: {
       enabled: true,
       formatter: (val: string) => `${parseInt(val, 10)}%`
