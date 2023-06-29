@@ -6,7 +6,7 @@ require_once('include.inc.php');
 CheckAuthUserLoginStatus();
 CheckAuthUserRoleHaveMenu(0, "/form/formname");
 
-$externalId = intval($_GET['externalId']);
+$externalId = intval($_REQUEST['externalId']);
 $FlowInfo   = returntablefield("form_formflow","id",$externalId,"FormId,FlowName,FaceTo");
 $FormId     = $FlowInfo['FormId'];
 

@@ -8,7 +8,7 @@ CheckAuthUserRoleHaveMenu(0, "/form/formname");
 
 $TableName      = "form_formflow";
 
-$externalId     = intval($_GET['externalId']);
+$externalId     = intval($_REQUEST['externalId']);
 $id             = ParamsFilter($_REQUEST['id']);
 $selectedRows   = ParamsFilter($_REQUEST['selectedRows']);
 if($externalId==""&&$id!="")    {
@@ -236,7 +236,7 @@ for($i=1;$i<sizeof($MetaColumnNamesTarget);$i++)   {
         $defaultValues_1["FieldSearch_".$FieldName] = true;
         $edit_default_1['Default'][] = ['name' => "FieldSearch_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("Search"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>1]];
         
-        $defaultValues_1["FieldImport_".$FieldName] = false;
+        $defaultValues_1["FieldImport_".$FieldName] = true;
         $edit_default_1['Default'][] = ['name' => "FieldImport_".$FieldName, 'show'=>true, 'type'=>'Switch', 'label' => __("Import"), 'value' => false, 'placeholder' => $FieldName, 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>4, 'sm'=>1]];
 
         $defaultValues_1["FieldExport_".$FieldName] = true;

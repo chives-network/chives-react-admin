@@ -6,7 +6,7 @@ require_once('include.inc.php');
 CheckAuthUserLoginStatus();
 CheckAuthUserRoleHaveMenu(0, "/form/formname");
 
-$externalId = intval($_GET['externalId']);
+$externalId = intval($_REQUEST['externalId']);
 $sql        = "select * from form_formname where id='$externalId'";
 $rs         = $db->CacheExecute(10, $sql);
 $FromInfo   = $rs->fields;
