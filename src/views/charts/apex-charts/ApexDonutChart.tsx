@@ -119,7 +119,6 @@ const ApexDonutChart = (props: DataType) => {
     ]
   }
 
-  console.log(data.dataY[0].data)
   return (
     <Card>
       <CardHeader

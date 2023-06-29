@@ -87,66 +87,66 @@ const AnalyticsDashboard = () => {
                     </Grid>
                 ) : (
                   <Grid container spacing={6}>
-                    {dashboardData && dashboardData.map( (item: any)=> {
+                    {dashboardData && dashboardData.map( (item: any, index: number)=> {
                       if(item.type=="AnalyticsTrophy") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} />
                           </Grid>
                         )
                       }
                       else if(item.type=="AnalyticsTransactionsCard") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsTransactionsCard data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="AnalyticsSalesByCountries") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsSalesByCountries data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="AnalyticsDepositWithdraw") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsDepositWithdraw data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="AnalyticsWeeklyOverview") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsWeeklyOverview data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="ApexLineChart") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <ApexLineChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="ApexDonutChart") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <ApexDonutChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="ApexRadialBarChart") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <ApexRadialBarChart data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
                       }
                       else if(item.type=="AnalyticsPerformance") {
                         return (
-                          <Grid item xs={12} md={item.grid}>
+                          <Grid item xs={12} md={item.grid} key={index}>
                             <AnalyticsPerformance data={item} handleOptionsMenuItemClick={handleOptionsMenuItemClick} />
                           </Grid>
                         )
