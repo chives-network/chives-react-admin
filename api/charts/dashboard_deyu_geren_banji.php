@@ -129,7 +129,8 @@ $rs_a   = $rs->GetArray();
 $Item   = [];
 $Index  = 0;
 for($i=0;$i<sizeof($rs_a);$i++) {
-    $rs_a[$i]['图标颜色'] = $colorArray[$i];
+    $rs_a[$i]['图标颜色']   = $colorArray[$i];
+    $rs_a[$i]['头像']       = '/images/avatars/'.(($rs_a[$i]['学号']%8)+1).'.png';
 }
 $AnalyticsSalesByCountries['Title']       = "班级排行";
 $AnalyticsSalesByCountries['SubTitle']    = "本班积分最高学生";

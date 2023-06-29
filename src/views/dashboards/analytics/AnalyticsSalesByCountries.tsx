@@ -8,6 +8,9 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
+// ** Config
+import authConfig from 'src/configs/auth'
+
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
 
@@ -21,6 +24,7 @@ interface DataType2 {
   班级: string
   图标颜色: ThemeColor
   积分分值: string
+  头像: string
 }
 
 interface DataType {
@@ -79,6 +83,7 @@ const AnalyticsSalesByCountries = (props: DataType) => {
               }}
             >
               <CustomAvatar
+                src={authConfig.backEndApiHost+item.头像}
                 skin='light'
                 color={item.图标颜色}
                 sx={{ width: 38, height: 38, mr: 3, fontSize: '1rem' }}
