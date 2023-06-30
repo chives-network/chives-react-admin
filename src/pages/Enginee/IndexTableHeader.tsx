@@ -237,13 +237,17 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                   </FormControl>
                 </Grid>
                 : ''}
-              {isAddButton || isImportButton || isExportButton ?
+              {isAddButton ?
                 <Grid item sm={3} xs={12}>
                   {isAddButton ? 
                   <Tooltip title="Alt+a">
                     <Button sx={{ ml: 3, mb: 2 }} onClick={toggleAddTableDrawer} variant='contained'>{button_add}</Button>
                   </Tooltip>
                   : ''}
+                </Grid>
+                : ''}
+              {isImportButton || isExportButton ?
+                <Grid item sm={2} xs={12}>
                   {isImportButton ? 
                   <Tooltip title="Alt+i">
                     <Button sx={{ ml: 3, mb: 2 }} onClick={toggleImportTableDrawer} variant='contained'>{button_import}</Button>
