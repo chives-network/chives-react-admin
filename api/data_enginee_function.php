@@ -1016,6 +1016,9 @@ function Extra_Priv_Filter_Field_To_SQL_Item($Item) {
             case '=':
                 $tempsql_One .= " and $Extra_Priv_Filter_Field_One = '".$Extra_Priv_Filter_Value_One."'";
                 break;
+            case '!=':
+                $tempsql_One .= " and $Extra_Priv_Filter_Field_One != '".$Extra_Priv_Filter_Value_One."'";
+                break;
             case '>':
                 $tempsql_One .= " and $Extra_Priv_Filter_Field_One > '".$Extra_Priv_Filter_Value_One."'";
                 break;

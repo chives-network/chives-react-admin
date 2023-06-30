@@ -377,6 +377,7 @@ $Page_Role_Array[] = ['value'=>"President", 'label'=>__("President")];
 
 $Extra_Priv_Filter_Method = [];
 $Extra_Priv_Filter_Method[] = ['value'=>"=", 'label'=>__("=")];
+$Extra_Priv_Filter_Method[] = ['value'=>"!=", 'label'=>__("!=")];
 $Extra_Priv_Filter_Method[] = ['value'=>">", 'label'=>__(">")];
 $Extra_Priv_Filter_Method[] = ['value'=>">=", 'label'=>__(">=")];
 $Extra_Priv_Filter_Method[] = ['value'=>"<", 'label'=>__("<")];

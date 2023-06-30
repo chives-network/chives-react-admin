@@ -1937,7 +1937,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     name={FieldArray.name}
                                                                     control={control}
                                                                     render={({ field: { value, onChange, onBlur } }) => (
-                                                                        <DatePickerWrapper sx={{ '& .react-datepicker-wrapper': { width: '390px' } }}>
+                                                                        <DatePickerWrapper sx={{ 'z-index': 9999}}>
                                                                             <DatePicker
                                                                                 showTimeSelect
                                                                                 timeFormat='HH:mm'
@@ -1964,8 +1964,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     setAllDates(allDatesTemp)
                                                                                     onChange(date);
                                                                                     onBlur();
-                                                                                }
-                                                                                }
+                                                                                }}
                                                                                 minDate={FieldArray.StartDateTime != "" && FieldArray.StartDateTime != undefined && FieldArray.StartDateTime != "1971-01-01" ? new Date(FieldArray.StartDateTime) : new Date("1971-01-01 00:00:00")}
                                                                                 maxDate={FieldArray.EndDateTime != "" && FieldArray.EndDateTime != undefined && FieldArray.EndDateTime != "1971-01-01" ? new Date(FieldArray.EndDateTime) : new Date("2099-12-31 00:00:00")}
                                                                                 placeholderText={FieldArray.placeholder}
