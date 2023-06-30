@@ -137,6 +137,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const addEditorDefault:{[key:string]:EditorState} = {}
     const [allEditorValues, setAllEditorValues] = useState(addEditorDefault)
     const [allFields, setAllFields] = useState(addEditStructInfo.allFields)
+    const [addEditStructInfo2, setAaddEditStructInfo2] = useState(addEditStructInfo)
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
     
@@ -169,11 +170,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             }
                             setFieldArrayShow(fieldArrayShowTemp)
                         }
-                        if (res.data.data) {
+                        if (res.data.data)              {
                             const allEditorValuesTemp = { ...allEditorValues }
                             const autoCompleteMultiTemp:{[key:string]:any} = {}
-                            const allFieldsMode = addEditStructInfo.allFieldsMode;
-                            const allFieldsTemp:{[key:string]:any} = JSON.parse(JSON.stringify(allFields))
+                            const allFieldsMode = addEditStructInfo2.allFieldsMode;
+                            const allFieldsTemp:{[key:string]:any} = JSON.parse(JSON.stringify(addEditStructInfo2.allFields))
                             allFieldsMode && allFieldsMode.map((allFieldsModeItem: any) => {
                                 allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArray: any, FieldArray_index: number) => {
                                     if (FieldArray.type == "autocompletemulti") {
@@ -221,6 +222,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             setAllFields(allFieldsTemp)
                             setAllEditorValues(allEditorValuesTemp)
                             setAutoCompleteMulti(autoCompleteMultiTemp)
+                            if(res.data.forceuse) {
+                                setAaddEditStructInfo2(res.data.edit_default)
+                                setAllFields(res.data.edit_default.allFields)
+                            }
                         }
                         
                         //end for condition
@@ -232,9 +237,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 })
         }
         else if (action == "add_default" || action == "import_default") {
-            setDefaultValuesNew(addEditStructInfo.defaultValues)
+            setDefaultValuesNew(addEditStructInfo2.defaultValues)
             setIsLoading(false)
-            const allFieldsMode = addEditStructInfo.allFieldsMode;
+            const allFieldsMode = addEditStructInfo2.allFieldsMode;
             allFieldsMode && allFieldsMode.map((allFieldsModeItem: any) => {
                 allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArray: any) => {
                     if (FieldArray.type == "UserRoleMenuDetail") {
@@ -261,11 +266,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         }
     }, [id, editViewCounter, IsGetStructureFromEditDefault]) //Need refresh data every time.
 
-    const allFieldsMode = addEditStructInfo.allFieldsMode;
-    const titletext: string = addEditStructInfo.titletext;
-    const defaultValues:{ [key:string]:any } = addEditStructInfo.defaultValues;
-    const componentsize = addEditStructInfo.componentsize;
+    const allFieldsMode = addEditStructInfo2.allFieldsMode;
+    const titletext: string = addEditStructInfo2.titletext;
+    const defaultValues:{ [key:string]:any } = addEditStructInfo2.defaultValues;
+    const componentsize = addEditStructInfo2.componentsize;
 
+    console.log("addEditStructInfo2",addEditStructInfo2)
+    console.log("allFieldsMode",allFieldsMode)
+    console.log("defaultValues",defaultValues)
+    console.log("defaultValuesNew",defaultValuesNew)
+    console.log("allFields",allFields)
+    
     const chinaIdCardCheck = (value:string|undefined) => {
         if(value==undefined)  {
 
@@ -365,7 +376,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     })
 
     const onSubmit = (data: {[key:string]:any}) => {
-        toast.loading(addEditStructInfo.submitloading,{duration:2000})
+        toast.loading(addEditStructInfo2.submitloading,{duration:2000})
         setIsSubmitLoading(true)
         const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
         if (!storedToken) {
@@ -695,7 +706,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     <Typography variant='h5' sx={{ mb: 3 }}>
                         {titletext}
                     </Typography>
-                    <Typography variant='body2'>{addEditStructInfo.titlememo ? addEditStructInfo.titlememo : ''}</Typography>
+                    <Typography variant='body2'>{addEditStructInfo2.titlememo ? addEditStructInfo2.titlememo : ''}</Typography>
                 </Box>
                 : ''
             }
@@ -704,7 +715,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     <Grid item xs={12} sm={12} container justifyContent="space-around">
                         <Box sx={{ mt: 6, mb: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                             <CircularProgress />
-                            <Typography>{addEditStructInfo.loading}</Typography>
+                            <Typography>{addEditStructInfo2.loading}</Typography>
                         </Box>
                     </Grid>
                 ) : (
@@ -721,7 +732,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 //开始根据表单中每个字段的类型,进行不同的渲染,此部分比较复杂,注意代码改动.
                                                 //Start to render differently according to the type of each field in the form
                                                 //this part is more complicated, pay attention to the code changes.
-                                                //console.log("defaultValuesNew[FieldArray.name]-----", FieldArray.name)
+                                                console.log("defaultValuesNew[FieldArray.name]-----", FieldArray)
                                                 if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
@@ -2719,10 +2730,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             )
                         })}
 
-                        {((addEditStructInfo.submittext && addEditStructInfo.submittext) || (addEditStructInfo.canceltext && addEditStructInfo.canceltext)) != "" ?
+                        {((addEditStructInfo2.submittext && addEditStructInfo2.submittext) || (addEditStructInfo2.canceltext && addEditStructInfo2.canceltext)) != "" ?
                             <Grid item xs={12} sm={12} container justifyContent="space-around" sx={{ pt: 4 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    {addEditStructInfo.submittext && addEditStructInfo.submittext != "" ?
+                                    {addEditStructInfo2.submittext && addEditStructInfo2.submittext != "" ?
                                         <Tooltip title="Alt+s">
                                             <Button size={componentsize} type='submit' variant='contained' sx={{ mr: 3 }}>
                                                 {isSubmitLoading ? (
@@ -2735,15 +2746,15 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         }}
                                                     />
                                                 ) : null}
-                                                {addEditStructInfo.submittext}
+                                                {addEditStructInfo2.submittext}
                                             </Button>
                                         </Tooltip>
                                         : ''
                                     }
-                                    {addEditStructInfo.canceltext && addEditStructInfo.canceltext != "" ?
+                                    {addEditStructInfo2.canceltext && addEditStructInfo2.canceltext != "" ?
                                         <Tooltip title="Alt+c">
                                             <Button size='small' variant='outlined' color='secondary' onClick={handleClose}>
-                                                {addEditStructInfo.canceltext}
+                                                {addEditStructInfo2.canceltext}
                                             </Button>
                                         </Tooltip>
                                         : ''

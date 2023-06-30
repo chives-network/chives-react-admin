@@ -45,7 +45,6 @@ const AddOrEditTable = (props: AddOrEditTableType) => {
   const handleClose = () => {
     toggleAddTableDrawer()
   }
-  console.log("addEditViewShowInWindow",addEditStructInfo)
 
   const addEditStructInfoNew = {...addEditStructInfo}
   if(addEditViewShowInWindow) {
