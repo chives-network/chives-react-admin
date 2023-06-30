@@ -732,8 +732,14 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 //开始根据表单中每个字段的类型,进行不同的渲染,此部分比较复杂,注意代码改动.
                                                 //Start to render differently according to the type of each field in the form
                                                 //this part is more complicated, pay attention to the code changes.
-                                                console.log("defaultValuesNew[FieldArray.name]-----", FieldArray)
-                                                if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
+                                                //console.log("defaultValuesNew[FieldArray.name]-----", FieldArray)
+                                                
+                                                if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "hidden") ) {
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
@@ -1487,7 +1493,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     control={control}
                                                                     render={({ field }) => (
                                                                         <RadioGroup
-                                                                            row
+                                                                            row={FieldArray.rules.row}
                                                                             {...field}
                                                                             aria-label={FieldArray.label}
                                                                             name={FieldArray.name}
@@ -1543,7 +1549,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     name={FieldArray.name}
                                                                     control={control}
                                                                     render={({ field }) => (
-                                                                        <FormGroup row {...field} aria-label={FieldArray.label}>
+                                                                        <FormGroup 
+                                                                            row={FieldArray.rules.row}
+                                                                            {...field} 
+                                                                            aria-label={FieldArray.label}>
                                                                             {FieldArray.options.map((ItemArray: any, ItemArray_index: number) => {
                                                                                 const TempValueArray = defaultValuesNew[FieldArray.name].split(",")
                                                                                 
@@ -1553,37 +1562,39 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         label={ItemArray.label}
                                                                                         key={ItemArray_index}
                                                                                         sx={errors[FieldArray.name] ? { color: 'error.main' } : null}
-                                                                                        control={<Checkbox
-                                                                                            size={componentsize}
-                                                                                            sx={errors[FieldArray.name] ? { color: 'error.main' } : null}
-                                                                                            checked={TempValueArray.indexOf(ItemArray.value) == -1 ? false : true}
-                                                                                            onChange={(e) => {
-                                                                                                const clickOrNot = e.target.checked
-                                                                                                const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                                if (clickOrNot) {
-                                                                                                    //click
-                                                                                                    if (defaultValuesNewTemp[FieldArray.name].indexOf(ItemArray.value) == -1) {
-                                                                                                        //Not Exist, will add into
-                                                                                                        if (defaultValuesNewTemp[FieldArray.name] == undefined || defaultValuesNewTemp[FieldArray.name] == "undefined" || defaultValuesNewTemp[FieldArray.name] == "") {
-                                                                                                            defaultValuesNewTemp[FieldArray.name] = ItemArray.value
-                                                                                                        }
-                                                                                                        else {
-                                                                                                            defaultValuesNewTemp[FieldArray.name] += "," + ItemArray.value
+                                                                                        control={
+                                                                                            <Checkbox
+                                                                                                size={componentsize}
+                                                                                                sx={errors[FieldArray.name] ? { color: 'error.main' } : null}
+                                                                                                checked={TempValueArray.indexOf(ItemArray.value) == -1 ? false : true}
+                                                                                                onChange={(e) => {
+                                                                                                    const clickOrNot = e.target.checked
+                                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                                    if (clickOrNot) {
+                                                                                                        //click
+                                                                                                        if (defaultValuesNewTemp[FieldArray.name].indexOf(ItemArray.value) == -1) {
+                                                                                                            //Not Exist, will add into
+                                                                                                            if (defaultValuesNewTemp[FieldArray.name] == undefined || defaultValuesNewTemp[FieldArray.name] == "undefined" || defaultValuesNewTemp[FieldArray.name] == "") {
+                                                                                                                defaultValuesNewTemp[FieldArray.name] = ItemArray.value
+                                                                                                            }
+                                                                                                            else {
+                                                                                                                defaultValuesNewTemp[FieldArray.name] += "," + ItemArray.value
+                                                                                                            }
                                                                                                         }
                                                                                                     }
-                                                                                                }
-                                                                                                else {
-                                                                                                    //cancel
-                                                                                                    const TempValue = defaultValuesNewTemp[FieldArray.name].split(",")
-                                                                                                    if (TempValue && TempValue.indexOf(ItemArray.value) != -1) {
-                                                                                                        //Exist, will remove
-                                                                                                        TempValue.splice(TempValue.indexOf(ItemArray.value), 1)
-                                                                                                        defaultValuesNewTemp[FieldArray.name] = TempValue.join(',')
+                                                                                                    else {
+                                                                                                        //cancel
+                                                                                                        const TempValue = defaultValuesNewTemp[FieldArray.name].split(",")
+                                                                                                        if (TempValue && TempValue.indexOf(ItemArray.value) != -1) {
+                                                                                                            //Exist, will remove
+                                                                                                            TempValue.splice(TempValue.indexOf(ItemArray.value), 1)
+                                                                                                            defaultValuesNewTemp[FieldArray.name] = TempValue.join(',')
+                                                                                                        }
                                                                                                     }
-                                                                                                }
-                                                                                                setDefaultValuesNew(defaultValuesNewTemp)
-                                                                                            }}
-                                                                                        />}
+                                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                                }}
+                                                                                            />
+                                                                                        }
                                                                                     />
                                                                                 )
                                                                             })}

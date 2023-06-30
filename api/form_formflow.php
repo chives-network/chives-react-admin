@@ -354,13 +354,13 @@ $Actions_In_List_Header = [];
 $Actions_In_List_Header[] = ['value'=>"Add", 'label'=>__("Add")];
 $Actions_In_List_Header[] = ['value'=>"Export", 'label'=>__("Export")];
 $Actions_In_List_Header[] = ['value'=>"Import", 'label'=>__("Import")];
-$edit_default_2['Tip_In_Interface'][] = ['name' => "Actions_In_List_Header", 'show'=>true, 'type'=>'checkbox', 'options'=>$Actions_In_List_Header, 'label' => __("Actions_In_List_Header"), 'value' => "Add,Import,Export", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_2['Tip_In_Interface'][] = ['name' => "Actions_In_List_Header", 'show'=>true, 'type'=>'checkbox', 'options'=>$Actions_In_List_Header, 'label' => __("Actions_In_List_Header"), 'value' => "Add,Import,Export", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'row'=>true, 'xs'=>12, 'sm'=>6]];
 
 $Actions_In_List_Row = [];
 $Actions_In_List_Row[] = ['value'=>"Edit", 'label'=>__("Edit")];
 $Actions_In_List_Row[] = ['value'=>"Delete", 'label'=>__("Delete")];
 $Actions_In_List_Row[] = ['value'=>"View", 'label'=>__("View")];
-$edit_default_2['Tip_In_Interface'][] = ['name' => "Actions_In_List_Row", 'show'=>true, 'type'=>'checkbox', 'options'=>$Actions_In_List_Row, 'label' => __("Actions_In_List_Row"), 'value' => "Edit,Delete,View", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_2['Tip_In_Interface'][] = ['name' => "Actions_In_List_Row", 'show'=>true, 'type'=>'checkbox', 'options'=>$Actions_In_List_Row, 'label' => __("Actions_In_List_Row"), 'value' => "Edit,Delete,View", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'row'=>true, 'xs'=>12, 'sm'=>6]];
 
 
 $Page_Role_Array = [];
@@ -649,7 +649,7 @@ $Bottom_Button_Actions[] = ['value'=>"Reset_Password_123654", 'label'=>__("Reset
 $Bottom_Button_Actions[] = ['value'=>"Reset_Password_ID_Last6", 'label'=>__("Reset_Password_ID_Last6")];
 $Bottom_Button_Actions[] = ['value'=>"Batch_Setting_One", 'label'=>__("Batch_Setting_One")];
 $Bottom_Button_Actions[] = ['value'=>"Batch_Setting_Two", 'label'=>__("Batch_Setting_Two")];
-$edit_default_3['Setting_Buttons'][] = ['name' => "Bottom_Button_Actions", 'show'=>true, 'type'=>'checkbox', 'options'=>$Bottom_Button_Actions, 'label' => __("Bottom_Button_Actions"), 'value' => "Edit,Delete", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+$edit_default_3['Setting_Buttons'][] = ['name' => "Bottom_Button_Actions", 'show'=>true, 'type'=>'checkbox', 'options'=>$Bottom_Button_Actions, 'label' => __("Bottom_Button_Actions"), 'value' => "Edit,Delete", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'row'=>true, 'xs'=>12, 'sm'=>12]];
 
 $edit_default_3['Setting_Buttons'][] = ['name' => "ApprovalNodeFields", 'show'=>true, 'type'=>"input", 'label' => __("Approval Node Fields"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 $edit_default_3['Setting_Buttons'][] = ['name' => "ApprovalNodeCurrentField", 'show'=>true, 'type'=>"input", 'label' => __("Approval Node Current Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -680,7 +680,7 @@ $edit_default_3['Batch_Approval'][]  = ['name' => "Batch_Approval_User_Field", '
 $Batch_Approval_User_Format = [];
 $Batch_Approval_User_Format[] = ['value'=>"UserID", 'label'=>__("UserID")];
 $Batch_Approval_User_Format[] = ['value'=>"UserName", 'label'=>__("UserName")];
-$edit_default_3['Batch_Approval'][]  = ['name' => "Batch_Approval_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Approval_User_Format, 'label' => __("Batch_Approval_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Approval'][]  = ['name' => "Batch_Approval_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Approval_User_Format, 'label' => __("Batch_Approval_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4, 'row'=>true]];
 
 $edit_default_3['Batch_Approval'][]  = ['name' => "Batch_Approval_Review_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsOnlyShowOpinion, 'label' => __("Batch_Approval_Review_Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
 $edit_default_3['Batch_Approval'][]  = ['name' => "Batch_Approval_Review_Opinion", 'show'=>true, 'type'=>"input", 'label' => __("Batch_Approval_Review_Opinion"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -713,13 +713,13 @@ $edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_DateTime_Field", '
 $Batch_Refuse_DateTime_Format = [];
 $Batch_Refuse_DateTime_Format[] = ['value'=>"DateTime", 'label'=>__("DateTime")];
 $Batch_Refuse_DateTime_Format[] = ['value'=>"Date", 'label'=>__("Date")];
-$edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_DateTime_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Refuse_DateTime_Format, 'label' => __("Batch_Refuse_DateTime_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_DateTime_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Refuse_DateTime_Format, 'label' => __("Batch_Refuse_DateTime_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4, 'row'=>true]];
 
 $edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_User_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsOnlyshowPerson, 'label' => __("Batch_Refuse_User_Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
 $Batch_Refuse_User_Format = [];
 $Batch_Refuse_User_Format[] = ['value'=>"UserID", 'label'=>__("UserID")];
 $Batch_Refuse_User_Format[] = ['value'=>"UserName", 'label'=>__("UserName")];
-$edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Refuse_User_Format, 'label' => __("Batch_Refuse_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Refuse_User_Format, 'label' => __("Batch_Refuse_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4, 'row'=>true]];
 
 $edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_Review_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsOnlyShowOpinion, 'label' => __("Batch_Refuse_Review_Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
 $edit_default_3['Batch_Refuse'][]  = ['name' => "Batch_Refuse_Review_Opinion", 'show'=>true, 'type'=>"input", 'label' => __("Batch_Refuse_Review_Opinion"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -752,13 +752,13 @@ $edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_DateTime_Field", '
 $Batch_Cancel_DateTime_Format = [];
 $Batch_Cancel_DateTime_Format[] = ['value'=>"DateTime", 'label'=>__("DateTime")];
 $Batch_Cancel_DateTime_Format[] = ['value'=>"Date", 'label'=>__("Date")];
-$edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_DateTime_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Cancel_DateTime_Format, 'label' => __("Batch_Cancel_DateTime_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_DateTime_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Cancel_DateTime_Format, 'label' => __("Batch_Cancel_DateTime_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4, 'row'=>true]];
 
 $edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_User_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsOnlyshowPerson, 'label' => __("Batch_Cancel_User_Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
 $Batch_Cancel_User_Format = [];
 $Batch_Cancel_User_Format[] = ['value'=>"UserID", 'label'=>__("UserID")];
 $Batch_Cancel_User_Format[] = ['value'=>"UserName", 'label'=>__("UserName")];
-$edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Cancel_User_Format, 'label' => __("Batch_Cancel_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_User_Format", 'show'=>true, 'type'=>'radiogroup', 'options'=>$Batch_Cancel_User_Format, 'label' => __("Batch_Cancel_User_Format"), 'value' => "DateTime", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4, 'row'=>true]];
 
 $edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_Review_Field", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsOnlyShowOpinion, 'label' => __("Batch_Cancel_Review_Field"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>8]];
 $edit_default_3['Batch_Cancel'][]  = ['name' => "Batch_Cancel_Review_Opinion", 'show'=>true, 'type'=>"input", 'label' => __("Batch_Cancel_Review_Opinion"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -866,7 +866,7 @@ for($i=1;$i<=$MaxMsgSections;$i++)     {
     $Msg_Reminder_Rule_Storage_StudentCodeAndClass_Object[] = ['value'=>"本系所有学生", 'label'=>__("本系所有学生")];
     $Msg_Reminder_Rule_Storage_StudentCodeAndClass_Object[] = ['value'=>"本校所有学生", 'label'=>__("本校所有学生")];
 
-    $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "Msg_Reminder_Rule_Storage_StudentCodeAndClass_Reminder_Object_{$i}", 'show'=>true, 'type'=>'checkbox', 'options'=>$Msg_Reminder_Rule_Storage_StudentCodeAndClass_Object, 'label' => __("Msg_Reminder_Rule_Storage_StudentCodeAndClass_Reminder_Object"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+    $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "Msg_Reminder_Rule_Storage_StudentCodeAndClass_Reminder_Object_{$i}", 'show'=>true, 'type'=>'checkbox', 'options'=>$Msg_Reminder_Rule_Storage_StudentCodeAndClass_Object, 'label' => __("Msg_Reminder_Rule_Storage_StudentCodeAndClass_Reminder_Object"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'row'=>true, 'xs'=>12, 'sm'=>12]];
 
 
     $edit_default_4['Msg_Reminder_Rule_'.$i][] = ['name' => "divider", 'show'=>true, 'type'=>"divider", 'label' => __("divider"), 'value' => "", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];

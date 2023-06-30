@@ -719,7 +719,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $CurrentWeekEndDays = [];
                 $CurrentWeekEndDays[] = ['value'=>strval($Day6), 'label'=>strval($Day6)];
                 $CurrentWeekEndDays[] = ['value'=>strval($Day5), 'label'=>strval($Day5)];
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>'checkbox', 'options'=>$CurrentWeekEndDays, 'label' => $ShowTextName, 'value' => $Day5.",".$Day6, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false, 'min'=>$Min, 'max'=>$Max]];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>'checkbox', 'options'=>$CurrentWeekEndDays, 'label' => $ShowTextName, 'value' => $Day5.",".$Day6, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false, 'row'=>true, 'min'=>$Min, 'max'=>$Max]];
                 break;
             case 'CurrentUnitName':
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = $GLOBAL_USER->UNIT_NAME;
@@ -943,7 +943,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 }
                 $rs = $db->CacheExecute(10, $sql) or print($sql);
                 $FieldType = $rs->GetArray();
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false, 'row'=>true], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
                 break;
             case 'avatar':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";

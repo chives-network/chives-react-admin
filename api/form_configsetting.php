@@ -81,17 +81,17 @@ $IsFullWidth[] = ['value'=>'5', 'label'=>'5'];
 $IsFullWidth[] = ['value'=>'4', 'label'=>'4'];
 $IsFullWidth[] = ['value'=>'3', 'label'=>'3'];
 $IsFullWidth[] = ['value'=>'2', 'label'=>'2'];
-$allFieldsAdd[] = ['name' => 'IsFullWidth', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsFullWidth, 'label' => __('Field Width (Total 12)'), 'value' => $IsFullWidth[1]['value'], 'placeholder' => __(''), 'helptext' => __(''), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'IsFullWidth', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsFullWidth, 'label' => __('Field Width (Total 12)'), 'value' => $IsFullWidth[1]['value'], 'placeholder' => __(''), 'helptext' => __(''), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
 $IsMustFill = [];
 $IsMustFill[] = ['value'=>'1', 'label'=>__('Enable')];
 $IsMustFill[] = ['value'=>'0', 'label'=>__('Disable')];
-$allFieldsAdd[] = ['name' => 'IsMustFill', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsMustFill, 'label' => __('Must Fill'), 'value' => $IsMustFill[1]['value'], 'placeholder' => __('Must Fill'), 'helptext' => __('Must Fill'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'IsMustFill', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsMustFill, 'label' => __('Must Fill'), 'value' => $IsMustFill[1]['value'], 'placeholder' => __('Must Fill'), 'helptext' => __('Must Fill'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
 $IsEnable = [];
 $IsEnable[] = ['value'=>'1', 'label'=>__('Enable')];
 $IsEnable[] = ['value'=>'0', 'label'=>__('Disable')];
-$allFieldsAdd[] = ['name' => 'IsEnable', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsEnable, 'label' => __('Is Enable'), 'value' => $IsEnable[0]['value'], 'placeholder' => __('Is Enable for this field'), 'helptext' => __('Is Enable for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'IsEnable', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsEnable, 'label' => __('Is Enable'), 'value' => $IsEnable[0]['value'], 'placeholder' => __('Is Enable for this field'), 'helptext' => __('Is Enable for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
 
 foreach($allFieldsAdd as $ITEM) {

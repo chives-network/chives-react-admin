@@ -148,7 +148,7 @@ foreach($AllFieldsFromTable as $Item)  {
         $Import_Fields_Default[]    = $Item['FieldName'];
     }
 }
-$allFieldsImport['Default'][] = ['name' => "Import_Fields", 'show'=>true, 'type'=>'checkbox', 'options'=>$Import_Fields, 'label' => __("Step2_Choose_Import_Fields"), 'value' => join(',', $Import_Fields_Default), 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+$allFieldsImport['Default'][] = ['name' => "Import_Fields", 'show'=>true, 'type'=>'checkbox', 'options'=>$Import_Fields, 'label' => __("Step2_Choose_Import_Fields"), 'value' => join(',', $Import_Fields_Default), 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12, 'row'=>true]];
 
 $TEMPARRAY                      = [];
 $TEMPARRAY['TableName']         = $TableName;
