@@ -164,18 +164,64 @@ function plugin_data_exam_paper_2_edit_default_data_before_submit($id)  {
     $试卷信息       = $rs->fields;
     $试题抽取方式   = $试卷信息['试题抽取方式'];
     $题库分类       = $试卷信息['题库分类'];
+    $考试类型       = $试卷信息['考试类型'];
+    $考试名称       = $试卷信息['考试名称'];
     $单选题目数量   = $试卷信息['单选题目数量'];
     $多选题目数量   = $试卷信息['多选题目数量'];
     $判断题目数量   = $试卷信息['判断题目数量'];
+    $用户答题_正确  = 0;
+    $用户答题_错误  = 0;
+    $用户答题_得分  = 0;
+
+    $题目序号列表 = DecryptID($_POST['题目序号列表']);
+    $题目序号列表Array = explode(',',$题目序号列表);
+    foreach($题目序号列表Array AS $Item) {
+        if($Item!="")   {
+            $用户所选 = $_POST["题目_".$Item];
+            if($用户所选!="")  {
+                $sql            = "SELECT * FROM `data_exam_question` where id='$Item'";
+                $rs             = $db->CacheExecute(180,$sql);
+                $题目信息        = $rs->fields;
+                $Element = [];
+                $Element['考试名称']    = $考试名称;
+                $Element['考试类型']    = $考试类型;
+                $Element['题库分类']    = $题库分类;
+                $Element['题目ID']      = $题目信息['id'];
+                $Element['所选']        = $用户所选;
+                $Element['答案']        = $题目信息['答案'];
+                $Element['题目类型']     = $题目信息['类型'];
+                if($Element['答案']==$用户所选)  {
+                    $对错="正确";
+                }
+                else {
+                    $对错="错误";
+                }
+                $Element['对错']        = $对错;
+                if($对错=="正确")   {
+                    $Element['得分']    = $题目信息['分值'];
+                    $用户答题_得分      += $题目信息['分值'];
+                    $用户答题_正确 ++;
+                }
+                else {
+                    $Element['得分']    = 0;
+                    $用户答题_错误 ++;
+                }
+                $Element['用户名']      = $GLOBAL_USER->USER_ID;
+                $Element['姓名']        = $GLOBAL_USER->USER_NAME;
+                $Element['时间']        = date("Y-m-d H:i:s");
+                [$Record,$sql]  = InsertOrUpdateTableByArray("data_exam_question_record", $Element, '题目ID,用户名,时间', 0, "Insert");
+                if($Record->EOF) {
+                }
+            }
+        }
+    }
 
     $RS = [];
-    $RS['status'] = "ERROR";
-    $RS['msg'] = __("sql execution failed");
-    $RS['试卷信息'] = $试卷信息;
-    $RS['_GET'] = $_GET;
-    $RS['_POST'] = $_POST;
+    $RS['status']   = "OK";
+    $RS['msg']      = "您已经完成本次题目,正确:".$用户答题_正确." 错误:".$用户答题_错误." 得分:".$用户答题_得分."";
+    $RS['_GET']     = $_GET;
+    $RS['_POST']    = $_POST;
     print json_encode($RS);
-
     exit;
 }
 

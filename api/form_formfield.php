@@ -174,10 +174,12 @@ if( ($_GET['action']=="add_default_data") && $_POST['FieldName']!="" && $externa
         $FieldsArray['Setting']         = json_encode($_POST);
         if(!in_array($FieldsArray['FieldName'], $MetaColumnNames)) {
             if(substr($FieldsArray['FieldType'],0,3)=="int")   {
-                $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '0' NOT NULL ;";
+                $FieldsArray['FieldDefault'] = intval($FieldsArray['FieldDefault']);
+                $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL ;";
             }
-            if(substr($FieldsArray['FieldType'],0,5)=="float")   {
-                $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '0' NOT NULL ;";
+            elseif(substr($FieldsArray['FieldType'],0,5)=="float")   {
+                $FieldsArray['FieldDefault'] = floatval($FieldsArray['FieldDefault']);
+                $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL ;";
             }
             elseif(substr($FieldsArray['FieldType'],0,4)=="date")   {
                 $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '1971-01-01' NOT NULL ;";
@@ -303,10 +305,12 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     $FieldNameOld = $rs->fields['FieldName'];
     if(in_array($FieldNameOld, $MetaColumnNames)) {
         if(substr($FieldsArray['FieldType'],0,3)=="int")   {
-            $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '0' NOT NULL;";
+            $FieldsArray['FieldDefault'] = intval($FieldsArray['FieldDefault']);
+            $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL;";
         }
         elseif(substr($FieldsArray['FieldType'],0,5)=="float")   {
-            $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '0' NOT NULL;";
+            $FieldsArray['FieldDefault'] = floatval($FieldsArray['FieldDefault']);
+            $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL;";
         }
         elseif(substr($FieldsArray['FieldType'],0,4)=="date")   {
             $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '1971-01-01' NOT NULL;";
