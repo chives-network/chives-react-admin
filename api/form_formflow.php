@@ -258,6 +258,7 @@ if($_GET['action']=="edit_default_1"&&$id!='')         {
     if(is_array($SettingMap))   {
         $defaultValues_1_keys = array_keys($defaultValues_1);
         foreach($SettingMap as $value => $label)  {
+            // && substr($value,0,strlen("FieldImport_"))!="FieldImport_" 
             if(in_array($value, $defaultValues_1_keys))  {
                 $defaultValues_1[$value] = $label;
             }
@@ -405,10 +406,10 @@ $Faculty_Filter_Field[] = ['value'=>"学生成绩二级管理", 'label'=>__("学
 $Faculty_Filter_Field[] = ['value'=>"班级事务二级管理", 'label'=>__("班级事务二级管理")];
 
 $EnableFields = [];
-$EnableFields['Faculty'] = ["Faculty_Filter_Field"];
+//$EnableFields['Faculty'] = ["Faculty_Filter_Field"];
 $DisableFields = [];
 $edit_default_2['Page_Role'][] = ['name' => "Page_Role_Name", 'show'=>true, 'type'=>'select', 'options'=>$Page_Role_Array, 'label' => __("Page_Role_Name"), 'value' => $Page_Role_Array[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12], 'EnableFields'=>$EnableFields, 'DisableFields'=>$DisableFields];
-$edit_default_2['Page_Role'][] = ['name' => "Faculty_Filter_Field", 'show'=>false, 'type'=>'select', 'options'=>$Faculty_Filter_Field, 'label' => __("Faculty_Filter_Field"), 'value' => $Faculty_Filter_Field[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
+$edit_default_2['Page_Role'][] = ['name' => "Faculty_Filter_Field", 'show'=>true, 'type'=>'select', 'options'=>$Faculty_Filter_Field, 'label' => __("Faculty_Filter_Field"), 'value' => $Faculty_Filter_Field[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
 
 $edit_default_2['Page_Role'][] = ['name' => "Extra_Priv_Filter_Field_One", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Extra_Priv_Filter_Field_One"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Page_Role'][] = ['name' => "Extra_Priv_Filter_Method_One", 'show'=>true, 'type'=>'select', 'options'=>$Extra_Priv_Filter_Method, 'label' => __("Extra_Priv_Filter_Method_One"), 'value' => $Extra_Priv_Filter_Method[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];

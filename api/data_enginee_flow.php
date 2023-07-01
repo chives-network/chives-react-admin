@@ -1762,7 +1762,7 @@ $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1 )  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
     $RS['init_default']['sql']                              = $sql_list;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
 }
