@@ -570,3 +570,18 @@ function 修复数据() {
 		//$db->Execute($sql);
 	}
 }
+
+//修复班级积分项目数据();
+function 修复班级积分项目数据() {
+	global $db;
+	$sql = "select 一级指标,二级指标 from data_deyu_banji_gradetwo";
+	$rs = $db->Execute($sql);
+	$rs_a = $rs->GetArray();
+	foreach($rs_a as $Item) {
+		$一级指标 = $Item['一级指标'];
+		$二级指标 = $Item['二级指标'];
+		$sql = "update data_deyu_banji_gradethree set 一级指标='$一级指标' where 二级指标='$二级指标' ";
+		//print $sql."<BR>";
+		//$db->Execute($sql);
+	}
+}

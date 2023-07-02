@@ -971,7 +971,8 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $sql    = "select * from data_menutwo where FaceTo='AuthUser' order by SortNumber asc";
                 $rsf    = $db->Execute($sql);
                 $MenuTwoRSA  = $rsf->GetArray();
-                $MenuTwoArray = [];
+                $MenuTwoArray1 = [];
+                $MenuTwoArray2 = [];
                 $MenuTwoCount = [];
                 $TabMap = [];
                 foreach($MenuTwoRSA as $Item)  {
@@ -979,14 +980,19 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                         $TabMap[$Item['MenuOneName']][$Item['MenuTwoName']] = "Tab";
                     }
                     if($Item['MenuThreeName']!="")   {
-                        $MenuTwoArray[$Item['MenuOneName']][$Item['MenuTwoName']][] = $Item;
+                        $MenuTwoArray1[$Item['MenuOneName']][$Item['MenuTwoName']][] = $Item;
                     }
                     else { 
-                        $MenuTwoArray[$Item['MenuOneName']]['SystemMenuTwo_'.$Item['id']][] = $Item;
+                        $MenuTwoArray1[$Item['MenuOneName']]['SystemMenuTwo_'.$Item['id']][] = $Item;
                     }
                     $MenuTwoCount[$Item['MenuOneName']] += 1;
+                }                
+                foreach($MenuOneRSA as $Item)  {
+                    if(isset($MenuTwoArray1[$Item['MenuOneName']])) {
+                        $MenuTwoArray2[$Item['MenuOneName']] = $MenuTwoArray1[$Item['MenuOneName']];
+                    }
                 }
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max], 'MenuTwoArray'=>$MenuTwoArray, 'MenuTwoCount'=>$MenuTwoCount, 'SelectAll'=>__("SelectAll") ];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max], 'MenuTwoArray'=>$MenuTwoArray2, 'MenuTwoCount'=>$MenuTwoCount, 'SelectAll'=>__("SelectAll") ];
                 break;
             default:
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
