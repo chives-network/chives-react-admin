@@ -16,6 +16,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import ListItem from '@mui/material/ListItem'
+import CircularProgress from '@mui/material/CircularProgress'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 import Dialog from '@mui/material/Dialog'
@@ -78,6 +79,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   
   // ** State
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingTip, setIsLoadingTip] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
   const [viewActionOpen, setViewActionOpen] = useState<boolean>(false)
   const [addEditActionOpen, setAddEditActionOpen] = useState<boolean>(false)
@@ -132,7 +134,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
     }
 
     if (storedToken) {
-      setIsLoading(true);
+      setIsLoading(true)
       const response = await axios.get(authConfig.backEndApiHost + backEndApi, {
         headers: {
           Authorization: storedToken
@@ -253,11 +255,26 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   }
 
   const toggleExportTableDrawer = () => {
-    const link = document.createElement('a')
-    link.href = authConfig.backEndApiHost + store.export_default.exportUrl
-    link.download = store.export_default.titletext
-    link.click()
+    setIsLoadingTip(true)
+    fetch(authConfig.backEndApiHost + store.export_default.exportUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = store.export_default.titletext;
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      console.log('File download completed');
+      setIsLoadingTip(false)
+    })
+    .catch(error => {
+      console.error('File download failed:', error);
+      setIsLoadingTip(false)
+    });
   }
+
 
   const toggleAddTableDrawer = () => {
     setAddEditActionName('add_default')
@@ -653,64 +670,73 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
 
           {store && store.init_default && store.init_default.searchFieldText && store.init_default.searchFieldArray && store.init_default.searchFieldArray.length>0 ? <IndexTableHeader filter={store.init_default.filter} handleFilterChange={handleFilterChange} value={searchOneFieldName} handleFilter={tableHeaderHandleFilter} toggleAddTableDrawer={toggleAddTableDrawer} toggleImportTableDrawer={toggleImportTableDrawer} toggleExportTableDrawer={toggleExportTableDrawer} searchFieldText={store.init_default.searchFieldText} searchFieldArray={store.init_default.searchFieldArray} selectedRows={selectedRows} multireview={store.init_default.multireview} multiReviewHandleFilter={multiReviewHandleFilter} button_search={store.init_default.button_search} button_add={store.init_default.button_add} button_import={store.init_default.button_import} button_export={store.init_default.button_export} isAddButton={store && store.add_default && store.add_default.allFields ? true : false} isImportButton={store && store.import_default && store.import_default.allFields ? true : false} isExportButton={store && store.export_default && store.export_default.allFields && store.export_default.exportUrl ? true : false} CSRF_TOKEN={store.init_default.CSRF_TOKEN}/> : ''}
 
-          <DataGridPro
-            autoHeight
-            pagination
-            rows={store.data}
-            rowCount={store.total}
-            rowHeight={Number(store.init_default.rowHeight)}
-            columns={columns_for_datagrid}
-            checkboxSelection={store.init_default.checkboxSelection?true:false}
-            disableSelectionOnClick
-            pageSize={pageSize}
-            sortingMode='server'
-            paginationMode='server'
-            onSortModelChange={handleSortModel}
-            rowsPerPageOptions={store.pageNumberArray}
-            onPageChange={newPage => setPage(newPage)}
-            onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
-            selectionModel={selectedRows}
-            onSelectionModelChange={rows => setSelectedRows(rows)}
-            loading={isLoading}
-            filterMode="server"
-            onFilterModelChange={onFilterColumnChangeMulti}
-            isRowSelectable={(params) => !store.init_default.ForbiddenSelectRow.includes(params.id)}
-            onCellEditCommit={(props:GridCellEditCommitParams) => {
-              const { id, field, value } = props;
-              const formData = new FormData();
-              formData.append('id', String(id));
-              formData.append('field', field);
-              formData.append('value', value);
-              formData.append('externalId', externalId);
-              fetch(
-                authConfig.backEndApiHost + backEndApi + '?action=updateone',
-                {
-                  headers: {
-                    Authorization: storedToken+"::::"+store.init_default.CSRF_TOKEN
-                  },
-                  method: 'POST',
-                  body: formData,
-                }
-              )
-                .then((response) => response.json())
-                .then((result) => {
-                  console.log('Success:', result);
-                  if (result.status == "OK") {
-                    toast.success(result.msg)
+          {isLoadingTip ?
+            <Grid item xs={12} sm={12} container justifyContent="space-around">
+                <Box sx={{ mt: 6, mb: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    <CircularProgress />
+                    <Typography>{store.export_default.ExportLoading}</Typography>
+                </Box>
+            </Grid>
+          :
+            <DataGridPro
+              autoHeight
+              pagination
+              rows={store.data}
+              rowCount={store.total}
+              rowHeight={Number(store.init_default.rowHeight)}
+              columns={columns_for_datagrid}
+              checkboxSelection={store.init_default.checkboxSelection?true:false}
+              disableSelectionOnClick
+              pageSize={pageSize}
+              sortingMode='server'
+              paginationMode='server'
+              onSortModelChange={handleSortModel}
+              rowsPerPageOptions={store.pageNumberArray}
+              onPageChange={newPage => setPage(newPage)}
+              onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
+              selectionModel={selectedRows}
+              onSelectionModelChange={rows => setSelectedRows(rows)}
+              loading={isLoading}
+              filterMode="server"
+              onFilterModelChange={onFilterColumnChangeMulti}
+              isRowSelectable={(params) => !store.init_default.ForbiddenSelectRow.includes(params.id)}
+              onCellEditCommit={(props:GridCellEditCommitParams) => {
+                const { id, field, value } = props;
+                const formData = new FormData();
+                formData.append('id', String(id));
+                formData.append('field', field);
+                formData.append('value', value);
+                formData.append('externalId', externalId);
+                fetch(
+                  authConfig.backEndApiHost + backEndApi + '?action=updateone',
+                  {
+                    headers: {
+                      Authorization: storedToken+"::::"+store.init_default.CSRF_TOKEN
+                    },
+                    method: 'POST',
+                    body: formData,
                   }
-                  else {
-                    toast.error(result.msg)
-                  }
-                })
-                .catch((error) => {
-                  console.error('Error:', error);
-                  toast.error("Network Error!");
-                });
-            }}
-            pinnedColumns={pinnedColumns}
-            onPinnedColumnsChange={handlePinnedColumnsChange}
-            localeText={dataGridLanguageText['localeText']}
-          />
+                )
+                  .then((response) => response.json())
+                  .then((result) => {
+                    console.log('Success:', result);
+                    if (result.status == "OK") {
+                      toast.success(result.msg)
+                    }
+                    else {
+                      toast.error(result.msg)
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error);
+                    toast.error("Network Error!");
+                  });
+              }}
+              pinnedColumns={pinnedColumns}
+              onPinnedColumnsChange={handlePinnedColumnsChange}
+              localeText={dataGridLanguageText['localeText']}
+            />
+          }
         </Card>
         { (store.init_default.ApprovalNodeFields && store.init_default.ApprovalNodeFields.AllNodes && store.init_default.ApprovalNodeFields.CurrentNode && store.init_default.ApprovalNodeFields.ApprovalNodeTitle) || (store.init_default.ApprovalNodeFields.DebugSql) ? 
           (

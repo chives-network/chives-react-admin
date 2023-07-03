@@ -13,6 +13,7 @@ $MAP['Cancel'] = "Cancel";
 $MAP['Redo'] = "Redo";
 $MAP['Loading'] = "Loading...";
 $MAP['SubmitLoading'] = "Processing...";
+$MAP['ExportLoading'] = "Export Processing...";
 $MAP['Subtitle'] = "Subtitle";
 $MAP['Add Data Success!'] = "Successfully added data!";
 $MAP['Edit Data Success!'] = "Successfully edited data!";

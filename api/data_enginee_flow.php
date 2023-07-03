@@ -227,7 +227,7 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
         $rowData = [];
         for ($col = 1; $col <= $highestColumnIndex; $col++) {
             $cellValue = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
-            $rowData[] = $cellValue;
+            $rowData[] = trim($cellValue);
         }
         $data[] = $rowData;
     }
@@ -263,7 +263,7 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
         for ($column = 0; $column < sizeof($Header); $column++)         {
             $FieldName  = $LocaleFieldArray[$Header[$column]];
             if( in_array($FieldName, $MetaColumnNames) && in_array($FieldName,$Import_Fields_Array))  {
-                $Element[$FieldName] = $data[$row][$column];
+                $Element[$FieldName] = trim($data[$row][$column]);
                 if($Element[$FieldName]!="")   {
                     $IsExecutionSQL = 1;
                 }
@@ -1712,6 +1712,7 @@ $RS['export_default']['titletext']        = $SettingMap['Export_Title_Name'];
 $RS['export_default']['titlememo']        = $SettingMap['Export_Subtitle_Name'];
 $RS['export_default']['tablewidth']       = 650;
 $RS['export_default']['submitloading']    = __("SubmitLoading");
+$RS['export_default']['ExportLoading']    = __("ExportLoading");
 $RS['export_default']['loading']          = __("Loading");
 if(sizeof(array_keys($allFieldsExport))>0 && in_array('Export',$Actions_In_List_Header_Array)) {
     $RS['export_default']['exportUrl']        = $exportUrl;

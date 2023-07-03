@@ -13,6 +13,7 @@ $MAP['Cancel'] 	= "取消";
 $MAP['Redo'] 	= "退回";
 $MAP['Loading'] 		        = "加载中...";
 $MAP['SubmitLoading'] 		    = "正在处理中...";
+$MAP['ExportLoading'] 		    = "正在生成导出文件...";
 $MAP['Subtitle'] 			    = "副标题";
 $MAP['Add Data Success!'] 	    = "新增数据成功!";
 $MAP['Edit Data Success!'] 	    = "修改数据成功!";
