@@ -212,6 +212,14 @@ $ApexLineChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$op
 $ApexLineChart['grid']                  = 8;
 $ApexLineChart['type']                  = "ApexLineChart";
 
+//输出GoView结构
+$ApexLineChart['GoView']['dimensions']      = [$ApexLineChart['Title'],"积分时间"];
+$GoViewSource = [];
+foreach($输出数据 as $输出数据X=>$输出数据Y)  {
+    $GoViewSource[] = [$ApexLineChart['Title']=>$输出数据X,'积分时间'=>$输出数据Y];
+}
+$ApexLineChart['GoView']['source']    = $GoViewSource;
+
 
 //AnalyticsWeeklyOverview
 $sql = "select 积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 积分时间 order by 积分时间 desc limit 7";
