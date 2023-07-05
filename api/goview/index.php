@@ -14,6 +14,8 @@ $param1 = ForSqlInjection($_GET['param1']);
 $param2 = ForSqlInjection($_GET['param2']);
 $param3 = ForSqlInjection($_GET['param3']);
 
+$BackEndApi = "/api/goview/image";
+
 if($param1=="sys" && $param2=="login")  {
 
 }
@@ -21,7 +23,7 @@ else if($param1=="sys" && $param2=="getOssInfo")  {
     $RS = [];
     $RS['msg'] = "操作成功";
     $RS['code'] = 200;
-    $RS['data']['bucketURL'] = "http://localhost:9999/";
+    $RS['data']['bucketURL'] = "/api/goview/bucket/";
     print_R(json_encode($RS));
     exit;
 }
@@ -60,6 +62,7 @@ else if($param1=="project" && $param2=="getData")  {
     $projectId      = intval(DecryptID($_GET['projectId']));
     $sql    = "select * from data_goview_project where id='$projectId'";
     $rs     = $db->Execute($sql);
+    $rs->fields['state'] = intval($rs->fields['state']);
     $RS     = [];
     $RS['msg']      = "操作成功";
     $RS['code']     = 200;
@@ -95,11 +98,45 @@ else if($param1=="project" && $param2=="edit")  {
     exit;
 }
 else if($param1=="project" && $param2=="list")  {
-    print '{"code":200,"msg":"获取成功","count":2,"data":[{"id":"1675716114495315970","projectName":"大数据中心演示图","state":-1,"createTime":"2023-07-02 21:00:29","createUserId":null,"isDelete":null,"indexImage":"http://127.0.0.1:8083/oss/2023-07-04/836345724009582592.png","remarks":null},{"id":"1676366152024260610","projectName":"新项目结构图","state":-1,"createTime":"2023-07-04 16:03:30","createUserId":null,"isDelete":null,"indexImage":"http://127.0.0.1:8083/oss/2023-07-04/836350463531159552.png","remarks":null}]}';
+    $page = intval($_GET['page']);
+    if($page<1) $page = 1;
+    $limit = intval($_GET['limit']);
+    if($limit<6) $limit = 6;
+    $from = ($page-1)*$limit;
+    $projectId      = intval(DecryptID($_GET['projectId']));
+    $sql    = "select id,projectName,state,indexImage,remarks,isDelete,createUserId,createTime from data_goview_project where projectName!='' and isDelete='-1' order by id desc limit ".$from.", ".$limit."";
+    $rs     = $db->Execute($sql);
+    $rs_a   = $rs->GetArray();
+    $Counter = 0;
+    foreach($rs_a as $Line) {
+        $rs_a[$Counter]['id']           = EncryptID($Line['id']);
+        $rs_a[$Counter]['indexImage']   = $BackEndApi."/".$rs_a[$Counter]['id'];
+        $rs_a[$Counter]['state']        = intval($Line['state']);
+        $rs_a[$Counter]['createUserId']        = intval($Line['createUserId']);
+        $Counter ++;
+    }
+    $RS     = [];
+    $RS['msg']      = "操作成功";
+    $RS['code']     = 200;
+    $RS['count']    = count($rs_a);
+    $RS['data']     = $rs_a;
+    $RS['sql']      = $sql;
+    $RS['_GET']     = $_GET;
+    print_R(json_encode($RS));
     exit;
 }
 else if($param1=="project" && $param2=="publish")  {
-    print '{"code":200,"data":{"id":"836359243467722753","fileName":"836359243467722752.png","fileSize":3927,"createTime":"2023-07-04 16:59:52","relativePath":"2023-07-04","virtualKey":"oss","fileurl":"http://127.0.0.1:8083/oss/2023-07-04/836359243467722752.png"}}';
+    $payload        = file_get_contents('php://input');
+    $_POST          = json_decode($payload,true);
+    $id             = intval(DecryptID($_POST['id']));
+    $state          = intval($_POST['state']);
+    $sql    = "update data_goview_project set state='$state' where id='$id'";
+    $rs     = $db->Execute($sql);
+    $RS     = [];
+    $RS['msg'] = "操作成功";
+    $RS['code'] = 200;
+    $RS['sql'] = $sql;
+    print_R(json_encode($RS));
     exit;
 }
 else if($param1=="project" && $param2=="save" && $param3=="data")  {
@@ -129,10 +166,132 @@ else if($param1=="project" && $param2=="save" && $param3=="data")  {
         print_R(json_encode($RS));
         exit;
     }
-
+}
+else if($param1=="image" && $param2!="")  {
+    $ID = DecryptID($param2);
+    global $FileStorageLocation;
+    $FileStorageLocation = $FileStorageLocation."/GoView";
+    $FilePath = $FileStorageLocation."/".$ID."_index_preview.png";
+    if (!file_exists($FilePath))             {
+        $FilePath = $FileStorageLocation."/0_index_preview.png";        
+    }
+    $imageType = exif_imagetype($FilePath);
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            header('Content-Type: image/jpeg');
+            break;
+        case IMAGETYPE_PNG:
+            header('Content-Type: image/png');
+            break;
+        case IMAGETYPE_GIF:
+            header('Content-Type: image/gif');
+            break;
+        default:
+            header('Content-Type: image/png');
+            break;
+    }
+    readfile($FilePath);
+    exit;
+}
+else if($param1=="bucket" && $param2!="")  {
+    $param2 = ForSqlInjection($param2);
+    global $FileStorageLocation;
+    $FileStorageLocation = $FileStorageLocation."/GoView";
+    $FilePath = $FileStorageLocation."/".$param2;
+    if (file_exists($FilePath))             {
+        $imageType = exif_imagetype($FilePath);
+        switch ($imageType) {
+            case IMAGETYPE_JPEG:
+                header('Content-Type: image/jpeg');
+                break;
+            case IMAGETYPE_PNG:
+                header('Content-Type: image/png');
+                break;
+            case IMAGETYPE_GIF:
+                header('Content-Type: image/gif');
+                break;
+            default:
+                header('Content-Type: image/png');
+                break;
+        }
+        readfile($FilePath);
+        exit;   
+    }    
+    exit;
 }
 else if($param1=="project" && $param2=="upload")  {
-
+    global $FileStorageLocation;
+    $FileStorageLocation = $FileStorageLocation."/GoView";
+    if(!is_dir($FileStorageLocation)) {
+        mkdir($FileStorageLocation);
+    }
+    if(strpos($_FILES['object']['name'],"_index_preview.png")>0 && isset($_FILES) && isset($_FILES['object']) && is_file($_FILES['object']['tmp_name']) ) {
+        $EncryptID  = str_replace("_index_preview.png","",$_FILES['object']['name']);
+        $ID         = DecryptID($EncryptID);
+        if($ID>0)    {
+            $NewFilePath = $FileStorageLocation."/".$ID."_index_preview.png";
+            //print $NewFilePath;
+            copy($_FILES['object']['tmp_name'], $NewFilePath);
+            $Element = [];
+            $Element['bucketName'] = NULL;
+            $Element['createTime'] = date("Y-m-d H:i:s");
+            $Element['createUserId'] = 'admin';
+            $Element['createUserName'] = 'admin';
+            $Element['fileName']    = $ID."_index_preview.png";
+            $Element['fileSize']    = filesize($ID."_index_preview.png");
+            $Element['fileSuffix']  = "image/png";
+            $Element['id']          = $ID;
+            $Element['updateTime'] = NULL;
+            $Element['updateUserId'] = NULL;
+            $Element['updateUserName'] = NULL;
+            print_R(json_encode($Element));
+        }
+        else {
+            $Element = [];
+            $Element['code'] = 218;
+            $Element['msg'] = "ID值不合法";
+            print_R(json_encode($Element));
+        }
+    }
+    else if(strpos($_FILES['object']['name'],"_index_background.png")>0 && isset($_FILES) && isset($_FILES['object']) && is_file($_FILES['object']['tmp_name']) ) {
+        $EncryptID  = str_replace("_index_background.png","",$_FILES['object']['name']);
+        $ID         = DecryptID($EncryptID);
+        if($ID>0)    {
+            $NewFilePath = $FileStorageLocation."/".$ID."_index_background.png";
+            //print $NewFilePath;
+            copy($_FILES['object']['tmp_name'], $NewFilePath);
+            $Element = [];
+            $Element['bucketName'] = NULL;
+            $Element['createTime'] = date("Y-m-d H:i:s");
+            $Element['createUserId'] = 'admin';
+            $Element['createUserName'] = 'admin';
+            $Element['fileName']    = $ID."_index_background.png";
+            $Element['fileSize']    = filesize($ID."_index_background.png");
+            $Element['fileSuffix']  = "image/png";
+            $Element['id']          = $ID;
+            $Element['updateTime'] = NULL;
+            $Element['updateUserId'] = NULL;
+            $Element['updateUserName'] = NULL;
+            $RS = [];
+            $RS['code'] = 200;
+            $RS['data'] = $Element;
+            print_R(json_encode($RS));
+        }
+        else {
+            $Element = [];
+            $Element['code'] = 218;
+            $Element['msg'] = "ID值不合法";
+            print_R(json_encode($Element));
+        }
+    }
+    else {
+        $Element = [];
+        $Element['code']    = 217;
+        $Element['_FILES']  = $_FILES;
+        $Element['msg']     = "UPLOAD时上传数据不合法";
+        print_R(json_encode($Element));
+    }
+    exit;
 }
 else if($param1=="project" && $param2=="login")  {
 
