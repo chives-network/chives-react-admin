@@ -10,6 +10,7 @@ $子目录[] 	= "/api/database";
 $子目录[] 	= "/api/exam";
 $子目录[] 	= "/api/charts";
 $子目录[] 	= "/api/tools";
+$子目录[] 	= "/api/goview";
 
 $子目录[] 	= "/src/pages";
 $子目录[] 	= "/src/pages/Enginee";
