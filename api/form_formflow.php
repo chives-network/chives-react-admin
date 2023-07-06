@@ -298,7 +298,7 @@ foreach($rsf_a as $Item)  {
     $MenuOneNameArray[] = ['value'=>$Item['MenuOneName'],'label'=>$Item['MenuOneName']];
 }
 $edit_default_2['Menu_Location'][] = ['name' => "Menu_One", 'show'=>true, 'type'=>'select', 'options'=>$MenuOneNameArray, 'label' => __("Menu_One"), 'value' => $MetaColumnNamesOptionsAll[1]['value'], 'placeholder' => "", 'helptext' => __("Allow_Repeat"), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
-$edit_default_2['Menu_Location'][] = ['name' => "Menu_Two", 'show'=>true, 'type'=>"input", 'label' => __("Menu_Two"), 'value' => "", 'placeholder' => "", 'helptext' => __("Allow_Repeat"), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_2['Menu_Location'][] = ['name' => "Menu_Two", 'show'=>true, 'type'=>"input", 'label' => __("Menu_Two"), 'value' => "", 'placeholder' => "", 'helptext' => __("Allow_Repeat"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_2['Menu_Location'][] = ['name' => "Menu_Three", 'show'=>true, 'type'=>"input", 'label' => __("Menu_Three"), 'value' => "", 'placeholder' => "", 'helptext' => __("Optional"), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_2['Menu_Location'][] = ['name' => "FaceTo", 'show'=>true, 'type'=>'select', 'options'=>$FaceToOptions, 'label' => __("Face_To"), 'value' => "AuthUser", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Menu_Location'][] = ['name' => "Menu_Three_Icon", 'show'=>true, 'type'=>'autocompletemdi', 'options'=>[], 'label' => __("Menu_Three_Icon"), 'value' => "account-outline", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
@@ -541,6 +541,20 @@ $edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_1",
 $edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Import_Fields_Unique_2"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_2['Import_Fields_Unique'][] = ['name' => "Import_Fields_Unique_3", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Import_Fields_Unique_3"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
+//Relative_Child_Table
+$sql    = "select id,FlowName from form_formflow where FlowName!='' and FaceTo='AuthUser'";
+$rsT    = $db->CacheExecute(180,$sql);
+$rsA    = $rsT->GetArray();
+$Relative_Child_Table = [];
+$Relative_Child_Table[] = ['value'=>0, 'label'=>__("None")];
+foreach($rsA as $Line) {
+    $Relative_Child_Table[] = ['value'=>$Line['id'], 'label'=>$Line['FlowName']];
+}
+$edit_default_2['Relative_Child_Table'][] = ['name' => "Relative_Child_Table", 'show'=>true, 'type'=>'select', 'options'=>$Relative_Child_Table, 'label' => __("Relative_Child_Table"), 'value' => $Relative_Child_Table[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Relative_Child_Table'][] = ['name' => "Relative_Child_Table_Field_Name", 'show'=>true, 'type'=>'input', 'label' => __("Relative_Child_Table_Field_Name"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_2['Relative_Child_Table'][] = ['name' => "Relative_Child_Table_Parent_Field_Name", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Relative_Child_Table_Parent_Field_Name"), 'value' => $MetaColumnNamesOptionsAll[0]['value'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+
+
 
 $defaultValues_2 = [];
 foreach($edit_default_2 as $ModeName=>$allFieldItem) {
@@ -559,6 +573,7 @@ $edit_default_2_mode[] = ['value'=>"Page_Sort", 'label'=>__("Page_Sort")];
 $edit_default_2_mode[] = ['value'=>"Init_Action", 'label'=>__("Init_Action")];
 $edit_default_2_mode[] = ['value'=>"Unique_Fields", 'label'=>__("Unique_Fields")];
 $edit_default_2_mode[] = ['value'=>"Import_Fields_Unique", 'label'=>__("Import_Fields_Unique")];
+$edit_default_2_mode[] = ['value'=>"Relative_Child_Table", 'label'=>__("Relative_Child_Table")];
 
 if($_GET['action']=="edit_default_2"&&$id!='')         {    
     $sql    = "select * from form_formflow where id = '$id'";
