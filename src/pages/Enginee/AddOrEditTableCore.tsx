@@ -110,11 +110,12 @@ interface AddOrEditTableType {
     CSRF_TOKEN: string
     dataGridLanguageCode: string
     toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+    handleIsLoadingTipChange: (status: boolean, showText: string) => void
 }
 
 const AddOrEditTableCore = (props: AddOrEditTableType) => {
     // ** Props
-    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode, toggleImagesPreviewListDrawer } = props
+    const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode, toggleImagesPreviewListDrawer, handleIsLoadingTipChange } = props
 
     //Yup Language
     if(dataGridLanguageCode=="zhCN") {
@@ -124,7 +125,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const router = useRouter();
     
     // ** Hooks
-    //const dispatch = useDispatch<AppDispatch>()
     const addFilesOrDatesDefault:{[key:string]:any} = {}
     const [defaultValuesNew, setDefaultValuesNew] = useState(addFilesOrDatesDefault)
     const [fieldArrayShow, setFieldArrayShow] = useState(addFilesOrDatesDefault)
@@ -376,8 +376,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     })
 
     const onSubmit = (data: {[key:string]:any}) => {
-        toast.loading(addEditStructInfo2.submitloading,{duration:2000})
+        const toastId = toast.loading(addEditStructInfo2.submitloading)
         setIsSubmitLoading(true)
+        handleIsLoadingTipChange(true, addEditStructInfo2.ImportLoading)
         const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
         if (!storedToken) {
             toggleAddTableDrawer()
@@ -453,12 +454,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 else {
                     toast.error(result.msg)
                 }
+                toast.dismiss(toastId);
                 addUserHandleFilter();
                 setIsSubmitLoading(false)
+                handleIsLoadingTipChange(false, addEditStructInfo2.ImportLoading)
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setIsSubmitLoading(false)
+                handleIsLoadingTipChange(false, addEditStructInfo2.ImportLoading)
             });
+            
 
         // clear avatar and files
         setAvatorShowArea({})

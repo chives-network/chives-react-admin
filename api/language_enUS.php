@@ -565,6 +565,7 @@ $MAP['Create New Dict Type From Here, use comma to split']  = 'Create New Dict T
 $MAP['NewDict']    							= 'New Dict';
 $MAP['return']    							= 'Return';
 $MAP['FormName is null']    				= 'FormName is null';
+$MAP['ImportLoading']    					= 'Import Loading ...';
 
 
 

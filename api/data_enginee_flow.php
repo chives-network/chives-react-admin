@@ -324,6 +324,7 @@ if( $_GET['action']=="import_default_data" && in_array('Import',$Actions_In_List
         $RS['_POST']    = $_POST;
         $RS['_FILES']   = $_FILES;
         $RS['sql']      = $sqlList;
+        $RS['counter']  = sizeof($data);
         print json_encode($RS);
         exit;
     }
@@ -1687,6 +1688,7 @@ $RS['import_default']['titlememo']        = $SettingMap['Import_Subtitle_Name'];
 $RS['import_default']['tablewidth']       = 650;
 $RS['import_default']['submitloading']    = __("SubmitLoading");
 $RS['import_default']['loading']          = __("Loading");
+$RS['import_default']['ImportLoading']    = __("ImportLoading");
 
 
 $TEMPARRAY                      = [];
@@ -1763,7 +1765,7 @@ $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
     $RS['init_default']['sql']                              = $sql_list;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
 }
