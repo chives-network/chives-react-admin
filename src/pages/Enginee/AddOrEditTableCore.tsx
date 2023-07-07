@@ -176,7 +176,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [addEditStructInfo2, setAaddEditStructInfo2] = useState(addEditStructInfo)
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
-    const [count, setCount] = useState<number>(1)
+    const [childItemCounter, setChildItemCounter] = useState<number>(1)
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -472,6 +472,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 }
             });
         }
+        formData.append('ChildItemCounter', String(childItemCounter));
 
         const postUrl = authConfig.backEndApiHost + backEndApi + "?action=" + action + "_data&id=" + id + "&externalId=" + externalId
         fetch(
@@ -2799,7 +2800,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                         {addEditStructInfo2.childtable && addEditStructInfo2.childtable.allFields && addEditStructInfo2.childtable.submittext ?
                             <Card key={"ChildtableSection"} sx={{ mb: 2 }}>
                                 <RepeaterWrapper>
-                                    <Repeater count={count}>
+                                    <Repeater count={childItemCounter}>
                                     {(i: number) => {
                                         const Tag = i === 0 ? Box : Collapse
 
@@ -2807,18 +2808,19 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         <Tag key={i} className='repeater-wrapper' {...(i !== 0 ? { in: true } : {})}>
                                             <Grid container>
                                             <RepeatingContent item xs={12}>
-                                                <Grid container sx={{ pl:1, py: 2, width: '100%', pr: 1 }}>
+                                                <Grid container sx={{ pl: 1, py: 2, width: '100%', pr: 1 }}>
                                                     {addEditStructInfo2.childtable.allFields.Default.map((FieldArray: any, FieldArray_index: number) => {
+                                                        const NewFieldName = "ChildTable____" + i + "____" + FieldArray.name
                                                         if (FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
-                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
-                                                                //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[NewFieldName] != undefined) {
+                                                                setValue(NewFieldName, defaultValuesNew[NewFieldName])
                                                             }
                                                             
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"ChildAllFields_" + FieldArray_index} sx={{ml:1, mr:1}} >
                                                                     <FormControl fullWidth sx={{ mb: 0 }}>
                                                                         <Controller
-                                                                            name={FieldArray.name}
+                                                                            name={NewFieldName}
                                                                             control={control}
                                                                             render={({ field: { value, onChange } }) => (
                                                                                 <TextField
@@ -2831,11 +2833,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     onChange={(e) => {
                                                                                         onChange(e);
                                                                                         const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                        defaultValuesNewTemp[FieldArray.name] = e.target.value
+                                                                                        if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.01' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>2)  {
+                                                                                            defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(2)
+                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else {
+                                                                                            defaultValuesNewTemp[NewFieldName] = e.target.value
+                                                                                        }
                                                                                         setDefaultValuesNew(defaultValuesNewTemp)
                                                                                     }}
                                                                                     placeholder={FieldArray.placeholder}
-                                                                                    error={Boolean(errors[FieldArray.name])}
+                                                                                    error={Boolean(errors[NewFieldName])}
                                                                                 />
                                                                             )}
                                                                         />
@@ -2844,35 +2852,36 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>
                                                                         )}
-                                                                        {errors[FieldArray.name] && (
+                                                                        {errors[NewFieldName] && (
                                                                             <FormHelperText sx={{ color: 'error.main' }}>
-                                                                                {(errors[FieldArray.name]?.message as string)??''}
+                                                                                {(errors[NewFieldName]?.message as string)??''}
                                                                             </FormHelperText>
                                                                         )}
                                                                     </FormControl>
                                                                 </Grid>
                                                             )
                                                         }                                                         
-                                                        else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "autocomplete") {
-                                                            if(FieldArray.name!=FieldArray.code) {
-                                                                if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
+                                                        else if ((FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "autocomplete") {
+                                                            const NewFieldCode = "ChildTable____" + i + "____" + FieldArray.code
+                                                            if(NewFieldName!=NewFieldCode) {
+                                                                if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
                                                                     FieldArray.options.map((ItemValue: any) => {
-                                                                        if(ItemValue.value==defaultValuesNew[FieldArray.code]) {
-                                                                            setValue(FieldArray.name, ItemValue.label)
-                                                                            setValue(FieldArray.code, ItemValue.value)
+                                                                        if(ItemValue.value==defaultValuesNew[NewFieldCode]) {
+                                                                            setValue(NewFieldName, ItemValue.label)
+                                                                            setValue(NewFieldCode, ItemValue.value)
                                                                         }
                                                                     })
                                                                 }
-                                                                if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]!=undefined)  {
-                                                                    setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                                if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]!=undefined)  {
+                                                                    setValue(NewFieldName, defaultValuesNew[NewFieldName])
                                                                 }
                                                             }
 
-                                                            if(defaultValuesNew[FieldArray.code]==undefined)  {
-                                                                setValue(FieldArray.code, "")
+                                                            if(defaultValuesNew[NewFieldCode]==undefined)  {
+                                                                setValue(NewFieldCode, "")
                                                             }
                                                             else {                                                        
-                                                                setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
+                                                                setValue(NewFieldCode, defaultValuesNew[NewFieldCode])
                                                             }
                                                             
                                                             const options = FieldArray.options
@@ -2881,7 +2890,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                                     <FormControl fullWidth sx={{ mb: 0 }}>
                                                                         <Controller
-                                                                            name={FieldArray.name}
+                                                                            name={NewFieldName}
                                                                             control={control}
                                                                             render={({ field: { value } }) => (
                                                                                 <Autocomplete
@@ -2895,12 +2904,12 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     onChange={(event: any, newValue: any) => {
                                                                                         if (newValue != undefined) {
                                                                                             const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                            if(FieldArray.name!=FieldArray.code) {
-                                                                                                defaultValuesNewTemp[FieldArray.name] = newValue.label
-                                                                                                defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                            if(NewFieldName!=NewFieldCode) {
+                                                                                                defaultValuesNewTemp[NewFieldName] = newValue.label
+                                                                                                defaultValuesNewTemp[NewFieldCode] = newValue.value
                                                                                             }
                                                                                             else    {
-                                                                                                defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                                defaultValuesNewTemp[NewFieldCode] = newValue.value
                                                                                             }
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                             
@@ -2917,45 +2926,14 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                 }
                                                                                             }
                                                                                             setFieldArrayShow(fieldArrayShowTemp)
-
-                                                                                            //根据下拉列表中项目的值来指定其它字段的类型
-                                                                                            FieldArray.options.map((ItemValue: any) => {
-                                                                                                if(ItemValue['ExtraControl']) {
-                                                                                                    const TempFieldNameAndType = ItemValue['ExtraControl'].split(":")
-                                                                                                    if(TempFieldNameAndType.length > 1 && TempFieldNameAndType[1] && newValue.value==ItemValue['value']) {
-                                                                                                        allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArrayChild: any, FieldArrayChild_index: number) => {
-                                                                                                            if(FieldArrayChild.name == TempFieldNameAndType[0]) {
-                                                                                                                const allFieldsTemp:{[key:string]:any} = JSON.parse(JSON.stringify(allFields))
-                                                                                                                if(TempFieldNameAndType[1]=='chinaidcard') {
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['format'] = TempFieldNameAndType[1]
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生日期'] = FieldArrayChild.name.replace("身份证件号","出生日期")
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生年月'] = FieldArrayChild.name.replace("身份证件号","出生年月")
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['性别'] = FieldArrayChild.name.replace("身份证件号","性别")
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['年龄'] = FieldArrayChild.name.replace("身份证件号","年龄")
-                                                                                                                }
-                                                                                                                else {
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['format'] = ""
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生日期'] = ""
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生年月'] = ""
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['性别'] = ""
-                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['年龄'] = ""
-                                                                                                                }
-                                                                                                                setAllFields(allFieldsTemp)
-                                                                                                            }
-                                                                                                        })
-                                                                                                    }
-                                                                                                }
-                                                                                            })
                                                                                         }
                                                                                         else {
                                                                                             const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                            defaultValuesNewTemp[FieldArray.name] = ""
-                                                                                            defaultValuesNewTemp[FieldArray.code] = ""
+                                                                                            defaultValuesNewTemp[NewFieldName] = ""
+                                                                                            defaultValuesNewTemp[NewFieldCode] = ""
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
-                                                                                            setValue(FieldArray.name, "")
-                                                                                            setValue(FieldArray.code, "")
+                                                                                            setValue(NewFieldName, "")
+                                                                                            setValue(NewFieldCode, "")
                                                                                         }
                                                                                     }}
                                                                                 />
@@ -2966,9 +2944,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>
                                                                         )}
-                                                                        {errors[FieldArray.name] && (
+                                                                        {errors[NewFieldName] && (
                                                                             <FormHelperText sx={{ color: 'error.main' }}>
-                                                                                {(errors[FieldArray.name]?.message as string)??''}
+                                                                                {(errors[NewFieldName]?.message as string)??''}
                                                                             </FormHelperText>
                                                                         )}
                                                                     </FormControl>
@@ -2997,7 +2975,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         size='small'
                                         variant='contained'
                                         startIcon={<Icon icon='mdi:plus' fontSize={20} />}
-                                        onClick={() => setCount(count + 1)}
+                                        onClick={() => setChildItemCounter(childItemCounter + 1)}
                                         >
                                         {addEditStructInfo2.childtable.submittext}
                                         </Button>

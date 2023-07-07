@@ -524,11 +524,56 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                 global $GLOBAL_EXEC_KEY_SQL;
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
+            //Child Table Items Insert
+            //Relative Child Table Support
+            $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+            $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+            $Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+            if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+                $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+                $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+                $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+                $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+                $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+                    //Get All Fields
+                    $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
+                    $rs                         = $db->Execute($sql);
+                    $ChildAllFieldsFromTable    = $rs->GetArray();
+                    $ChildAllFieldsMap          = [];
+                    $ChildItemCounter               = $_POST['ChildItemCounter'];
+                    for($X=0;$X<$ChildItemCounter;$X++)                    {
+                        $ChildElement = [];
+                        foreach($ChildAllFieldsFromTable as $Item)  {
+                            $ChildFieldName = $Item['FieldName'];
+                            switch($Item['ShowType']) {
+                                case 'Hidden:Createtime':
+                                    $ChildElement[$ChildFieldName] = date('Y-m-d H:i:s');
+                                    break;
+                                case 'Hidden:CurrentUserIdAdd':
+                                case 'Hidden:CurrentUserIdAddEdit':
+                                    $ChildElement[$ChildFieldName] = $GLOBAL_USER->USER_ID;
+                                    break;
+                                default:
+                                    $ChildElement[$ChildFieldName] = ForSqlInjection($_POST['ChildTable____'.$X.'____'.$ChildFieldName]);
+                                    break;
+                            }                            
+                        }
+                        $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $FieldsArray[$Relative_Child_Table_Parent_Field_Name];
+                        //print_R($ChildElement);
+                        //print_R($FieldsArray[$Relative_Child_Table_Parent_Field_Name]);   
+                        [$Record,$sql]  = InsertOrUpdateTableByArray($ChildTableName, $ChildElement, 'id', 0, 'Insert');
+                        //print $sql."<BR>";
+                        if($Record->EOF) {
+                        }
+                    }
+                }
+            }
             //functionNameIndividual
             $functionNameIndividual = "plugin_".$TableName."_".$Step."_add_default_data_after_submit";
             if(function_exists($functionNameIndividual))  {
                 $functionNameIndividual($NewId);
-            }            
+            }
             //SystemLogRecord
             if(in_array($SettingMap['OperationLogGrade'],["AddEditAndDeleteOperation","AllOperation"]))  {
                 $sql    = "select * from $TableName where ".$MetaColumnNames[0]." = '$NewId'";
