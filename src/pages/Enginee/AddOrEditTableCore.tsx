@@ -116,10 +116,10 @@ const RepeatingContent = styled(Grid)<GridProps>(({ theme }) => ({
 }))
 
 const RepeaterWrapper = styled(CardContent)<CardContentProps>(({ theme }) => ({
-    paddingTop: theme.spacing(12),
-    paddingBottom: theme.spacing(12),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(2),
     '& .repeater-wrapper + .repeater-wrapper': {
-        marginTop: theme.spacing(12)
+        marginTop: theme.spacing(2)
     }
 }))
 
@@ -804,10 +804,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             value={value}
                                                                             label={FieldArray.label}
                                                                             type={FieldArray.type}
+                                                                            InputProps={FieldArray.inputProps ? FieldArray.inputProps : {}}
                                                                             onChange={(e) => {
                                                                                 onChange(e);
                                                                                 const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
-                                                                                defaultValuesNewTemp[FieldArray.name] = e.target.value
+                                                                                if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.01' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>2)  {
+                                                                                    defaultValuesNewTemp[FieldArray.name] = parseFloat(e.target.value).toFixed(2)
+                                                                                    console.log("FieldArray.inputProps", defaultValuesNewTemp)
+                                                                                }
+                                                                                else {
+                                                                                    defaultValuesNewTemp[FieldArray.name] = e.target.value
+                                                                                }
                                                                                 if(FieldArray.rules.format == 'chinaidcard' && chinaIdCardCheck(e.target.value))     {
                                                                                     if( FieldArray.rules.出生日期 )   {        
                                                                                         defaultValuesNewTemp[FieldArray.rules.出生日期] = defaultValuesNew[FieldArray.name].substr(6, 4)+"-"+defaultValuesNew[FieldArray.name].substr(10, 2)+"-"+defaultValuesNew[FieldArray.name].substr(12, 2)
@@ -2800,82 +2807,177 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         <Tag key={i} className='repeater-wrapper' {...(i !== 0 ? { in: true } : {})}>
                                             <Grid container>
                                             <RepeatingContent item xs={12}>
-                                                <Grid container sx={{ py: 4, width: '100%', pr: { lg: 0, xs: 4 } }}>
-                                                    <Grid item md={5} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
-                                                        <Typography
-                                                        variant='body2'
-                                                        className='col-title'
-                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
-                                                        >
-                                                        Item
-                                                        </Typography>
-                                                        <Select fullWidth size='small' defaultValue='App Design'>
-                                                        <MenuItem value='App Design'>App Design</MenuItem>
-                                                        <MenuItem value='App Customization'>App Customization</MenuItem>
-                                                        <MenuItem value='ABC Template'>ABC Template</MenuItem>
-                                                        <MenuItem value='App Development'>App Development</MenuItem>
-                                                        </Select>
-                                                    </Grid>
-                                                    <Grid item md={3} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
-                                                        <Typography
-                                                        variant='body2'
-                                                        className='col-title'
-                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
-                                                        >
-                                                        Cost
-                                                        </Typography>
-                                                        <TextField
-                                                        size='small'
-                                                        type='number'
-                                                        placeholder='24'
-                                                        defaultValue='24'
-                                                        InputProps={{ inputProps: { min: 0 } }}
-                                                        />
-                                                        <Box sx={{ mt: 3.5 }}>
-                                                            <Typography component='span' variant='body2'>
-                                                                Discount:
-                                                            </Typography>{' '}
-                                                            <Typography component='span' variant='body2'>
-                                                                0%
-                                                            </Typography>
-                                                            <Tooltip title='Tax 1' placement='top'>
-                                                                <Typography component='span' variant='body2' sx={{ mx: 2 }}>
-                                                                0%
-                                                                </Typography>
-                                                            </Tooltip>
-                                                            <Tooltip title='Tax 2' placement='top'>
-                                                                <Typography component='span' variant='body2'>
-                                                                0%
-                                                                </Typography>
-                                                            </Tooltip>
-                                                        </Box>
-                                                    </Grid>
-                                                    <Grid item md={2} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
-                                                        <Typography
-                                                        variant='body2'
-                                                        className='col-title'
-                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
-                                                        >
-                                                        Hours
-                                                        </Typography>
-                                                        <TextField
-                                                        size='small'
-                                                        type='number'
-                                                        placeholder='1'
-                                                        defaultValue='1'
-                                                        InputProps={{ inputProps: { min: 0 } }}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item md={1} xs={12} sx={{ px: 4, my: { lg: 0 }, mt: 2 }}>
-                                                        <Typography
-                                                        variant='body2'
-                                                        className='col-title'
-                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
-                                                        >
-                                                        Price
-                                                        </Typography>
-                                                        <Typography>$24.00</Typography>
-                                                    </Grid>
+                                                <Grid container sx={{ pl:1, py: 2, width: '100%', pr: 1 }}>
+                                                    {addEditStructInfo2.childtable.allFields.Default.map((FieldArray: any, FieldArray_index: number) => {
+                                                        if (FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
+                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                                //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                            }
+                                                            
+                                                            return (
+                                                                <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"ChildAllFields_" + FieldArray_index} sx={{ml:1, mr:1}} >
+                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                        <Controller
+                                                                            name={FieldArray.name}
+                                                                            control={control}
+                                                                            render={({ field: { value, onChange } }) => (
+                                                                                <TextField
+                                                                                    size='small'
+                                                                                    disabled={FieldArray.rules.disabled}
+                                                                                    value={value}
+                                                                                    label={FieldArray.label}
+                                                                                    type={FieldArray.type}
+                                                                                    InputProps={FieldArray.inputProps ? FieldArray.inputProps : {}}
+                                                                                    onChange={(e) => {
+                                                                                        onChange(e);
+                                                                                        const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                        defaultValuesNewTemp[FieldArray.name] = e.target.value
+                                                                                        setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                    }}
+                                                                                    placeholder={FieldArray.placeholder}
+                                                                                    error={Boolean(errors[FieldArray.name])}
+                                                                                />
+                                                                            )}
+                                                                        />
+                                                                        {FieldArray.helptext && (
+                                                                            <FormHelperText>
+                                                                                {FieldArray.helptext}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {errors[FieldArray.name] && (
+                                                                            <FormHelperText sx={{ color: 'error.main' }}>
+                                                                                {(errors[FieldArray.name]?.message as string)??''}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                    </FormControl>
+                                                                </Grid>
+                                                            )
+                                                        }                                                         
+                                                        else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "autocomplete") {
+                                                            if(FieldArray.name!=FieldArray.code) {
+                                                                if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
+                                                                    FieldArray.options.map((ItemValue: any) => {
+                                                                        if(ItemValue.value==defaultValuesNew[FieldArray.code]) {
+                                                                            setValue(FieldArray.name, ItemValue.label)
+                                                                            setValue(FieldArray.code, ItemValue.value)
+                                                                        }
+                                                                    })
+                                                                }
+                                                                if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]!=undefined)  {
+                                                                    setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                                }
+                                                            }
+
+                                                            if(defaultValuesNew[FieldArray.code]==undefined)  {
+                                                                setValue(FieldArray.code, "")
+                                                            }
+                                                            else {                                                        
+                                                                setValue(FieldArray.code, defaultValuesNew[FieldArray.code])
+                                                            }
+                                                            
+                                                            const options = FieldArray.options
+                                                            
+                                                            return (
+                                                                <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                        <Controller
+                                                                            name={FieldArray.name}
+                                                                            control={control}
+                                                                            render={({ field: { value } }) => (
+                                                                                <Autocomplete
+                                                                                    size="small"
+                                                                                    value={value}
+                                                                                    options={options}
+                                                                                    freeSolo={FieldArray.freeSolo}
+                                                                                    id="controllable-states-demo"
+                                                                                    isOptionEqualToValue={(option:any, value) => { return option.value === value; }}
+                                                                                    renderInput={(params) => <TextField {...params} label={FieldArray.label} />}
+                                                                                    onChange={(event: any, newValue: any) => {
+                                                                                        if (newValue != undefined) {
+                                                                                            const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                            if(FieldArray.name!=FieldArray.code) {
+                                                                                                defaultValuesNewTemp[FieldArray.name] = newValue.label
+                                                                                                defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                            }
+                                                                                            else    {
+                                                                                                defaultValuesNewTemp[FieldArray.code] = newValue.value
+                                                                                            }
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                            
+                                                                                            //This field will control other fields show or not
+                                                                                            const fieldArrayShowTemp:{[key:string]:any} = {}
+                                                                                            if (FieldArray.EnableFields && FieldArray.EnableFields != undefined && FieldArray.EnableFields[newValue.value] != undefined) {
+                                                                                                for (const fieldItem of FieldArray.EnableFields[newValue.value]) {
+                                                                                                    fieldArrayShowTemp[fieldItem] = true
+                                                                                                }
+                                                                                            }
+                                                                                            if (FieldArray.DisableFields && FieldArray.DisableFields != undefined && FieldArray.DisableFields[newValue.value] != undefined) {
+                                                                                                for (const fieldItem of FieldArray.DisableFields[newValue.value]) {
+                                                                                                    fieldArrayShowTemp[fieldItem] = false
+                                                                                                }
+                                                                                            }
+                                                                                            setFieldArrayShow(fieldArrayShowTemp)
+
+                                                                                            //根据下拉列表中项目的值来指定其它字段的类型
+                                                                                            FieldArray.options.map((ItemValue: any) => {
+                                                                                                if(ItemValue['ExtraControl']) {
+                                                                                                    const TempFieldNameAndType = ItemValue['ExtraControl'].split(":")
+                                                                                                    if(TempFieldNameAndType.length > 1 && TempFieldNameAndType[1] && newValue.value==ItemValue['value']) {
+                                                                                                        allFields && allFields[allFieldsModeItem.value] && allFields[allFieldsModeItem.value].map((FieldArrayChild: any, FieldArrayChild_index: number) => {
+                                                                                                            if(FieldArrayChild.name == TempFieldNameAndType[0]) {
+                                                                                                                const allFieldsTemp:{[key:string]:any} = JSON.parse(JSON.stringify(allFields))
+                                                                                                                if(TempFieldNameAndType[1]=='chinaidcard') {
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['format'] = TempFieldNameAndType[1]
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生日期'] = FieldArrayChild.name.replace("身份证件号","出生日期")
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生年月'] = FieldArrayChild.name.replace("身份证件号","出生年月")
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['性别'] = FieldArrayChild.name.replace("身份证件号","性别")
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['年龄'] = FieldArrayChild.name.replace("身份证件号","年龄")
+                                                                                                                }
+                                                                                                                else {
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['type'] = "input"
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['format'] = ""
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生日期'] = ""
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['出生年月'] = ""
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['性别'] = ""
+                                                                                                                    allFieldsTemp[allFieldsModeItem.value][FieldArrayChild_index]['rules']['年龄'] = ""
+                                                                                                                }
+                                                                                                                setAllFields(allFieldsTemp)
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }
+                                                                                                }
+                                                                                            })
+                                                                                        }
+                                                                                        else {
+                                                                                            const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                            defaultValuesNewTemp[FieldArray.name] = ""
+                                                                                            defaultValuesNewTemp[FieldArray.code] = ""
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                            setValue(FieldArray.name, "")
+                                                                                            setValue(FieldArray.code, "")
+                                                                                        }
+                                                                                    }}
+                                                                                />
+                                                                            )}
+                                                                        />
+                                                                        {FieldArray.helptext && (
+                                                                            <FormHelperText>
+                                                                                {FieldArray.helptext}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {errors[FieldArray.name] && (
+                                                                            <FormHelperText sx={{ color: 'error.main' }}>
+                                                                                {(errors[FieldArray.name]?.message as string)??''}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                    </FormControl>
+                                                                </Grid>
+                                                            )
+                                                        }
+                                                        
+                                                    })}
+
                                                 </Grid>
                                                 <ChildTableRowAction>
                                                 <IconButton size='small' onClick={deleteChildTableItem}>

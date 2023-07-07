@@ -107,6 +107,7 @@ $IsFullWidth[] = ['value'=>'5', 'label'=>'5'];
 $IsFullWidth[] = ['value'=>'4', 'label'=>'4'];
 $IsFullWidth[] = ['value'=>'3', 'label'=>'3'];
 $IsFullWidth[] = ['value'=>'2', 'label'=>'2'];
+$IsFullWidth[] = ['value'=>'1', 'label'=>'1'];
 $allFieldsAdd[] = ['name' => 'IsFullWidth', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsFullWidth, 'label' => __('Field Width (Total 12)'), 'value' => $IsFullWidth[1]['value'], 'placeholder' => __(''), 'helptext' => __(''), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
 $IsMustFill = [];

@@ -36,8 +36,8 @@ $ExceptCsrf[] = "/apps/apps_19.php";
 
 if($FaceTo=="AuthUser")         {
     //Check User Login or Not
-    //CheckAuthUserLoginStatus();
-    //CheckAuthUserRoleHaveMenu($FlowId);
+    CheckAuthUserLoginStatus();
+    CheckAuthUserRoleHaveMenu($FlowId);
     CheckCsrsToken();
 }
 if($FaceTo=="Student")         {
