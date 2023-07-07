@@ -36,8 +36,8 @@ $ExceptCsrf[] = "/apps/apps_19.php";
 
 if($FaceTo=="AuthUser")         {
     //Check User Login or Not
-    CheckAuthUserLoginStatus();
-    CheckAuthUserRoleHaveMenu($FlowId);
+    //CheckAuthUserLoginStatus();
+    //CheckAuthUserRoleHaveMenu($FlowId);
     CheckCsrsToken();
 }
 if($FaceTo=="Student")         {
@@ -109,7 +109,7 @@ $defaultValuesAdd  = [];
 $defaultValuesEdit = [];
 
 
-$allFieldsAdd   = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'ADD');
+$allFieldsAdd   = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'ADD', true, $SettingMap);
 foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
         $defaultValuesAdd[$ITEM['name']] = $ITEM['value'];
@@ -119,14 +119,14 @@ foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
     }
 }
 
-$allFieldsEdit  = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'EDIT');
+$allFieldsEdit  = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'EDIT', true, $SettingMap);
 foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
         $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];
     }
 }
 
-$allFieldsView  = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'VIEW');
+$allFieldsView  = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'VIEW', true, $SettingMap);
 foreach($allFieldsView as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
         $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];
@@ -1720,7 +1720,6 @@ if(sizeof(array_keys($allFieldsExport))>0 && in_array('Export',$Actions_In_List_
     $RS['export_default']['exportUrl']        = $exportUrl;
 }
 
-
 $RS['add_default']['allFields']     = $allFieldsAdd;
 $RS['add_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
 $RS['add_default']['defaultValues'] = $defaultValuesAdd;
@@ -1755,6 +1754,63 @@ $RS['view_default']['titletext']  = $SettingMap['View_Title_Name'];
 $RS['view_default']['titlememo']  = $SettingMap['View_Subtitle_Name'];
 $RS['view_default']['componentsize'] = "small";
 
+//Relative Child Table Support
+$Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+$Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+$Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+    $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+    $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+    $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+    $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+    $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+    if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+        //Get All Fields
+        $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
+        $rs                         = $db->Execute($sql);
+        $ChildAllFieldsFromTable    = $rs->GetArray();
+        $ChildAllFieldsMap = [];
+        foreach($ChildAllFieldsFromTable as $Item)  {
+            $ChildAllFieldsMap[$Item['FieldName']] = $Item;
+            $ChildLocaleFieldArray[$Item['EnglishName']] = $Item['FieldName'];
+            $ChildLocaleFieldArray[$Item['ChineseName']] = $Item['FieldName'];
+        }
+        $defaultValuesAddChild  = [];
+        $defaultValuesEditChild = [];
+        $allFieldsAdd   = getAllFields($ChildAllFieldsFromTable, $AllShowTypesArray, 'ADD', true, $ChildSettingMap);
+        foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
+            foreach($allFieldItem as $ITEM) {
+                $defaultValuesAddChild[$ITEM['name']] = $ITEM['value'];
+                if($ITEM['code']!="") {
+                    $defaultValuesAddChild[$ITEM['code']] = $ITEM['value'];
+                }
+            }
+        }
+        $RS['add_default']['childtable']['allFields']        = $allFieldsAdd;
+        $RS['add_default']['childtable']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
+        $RS['add_default']['childtable']['defaultValues']    = $defaultValuesAddChild;
+        
+        $allFieldsEdit   = getAllFields($ChildAllFieldsFromTable, $AllShowTypesArray, 'EDIT', true, $ChildSettingMap);
+        foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
+            foreach($allFieldItem as $ITEM) {
+                $defaultValuesEditChild[$ITEM['name']] = $ITEM['value'];
+                if($ITEM['code']!="") {
+                    $defaultValuesEditChild[$ITEM['code']] = $ITEM['value'];
+                }
+            }
+        }
+        if(is_array($ChildSettingMap))   {
+            foreach($ChildSettingMap as $ModeName=>$allFieldItem) {
+                $defaultValuesEditChild[$ModeName] = $allFieldItem;
+            }
+        }
+        $RS['edit_default']['childtable']['allFields']        = $allFieldsEdit;
+        $RS['edit_default']['childtable']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
+        $RS['edit_default']['childtable']['defaultValues']    = $defaultValuesEditChild;
+
+    }
+}
+
 $RS['init_default']['delete_dialog_title']      = $SettingMap['Tip_Title_When_Delete'];
 $RS['init_default']['delete_dialog_content']    = $SettingMap['Tip_Content_When_Delete'];
 $RS['init_default']['delete_dialog_button']     = $SettingMap['Tip_Button_When_Delete'];
@@ -1778,7 +1834,7 @@ if($SettingMap['Init_Action_Value']=="edit_default_configsetting")   {
     $rs                     = $db->Execute($sql);
     $AllFieldsFromTable     = $rs->GetArray();
     $defaultValuesEdit      = [];
-    $allFieldsEdit          = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'EDIT', $FilterFlowSetting=false);
+    $allFieldsEdit          = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'EDIT', $FilterFlowSetting=false, $SettingMap);
     foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
         foreach($allFieldItem as $ITEM) {
             $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];

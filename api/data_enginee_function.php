@@ -533,12 +533,10 @@ function Msg_Reminder_Object_From_Add_Or_Edit($TableName, $id) {
     return $InsertSQLALL;
 }
 
-function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $FilterFlowSetting=true)  {
+function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $FilterFlowSetting=true, $SettingMap)  {
     global $db;
-    global $SettingMap;
     global $InsertOrUpdateFieldArrayForSql;
     global $GLOBAL_USER;
-    global $TableName;
     $allFieldsMap = [];
     foreach($AllFieldsFromTable as $Item)  {
         $FieldName      = $Item['FieldName'];
