@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, MouseEvent, ChangeEvent, Fragment } from 'react'
+import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, SyntheticEvent } from 'react'
 import { ElementType,MouseEventHandler } from 'react'
 
 // ** MUI Imports
@@ -14,7 +14,8 @@ import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import Box from '@mui/material/Box'
+import Box, { BoxProps } from '@mui/material/Box'
+import Collapse from '@mui/material/Collapse'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import Radio from '@mui/material/Radio'
@@ -31,7 +32,7 @@ import Slider from '@mui/material/Slider'
 import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
+import CardContent, { CardContentProps } from '@mui/material/CardContent'
 import Tooltip from "@mui/material/Tooltip"
 import TableContainer from '@mui/material/TableContainer'
 import Link from "@mui/material/Link"
@@ -42,6 +43,8 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import { useRouter } from 'next/router'
 
+// ** Custom Component Imports
+import Repeater from 'src/@core/components/repeater'
 
 // ** Config
 import authConfig from 'src/configs/auth'
@@ -55,14 +58,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { setLocale } from 'yup';
 import AddOrEditTableLanguage from 'src/types/forms/AddOrEditTableLanguage';
 
-
 import axios from 'axios'
 
 import Mousetrap from 'mousetrap'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import Grid from '@mui/material/Grid'
+import Grid, { GridProps } from '@mui/material/Grid'
 
 // Date Locale
 import DatePicker, { registerLocale } from 'react-datepicker'
@@ -81,7 +83,6 @@ import { convertFromHTML, ContentState, EditorState } from 'draft-js'
 import { convertToHTML } from 'draft-convert';
 import toast from 'react-hot-toast'
 
-
 // ** Component Import
 import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
@@ -94,6 +95,41 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 import chinacity from 'src/types/forms/chinacity';
 import mdi from 'src/types/forms/mdi';
+
+
+const RepeatingContent = styled(Grid)<GridProps>(({ theme }) => ({
+    paddingRight: 0,
+    display: 'flex',
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    border: `1px solid ${theme.palette.divider}`,
+    '& .col-title': {
+      top: '-1.5rem',
+      position: 'absolute'
+    },
+    [theme.breakpoints.down('lg')]: {
+      '& .col-title': {
+        top: '0',
+        position: 'relative'
+      }
+    }
+}))
+
+const RepeaterWrapper = styled(CardContent)<CardContentProps>(({ theme }) => ({
+    paddingTop: theme.spacing(12),
+    paddingBottom: theme.spacing(12),
+    '& .repeater-wrapper + .repeater-wrapper': {
+        marginTop: theme.spacing(12)
+    }
+}))
+
+const ChildTableRowAction = styled(Box)<BoxProps>(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: theme.spacing(2, 1),
+    borderLeft: `1px solid ${theme.palette.divider}`
+}))
 
 interface AddOrEditTableType {
     externalId: number
@@ -140,6 +176,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [addEditStructInfo2, setAaddEditStructInfo2] = useState(addEditStructInfo)
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
+    const [count, setCount] = useState<number>(1)
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -703,6 +740,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     }
     const handleRemoveAllFiles = () => {
         setUploadFiles([])
+    }
+    const deleteChildTableItem = (e: SyntheticEvent) => {
+        e.preventDefault()
+        e.target.closest('.repeater-wrapper').remove()
     }
 
     return (
@@ -2747,6 +2788,124 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             )
                         })}
 
+                        
+                        {addEditStructInfo2.childtable && addEditStructInfo2.childtable.allFields && addEditStructInfo2.childtable.submittext ?
+                            <Card key={"ChildtableSection"} sx={{ mb: 2 }}>
+                                <RepeaterWrapper>
+                                    <Repeater count={count}>
+                                    {(i: number) => {
+                                        const Tag = i === 0 ? Box : Collapse
+
+                                        return (
+                                        <Tag key={i} className='repeater-wrapper' {...(i !== 0 ? { in: true } : {})}>
+                                            <Grid container>
+                                            <RepeatingContent item xs={12}>
+                                                <Grid container sx={{ py: 4, width: '100%', pr: { lg: 0, xs: 4 } }}>
+                                                    <Grid item md={5} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
+                                                        <Typography
+                                                        variant='body2'
+                                                        className='col-title'
+                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
+                                                        >
+                                                        Item
+                                                        </Typography>
+                                                        <Select fullWidth size='small' defaultValue='App Design'>
+                                                        <MenuItem value='App Design'>App Design</MenuItem>
+                                                        <MenuItem value='App Customization'>App Customization</MenuItem>
+                                                        <MenuItem value='ABC Template'>ABC Template</MenuItem>
+                                                        <MenuItem value='App Development'>App Development</MenuItem>
+                                                        </Select>
+                                                    </Grid>
+                                                    <Grid item md={3} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
+                                                        <Typography
+                                                        variant='body2'
+                                                        className='col-title'
+                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
+                                                        >
+                                                        Cost
+                                                        </Typography>
+                                                        <TextField
+                                                        size='small'
+                                                        type='number'
+                                                        placeholder='24'
+                                                        defaultValue='24'
+                                                        InputProps={{ inputProps: { min: 0 } }}
+                                                        />
+                                                        <Box sx={{ mt: 3.5 }}>
+                                                            <Typography component='span' variant='body2'>
+                                                                Discount:
+                                                            </Typography>{' '}
+                                                            <Typography component='span' variant='body2'>
+                                                                0%
+                                                            </Typography>
+                                                            <Tooltip title='Tax 1' placement='top'>
+                                                                <Typography component='span' variant='body2' sx={{ mx: 2 }}>
+                                                                0%
+                                                                </Typography>
+                                                            </Tooltip>
+                                                            <Tooltip title='Tax 2' placement='top'>
+                                                                <Typography component='span' variant='body2'>
+                                                                0%
+                                                                </Typography>
+                                                            </Tooltip>
+                                                        </Box>
+                                                    </Grid>
+                                                    <Grid item md={2} xs={12} sx={{ px: 4, my: { lg: 0, xs: 4 } }}>
+                                                        <Typography
+                                                        variant='body2'
+                                                        className='col-title'
+                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
+                                                        >
+                                                        Hours
+                                                        </Typography>
+                                                        <TextField
+                                                        size='small'
+                                                        type='number'
+                                                        placeholder='1'
+                                                        defaultValue='1'
+                                                        InputProps={{ inputProps: { min: 0 } }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item md={1} xs={12} sx={{ px: 4, my: { lg: 0 }, mt: 2 }}>
+                                                        <Typography
+                                                        variant='body2'
+                                                        className='col-title'
+                                                        sx={{ fontWeight: '600', mb: { md: 2, xs: 0 } }}
+                                                        >
+                                                        Price
+                                                        </Typography>
+                                                        <Typography>$24.00</Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <ChildTableRowAction>
+                                                <IconButton size='small' onClick={deleteChildTableItem}>
+                                                    <Icon icon='mdi:close' fontSize={20} />
+                                                </IconButton>
+                                                </ChildTableRowAction>
+                                            </RepeatingContent>
+                                            </Grid>
+                                        </Tag>
+                                        )
+                                    }}
+                                    </Repeater>
+
+                                    <Grid container sx={{ mt: 4 }}>
+                                    <Grid item xs={12} sx={{ px: 0 }}>
+                                        <Button
+                                        size='small'
+                                        variant='contained'
+                                        startIcon={<Icon icon='mdi:plus' fontSize={20} />}
+                                        onClick={() => setCount(count + 1)}
+                                        >
+                                        {addEditStructInfo2.childtable.submittext}
+                                        </Button>
+                                    </Grid>
+                                    </Grid>
+                                </RepeaterWrapper>
+                            </Card>
+                            : ''
+                        }
+
                         {((addEditStructInfo2.submittext && addEditStructInfo2.submittext) || (addEditStructInfo2.canceltext && addEditStructInfo2.canceltext)) != "" ?
                             <Grid item xs={12} sm={12} container justifyContent="space-around" sx={{ pt: 4 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -2783,6 +2942,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     </form>
                 )}
             </Grid>
+            
         </Fragment>
     )
 }

@@ -569,6 +569,11 @@ $MAP['ImportLoading']    					= 'Import Loading ...';
 $MAP['Relative_Child_Table']    			= 'Relative Child Table';
 $MAP['Relative_Child_Table_Field_Name']    	    = 'Child Table Field';
 $MAP['Relative_Child_Table_Parent_Field_Name']  = 'Parent Table Field';
+$MAP['NewItem']    							    = 'New Item';
+
+
+
+
 
 
 

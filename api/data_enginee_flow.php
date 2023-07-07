@@ -1787,8 +1787,8 @@ if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_
             }
         }
         $RS['add_default']['childtable']['allFields']        = $allFieldsAdd;
-        $RS['add_default']['childtable']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
         $RS['add_default']['childtable']['defaultValues']    = $defaultValuesAddChild;
+        $RS['add_default']['childtable']['submittext']       = __("NewItem");
         
         $allFieldsEdit   = getAllFields($ChildAllFieldsFromTable, $AllShowTypesArray, 'EDIT', true, $ChildSettingMap);
         foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
@@ -1805,8 +1805,8 @@ if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_
             }
         }
         $RS['edit_default']['childtable']['allFields']        = $allFieldsEdit;
-        $RS['edit_default']['childtable']['allFieldsMode']    = [['value'=>"Default", 'label'=>__("")]];
         $RS['edit_default']['childtable']['defaultValues']    = $defaultValuesEditChild;
+        $RS['edit_default']['childtable']['submittext']       = __("NewItem");
 
     }
 }
