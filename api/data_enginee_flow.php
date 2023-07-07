@@ -777,6 +777,57 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             if(function_exists($functionNameIndividual))  {
                 $functionNameIndividual($id);
             }
+            //Child Table Items Insert
+            //Relative Child Table Support
+            $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+            $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+            $Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+            if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+                $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+                $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+                $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+                $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+                $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+                    //Get All Fields
+                    $db->BeginTrans();
+                    $MultiSql                   = [];
+                    $sql                        = "delete from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name]."';";
+                    $db->Execute($sql);
+                    $MultiSql[]                 = $sql;
+                    $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
+                    $rs                         = $db->Execute($sql);
+                    $ChildAllFieldsFromTable    = $rs->GetArray();
+                    $ChildAllFieldsMap          = [];
+                    $ChildItemCounter           = $_POST['ChildItemCounter'];
+                    for($X=0;$X<$ChildItemCounter;$X++)                    {
+                        $ChildElement = [];
+                        foreach($ChildAllFieldsFromTable as $Item)  {
+                            $ChildFieldName = $Item['FieldName'];
+                            switch($Item['ShowType']) {
+                                case 'Hidden:Createtime':
+                                    $ChildElement[$ChildFieldName] = date('Y-m-d H:i:s');
+                                    break;
+                                case 'Hidden:CurrentUserIdAdd':
+                                case 'Hidden:CurrentUserIdAddEdit':
+                                    $ChildElement[$ChildFieldName] = $GLOBAL_USER->USER_ID;
+                                    break;
+                                default:
+                                    $ChildElement[$ChildFieldName] = ForSqlInjection($_POST['ChildTable____'.$X.'____'.$ChildFieldName]);
+                                    break;
+                            }                            
+                        }
+                        $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name];
+                        $ChildKeys      = array_keys($ChildElement);
+                        $ChildValues    = array_values($ChildElement);
+                        $sql            = "insert into $ChildTableName (".join(',',$ChildKeys).") values('".join("','",$ChildValues)."');";
+                        $db->Execute($sql);
+                        $MultiSql[]     = $sql;
+                    }
+                    $db->CommitTrans();
+                    $RS['MultiSql'] = $MultiSql;
+                }
+            }
             //SystemLogRecord
             if(in_array($SettingMap['OperationLogGrade'],["EditAndDeleteOperation","AddEditAndDeleteOperation","AllOperation"]))  {
                 $sql            = "select * from $TableName where ".$MetaColumnNames[0]." = '$id'";
@@ -823,7 +874,6 @@ if( $_GET['action']=="edit_default_configsetting_data" && $SettingMap['Init_Acti
     print json_encode($RS);
     exit;
 }
-
 
 if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Array))  ) && $_GET['id']!="")  {
     if($TableName=="data_user" && $SettingMap['Init_Action_Value']=="edit_default" && $SettingMap['Init_Action_FilterValue']=="email") {
@@ -896,6 +946,33 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
         $edit_default['titletext']      = "";
         $edit_default['titlememo']      = "";
         $edit_default['tablewidth']     = 650;
+    }
+    //Relative Child Table Support
+    $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+    $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+    $Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+    if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+        $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+        $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+        $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+        $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+        $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+        if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+            //Get All Fields
+            $sql        = "select * from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$data[$Relative_Child_Table_Parent_Field_Name]."';";
+            $rs         = $db->Execute($sql);
+            $rs_a       = $rs->GetArray();
+            $RS['childtable']['sql']    = $sql;
+            $RS['childtable']['data']   = $rs_a;
+            $RS['childtable']['ChildItemCounter'] = sizeof($rs_a);
+            for($X=0;$X<sizeof($rs_a);$X++) {
+                $Line = $rs_a[$X];
+                foreach($Line AS $LineKey=>$LineValue) {
+                    $data['ChildTable____'.$X.'____'.$LineKey] = $LineValue;
+                }
+            }
+            $RS['data']  = $data;
+        }
     }
     $RS['edit_default'] = $edit_default;
     print json_encode($RS);

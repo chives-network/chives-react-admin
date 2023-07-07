@@ -177,6 +177,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
     const [childItemCounter, setChildItemCounter] = useState<number>(1)
+    const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -262,6 +263,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             if(res.data.forceuse) {
                                 setAaddEditStructInfo2(res.data.edit_default)
                                 setAllFields(res.data.edit_default.allFields)
+                            }
+                            console.log(res.data.childtable, res.data.childtable.ChildItemCounter)
+                            if(res.data.childtable && res.data.childtable.ChildItemCounter) {
+                                setChildItemCounter(res.data.childtable.ChildItemCounter)
+                                setChildItemRecords(res.data.childtable.data)
                             }
                         }
                         
