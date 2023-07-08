@@ -172,6 +172,8 @@ $RS['edit_default']['canceltext']    = __("Cancel");
 $RS['edit_default']['titletext']    = __("Change Your Password");
 $RS['edit_default']['titlememo']    = __("Minimum 6 characters long - the more, the better");
 $RS['edit_default']['tablewidth']   = 550;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 $RS['export_default'] = [];
 $RS['import_default'] = [];

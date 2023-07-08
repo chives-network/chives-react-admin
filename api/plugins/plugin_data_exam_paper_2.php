@@ -45,9 +45,9 @@ function plugin_data_exam_paper_2_edit_default($id)  {
     global $TableName;
     //Here is your write code
 
-    $edit_default_mode = [];
-    $edit_default = [];
-    $defaultValues = [];
+    $edit_default_mode  = [];
+    $edit_default       = [];
+    $defaultValues      = [];
 
     $sql            = "SELECT * FROM `data_exam_paper` where id='$id'";
     $rs             = $db->CacheExecute(180,$sql);
@@ -57,8 +57,12 @@ function plugin_data_exam_paper_2_edit_default($id)  {
     $单选题目数量   = $试卷信息['单选题目数量'];
     $多选题目数量   = $试卷信息['多选题目数量'];
     $判断题目数量   = $试卷信息['判断题目数量'];
+    $试卷数据       = json_decode(base64_decode($试卷信息['试卷数据']),true);
     $题库抽取       = [];
     $题目序号列表 = [];
+    if($试题抽取方式=="所有学生共用一套试题"&&$单选题目数量>0)      {
+        print_R($试卷数据);
+    }
     if($试题抽取方式=="学生每次打开时随机抽取试题"&&$单选题目数量>0) {
         $sql        = "select * from data_exam_question where 题库分类='$题库分类' and 类型='单选'";
         $rs         = $db->Execute($sql);
@@ -140,6 +144,8 @@ function plugin_data_exam_paper_2_edit_default($id)  {
     $RS['edit_default']['titletext']     = "开始您的练习";
     $RS['edit_default']['titlememo']     = "不限制时间,每次随机出题";
     $RS['edit_default']['tablewidth']    = 650;
+    $RS['edit_default']['submitloading']    = __("SubmitLoading");
+    $RS['edit_default']['loading']          = __("Loading");
 
     $RS['status']   = "OK";
     $RS['msg']      = "获得数据成功";

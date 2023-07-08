@@ -276,7 +276,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     setIsLoading(false)
                 })
                 .catch(() => {
-                    console.log("axios.get editUrl return")
+                    setIsLoading(false)
+                    console.log("axios.get editUrl return ******************************************")
                 })
         }
         else if (action == "add_default" || action == "import_default") {
@@ -314,11 +315,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const defaultValues:{ [key:string]:any } = addEditStructInfo2.defaultValues;
     const componentsize = addEditStructInfo2.componentsize;
 
-    console.log("addEditStructInfo2",addEditStructInfo2)
-    console.log("allFieldsMode",allFieldsMode)
-    console.log("defaultValues",defaultValues)
-    console.log("defaultValuesNew",defaultValuesNew)
-    console.log("allFields",allFields)
+    //console.log("addEditStructInfo2",addEditStructInfo2)
+    //console.log("allFieldsMode",allFieldsMode)
+    //console.log("defaultValues",defaultValues)
+    //console.log("defaultValuesNew",defaultValuesNew)
+    //console.log("allFields",allFields)
     
     const chinaIdCardCheck = (value:string|undefined) => {
         if(value==undefined)  {
@@ -2843,6 +2844,86 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(2)
                                                                                             console.log("FieldArray.inputProps", defaultValuesNewTemp)
                                                                                         }
+                                                                                        else if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.1' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>1)  {
+                                                                                            defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(1)
+                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='1' && String(e.target.value).includes('.'))  {
+                                                                                            defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(0)
+                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else {
+                                                                                            defaultValuesNewTemp[NewFieldName] = e.target.value
+                                                                                        }
+                                                                                        setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        //Formula Method
+                                                                                        if(FieldArray.Formula && FieldArray.Formula.FormulaMethod && FieldArray.Formula.FormulaMethod!="" && FieldArray.Formula.FormulaMethod!="None" && FieldArray.Formula.FormulaMethodField && FieldArray.Formula.FormulaMethodField!="" && FieldArray.Formula.FormulaMethodTarget && FieldArray.Formula.FormulaMethodTarget!="") {
+                                                                                            const NewFormulaMethodField = "ChildTable____" + i + "____" + FieldArray.Formula.FormulaMethodField
+                                                                                            const NewFormulaMethodTarget = "ChildTable____" + i + "____" + FieldArray.Formula.FormulaMethodTarget
+                                                                                            if( defaultValuesNewTemp[NewFormulaMethodField] && defaultValuesNewTemp[NewFormulaMethodTarget]) {
+                                                                                                console.log("NewFormulaMethodField",NewFormulaMethodField)
+                                                                                                console.log("NewFormulaMethodTarget",NewFormulaMethodTarget)
+                                                                                                console.log("defaultValuesNewTemp",defaultValuesNewTemp)
+                                                                                                if(FieldArray.Formula.FormulaMethod=='*') {
+                                                                                                    const ThisInputValue: any = e.target.value
+                                                                                                    const NewValue = defaultValuesNewTemp[NewFormulaMethodField] * ThisInputValue
+                                                                                                    if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                                    }
+                                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                                }
+
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    placeholder={FieldArray.placeholder}
+                                                                                    error={Boolean(errors[NewFieldName])}
+                                                                                />
+                                                                            )}
+                                                                        />
+                                                                        {FieldArray.helptext && (
+                                                                            <FormHelperText>
+                                                                                {FieldArray.helptext}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {errors[NewFieldName] && (
+                                                                            <FormHelperText sx={{ color: 'error.main' }}>
+                                                                                {(errors[NewFieldName]?.message as string)??''}
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                    </FormControl>
+                                                                </Grid>
+                                                            )
+                                                        }
+                                                        else if (FieldArray.show && FieldArray.type == "readonly") {
+                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[NewFieldName] != undefined) {
+                                                                setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                            }
+                                                            
+                                                            return (
+                                                                <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"ChildAllFields_" + FieldArray_index} sx={{ml:1, mr:1}} >
+                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                        <Controller
+                                                                            name={NewFieldName}
+                                                                            control={control}
+                                                                            render={({ field: { value, onChange } }) => (
+                                                                                <TextField
+                                                                                    size='small'
+                                                                                    disabled={FieldArray.rules.disabled}
+                                                                                    value={value}
+                                                                                    label={FieldArray.label}
+                                                                                    type={FieldArray.type}
+                                                                                    InputProps={FieldArray.inputProps ? FieldArray.inputProps : {}}
+                                                                                    onChange={(e) => {
+                                                                                        onChange(e);
+                                                                                        const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                        if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.01' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>2)  {
+                                                                                            defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(2)
+                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
+                                                                                        }
                                                                                         else {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
                                                                                         }
@@ -2866,7 +2947,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     </FormControl>
                                                                 </Grid>
                                                             )
-                                                        }                                                         
+                                                        }
                                                         else if ((FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "autocomplete") {
                                                             const NewFieldCode = "ChildTable____" + i + "____" + FieldArray.code
                                                             if(NewFieldName!=NewFieldCode) {

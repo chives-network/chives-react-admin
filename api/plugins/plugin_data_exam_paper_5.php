@@ -1,8 +1,8 @@
 <?php
 
-//FlowName: 开始考试
+//FlowName: 我的考试
 
-function plugin_data_exam_paper_3_init_default()  {
+function plugin_data_exam_paper_5_init_default()  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -11,7 +11,7 @@ function plugin_data_exam_paper_3_init_default()  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_add_default_data_before_submit()  {
+function plugin_data_exam_paper_5_add_default_data_before_submit()  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -20,7 +20,7 @@ function plugin_data_exam_paper_3_add_default_data_before_submit()  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_add_default_data_after_submit($id)  {
+function plugin_data_exam_paper_5_add_default_data_after_submit($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -37,7 +37,7 @@ function plugin_data_exam_paper_3_add_default_data_after_submit($id)  {
     */
 }
 
-function plugin_data_exam_paper_3_edit_default($id)  {
+function plugin_data_exam_paper_5_edit_default($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -45,9 +45,10 @@ function plugin_data_exam_paper_3_edit_default($id)  {
     global $TableName;
     //Here is your write code
 
-    $edit_default_mode = [];
-    $edit_default = [];
-    $defaultValues = [];
+    $edit_default_mode  = [];
+    $edit_default       = [];
+    $defaultValues      = [];
+
 
     $sql            = "SELECT * FROM `data_exam_paper` where id='$id'";
     $rs             = $db->CacheExecute(180,$sql);
@@ -57,37 +58,69 @@ function plugin_data_exam_paper_3_edit_default($id)  {
     $单选题目数量   = $试卷信息['单选题目数量'];
     $多选题目数量   = $试卷信息['多选题目数量'];
     $判断题目数量   = $试卷信息['判断题目数量'];
+    $考试名称       = $试卷信息['考试名称'];
+    
+    //判断是否已经有考试记录
+    $学号           = $GLOBAL_USER->学号;
+    $sql            = "select COUNT(*) AS NUM from data_exam_question_record where 学号='$学号' and 考试名称='$考试名称'";
+    $rs             = $db->CacheExecute(180,$sql);
+    $NUM            = $rs->fields['NUM'];
+    if($NUM>0)   {
+        $RS['edit_default']['allFields']      = [];
+        $RS['edit_default']['allFieldsMode']  = [];
+        $RS['edit_default']['defaultValues']  = [];
+        $RS['edit_default']['dialogContentHeight']  = "850px";
+        $RS['edit_default']['submitaction']  = "edit_default_data";
+        $RS['edit_default']['componentsize'] = "small";
+        $RS['edit_default']['submittext']    = "";
+        $RS['edit_default']['canceltext']    = __("Cancel");
+        $RS['edit_default']['titletext']     = $考试名称;
+        $RS['edit_default']['titlememo']     = "您已经参加过本次考试,不需要再次考试.";
+        $RS['edit_default']['tablewidth']    = 650;
+        $RS['edit_default']['submitloading']    = __("SubmitLoading");
+        $RS['edit_default']['loading']          = __("Loading");
+
+        $RS['status']   = "OK";
+        $RS['msg']      = "获得数据成功";
+        $RS['forceuse'] = true; //强制使用当前结构数据来渲染表单
+        $RS['data']     = $defaultValues;
+        $RS['EnableFields']     = [];
+        print_R(json_encode($RS, true));
+        exit;
+    }
+
+    $试卷数据       = json_decode(base64_decode($试卷信息['试卷数据']),true);
     $题库抽取       = [];
-    $题目序号列表 = [];
-    if($试题抽取方式=="学生每次打开时随机抽取试题"&&$单选题目数量>0) {
-        $sql        = "select * from data_exam_question where 题库分类='$题库分类' and 类型='单选'";
+    $题目序号列表   = [];
+    if($试题抽取方式=="所有学生共用一套试题"&&$单选题目数量>0) {
+        $sql        = "select * from data_exam_question where id in ('".join("','",$试卷数据['单选'])."')";
         $rs         = $db->Execute($sql);
         $rs_a       = $rs->GetArray();
         $NUM        = sizeof($rs_a);
-        for($i=0;$i<$单选题目数量;$i++) {
-            $Item = $rs_a[rand(0,$NUM-1)];
+        for($i=0;$i<sizeof($rs_a);$i++) {
+            $Item = $rs_a[$i];
             $题库抽取['单选'][] = $Item;
             $题目序号列表[] = $Item['id'];
         }
     }
-    if($试题抽取方式=="学生每次打开时随机抽取试题"&&$多选题目数量>0) {
-        $sql        = "select * from data_exam_question where 题库分类='$题库分类' and 类型='多选'";
+    if($试题抽取方式=="所有学生共用一套试题"&&$多选题目数量>0) {
+        $sql        = "select * from data_exam_question where id in ('".join("','",$试卷数据['多选'])."')";
         $rs         = $db->Execute($sql);
         $rs_a       = $rs->GetArray();
         $NUM        = sizeof($rs_a);
-        for($i=0;$i<$多选题目数量;$i++) {
-            $Item = $rs_a[rand(0,$NUM-1)];
+        for($i=0;$i<sizeof($rs_a);$i++) {
+            $Item = $rs_a[$i];
             $题库抽取['多选'][] = $Item;
             $题目序号列表[] = $Item['id'];
         }
     }
-    if($试题抽取方式=="学生每次打开时随机抽取试题"&&$判断题目数量>0) {
-        $sql        = "select * from data_exam_question where 题库分类='$题库分类' and 类型='判断'";
+    if($试题抽取方式=="所有学生共用一套试题"&&$判断题目数量>0) {
+        $sql        = "select * from data_exam_question where id in ('".join("','",$试卷数据['判断'])."')";
         $rs         = $db->Execute($sql);
         $rs_a       = $rs->GetArray();
         $NUM        = sizeof($rs_a);
-        for($i=0;$i<$判断题目数量;$i++) {
-            $Item = $rs_a[rand(0,$NUM-1)];
+        for($i=0;$i<sizeof($rs_a);$i++) {
+            $Item = $rs_a[$i];
             $题库抽取['判断'][] = $Item;
             $题目序号列表[] = $Item['id'];
         }
@@ -137,7 +170,7 @@ function plugin_data_exam_paper_3_edit_default($id)  {
     $RS['edit_default']['componentsize'] = "small";
     $RS['edit_default']['submittext']    = __("Submit");
     $RS['edit_default']['canceltext']    = __("Cancel");
-    $RS['edit_default']['titletext']     = "开始您的练习";
+    $RS['edit_default']['titletext']     = "开始您的考试";
     $RS['edit_default']['titlememo']     = "不限制时间,每次随机出题";
     $RS['edit_default']['tablewidth']    = 650;
     $RS['edit_default']['submitloading']    = __("SubmitLoading");
@@ -153,7 +186,7 @@ function plugin_data_exam_paper_3_edit_default($id)  {
     exit;
 }
 
-function plugin_data_exam_paper_3_edit_default_data_before_submit($id)  {
+function plugin_data_exam_paper_5_edit_default_data_before_submit($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -209,8 +242,8 @@ function plugin_data_exam_paper_3_edit_default_data_before_submit($id)  {
                     $用户答题_错误 ++;
                 }
                 $Element['学号']        = $GLOBAL_USER->学号;
+                $Element['姓名']        = $GLOBAL_USER->姓名;
                 $Element['班级']        = $GLOBAL_USER->班级;
-                $Element['姓名']        = $GLOBAL_USER->USER_NAME;
                 $Element['时间']        = date("Y-m-d H:i:s");
                 [$Record,$sql]  = InsertOrUpdateTableByArray("data_exam_question_record", $Element, '题目ID,学号,时间', 0, "Insert");
                 if($Record->EOF) {
@@ -221,14 +254,14 @@ function plugin_data_exam_paper_3_edit_default_data_before_submit($id)  {
 
     $RS = [];
     $RS['status']   = "OK";
-    $RS['msg']      = "您已经完成本次题目,正确:".$用户答题_正确." 错误:".$用户答题_错误." 得分:".$用户答题_得分."";
+    $RS['msg']      = "您已经完成本次考试,正确:".$用户答题_正确." 错误:".$用户答题_错误." 得分:".$用户答题_得分."";
     $RS['_GET']     = $_GET;
     $RS['_POST']    = $_POST;
     print json_encode($RS);
     exit;
 }
 
-function plugin_data_exam_paper_3_edit_default_data_after_submit($id)  {
+function plugin_data_exam_paper_5_edit_default_data_after_submit($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -237,7 +270,7 @@ function plugin_data_exam_paper_3_edit_default_data_after_submit($id)  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_view_default($id)  {
+function plugin_data_exam_paper_5_view_default($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -246,7 +279,7 @@ function plugin_data_exam_paper_3_view_default($id)  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_delete_array($id)  {
+function plugin_data_exam_paper_5_delete_array($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -255,7 +288,7 @@ function plugin_data_exam_paper_3_delete_array($id)  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_updateone($id)  {
+function plugin_data_exam_paper_5_updateone($id)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -264,7 +297,7 @@ function plugin_data_exam_paper_3_updateone($id)  {
     //Here is your write code
 }
 
-function plugin_data_exam_paper_3_import_default_data_before_submit($Element)  {
+function plugin_data_exam_paper_5_import_default_data_before_submit($Element)  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;
@@ -274,7 +307,7 @@ function plugin_data_exam_paper_3_import_default_data_before_submit($Element)  {
     return $Element;
 }
 
-function plugin_data_exam_paper_3_import_default_data_after_submit()  {
+function plugin_data_exam_paper_5_import_default_data_after_submit()  {
     global $db;
     global $SettingMap;
     global $MetaColumnNames;

@@ -1309,6 +1309,8 @@ $RS['edit_default_4']['canceltext']    = __("Cancel");
 $RS['edit_default_4']['titletext']  = __("Design Form Bottom Button");
 $RS['edit_default_4']['titlememo']  = __("Manage All Bottom Button Related Attributes in Flow");
 $RS['edit_default_4']['tablewidth']  = 650;
+$RS['add_default']['submitloading'] = __("SubmitLoading");
+$RS['add_default']['loading']       = __("Loading");
 
 $RS['edit_default'] = $RS['add_default'];
 $RS['edit_default']['allFields']  = $allFieldsEdit;
@@ -1323,6 +1325,8 @@ $RS['edit_default']['canceltext']    = __("Cancel");
 $RS['edit_default']['titletext']  = __("Edit Form");
 $RS['edit_default']['titlememo']  = __("Manage All Form Fields in Table");
 $RS['edit_default']['tablewidth']  = 650;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 
 $RS['view_default'] = $RS['add_default'];

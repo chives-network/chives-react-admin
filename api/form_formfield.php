@@ -52,8 +52,17 @@ $allFieldsAdd[] = ['name' => 'FieldDefault', 'show'=>true, 'type'=>'input', 'lab
 
 $allFieldsAdd[] = ['name' => 'NewDict', 'show'=>false, 'type'=>'input', 'label' => __('NewDict'), 'value' => '', 'placeholder' => __('Create New Dict Type From Here, use comma to split'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false,'min'=>0,'max'=>999]];
 
-$allFieldsAdd[] = ['name' => 'Max', 'show'=>false, 'type'=>'number', 'label' => __('Max'), 'value' => '', 'placeholder' => __('Maximum input'), 'helptext' => __('Value length maximum, or leave it blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false,'min'=>0,'max'=>4]];
-$allFieldsAdd[] = ['name' => 'Min', 'show'=>false, 'type'=>'number', 'label' => __('Min'), 'value' => '', 'placeholder' => __('Minimum input'), 'helptext' => __('Value length maximum, or leave it blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false,'min'=>0,'max'=>4]];
+$allFieldsAdd[] = ['name' => 'Min', 'show'=>false, 'type'=>'number', 'label' => __('Min'), 'value' => '', 'placeholder' => __('Minimum input'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>2, 'disabled' => false,'min'=>0,'max'=>4]];
+$allFieldsAdd[] = ['name' => 'Max', 'show'=>false, 'type'=>'number', 'label' => __('Max'), 'value' => '', 'placeholder' => __('Maximum input'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>2, 'disabled' => false,'min'=>0,'max'=>4]];
+$FormulaMethod = [];
+$FormulaMethod[] = ['value'=>'None', 'label'=>__('None')];
+$FormulaMethod[] = ['value'=>'+', 'label'=>'+'];
+$FormulaMethod[] = ['value'=>'-', 'label'=>'-'];
+$FormulaMethod[] = ['value'=>'*', 'label'=>'*'];
+$FormulaMethod[] = ['value'=>'/', 'label'=>'/'];
+$allFieldsAdd[] = ['name' => 'FormulaMethod', 'show'=>false, 'type'=>'select', 'options'=>$FormulaMethod, 'label' => __('FormulaMethod'), 'value' => $FormulaMethod[0]['value'], 'placeholder' => __(''), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>2,'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'FormulaMethodField', 'show'=>false, 'type'=>'input', 'label' => __('FormulaMethodField'), 'value' => '', 'placeholder' => __('FormulaMethodField'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>3, 'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'FormulaMethodTarget', 'show'=>false, 'type'=>'input', 'label' => __('FormulaMethodTarget'), 'value' => '', 'placeholder' => __('FormulaMethodTarget'), 'helptext' => __(''), 'rules' => ['required' => false,'xs'=>12, 'sm'=>3, 'disabled' => false]];
 
 $allFieldsAdd[] = ['name' => 'StartDate', 'show'=>false, 'type'=>'date', 'label' => __('Start Date'), 'value' => '', 'placeholder' => __('Start Date'), 'helptext' => __('Start Date'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'EndDate', 'show'=>false, 'type'=>'date', 'label' => __('End Date'), 'value' => '', 'placeholder' => __('End Date'), 'helptext' => __('End Date'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
@@ -173,7 +182,7 @@ if( ($_GET['action']=="add_default_data") && $_POST['FieldName']!="" && $externa
         $FieldsArray['Placeholder']     = $_POST['Placeholder'];
         $FieldsArray['Helptext']        = $_POST['Helptext'];
         $FieldsArray['ColumnWidth']     = $_POST['ColumnWidth'];
-        $FieldsArray['Setting']         = json_encode($_POST);
+        $FieldsArray['Setting']         = json_encode($_POST, JSON_UNESCAPED_UNICODE);
         if(!in_array($FieldsArray['FieldName'], $MetaColumnNames)) {
             if(substr($FieldsArray['FieldType'],0,3)=="int")   {
                 $FieldsArray['FieldDefault'] = intval($FieldsArray['FieldDefault']);
@@ -255,7 +264,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     $FieldsArray['Placeholder']     = $_POST['Placeholder'];
     $FieldsArray['Helptext']        = $_POST['Helptext'];
     $FieldsArray['ColumnWidth']     = $_POST['ColumnWidth'];
-    $FieldsArray['Setting']         = json_encode($_POST);
+    $FieldsArray['Setting']         = json_encode($_POST, JSON_UNESCAPED_UNICODE);
 
     //处理额外数据字典同步生成的功能
     if($FieldsArray['ShowType']=="NewDict"&&$_POST['NewDict']!="")     {
@@ -599,6 +608,8 @@ $RS['add_default']['canceltext']    = __("Cancel");
 $RS['add_default']['titletext']  = __("Create Form");
 $RS['add_default']['titlememo']  = __("Manage All Form Fields in Table");
 $RS['add_default']['tablewidth']  = 650;
+$RS['add_default']['submitloading'] = __("SubmitLoading");
+$RS['add_default']['loading']       = __("Loading");
 
 $RS['edit_default'] = $RS['add_default'];
 
@@ -613,6 +624,8 @@ $RS['edit_default']['canceltext']    = __("Cancel");
 $RS['edit_default']['titletext']  = __("Edit Form");
 $RS['edit_default']['titlememo']  = __("Manage All Form Fields in Table");
 $RS['edit_default']['tablewidth']  = 650;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 
 $RS['view_default'] = $RS['add_default'];

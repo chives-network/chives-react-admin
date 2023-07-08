@@ -255,6 +255,8 @@ $RS['add_default']['canceltext']        = __("Cancel");
 $RS['add_default']['titletext']         = __("Create Field Show Type");
 $RS['add_default']['titlememo']         = __("It is only provided for developers to use, if you do not understand the meaning, please do not modify it.");
 $RS['add_default']['tablewidth']        = 550;
+$RS['add_default']['submitloading'] = __("SubmitLoading");
+$RS['add_default']['loading']       = __("Loading");
 
 $RS['edit_default'] = $RS['add_default'];
 $RS['edit_default']['allFields']['Default']        = $allFieldsEdit;
@@ -266,6 +268,8 @@ $RS['edit_default']['canceltext']       = __("Cancel");
 $RS['edit_default']['titletext']        = __("Edit Field Show Type");
 $RS['edit_default']['titlememo']        = __("It is only provided for developers to use, if you do not understand the meaning, please do not modify it.");
 $RS['edit_default']['tablewidth']       = 550;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 
 $RS['edit_default_1']['allFields']['Default']  = $allFieldsEdit;

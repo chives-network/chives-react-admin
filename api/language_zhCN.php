@@ -566,9 +566,9 @@ $MAP['Relative_Child_Table']    			= '关联子表';
 $MAP['Relative_Child_Table_Field_Name']    	= '子表字段';
 $MAP['Relative_Child_Table_Parent_Field_Name']  = '父表字段';
 $MAP['NewItem']    							= '新建一条记录';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
-$MAP['NULL']    							= '空值';
+$MAP['FormulaMethod']    					= '公式方法';
+$MAP['FormulaMethodField']    				= '计算字段';
+$MAP['FormulaMethodTarget']    				= '目标字段';
 
 
 

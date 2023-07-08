@@ -54,7 +54,6 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { filter, handleFilterChange, handleFilter, toggleAddTableDrawer, toggleImportTableDrawer, toggleExportTableDrawer, value, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, button_import, button_export, isAddButton, isImportButton, isExportButton, CSRF_TOKEN } = props
   const defaultValuesInitial = { "searchOneFieldName": searchFieldArray && searchFieldArray[0] && searchFieldArray[0].value ? searchFieldArray[0].value : undefined, "searchOneFieldValue": "", "multiReviewInputName": "" }
-  console.log("value tableHeader",value)
   
   //const [defaultValues, setDefaultValues] = useState(JSON.parse(JSON.stringify(defaultValuesInitial)))
   const defaultValues = JSON.parse(JSON.stringify(defaultValuesInitial))
@@ -79,8 +78,9 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   //console.log("defaultValues", defaultValues)
   //console.log("JSON.parse(JSON.stringify(filter))***********", JSON.parse(JSON.stringify(filter)))
   //console.log("filter", filter)
-  console.log("filter*******************************", filter)
-  console.log("searchFieldArray*******************************", searchFieldArray)
+  //console.log("filter*******************************", filter)
+  //console.log("searchFieldArray*******************************", searchFieldArray)
+  
   const {
     control,
     handleSubmit,

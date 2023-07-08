@@ -518,6 +518,8 @@ $RS['add_default']['submittext']    = __("Submit");
 $RS['add_default']['canceltext']    = __("Cancel");
 $RS['add_default']['titletext']   = __("Create Form");
 $RS['add_default']['tablewidth']  = 550;
+$RS['add_default']['submitloading'] = __("SubmitLoading");
+$RS['add_default']['loading']       = __("Loading");
 
 
 
@@ -532,6 +534,8 @@ $RS['edit_default']['canceltext']    = __("Cancel");
 $RS['edit_default']['titletext']    = __("Edit Form");
 $RS['edit_default']['titlememo']    = __("Manage All Forms in Table");
 $RS['edit_default']['tablewidth']  = 550;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 $allFieldsEdit1 = [];
 $allFieldsEdit1[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => __('Input new table name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];

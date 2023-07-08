@@ -315,6 +315,8 @@ $RS['add_default']['canceltext']    = __("Cancel");
 $RS['add_default']['titletext']     = __("Create Form");
 $RS['add_default']['titlememo']     = __("Manage All Form Fields in Table");
 $RS['add_default']['tablewidth']    = 650;
+$RS['add_default']['submitloading'] = __("SubmitLoading");
+$RS['add_default']['loading']       = __("Loading");
 
 $RS['edit_default'] = $RS['add_default'];
 
@@ -330,6 +332,8 @@ $RS['edit_default']['canceltext']    = __("Cancel");
 $RS['edit_default']['titletext']  = __("Edit Form");
 $RS['edit_default']['titlememo']  = __("Manage All Form Fields in Table");
 $RS['edit_default']['tablewidth']  = 650;
+$RS['edit_default']['submitloading']    = __("SubmitLoading");
+$RS['edit_default']['loading']          = __("Loading");
 
 
 $RS['view_default'] = $RS['add_default'];
