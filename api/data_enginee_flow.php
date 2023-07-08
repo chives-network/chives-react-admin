@@ -535,7 +535,7 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                 $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
                 $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
                 $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
-                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) &&strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')!==false) {
                     //Get All Fields
                     $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
                     $rs                         = $db->Execute($sql);
@@ -788,7 +788,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                 $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
                 $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
                 $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
-                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) &&strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')!==false) {
                     //Get All Fields
                     $db->BeginTrans();
                     $MultiSql                   = [];
@@ -1911,14 +1911,22 @@ if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_
         $RS['add_default']['childtable']['allFields']        = $allFieldsAdd;
         $RS['add_default']['childtable']['defaultValues']    = $defaultValuesAddChild;
         $RS['add_default']['childtable']['submittext']       = __("NewItem");
+        $RS['add_default']['childtable']['Add']                = strpos($ChildSettingMap['Actions_In_List_Header'],'Add')===false?false:true;
+        $RS['add_default']['childtable']['Edit']               = strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')===false?false:true;
+        $RS['add_default']['childtable']['Delete']             = strpos($ChildSettingMap['Actions_In_List_Row'],'Delete')===false?false:true;
         
         $allFieldsEdit   = getAllFields($ChildAllFieldsFromTable, $AllShowTypesArray, 'EDIT', true, $ChildSettingMap);
         foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
+            $allFieldItemIndex = 0;
             foreach($allFieldItem as $ITEM) {
                 $defaultValuesEditChild[$ITEM['name']] = $ITEM['value'];
                 if($ITEM['code']!="") {
                     $defaultValuesEditChild[$ITEM['code']] = $ITEM['value'];
                 }
+                if(strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')===false) {
+                    $allFieldsEdit[$ModeName][$allFieldItemIndex]['rules']['disabled'] = true;
+                }
+                $allFieldItemIndex ++;
             }
         }
         if(is_array($ChildSettingMap))   {
@@ -1926,10 +1934,12 @@ if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_
                 $defaultValuesEditChild[$ModeName] = $allFieldItem;
             }
         }
-        $RS['edit_default']['childtable']['allFields']        = $allFieldsEdit;
-        $RS['edit_default']['childtable']['defaultValues']    = $defaultValuesEditChild;
-        $RS['edit_default']['childtable']['submittext']       = __("NewItem");
-
+        $RS['edit_default']['childtable']['allFields']          = $allFieldsEdit;
+        $RS['edit_default']['childtable']['defaultValues']      = $defaultValuesEditChild;
+        $RS['edit_default']['childtable']['submittext']         = __("NewItem");
+        $RS['edit_default']['childtable']['Add']                = strpos($ChildSettingMap['Actions_In_List_Header'],'Add')===false?false:true;
+        $RS['edit_default']['childtable']['Edit']               = strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')===false?false:true;
+        $RS['edit_default']['childtable']['Delete']             = strpos($ChildSettingMap['Actions_In_List_Row'],'Delete')===false?false:true;
     }
 }
 
@@ -1943,7 +1953,7 @@ $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
     $RS['init_default']['sql']                              = $sql_list;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
 }

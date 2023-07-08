@@ -59,6 +59,8 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   const defaultValues = JSON.parse(JSON.stringify(defaultValuesInitial))
   const [filterSelectValue, setFilterSelectValue] = useState<any[]>([])
 
+  console.log("value", value)
+
   useEffect(() => {
     
     //Mousetrap.bind(['alt+f', 'command+f'], handleSubmit(onSubmit));

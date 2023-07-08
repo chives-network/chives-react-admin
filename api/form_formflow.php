@@ -989,6 +989,34 @@ if($_GET['action']=="edit_default_4"&&$id!='')         {
     exit;
 }
 
+if(($_GET['action']=="edit_default_6_data") && $id!="")     {
+    $sql        = "select * from form_formflow where id = '$id'";
+    $rs         = $db->Execute($sql);
+    $FieldsArray                = $rs->fields;
+    $FieldsArray['id']          = NULL;
+    $FieldsArray['FlowName']    = ForSqlInjection($_POST['FlowName']);
+    $FieldsArray['FaceTo']      = ForSqlInjection($_POST['FaceTo']);
+    $FieldsArray['Step']        += 1;
+    [$rs,$sql] = InsertOrUpdateTableByArray("form_formflow",$FieldsArray,'FormId,Step',0);
+    if($rs->EOF) {
+        $RS['status'] = "OK";
+        $RS['_POST'] = $_POST;
+        $RS['msg'] = __("Submit Success");
+        print json_encode($RS);
+        exit;  
+    }
+    else {
+        $RS = [];
+        $RS['status'] = "ERROR";
+        $RS['msg'] = __("sql execution failed");
+        $RS['sql'] = $sql;
+        $RS['_GET'] = $_GET;
+        $RS['_POST'] = $_POST;
+        print json_encode($RS);
+        exit;
+    }
+}
+
 if(($_GET['action']=="edit_default_1_data" || $_GET['action']=="edit_default_2_data" || $_GET['action']=="edit_default_3_data" || $_GET['action']=="edit_default_4_data") && $id!="")     {
     
     if($_POST['Menu_One']!=""&&$_POST['Menu_Two']!=""&&$id!="")   {
@@ -1151,8 +1179,9 @@ if($_GET['action']=="delete_array")  {
 
 $AddSql = " where 1=1 and FormId='$externalId'";
 
-$columnsactions = [];
+$columnsactions     = [];
 $columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
+$columnsactions[]   = ['action'=>'edit_default_6','text'=>__('Copy'),'mdi'=>'mdi:content-copy','double_check'=>'Do you want to copy this item?'];
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 //$columnName = "ShortName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
@@ -1302,22 +1331,22 @@ $RS['edit_default_4']['allFields']      = $edit_default_4;
 $RS['edit_default_4']['allFieldsMode']  = $edit_default_4_mode;
 $RS['edit_default_4']['defaultValues']  = $defaultValues_4;
 $RS['edit_default_4']['dialogContentHeight']  = "850px";
-$RS['edit_default_4']['submitaction']  = "edit_default_3_data";
+$RS['edit_default_4']['submitaction']  = "edit_default_4_data";
 $RS['edit_default_4']['componentsize'] = "small";
 $RS['edit_default_4']['submittext']    = __("Submit");
 $RS['edit_default_4']['canceltext']    = __("Cancel");
 $RS['edit_default_4']['titletext']  = __("Design Form Bottom Button");
 $RS['edit_default_4']['titlememo']  = __("Manage All Bottom Button Related Attributes in Flow");
 $RS['edit_default_4']['tablewidth']  = 650;
-$RS['add_default']['submitloading'] = __("SubmitLoading");
-$RS['add_default']['loading']       = __("Loading");
+$RS['edit_default_4']['submitloading'] = __("SubmitLoading");
+$RS['edit_default_4']['loading']       = __("Loading");
 
-$RS['edit_default'] = $RS['add_default'];
-$RS['edit_default']['allFields']  = $allFieldsEdit;
+$RS['edit_default']                 = $RS['add_default'];
+$RS['edit_default']['allFields']    = $allFieldsEdit;
 $RS['edit_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
 $RS['edit_default']['defaultValues']  = $defaultValues;
 $RS['edit_default']['dialogContentHeight']  = "850px";
-$RS['edit_default']['submitaction']  = "add_default_data";
+$RS['edit_default']['submitaction']  = "edit_default_data";
 $RS['edit_default']['componentsize'] = "small";
 $RS['edit_default']['componentsize'] = "small";
 $RS['edit_default']['submittext']    = __("Submit");
@@ -1328,6 +1357,17 @@ $RS['edit_default']['tablewidth']  = 650;
 $RS['edit_default']['submitloading']    = __("SubmitLoading");
 $RS['edit_default']['loading']          = __("Loading");
 
+$RS['edit_default_6']['allFields']      = $allFieldsAdd;
+$RS['edit_default_6']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
+$RS['edit_default_6']['defaultValues']  = $defaultValues;
+$RS['edit_default_6']['dialogContentHeight']  = "90%";
+$RS['edit_default_6']['submitaction']   = "edit_default_6_data";
+$RS['edit_default_6']['submittext']     = __("Submit");
+$RS['edit_default_6']['canceltext']     = __("Cancel");
+$RS['edit_default_6']['titletext']      = __("Copy Item");
+$RS['edit_default_6']['tablewidth']     = 550;
+$RS['edit_default_6']['submitloading']  = __("SubmitLoading");
+$RS['edit_default_6']['loading']        = __("Loading");
 
 $RS['view_default'] = $RS['add_default'];
 $RS['view_default']['titletext']  = __("View Form");

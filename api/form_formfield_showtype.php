@@ -161,7 +161,6 @@ $columnName = "VIEW";           $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "SortNumber";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "EnableFields";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 400, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL ];
 
-
 $RS['init_default']['button_search']    = __("Search");
 $RS['init_default']['button_add']       = __("Add");
 $RS['init_default']['columns']          = $init_default_columns;

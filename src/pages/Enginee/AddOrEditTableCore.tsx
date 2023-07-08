@@ -177,7 +177,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
     const [childItemCounter, setChildItemCounter] = useState<number>(1)
-    const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
+    
+    //const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -267,7 +268,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             console.log(res.data.childtable, res.data.childtable.ChildItemCounter)
                             if(res.data.childtable && res.data.childtable.ChildItemCounter) {
                                 setChildItemCounter(res.data.childtable.ChildItemCounter)
-                                setChildItemRecords(res.data.childtable.data)
+                                
+                                //setChildItemRecords(res.data.childtable.data)
                             }
                         }
                         
@@ -751,6 +753,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     }
     const deleteChildTableItem = (e: SyntheticEvent) => {
         e.preventDefault()
+
+        // @ts-ignore
         e.target.closest('.repeater-wrapper').remove()
     }
 
@@ -2856,6 +2860,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
                                                                                         }
                                                                                         setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        
                                                                                         //Formula Method
                                                                                         if(FieldArray.Formula && FieldArray.Formula.FormulaMethod && FieldArray.Formula.FormulaMethod!="" && FieldArray.Formula.FormulaMethod!="None" && FieldArray.Formula.FormulaMethodField && FieldArray.Formula.FormulaMethodField!="" && FieldArray.Formula.FormulaMethodTarget && FieldArray.Formula.FormulaMethodTarget!="") {
                                                                                             const NewFormulaMethodField = "ChildTable____" + i + "____" + FieldArray.Formula.FormulaMethodField
@@ -2984,6 +2989,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     size="small"
                                                                                     value={value}
                                                                                     options={options}
+                                                                                    disabled={FieldArray.rules.disabled}
                                                                                     freeSolo={FieldArray.freeSolo}
                                                                                     id="controllable-states-demo"
                                                                                     isOptionEqualToValue={(option:any, value) => { return option.value === value; }}
@@ -3044,30 +3050,34 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     })}
 
                                                 </Grid>
+                                                {addEditStructInfo2.childtable && addEditStructInfo2.childtable.Delete ?
                                                 <ChildTableRowAction>
-                                                <IconButton size='small' onClick={deleteChildTableItem}>
-                                                    <Icon icon='mdi:close' fontSize={20} />
-                                                </IconButton>
+                                                    <IconButton size='small' onClick={deleteChildTableItem}>
+                                                        <Icon icon='mdi:close' fontSize={20} />
+                                                    </IconButton>
                                                 </ChildTableRowAction>
+                                                :''}
                                             </RepeatingContent>
                                             </Grid>
                                         </Tag>
                                         )
                                     }}
                                     </Repeater>
-
+                                    
+                                    {addEditStructInfo2.childtable && addEditStructInfo2.childtable.Add ?
                                     <Grid container sx={{ mt: 4 }}>
-                                    <Grid item xs={12} sx={{ px: 0 }}>
-                                        <Button
-                                        size='small'
-                                        variant='contained'
-                                        startIcon={<Icon icon='mdi:plus' fontSize={20} />}
-                                        onClick={() => setChildItemCounter(childItemCounter + 1)}
-                                        >
-                                        {addEditStructInfo2.childtable.submittext}
-                                        </Button>
+                                        <Grid item xs={12} sx={{ px: 0 }}>
+                                            <Button
+                                            size='small'
+                                            variant='contained'
+                                            startIcon={<Icon icon='mdi:plus' fontSize={20} />}
+                                            onClick={() => setChildItemCounter(childItemCounter + 1)}
+                                            >
+                                            {addEditStructInfo2.childtable.submittext}
+                                            </Button>
+                                        </Grid>
                                     </Grid>
-                                    </Grid>
+                                    : ''}
                                 </RepeaterWrapper>
                             </Card>
                             : ''

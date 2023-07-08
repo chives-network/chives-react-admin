@@ -48,6 +48,7 @@ export const appUsersSlice = createSlice({
     edit_default_3: [],
     edit_default_4: [],
     edit_default_5: [],
+    edit_default_6: [],
     view_default: {defaultValues:{},allFields:[[]],allFieldsMode:[],titletext:'',titlememo:'',},
     view_default_1: [],
     view_default_2: [],
@@ -81,6 +82,7 @@ export const appUsersSlice = createSlice({
       state.edit_default_3 = action.payload.edit_default_3
       state.edit_default_4 = action.payload.edit_default_4
       state.edit_default_5 = action.payload.edit_default_5
+      state.edit_default_6 = action.payload.edit_default_6
       state.view_default_1 = action.payload.view_default_1
       state.view_default_2 = action.payload.view_default_2
       state.view_default_3 = action.payload.view_default_3
