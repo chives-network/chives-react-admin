@@ -177,6 +177,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [uploadFiles, setUploadFiles] = useState<File[] | FileUrl[]>([])
     const [uploadFileFieldName, setUploadFileFieldName] = useState<string>("")
     const [childItemCounter, setChildItemCounter] = useState<number>(1)
+    const [deleteChildTableItemArray, setDeleteChildTableItemArray] = useState<number[]>([])
+    
     
     //const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
     
@@ -482,6 +484,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
             });
         }
         formData.append('ChildItemCounter', String(childItemCounter));
+        formData.append('deleteChildTableItemArray', deleteChildTableItemArray.join(','));
+
+        
 
         const postUrl = authConfig.backEndApiHost + backEndApi + "?action=" + action + "_data&id=" + id + "&externalId=" + externalId
         fetch(
@@ -751,8 +756,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const handleRemoveAllFiles = () => {
         setUploadFiles([])
     }
-    const deleteChildTableItem = (e: SyntheticEvent) => {
+    const deleteChildTableItem = (e: SyntheticEvent, i: number) => {
         e.preventDefault()
+        setDeleteChildTableItemArray([...deleteChildTableItemArray, i])
 
         // @ts-ignore
         e.target.closest('.repeater-wrapper').remove()
@@ -2823,8 +2829,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     {addEditStructInfo2.childtable.allFields.Default.map((FieldArray: any, FieldArray_index: number) => {
                                                         const NewFieldName = "ChildTable____" + i + "____" + FieldArray.name
                                                         if (FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
-                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[NewFieldName] != undefined) {
+                                                            if (defaultValuesNew[NewFieldName] != undefined) {
                                                                 setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                            }
+                                                            else if (defaultValuesNew[NewFieldName] == undefined) {
+                                                                setValue(NewFieldName, "")
                                                             }
                                                             
                                                             return (
@@ -2865,7 +2874,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         if(FieldArray.Formula && FieldArray.Formula.FormulaMethod && FieldArray.Formula.FormulaMethod!="" && FieldArray.Formula.FormulaMethod!="None" && FieldArray.Formula.FormulaMethodField && FieldArray.Formula.FormulaMethodField!="" && FieldArray.Formula.FormulaMethodTarget && FieldArray.Formula.FormulaMethodTarget!="") {
                                                                                             const NewFormulaMethodField = "ChildTable____" + i + "____" + FieldArray.Formula.FormulaMethodField
                                                                                             const NewFormulaMethodTarget = "ChildTable____" + i + "____" + FieldArray.Formula.FormulaMethodTarget
-                                                                                            if( defaultValuesNewTemp[NewFormulaMethodField] && defaultValuesNewTemp[NewFormulaMethodTarget]) {
+                                                                                            console.log(defaultValuesNewTemp[NewFormulaMethodField])
+                                                                                            console.log(e.target.value)
+                                                                                            if( defaultValuesNewTemp[NewFormulaMethodField] && e.target.value) {
                                                                                                 console.log("NewFormulaMethodField",NewFormulaMethodField)
                                                                                                 console.log("NewFormulaMethodTarget",NewFormulaMethodTarget)
                                                                                                 console.log("defaultValuesNewTemp",defaultValuesNewTemp)
@@ -2878,6 +2889,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     else {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
                                                                                                     }
+                                                                                                    console.log("defaultValuesNewTemp",defaultValuesNewTemp)
                                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                                 }
 
@@ -2904,8 +2916,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             )
                                                         }
                                                         else if (FieldArray.show && FieldArray.type == "readonly") {
-                                                            if (action.indexOf("edit_default") != -1 && defaultValuesNew[NewFieldName] != undefined) {
+                                                            if (defaultValuesNew[NewFieldName] != undefined) {
                                                                 setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                            }
+                                                            else if (defaultValuesNew[NewFieldName] == undefined) {
+                                                                setValue(NewFieldName, "")
                                                             }
                                                             
                                                             return (
@@ -2927,7 +2942,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
                                                                                         if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.01' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>2)  {
                                                                                             defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(2)
-                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
                                                                                         }
                                                                                         else {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
@@ -3046,13 +3060,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 </Grid>
                                                             )
                                                         }
-                                                        
+
                                                     })}
 
                                                 </Grid>
                                                 {addEditStructInfo2.childtable && addEditStructInfo2.childtable.Delete ?
                                                 <ChildTableRowAction>
-                                                    <IconButton size='small' onClick={deleteChildTableItem}>
+                                                    <IconButton size='small' onClick={(event: SyntheticEvent)=>deleteChildTableItem(event, i)}>
                                                         <Icon icon='mdi:close' fontSize={20} />
                                                     </IconButton>
                                                 </ChildTableRowAction>

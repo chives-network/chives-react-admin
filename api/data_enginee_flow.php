@@ -524,7 +524,7 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                 global $GLOBAL_EXEC_KEY_SQL;
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
-            //Child Table Items Insert
+            
             //Relative Child Table Support
             $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
             $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
@@ -537,11 +537,16 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                 $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
                 if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) &&strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')!==false) {
                     //Get All Fields
+                    $db->BeginTrans();
+                    $MultiSql                   = [];
+                    $sql                        = "delete from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$FieldsArray[$Relative_Child_Table_Parent_Field_Name]."';";
+                    $db->Execute($sql);
+                    $MultiSql[]                 = $sql;
                     $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
                     $rs                         = $db->Execute($sql);
                     $ChildAllFieldsFromTable    = $rs->GetArray();
                     $ChildAllFieldsMap          = [];
-                    $ChildItemCounter               = $_POST['ChildItemCounter'];
+                    $ChildItemCounter           = $_POST['ChildItemCounter'];
                     for($X=0;$X<$ChildItemCounter;$X++)                    {
                         $ChildElement = [];
                         foreach($ChildAllFieldsFromTable as $Item)  {
@@ -559,14 +564,18 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                                     break;
                             }                            
                         }
-                        $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $FieldsArray[$Relative_Child_Table_Parent_Field_Name];
-                        //print_R($ChildElement);
-                        //print_R($FieldsArray[$Relative_Child_Table_Parent_Field_Name]);   
-                        [$Record,$sql]  = InsertOrUpdateTableByArray($ChildTableName, $ChildElement, 'id', 0, 'Insert');
-                        //print $sql."<BR>";
-                        if($Record->EOF) {
+                        $deleteChildTableItemArray = explode(',',$_POST['deleteChildTableItemArray']);
+                        if(!in_array($X, $deleteChildTableItemArray)) {
+                            $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $FieldsArray[$Relative_Child_Table_Parent_Field_Name];
+                            $ChildKeys      = array_keys($ChildElement);
+                            $ChildValues    = array_values($ChildElement);
+                            $sql            = "insert into $ChildTableName (".join(',',$ChildKeys).") values('".join("','",$ChildValues)."');";
+                            $db->Execute($sql);
+                            $MultiSql[]     = $sql;
                         }
                     }
+                    $db->CommitTrans();
+                    $RS['MultiSql'] = $MultiSql;
                 }
             }
             //functionNameIndividual
@@ -777,7 +786,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             if(function_exists($functionNameIndividual))  {
                 $functionNameIndividual($id);
             }
-            //Child Table Items Insert
+            
             //Relative Child Table Support
             $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
             $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
@@ -817,12 +826,15 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                                     break;
                             }                            
                         }
-                        $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name];
-                        $ChildKeys      = array_keys($ChildElement);
-                        $ChildValues    = array_values($ChildElement);
-                        $sql            = "insert into $ChildTableName (".join(',',$ChildKeys).") values('".join("','",$ChildValues)."');";
-                        $db->Execute($sql);
-                        $MultiSql[]     = $sql;
+                        $deleteChildTableItemArray = explode(',',$_POST['deleteChildTableItemArray']);
+                        if(!in_array($X, $deleteChildTableItemArray)) {
+                            $ChildElement[$Relative_Child_Table_Parent_Field_Name] = $RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name];
+                            $ChildKeys      = array_keys($ChildElement);
+                            $ChildValues    = array_values($ChildElement);
+                            $sql            = "insert into $ChildTableName (".join(',',$ChildKeys).") values('".join("','",$ChildValues)."');";
+                            $db->Execute($sql);
+                            $MultiSql[]     = $sql;
+                        }
                     }
                     $db->CommitTrans();
                     $RS['MultiSql'] = $MultiSql;
@@ -1175,8 +1187,32 @@ if($_GET['action']=="delete_array")  {
             if(in_array($SettingMap['OperationLogGrade'],["DeleteOperation","EditAndDeleteOperation","AddEditAndDeleteOperation","AllOperation"]))  {
                 SystemLogRecord("delete_array", '', json_encode($RecordOriginal->fields));
             }
-            $sql    = "delete from $TableName where $primary_key = '$id'";
+
+            $db->BeginTrans();
+            $MultiSql   = [];
+            $sql        = "delete from $TableName where $primary_key = '$id'";
             $db->Execute($sql);
+            $MultiSql[] = $sql;
+            //Relative Child Table Support
+            $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+            $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+            $Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+            if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+                $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+                $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+                $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+                $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+                $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+                if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) &&strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')!==false) {
+                    //Get All Fields
+                    
+                    $sql                    = "delete from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name]."';";
+                    $db->Execute($sql);
+                    $MultiSql[]             = $sql;
+                }
+            }
+            $db->CommitTrans();
+
             //functionNameIndividual
             $functionNameIndividual = "plugin_".$TableName."_".$Step."_delete_array";
             if(function_exists($functionNameIndividual))  {
@@ -1185,8 +1221,9 @@ if($_GET['action']=="delete_array")  {
         }
     }
     $RS = [];
-    $RS['status'] = "OK";
-    $RS['msg'] = __("Drop Item Success");
+    $RS['status']   = "OK";
+    $RS['MultiSql'] = $MultiSql;
+    $RS['msg']      = __("Drop Item Success");
     print json_encode($RS);
     exit;
 }
