@@ -102,7 +102,7 @@ const ViewTableCore = (props: ViewTableType) => {
           console.log("axios.get editUrl return")
         })
     }
-  }, [id, editViewCounter]) 
+  }, [id, editViewCounter])
   
   //Need refresh data every time.
 

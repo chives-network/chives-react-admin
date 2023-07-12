@@ -22,6 +22,7 @@ $子目录[] 	= "/src/pages/apps";
 $子目录[] 	= "/src/pages/dashboards";
 $子目录[] 	= "/src/views/dashboards/analytics";
 $子目录[] 	= "/src/views/charts/apex-charts";
+$子目录[] 	= "/src/views/pages/dialog-examples/create-app-tabs";
 
 $子目录[] 	= "/public/images/screenshot";
 

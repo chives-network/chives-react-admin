@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, SyntheticEvent, forwardRef } from 'react'
+import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, SyntheticEvent, forwardRef, ReactElement, Ref } from 'react'
 import { ElementType,MouseEventHandler } from 'react'
 
 // ** MUI Imports
@@ -36,19 +36,20 @@ import CardContent, { CardContentProps } from '@mui/material/CardContent'
 import Tooltip from "@mui/material/Tooltip"
 import TableContainer from '@mui/material/TableContainer'
 import Link from "@mui/material/Link"
-import Tab from '@mui/material/Tab'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TabContext from '@mui/lab/TabContext'
-import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import { useRouter } from 'next/router'
 import Fade, { FadeProps } from '@mui/material/Fade'
+
+//import Tab from '@mui/material/Tab'
+//import TabList from '@mui/lab/TabList'
 
 // ** Custom Component Imports
 import Repeater from 'src/@core/components/repeater'
@@ -104,9 +105,7 @@ import chinacity from 'src/types/forms/chinacity';
 import mdi from 'src/types/forms/mdi';
 
 // ** Tab Content Imports
-import DialogTabDetails from 'src/views/pages/dialog-examples/create-app-tabs/DialogTabDetails'
-
-import { useSettings } from 'src/@core/hooks/useSettings'
+import DialogFixedAssetClassification from 'src/views/pages/dialog-examples/create-app-tabs/DialogFixedAssetClassification'
 
 const RepeatingContent = styled(Grid)<GridProps>(({ theme }) => ({
     paddingRight: 0,
@@ -148,26 +147,6 @@ const Transition = forwardRef(function Transition(
   ) {
     return <Fade ref={ref} {...props} />
   })
-
-const TabLabel = (props: TabLabelProps) => {
-    const { icon, title, subtitle, active } = props
-  
-    return (
-      <div>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Box sx={{ textAlign: 'left' }}>
-            <Typography>{title}</Typography>
-            <Typography variant='caption' sx={{ textTransform: 'none' }}>
-              {subtitle}
-            </Typography>
-          </Box>
-        </Box>
-      </div>
-    )
-  }
-  
-const tabsArr = ['detailsTab', 'frameworkTab', 'DatabaseTab', 'paymentTab', 'submitTab']
-  
 
 interface AddOrEditTableType {
     externalId: number
@@ -218,11 +197,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [deleteChildTableItemArray, setDeleteChildTableItemArray] = useState<number[]>([])
     const [jumpWindowIsShow, setJumpWindowIsShow] = useState(addFilesOrDatesDefault)
 
-    const { settings } = useSettings()
-    const { direction } = settings
     const [activeTab, setActiveTab] = useState<string>('detailsTab')
-    const nextArrow = direction === 'ltr' ? 'mdi:arrow-right' : 'mdi:arrow-left'
-    const previousArrow = direction === 'ltr' ? 'mdi:arrow-left' : 'mdi:arrow-right'
 
     //const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
     
@@ -591,6 +566,12 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         //setDefaultValuesNew({})
         toggleAddTableDrawer()
         reset()
+    }
+
+    const handleDialogClose = (NewFieldName: string) => {
+        setJumpWindowIsShow({})
+        setActiveTab('detailsTab')
+        console.log("NewFieldName", NewFieldName)
     }
 
     const handleAvatorChange = (e: ChangeEvent) => {
@@ -3127,8 +3108,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 setValue(NewFieldCode, defaultValuesNew[NewFieldCode])
                                                             }
                                                             
-                                                            const options = FieldArray.options
-                                                            
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                                     <FormControl fullWidth sx={{ mb: 0 }}>
@@ -3150,22 +3129,22 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }}
-                                                                                        onSelect={(e) => {
+                                                                                        onSelect={() => {
                                                                                             const jumpWindowIsShowTemp:{[key:string]:any} = { ...jumpWindowIsShow }
                                                                                             jumpWindowIsShowTemp[NewFieldName] = true
                                                                                             setJumpWindowIsShow(jumpWindowIsShowTemp)
-                                                                                            console.log("jumpWindowIsShow", jumpWindowIsShow)
+                                                                                            console.log("jumpWindowIsShowTemp", jumpWindowIsShowTemp)
                                                                                         }}
                                                                                         placeholder={FieldArray.placeholder}
                                                                                         error={Boolean(errors[NewFieldName])}
                                                                                     />
                                                                                     <Dialog
                                                                                         fullWidth
-                                                                                        open={jumpWindowIsShow[NewFieldName]}
+                                                                                        open={jumpWindowIsShow[NewFieldName]==true?true:false}
                                                                                         scroll='body'
                                                                                         maxWidth='md'
-                                                                                        onClose={handleClose}
-                                                                                        onBackdropClick={handleClose}
+                                                                                        onClose={()=>handleDialogClose(NewFieldName)}
+                                                                                        onBackdropClick={()=>handleDialogClose(NewFieldName)}
                                                                                         TransitionComponent={Transition}
                                                                                     >
                                                                                         <DialogContent
@@ -3177,7 +3156,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             position: 'relative'
                                                                                         }}
                                                                                         >
-                                                                                        <IconButton size='small' onClick={handleClose} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+                                                                                        <IconButton size='small' onClick={()=>handleDialogClose(NewFieldName)} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
                                                                                             <Icon icon='mdi:close' />
                                                                                         </IconButton>
                                                                                         <Box sx={{ mb: 8, textAlign: 'center' }}>
@@ -3186,57 +3165,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         </Box>
                                                                                         <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
                                                                                             <TabContext value={activeTab}>
-                                                                                            <TabList
-                                                                                                orientation='vertical'
-                                                                                                onChange={(e, newValue: string) => setActiveTab(newValue)}
-                                                                                                sx={{
-                                                                                                border: 0,
-                                                                                                minWidth: 200,
-                                                                                                '& .MuiTabs-indicator': { display: 'none' },
-                                                                                                '& .MuiTabs-flexContainer': {
-                                                                                                    alignItems: 'flex-start',
-                                                                                                    '& .MuiTab-root': {
-                                                                                                    width: '100%',
-                                                                                                    alignItems: 'flex-start'
-                                                                                                    }
-                                                                                                }
-                                                                                                }}
-                                                                                            >
-                                                                                                <Tab
-                                                                                                disableRipple
-                                                                                                value='detailsTab'
-                                                                                                label={
-                                                                                                    <TabLabel
-                                                                                                    title='Details'
-                                                                                                    subtitle='Enter Details'
-                                                                                                    active={activeTab === 'detailsTab'}
-                                                                                                    icon={<Icon icon='mdi:file-document-outline' />}
-                                                                                                    />
-                                                                                                }
-                                                                                                />
-                                                                                            </TabList>
                                                                                             <TabPanel value='detailsTab' sx={{ flexGrow: 1 }}>
-                                                                                                <DialogTabDetails />
-                                                                                                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                                                                    <Button
-                                                                                                    variant='contained'
-                                                                                                    color={'success'}
-                                                                                                    onClick={() => {
-                                                                                                        handleClose()
-                                                                                                    }}
-                                                                                                    >
-                                                                                                    Close
-                                                                                                    </Button>
-                                                                                                    <Button
-                                                                                                    variant='contained'
-                                                                                                    color={'primary'}
-                                                                                                    onClick={() => {
-                                                                                                        handleClose()
-                                                                                                    }}
-                                                                                                    >
-                                                                                                    Submit
-                                                                                                    </Button>
-                                                                                                </Box>
+                                                                                                <DialogFixedAssetClassification />
                                                                                             </TabPanel>
                                                                                             </TabContext>
                                                                                         </Box>
