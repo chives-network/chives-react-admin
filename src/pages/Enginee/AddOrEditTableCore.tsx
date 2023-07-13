@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, SyntheticEvent, forwardRef, ReactElement, Ref } from 'react'
+import { useState, useEffect, MouseEvent, ChangeEvent, Fragment, SyntheticEvent, forwardRef, ReactElement, Ref, FocusEvent } from 'react'
 import { ElementType,MouseEventHandler } from 'react'
 
 // ** MUI Imports
@@ -568,10 +568,19 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         reset()
     }
 
-    const handleDialogClose = (NewFieldName: string) => {
+    const handleDialogWindowClose = () => {
         setJumpWindowIsShow({})
         setActiveTab('detailsTab')
-        console.log("NewFieldName", NewFieldName)
+    }
+
+    const handleDialogWindowCloseWithParam = (field: string, value: string, fieldCode: string, valueCode: string) => {
+        const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+        defaultValuesNewTemp[field] = value
+        defaultValuesNewTemp[fieldCode] = valueCode
+        setDefaultValuesNew(defaultValuesNewTemp)
+        setJumpWindowIsShow({})
+        setActiveTab('detailsTab')
+        console.log("defaultValuesNewTemp", defaultValuesNewTemp)
     }
 
     const handleAvatorChange = (e: ChangeEvent) => {
@@ -1317,6 +1326,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         }
                                                         if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]!=undefined)  {
                                                             setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                        }
+                                                        if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
+                                                            setValue(NewFieldName, "")
+                                                            setValue(NewFieldCode, "")
                                                         }
                                                     }
 
@@ -3006,6 +3019,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]!=undefined)  {
                                                                     setValue(NewFieldName, defaultValuesNew[NewFieldName])
                                                                 }
+                                                                if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
+                                                                    setValue(NewFieldName, "")
+                                                                    setValue(NewFieldCode, "")
+                                                                }
                                                             }
 
                                                             if(defaultValuesNew[NewFieldCode]==undefined)  {
@@ -3098,6 +3115,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 }
                                                                 if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]!=undefined)  {
                                                                     setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                                    console.log("NewFieldName", NewFieldName, defaultValuesNew[NewFieldName])
+                                                                }
+                                                                if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
+                                                                    setValue(NewFieldName, "")
+                                                                    setValue(NewFieldCode, "")
                                                                 }
                                                             }
 
@@ -3106,8 +3128,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             }
                                                             else {                                                        
                                                                 setValue(NewFieldCode, defaultValuesNew[NewFieldCode])
+                                                                console.log("NewFieldCode", NewFieldCode, defaultValuesNew[NewFieldCode])
                                                             }
-                                                            
+
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                                     <FormControl fullWidth sx={{ mb: 0 }}>
@@ -3129,11 +3152,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }}
-                                                                                        onSelect={() => {
+                                                                                        onSelect={(event: FocusEvent<HTMLInputElement>) => {
+                                                                                            event.target.blur();
                                                                                             const jumpWindowIsShowTemp:{[key:string]:any} = { ...jumpWindowIsShow }
                                                                                             jumpWindowIsShowTemp[NewFieldName] = true
                                                                                             setJumpWindowIsShow(jumpWindowIsShowTemp)
-                                                                                            console.log("jumpWindowIsShowTemp", jumpWindowIsShowTemp)
                                                                                         }}
                                                                                         placeholder={FieldArray.placeholder}
                                                                                         error={Boolean(errors[NewFieldName])}
@@ -3143,8 +3166,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         open={jumpWindowIsShow[NewFieldName]==true?true:false}
                                                                                         scroll='body'
                                                                                         maxWidth='md'
-                                                                                        onClose={()=>handleDialogClose(NewFieldName)}
-                                                                                        onBackdropClick={()=>handleDialogClose(NewFieldName)}
+                                                                                        onClose={()=>handleDialogWindowClose()}
+                                                                                        onBackdropClick={()=>handleDialogWindowClose()}
                                                                                         TransitionComponent={Transition}
                                                                                     >
                                                                                         <DialogContent
@@ -3156,7 +3179,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             position: 'relative'
                                                                                         }}
                                                                                         >
-                                                                                        <IconButton size='small' onClick={()=>handleDialogClose(NewFieldName)} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+                                                                                        <IconButton size='small' onClick={()=>handleDialogWindowClose()} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
                                                                                             <Icon icon='mdi:close' />
                                                                                         </IconButton>
                                                                                         <Box sx={{ mb: 8, textAlign: 'center' }}>
@@ -3166,7 +3189,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
                                                                                             <TabContext value={activeTab}>
                                                                                             <TabPanel value='detailsTab' sx={{ flexGrow: 1 }}>
-                                                                                                <DialogFixedAssetClassification />
+                                                                                                <DialogFixedAssetClassification handleDialogWindowCloseWithParam={handleDialogWindowCloseWithParam} NewFieldName={NewFieldName} NewFieldCode={NewFieldCode} />
                                                                                             </TabPanel>
                                                                                             </TabContext>
                                                                                         </Box>

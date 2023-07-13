@@ -996,6 +996,25 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 }
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max], 'MenuTwoArray'=>$MenuTwoArray2, 'MenuTwoCount'=>$MenuTwoCount, 'SelectAll'=>__("SelectAll") ];
                 break;
+            case 'jumpwindow':
+                //一次性同时赋值名称和代码
+                if($TableNameTemp=="data_student") {
+                    $FieldCodeName = str_replace("姓名","学号",$FieldName);
+                }
+                else if($TableNameTemp=="data_user"&&$KeyField=="1"&&$ValueField=="2") {
+                    $FieldCodeName = str_replace("姓名","用户名",$FieldName);
+                }
+                else if($TableNameTemp=="data_course"&&$KeyField=="1"&&$ValueField=="2") {
+                    $FieldCodeName = str_replace("名称","代码",$FieldName);
+                }
+                else    {
+                    $FieldCodeName = str_replace("名称","代码",$FieldName);
+                }
+                if($FieldCodeName==$FieldName) {
+                    $FieldName = $FieldName."_名称";
+                }
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
+                break;
             default:
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
                 break;
