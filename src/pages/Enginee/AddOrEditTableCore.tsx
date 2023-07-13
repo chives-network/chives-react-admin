@@ -105,7 +105,7 @@ import chinacity from 'src/types/forms/chinacity';
 import mdi from 'src/types/forms/mdi';
 
 // ** Tab Content Imports
-import DialogFixedAssetClassification from 'src/views/pages/dialog-examples/create-app-tabs/DialogFixedAssetClassification'
+import IndexJumpDialogWindow from 'src/pages/Enginee/IndexJumpDialogWindow'
 
 const RepeatingContent = styled(Grid)<GridProps>(({ theme }) => ({
     paddingRight: 0,
@@ -199,8 +199,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
     const [activeTab, setActiveTab] = useState<string>('detailsTab')
 
-    //const [childItemRecords, setChildItemRecords] = useState(addFilesOrDatesDefault)
-    
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
     ///console.log("AddtionalParams======================================",action)
@@ -1327,9 +1325,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         if(defaultValuesNew[FieldArray.code]!="" && defaultValuesNew[FieldArray.code]!=undefined && defaultValuesNew[FieldArray.name]!=undefined)  {
                                                             setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                         }
-                                                        if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
-                                                            setValue(NewFieldName, "")
-                                                            setValue(NewFieldCode, "")
+                                                        if(defaultValuesNew[FieldArray.name]==undefined && defaultValuesNew[FieldArray.code]==undefined)  {
+                                                            setValue(FieldArray.name, "")
+                                                            setValue(FieldArray.code, "")
                                                         }
                                                     }
 
@@ -2851,7 +2849,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             )
                         })}
 
-                        
                         {addEditStructInfo2.childtable && addEditStructInfo2.childtable.allFields && addEditStructInfo2.childtable.submittext ?
                             <Card key={"ChildtableSection"} sx={{ mb: 2 }}>
                                 <RepeaterWrapper>
@@ -2893,15 +2890,12 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
                                                                                         if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.01' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>2)  {
                                                                                             defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(2)
-                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
                                                                                         }
                                                                                         else if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='0.1' && String(e.target.value).split('.')[1] && String(e.target.value).split('.')[1].length>1)  {
                                                                                             defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(1)
-                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
                                                                                         }
                                                                                         else if(FieldArray.inputProps && FieldArray.inputProps.step && FieldArray.inputProps.step=='1' && String(e.target.value).includes('.'))  {
                                                                                             defaultValuesNewTemp[NewFieldName] = parseFloat(e.target.value).toFixed(0)
-                                                                                            console.log("FieldArray.inputProps", defaultValuesNewTemp)
                                                                                         }
                                                                                         else {
                                                                                             defaultValuesNewTemp[NewFieldName] = e.target.value
@@ -2927,7 +2921,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     else {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
                                                                                                     }
-                                                                                                    console.log("defaultValuesNewTemp",defaultValuesNewTemp)
                                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                                 }
 
@@ -3115,7 +3108,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 }
                                                                 if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]!=undefined)  {
                                                                     setValue(NewFieldName, defaultValuesNew[NewFieldName])
-                                                                    console.log("NewFieldName", NewFieldName, defaultValuesNew[NewFieldName])
                                                                 }
                                                                 if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
                                                                     setValue(NewFieldName, "")
@@ -3128,7 +3120,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             }
                                                             else {                                                        
                                                                 setValue(NewFieldCode, defaultValuesNew[NewFieldCode])
-                                                                console.log("NewFieldCode", NewFieldCode, defaultValuesNew[NewFieldCode])
                                                             }
 
                                                             return (
@@ -3183,13 +3174,13 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             <Icon icon='mdi:close' />
                                                                                         </IconButton>
                                                                                         <Box sx={{ mb: 8, textAlign: 'center' }}>
-                                                                                            <Typography variant='h5' sx={{ mb: 3 }}>固定资产分类查询</Typography>
-                                                                                            <Typography variant='body2'>通过左侧分类查询或是直接输入关键字查询.</Typography>
+                                                                                            <Typography variant='h5' sx={{ mb: 3 }}>{FieldArray.jumpWindowTitle}</Typography>
+                                                                                            <Typography variant='body2'>{FieldArray.jumpWindowSubTitle}.</Typography>
                                                                                         </Box>
                                                                                         <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
                                                                                             <TabContext value={activeTab}>
                                                                                             <TabPanel value='detailsTab' sx={{ flexGrow: 1 }}>
-                                                                                                <DialogFixedAssetClassification handleDialogWindowCloseWithParam={handleDialogWindowCloseWithParam} NewFieldName={NewFieldName} NewFieldCode={NewFieldCode} />
+                                                                                                <IndexJumpDialogWindow handleDialogWindowCloseWithParam={handleDialogWindowCloseWithParam} NewFieldName={NewFieldName} NewFieldCode={NewFieldCode} FieldArray={FieldArray} />
                                                                                             </TabPanel>
                                                                                             </TabContext>
                                                                                         </Box>

@@ -997,23 +997,53 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max], 'MenuTwoArray'=>$MenuTwoArray2, 'MenuTwoCount'=>$MenuTwoCount, 'SelectAll'=>__("SelectAll") ];
                 break;
             case 'jumpwindow':
+                if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                $TableNameTemp      = $CurrentFieldTypeArray[1];
+                $KeyField           = $CurrentFieldTypeArray[2];
+                $ValueField         = $CurrentFieldTypeArray[3];
+                $DefaultValue       = $CurrentFieldTypeArray[4];
+                $WhereField         = ForSqlInjection($CurrentFieldTypeArray[5]);
+                $WhereValue         = ForSqlInjection($CurrentFieldTypeArray[6]);
                 //一次性同时赋值名称和代码
                 if($TableNameTemp=="data_student") {
                     $FieldCodeName = str_replace("姓名","学号",$FieldName);
+                    $jumpWindowTitle            = "学生信息查询";
+                    $jumpWindowSubTitle         = "输入关键字查询";
+                    $jumpWindowSearchFiledText  = "学生姓名或学号";
+                    $jumpWindowSearchFiledPlaceholder   = "请输入关键字";
                 }
                 else if($TableNameTemp=="data_user"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("姓名","用户名",$FieldName);
+                    $jumpWindowTitle            = "用户信息查询";
+                    $jumpWindowSubTitle         = "输入关键字查询";
+                    $jumpWindowSearchFiledText  = "用户名或用户姓名";
+                    $jumpWindowSearchFiledPlaceholder   = "请输入关键字";
                 }
                 else if($TableNameTemp=="data_course"&&$KeyField=="1"&&$ValueField=="2") {
                     $FieldCodeName = str_replace("名称","代码",$FieldName);
+                    $jumpWindowTitle            = "课程信息查询";
+                    $jumpWindowSubTitle         = "输入关键字查询";
+                    $jumpWindowSearchFiledText  = "课程名称或代码";
+                    $jumpWindowSearchFiledPlaceholder   = "请输入关键字";
+                }
+                else if($TableNameTemp=="data_fixedasset_classification") {
+                    $FieldCodeName              = str_replace("名称","代码",$FieldName);
+                    $jumpWindowTitle            = "固定资产分类查询";
+                    $jumpWindowSubTitle         = "输入关键字查询";
+                    $jumpWindowSearchFiledText  = "固定资产分类";
+                    $jumpWindowSearchFiledPlaceholder   = "请输入关键字";
                 }
                 else    {
                     $FieldCodeName = str_replace("名称","代码",$FieldName);
+                    $jumpWindowTitle            = "查询";
+                    $jumpWindowSubTitle         = "输入关键字查询.";
+                    $jumpWindowSearchFiledText  = "分类";
+                    $jumpWindowSearchFiledPlaceholder   = "请输入关键字";
                 }
                 if($FieldCodeName==$FieldName) {
                     $FieldName = $FieldName."_名称";
                 }
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false],'jumpWindowTitle'=>$jumpWindowTitle,'jumpWindowSubTitle'=>$jumpWindowSubTitle,'jumpWindowSearchFiledText'=>$jumpWindowSearchFiledText,'jumpWindowSearchFiledPlaceholder'=>$jumpWindowSearchFiledPlaceholder,'TableNameTemp'=>$TableNameTemp];
                 break;
             default:
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
@@ -1182,12 +1212,24 @@ function option_multi_approval_exection($selectedRows, $multiReviewInputValue, $
     if(in_array($Change_Field_When_Batch_Approval_6,$MetaColumnNames))   {
         $updateSQL[] = " $Change_Field_When_Batch_Approval_6 = '".$Change_Into_Value_When_Batch_Approval_6."' ";
     }
+    $Change_Field_When_Batch_Approval_7         = $SettingMap['Change_Field_When_Batch_Approval_7'];
+    $Change_Into_Value_When_Batch_Approval_7    = $SettingMap['Change_Into_Value_When_Batch_Approval_7'];
+    if(in_array($Change_Field_When_Batch_Approval_7,$MetaColumnNames))   {
+        $updateSQL[] = " $Change_Field_When_Batch_Approval_7 = '".$Change_Into_Value_When_Batch_Approval_7."' ";
+    }
+    $Change_Field_When_Batch_Approval_8         = $SettingMap['Change_Field_When_Batch_Approval_8'];
+    $Change_Into_Value_When_Batch_Approval_8    = $SettingMap['Change_Into_Value_When_Batch_Approval_8'];
+    if(in_array($Change_Field_When_Batch_Approval_8,$MetaColumnNames))   {
+        $updateSQL[] = " $Change_Field_When_Batch_Approval_8 = '".$Change_Into_Value_When_Batch_Approval_8."' ";
+    }
     
     $sqlArray = [];
     if($selectedRows[0]!=""&&count($updateSQL)>0) {
         $RS             = [];
         foreach($selectedRows as $id) {
-            $id         = intval(DecryptID($id));
+            if(strlen($id)>30) {
+                $id         = intval(DecryptID($id));
+            }
             $sql        = "update $TableName set ".join(',',$updateSQL)." where $primary_key = '$id'";
             $db->Execute($sql);
             $sqlArray[] = $sql;
@@ -1199,7 +1241,7 @@ function option_multi_approval_exection($selectedRows, $multiReviewInputValue, $
             SystemLogRecord("option_multi_approval", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;
@@ -1283,7 +1325,9 @@ function option_multi_refuse_exection($selectedRows, $multiReviewInputValue, $Re
     if($selectedRows[0]!=""&&count($updateSQL)>0) {
         $RS             = [];
         foreach($selectedRows as $id) {
-            $id         = intval(DecryptID($id));
+            if(strlen($id)>30) {
+                $id         = intval(DecryptID($id));
+            }
             $sql        = "update $TableName set ".join(',',$updateSQL)." where $primary_key = '$id'";
             $db->Execute($sql);
             $sqlArray[] = $sql;
@@ -1373,12 +1417,24 @@ function option_multi_cancel_exection($selectedRows, $multiReviewInputValue, $Re
     if(in_array($Change_Field_When_Batch_Cancel_6,$MetaColumnNames))   {
         $updateSQL[] = " $Change_Field_When_Batch_Cancel_6 = '".$Change_Into_Value_When_Batch_Cancel_6."' ";
     }
+    $Change_Field_When_Batch_Cancel_7         = $SettingMap['Change_Field_When_Batch_Cancel_7'];
+    $Change_Into_Value_When_Batch_Cancel_7    = $SettingMap['Change_Into_Value_When_Batch_Cancel_7'];
+    if(in_array($Change_Field_When_Batch_Cancel_7,$MetaColumnNames))   {
+        $updateSQL[] = " $Change_Field_When_Batch_Cancel_7 = '".$Change_Into_Value_When_Batch_Cancel_7."' ";
+    }
+    $Change_Field_When_Batch_Cancel_8         = $SettingMap['Change_Field_When_Batch_Cancel_8'];
+    $Change_Into_Value_When_Batch_Cancel_8    = $SettingMap['Change_Into_Value_When_Batch_Cancel_8'];
+    if(in_array($Change_Field_When_Batch_Cancel_8,$MetaColumnNames))   {
+        $updateSQL[] = " $Change_Field_When_Batch_Cancel_8 = '".$Change_Into_Value_When_Batch_Cancel_8."' ";
+    }
     
     $sqlArray = [];
     if($selectedRows[0]!=""&&count($updateSQL)>0) {
         $RS             = [];
         foreach($selectedRows as $id) {
-            $id         = intval(DecryptID($id));
+            if(strlen($id)>30) {
+                $id         = intval(DecryptID($id));
+            }
             $sql        = "update $TableName set ".join(',',$updateSQL)." where $primary_key = '$id'";
             $db->Execute($sql);
             $sqlArray[] = $sql;
@@ -1390,7 +1446,7 @@ function option_multi_cancel_exection($selectedRows, $multiReviewInputValue, $Re
             SystemLogRecord("option_multi_cancel", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;

@@ -1110,6 +1110,86 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         }
     }
 
+    //Convert data to Table
+    $ApprovalNodeFieldsArray = explode(',',$SettingMap['ApprovalNodeFields']);
+    $ApprovalNodeFieldsHidden = [];
+    $ApprovalNodeFieldsStatus = [];
+    foreach($ApprovalNodeFieldsArray as $TempField) {
+        $ApprovalNodeFieldsHidden[] = $TempField."审核状态";
+        //$ApprovalNodeFieldsHidden[] = $TempField."申请时间";
+        //$ApprovalNodeFieldsHidden[] = $TempField."申请人";
+        $ApprovalNodeFieldsHidden[] = $TempField."审核时间";
+        $ApprovalNodeFieldsHidden[] = $TempField."审核人";
+        $ApprovalNodeFieldsHidden[] = $TempField."审核意见";
+        $ApprovalNodeFieldsStatus[$TempField."审核状态"] = $TempField."审核状态";
+    }
+    $ApprovalNodeFieldsStatus = array_keys($ApprovalNodeFieldsStatus);
+    $NewTableRowData = [];
+    $FieldNameArray = $allFieldsView['Default'];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X]['name'];
+        if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
+            $FieldName1 = $FieldNameArray[$X]['code'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1]['name'];
+        if($FieldNameArray[$X+1]['type']=="autocomplete" && $FieldNameArray[$X+1]['code']!="") {
+            $FieldName2 = $FieldNameArray[$X+1]['code'];
+        }
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']     = $FieldName1;
+            $RowData[0]['Value']    = $RS['data'][$FieldName1];
+            $RowData[0]['FieldArray']   = $FieldNameArray[$X];
+        }
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']     = $FieldName2;
+            $RowData[1]['Value']    = $RS['data'][$FieldName2];
+            $RowData[1]['FieldArray']   = $FieldNameArray[$X+1];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS['newTableRowData'] = $NewTableRowData;
+
+    //Relative Child Table Support
+    $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
+    $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
+    $Relative_Child_Table_Parent_Field_Name = $SettingMap['Relative_Child_Table_Parent_Field_Name'];
+    if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_array($Relative_Child_Table_Parent_Field_Name,$MetaColumnNames)) {
+        $ChildSettingMap = returntablefield("form_formflow",'id',$Relative_Child_Table,'Setting')['Setting'];
+        $ChildSettingMap = unserialize(base64_decode($ChildSettingMap));
+        $ChildFormId                = returntablefield("form_formflow",'id',$Relative_Child_Table,'FormId')['FormId'];
+        $ChildTableName             = returntablefield("form_formname",'id',$ChildFormId,'TableName')['TableName'];
+        $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
+        if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) ) {
+            //Get All Fields
+            $sql        = "select * from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$data[$Relative_Child_Table_Parent_Field_Name]."';";
+            $rs         = $db->Execute($sql);
+            $rs_a       = $rs->GetArray();
+            $RS['childtable']['sql']    = $sql;
+            $RS['childtable']['data']   = $rs_a;
+            $RS['childtable']['ChildItemCounter'] = sizeof($rs_a);
+
+            //Get All Fields
+            $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
+            $rs                         = $db->Execute($sql);
+            $ChildAllFieldsFromTable    = $rs->GetArray();
+            $allFieldsView   = getAllFields($ChildAllFieldsFromTable, $AllShowTypesArray, 'VIEW', true, $ChildSettingMap);
+            foreach($allFieldsView as $ModeName=>$allFieldItem) {
+                $allFieldItemIndex = 0;
+                foreach($allFieldItem as $ITEM) {
+                    //if(strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')===false) {
+                        //$allFieldsView[$ModeName][$allFieldItemIndex]['rules']['disabled'] = true;
+                    //}
+                    //$allFieldItemIndex ++;
+                }
+            }
+            $RS['childtable']['allFields']  = $allFieldsView;
+            
+        }
+    }
+
     print json_encode($RS);
     exit;  
 }
@@ -1907,7 +1987,7 @@ $RS['edit_default']['tablewidth']       = 650;
 $RS['edit_default']['submitloading']    = __("SubmitLoading");
 $RS['edit_default']['loading']          = __("Loading");
 
-$RS['view_default'] = $RS['add_default'];
+$RS['view_default']               = $RS['add_default'];
 $RS['view_default']['allFields']  = $allFieldsView;
 $RS['view_default']['titletext']  = $SettingMap['View_Title_Name'];
 $RS['view_default']['titlememo']  = $SettingMap['View_Subtitle_Name'];
@@ -1977,6 +2057,7 @@ if($Relative_Child_Table>0 && $Relative_Child_Table_Parent_Field_Name!="" && in_
         $RS['edit_default']['childtable']['Add']                = strpos($ChildSettingMap['Actions_In_List_Header'],'Add')===false?false:true;
         $RS['edit_default']['childtable']['Edit']               = strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')===false?false:true;
         $RS['edit_default']['childtable']['Delete']             = strpos($ChildSettingMap['Actions_In_List_Row'],'Delete')===false?false:true;
+
     }
 }
 
