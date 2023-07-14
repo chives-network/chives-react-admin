@@ -7,14 +7,15 @@ import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
+import TableHead from '@mui/material/TableHead'
 import { styled } from '@mui/material/styles'
 import TableCell, { TableCellBaseProps } from '@mui/material/TableCell'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import ListItem from '@mui/material/ListItem'
 import Link from "@mui/material/Link"
+import Button from '@mui/material/Button'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -31,6 +32,7 @@ import { useSelector } from 'react-redux'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 import { RootState } from 'src/store/index'
+import { Divider } from '@mui/material'
 
 const MUITableCell = styled(TableCell)<TableCellBaseProps>(({ theme }) => ({
   borderBottom: 0,
@@ -73,14 +75,14 @@ const ViewTableCore = (props: ViewTableType) => {
   // ** Hooks
   //const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.user)
-  const allFields = store.view_default.allFields;
-  const allFieldsMode = store.view_default.allFieldsMode;
   const titletext: string = store.view_default.titletext;
   const [defaultValuesView, setDefaultValuesView] = useState<{[key:string]:any}>({})
   const [childTable, setChildTable] = useState<{[key:string]:any}>({})
 
   const addFilesOrDatesDefault:{[key:string]:any}[][] = []
   const [newTableRowData, setNewTableRowData] = useState(addFilesOrDatesDefault)
+  const [approvalNodes, setApprovalNodes] = useState<{[key:string]:any}>({})
+  const [print, setPrint] = useState<{[key:string]:any}>({})
   
   useEffect(() => {
     Mousetrap.bind(['alt+c', 'command+c'], handleClose);
@@ -90,7 +92,8 @@ const ViewTableCore = (props: ViewTableType) => {
     }
   });
 
-  //console.log("view_default--------------------------------", id, action)
+  console.log("defaultValuesView--------------------------------", defaultValuesView)
+
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
   useEffect(() => {
@@ -105,6 +108,12 @@ const ViewTableCore = (props: ViewTableType) => {
             }
             if(res.data.newTableRowData) {
               setNewTableRowData(res.data.newTableRowData)
+            }
+            if(res.data.ApprovalNodes) {
+              setApprovalNodes(res.data.ApprovalNodes)
+            }
+            if(res.data.print) {
+              setPrint(res.data.print)
             }
           }
         })
@@ -130,7 +139,7 @@ const ViewTableCore = (props: ViewTableType) => {
         </Box>
         <Card key={"AllFieldsMode"}>
           <CardContent sx={{ px: { xs: 8, sm: 12 } }}>
-            <Grid container spacing={6} >
+            <Grid container spacing={6} sx={{pt: '10px'}}>
               <Table>
                 <TableBody>
                   {newTableRowData && newTableRowData.length>0 && newTableRowData.map((RowData: any, RowData_index: number) => {
@@ -139,6 +148,7 @@ const ViewTableCore = (props: ViewTableType) => {
                       <TableRow key={RowData_index}>
                         {RowData && RowData.map((CellData: any, FieldArray_index: number) => {
                           const FieldArray = CellData.FieldArray
+                          
                           //开始根据表单中每个字段的类型,进行不同的渲染,此部分比较复杂,注意代码改动.
                           if (FieldArray.type == "input"
                             || FieldArray.type == "email"
@@ -155,11 +165,11 @@ const ViewTableCore = (props: ViewTableType) => {
                             if (CellData.Value == "1971-01-01" || CellData.Value == "1971-01-01 00:00:00" || CellData.Value == "1971-01") {
                               CellData.Value = "";
                             }
-                            console.log("CellData.Value", CellData)
+                            
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }//end if
@@ -170,8 +180,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -179,8 +189,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -188,8 +198,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -197,8 +207,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -206,8 +216,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+CellData.Value])}>
                                   <ImgStyled src={authConfig.backEndApiHost+CellData.Value} alt={FieldArray.helptext} />
                                 </Box>
@@ -216,11 +226,13 @@ const ViewTableCore = (props: ViewTableType) => {
                             )
                           }
                           else if (FieldArray.type == "files" && CellData.Value != undefined) {
+                            
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>
                                   {CellData.Value && CellData.Value.length>0 && CellData.Value.map((FileUrl: any)=>{
+                                    
                                     return (
                                       <ListItem key={FileUrl['name']} style={{padding: "3px"}}>
                                       <div className='file-details' style={{display: "flex"}}>
@@ -255,8 +267,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }    
@@ -268,8 +280,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ minWidth: 140 }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }                      
@@ -277,8 +289,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell>{FieldArray.label}: {FieldArray.type} </MUITableCell>
-                                <MUITableCell>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{FieldArray.label}: {FieldArray.type} </MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -292,28 +304,79 @@ const ViewTableCore = (props: ViewTableType) => {
                 </TableBody>
               </Table>
 
+              {approvalNodes && approvalNodes.Nodes && approvalNodes.Fields ?
+                <Fragment>
+                <Divider />
+                  <Table>
+                    <TableHead>
+                      <TableRow key="ChildTableTableRow">
+                        {approvalNodes.Fields && approvalNodes.Fields.map((Item: any, ItemIndex: number) => {
+                          
+                          return <MUITableCell sx={{ width: '20%', whiteSpace: 'nowrap' }} key={ItemIndex}>{Item}</MUITableCell>
+                        })}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {approvalNodes.Nodes && approvalNodes.Nodes.map((Node: string, NodeIndex: number) => {
+                        const FieldTemp = `${Node}${approvalNodes.Fields[1]}`
+                        
+                        return (
+                          <Fragment key={NodeIndex}>
+                            {FieldTemp in defaultValuesView ?
+                              <TableRow>
+                                {approvalNodes.Fields && approvalNodes.Fields.map((Item: any, ItemIndex: number) => {
+                                  const FieldTemp = `${Node}${Item}`
 
-              {childTable && childTable.allFields && childTable.data ?
-                <Table>
-                  <TableBody>
-                    <TableRow key="ChildTableTableRow">
-                      {childTable.allFields && childTable.allFields.Default.map((Item: any, Index: number) => {
-                        return <MUITableCell>{Item.code? Item.code : Item.name}</MUITableCell>
+                                  return <MUITableCell key={ItemIndex}>{Item=="审核结点" ? Node : defaultValuesView[FieldTemp]}</MUITableCell>
+                                })}
+                              </TableRow>
+                              : '' }
+                          </Fragment>
+                        )
                       })}
-                    </TableRow>
-                    {childTable.data && childTable.data.map((RowItem: any, RowIndex: number) => {
-                      return (
-                        <TableRow key={RowIndex}>
-                          {childTable.allFields && childTable.allFields.Default.map((Item: any, Index: number) => {
-                            return <MUITableCell>{Item.type=="autocomplete" ? RowItem[Item.code? Item.code : Item.name] : RowItem[Item.name]}</MUITableCell>
-                          })}
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
+                    </TableBody>
+                  </Table>
+                </Fragment>
                 : ''
               }
+              
+              {childTable && childTable.allFields && childTable.data ?
+                <Fragment>
+                <Divider />
+                  <Table>
+                    <TableHead>
+                      <TableRow key="ChildTableTableRow">
+                        {childTable.allFields && childTable.allFields.Default.map((Item: any, Index: number) => {
+                          
+                          return <MUITableCell key={Index}>{Item.code? Item.code : Item.name}</MUITableCell>
+                        })}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {childTable.data && childTable.data.map((RowItem: any, RowIndex: number) => {
+                        
+                        return (
+                          <TableRow key={RowIndex}>
+                            {childTable.allFields && childTable.allFields.Default.map((Item: any, Index: number) => {
+                              
+                              return <MUITableCell key={Index}>{Item.type=="autocomplete" ? RowItem[Item.code? Item.code : Item.name] : RowItem[Item.name]}</MUITableCell>
+                            })}
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </Fragment>
+                : ''
+              }
+
+              {print && print.text ?
+                <Grid container justifyContent="flex-end">
+                    <Button onClick={()=>{window.print();}}  variant='contained' size="small">{print.text}</Button>
+                </Grid>
+                : ''
+              }    
+
             </Grid>
           </CardContent>
         </Card>

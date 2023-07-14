@@ -52,14 +52,12 @@ interface TableHeaderProps {
 const IndexTableHeader = (props: TableHeaderProps) => {
   
   // ** Props
-  const { filter, handleFilterChange, handleFilter, toggleAddTableDrawer, toggleImportTableDrawer, toggleExportTableDrawer, value, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, button_import, button_export, isAddButton, isImportButton, isExportButton, CSRF_TOKEN } = props
+  const { filter, handleFilterChange, handleFilter, toggleAddTableDrawer, toggleImportTableDrawer, toggleExportTableDrawer, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, button_import, button_export, isAddButton, isImportButton, isExportButton, CSRF_TOKEN } = props
   const defaultValuesInitial = { "searchOneFieldName": searchFieldArray && searchFieldArray[0] && searchFieldArray[0].value ? searchFieldArray[0].value : undefined, "searchOneFieldValue": "", "multiReviewInputName": "" }
   
   //const [defaultValues, setDefaultValues] = useState(JSON.parse(JSON.stringify(defaultValuesInitial)))
   const defaultValues = JSON.parse(JSON.stringify(defaultValuesInitial))
   const [filterSelectValue, setFilterSelectValue] = useState<any[]>([])
-
-  console.log("value", value)
 
   useEffect(() => {
     

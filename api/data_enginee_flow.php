@@ -129,7 +129,7 @@ foreach($allFieldsEdit as $ModeName=>$allFieldItem) {
 $allFieldsView  = getAllFields($AllFieldsFromTable, $AllShowTypesArray, 'VIEW', true, $SettingMap);
 foreach($allFieldsView as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
-        $defaultValuesEdit[$ITEM['name']] = $ITEM['value'];
+        $allFieldsView[$ITEM['name']] = $ITEM['value'];
     }
 }
 
@@ -1106,6 +1106,8 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
                     }
                     $RS['data'][$FieldName] = join(',',$MultiValueRS);
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -1124,8 +1126,8 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         $ApprovalNodeFieldsStatus[$TempField."审核状态"] = $TempField."审核状态";
     }
     $ApprovalNodeFieldsStatus = array_keys($ApprovalNodeFieldsStatus);
-    $NewTableRowData = [];
-    $FieldNameArray = $allFieldsView['Default'];
+    $NewTableRowData    = [];
+    $FieldNameArray     = $allFieldsView['Default'];
     for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
         $FieldName1 = $FieldNameArray[$X]['name'];
         if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
@@ -1150,7 +1152,11 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
             $NewTableRowData[] = $RowData;
         }
     }
-    $RS['newTableRowData'] = $NewTableRowData;
+    $RS['newTableRowData']          = $NewTableRowData;
+    $RS['ApprovalNodes']['Nodes']   = $ApprovalNodeFieldsArray;
+    $RS['ApprovalNodes']['Fields']  = ['审核结点','审核状态','审核时间','审核人','审核意见'];
+
+    $RS['print']['text']            = __("Print");
 
     //Relative Child Table Support
     $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];

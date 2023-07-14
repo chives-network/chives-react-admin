@@ -171,6 +171,8 @@ $MAP['Change_Field_When_Batch_Approval_3'] 	= '批量通过时修改字段3';
 $MAP['Change_Field_When_Batch_Approval_4'] 	= '批量通过时修改字段4';
 $MAP['Change_Field_When_Batch_Approval_5'] 	= '批量通过时修改字段5';
 $MAP['Change_Field_When_Batch_Approval_6'] 	= '批量通过时修改字段6';
+$MAP['Change_Field_When_Batch_Approval_7'] 	= '批量通过时修改字段7';
+$MAP['Change_Field_When_Batch_Approval_8'] 	= '批量通过时修改字段8';
 $MAP['Change_Into_Value'] 	                = '修改值为';
 $MAP['Batch_Refuse_Status_Field'] 	        = '批量拒绝状态字段';
 $MAP['Batch_Refuse_Status_Value'] 	        = '批量拒绝状态值';
@@ -569,6 +571,7 @@ $MAP['NewItem']    							= '新建一条记录';
 $MAP['FormulaMethod']    					= '公式方法';
 $MAP['FormulaMethodField']    				= '计算字段';
 $MAP['FormulaMethodTarget']    				= '目标字段';
+$MAP['Print']    				            = '打印';
 
 
 

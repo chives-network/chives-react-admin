@@ -173,6 +173,8 @@ $MAP['Change_Field_When_Batch_Approval_3'] 	= 'Change field when batch approval 
 $MAP['Change_Field_When_Batch_Approval_4'] 	= 'Change field when batch approval 4';
 $MAP['Change_Field_When_Batch_Approval_5'] 	= 'Change field when batch approval 5';
 $MAP['Change_Field_When_Batch_Approval_6'] 	= 'Change field when batch approval 6';
+$MAP['Change_Field_When_Batch_Approval_7'] 	= 'Change field when batch approval 7';
+$MAP['Change_Field_When_Batch_Approval_8'] 	= 'Change field when batch approval 8';
 $MAP['Change_Into_Value'] 	                = 'Change into value';
 $MAP['Batch_Refuse_Status_Field'] 	        = 'Batch refuse status field';
 $MAP['Batch_Refuse_Status_Value'] 	        = 'Batch refuse status value';
@@ -573,6 +575,7 @@ $MAP['NewItem']    							    = 'New Item';
 $MAP['FormulaMethod']    					    = 'Formula Method';
 $MAP['FormulaMethodField']    				    = 'Formula Field';
 $MAP['FormulaMethodTarget']    				    = 'Formula Target';
+$MAP['Print']    				                = 'Print';
 
 
 
