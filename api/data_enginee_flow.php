@@ -1153,7 +1153,7 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         }
     }
     $RS['newTableRowData']          = $NewTableRowData;
-    $RS['ApprovalNodes']['Nodes']   = $ApprovalNodeFieldsArray;
+    $RS['ApprovalNodes']['Nodes']   = $ApprovalNodeFieldsArray[0]!=""?$ApprovalNodeFieldsArray:[];
     $RS['ApprovalNodes']['Fields']  = ['审核结点','审核状态','审核时间','审核人','审核意见'];
 
     $RS['print']['text']            = __("Print");

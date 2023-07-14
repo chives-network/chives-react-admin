@@ -289,7 +289,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             
                             return (
                               <Fragment key={FieldArray_index}>
-                                <MUITableCell sx={{ width: '35%' }}>{FieldArray.label}: {FieldArray.type} </MUITableCell>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
                                 <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
@@ -304,7 +304,7 @@ const ViewTableCore = (props: ViewTableType) => {
                 </TableBody>
               </Table>
 
-              {approvalNodes && approvalNodes.Nodes && approvalNodes.Fields ?
+              {approvalNodes && approvalNodes.Nodes && approvalNodes.Nodes.length>0 && approvalNodes.Fields ?
                 <Fragment>
                 <Divider />
                   <Table>

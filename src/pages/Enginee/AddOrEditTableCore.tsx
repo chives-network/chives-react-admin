@@ -1584,6 +1584,115 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             </FormControl>
                                                         </Grid>
                                                     )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "jumpwindow") {
+                                                    const NewFieldName = FieldArray.name
+                                                    const NewFieldCode = FieldArray.code
+                                                    if(NewFieldName!=NewFieldCode) {
+                                                        if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
+                                                            FieldArray.options.map((ItemValue: any) => {
+                                                                if(ItemValue.value==defaultValuesNew[NewFieldCode]) {
+                                                                    setValue(NewFieldName, ItemValue.label)
+                                                                    setValue(NewFieldCode, ItemValue.value)
+                                                                }
+                                                            })
+                                                        }
+                                                        if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]!=undefined)  {
+                                                            setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                        }
+                                                        if(defaultValuesNew[NewFieldName]==undefined && defaultValuesNew[NewFieldCode]==undefined)  {
+                                                            setValue(NewFieldName, "")
+                                                            setValue(NewFieldCode, "")
+                                                        }
+                                                    }
+
+                                                    if(defaultValuesNew[NewFieldCode]==undefined)  {
+                                                        setValue(NewFieldCode, "")
+                                                    }
+                                                    else {                                                        
+                                                        setValue(NewFieldCode, defaultValuesNew[NewFieldCode])
+                                                    }
+
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <Controller
+                                                                    name={NewFieldName}
+                                                                    control={control}
+                                                                    render={({ field: { value, onChange } }) => (
+                                                                        <Fragment>
+                                                                            <TextField
+                                                                                size={componentsize}  
+                                                                                disabled={FieldArray.rules.disabled}
+                                                                                value={value}
+                                                                                label={FieldArray.label}
+                                                                                type={FieldArray.type}
+                                                                                InputProps={FieldArray.inputProps ? FieldArray.inputProps : {}}
+                                                                                onChange={(e) => {
+                                                                                    onChange(e);
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[NewFieldName] = e.target.value
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                }}
+                                                                                onSelect={(event: FocusEvent<HTMLInputElement>) => {
+                                                                                    event.target.blur();
+                                                                                    const jumpWindowIsShowTemp:{[key:string]:any} = { ...jumpWindowIsShow }
+                                                                                    jumpWindowIsShowTemp[NewFieldName] = true
+                                                                                    setJumpWindowIsShow(jumpWindowIsShowTemp)
+                                                                                }}
+                                                                                placeholder={FieldArray.placeholder}
+                                                                                error={Boolean(errors[NewFieldName])}
+                                                                            />
+                                                                            <Dialog
+                                                                                fullWidth
+                                                                                open={jumpWindowIsShow[NewFieldName]==true?true:false}
+                                                                                scroll='body'
+                                                                                maxWidth='md'
+                                                                                onClose={()=>handleDialogWindowClose()}
+                                                                                onBackdropClick={()=>handleDialogWindowClose()}
+                                                                                TransitionComponent={Transition}
+                                                                            >
+                                                                                <DialogContent
+                                                                                sx={{
+                                                                                    pt: { xs: 8, sm: 12.5 },
+                                                                                    pr: { xs: 5, sm: 12 },
+                                                                                    pb: { xs: 5, sm: 9.5 },
+                                                                                    pl: { xs: 4, sm: 11 },
+                                                                                    position: 'relative'
+                                                                                }}
+                                                                                >
+                                                                                <IconButton size='small' onClick={()=>handleDialogWindowClose()} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+                                                                                    <Icon icon='mdi:close' />
+                                                                                </IconButton>
+                                                                                <Box sx={{ mb: 8, textAlign: 'center' }}>
+                                                                                    <Typography variant='h5' sx={{ mb: 3 }}>{FieldArray.jumpWindowTitle}</Typography>
+                                                                                    <Typography variant='body2'>{FieldArray.jumpWindowSubTitle}.</Typography>
+                                                                                </Box>
+                                                                                <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
+                                                                                    <TabContext value={activeTab}>
+                                                                                    <TabPanel value='detailsTab' sx={{ flexGrow: 1 }}>
+                                                                                        <IndexJumpDialogWindow handleDialogWindowCloseWithParam={handleDialogWindowCloseWithParam} NewFieldName={NewFieldName} NewFieldCode={NewFieldCode} FieldArray={FieldArray} />
+                                                                                    </TabPanel>
+                                                                                    </TabContext>
+                                                                                </Box>
+                                                                                </DialogContent>
+                                                                            </Dialog>
+                                                                        </Fragment>
+                                                                    )}
+                                                                />
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[NewFieldName] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[NewFieldName]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
                                                 }     
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "radiogroup" || FieldArray.type == "radiogroupcolor")) {
                                                     
