@@ -117,13 +117,13 @@ $MetaColumnNamesTarget    = $db->MetaColumnNames($TableNameTarget);
 $MetaColumnNamesTarget    = array_values($MetaColumnNamesTarget);
 $MetaColumnNamesOptions = [];
 $MetaColumnNamesOptionsOnlyShowStatus = [];
-$MetaColumnNamesOptionsOnlyShowStatus[] = ['value'=>"Disabled", 'label'=>"Disabled"];
+$MetaColumnNamesOptionsOnlyShowStatus[] = ['value'=>"Disabled", 'label'=>__("Disabled")];
 $MetaColumnNamesOptionsOnlyshowPerson = [];
-$MetaColumnNamesOptionsOnlyshowPerson[] = ['value'=>"Disabled", 'label'=>"Disabled"];
+$MetaColumnNamesOptionsOnlyshowPerson[] = ['value'=>"Disabled", 'label'=>__("Disabled")];
 $MetaColumnNamesOptionsOnlyShowDateTime = [];
-$MetaColumnNamesOptionsOnlyShowDateTime[] = ['value'=>"Disabled", 'label'=>"Disabled"];
+$MetaColumnNamesOptionsOnlyShowDateTime[] = ['value'=>"Disabled", 'label'=>__("Disabled")];
 $MetaColumnNamesOptionsOnlyShowOpinion = [];
-$MetaColumnNamesOptionsOnlyShowOpinion[] = ['value'=>"Disabled", 'label'=>"Disabled"];
+$MetaColumnNamesOptionsOnlyShowOpinion[] = ['value'=>"Disabled", 'label'=>__("Disabled")];
 $MetaColumnNamesOptionsAll = [];
 $MetaColumnNamesOptionsAll[] = ['value'=>"Disabled", 'label'=>__("Disabled")];
 foreach($MetaColumnNamesTarget AS $Item) {
@@ -131,6 +131,9 @@ foreach($MetaColumnNamesTarget AS $Item) {
         $MetaColumnNamesOptions[] = ['value'=>$Item, 'label'=>$Item];
     }
     $MetaColumnNamesOptionsAll[] = ['value'=>$Item, 'label'=>$Item];
+    if(strpos($Item,'提交状态')!==false)   {
+        $MetaColumnNamesOptionsOnlyShowStatus[] = ['value'=>$Item, 'label'=>$Item];
+    }
     if(strpos($Item,'审核状态')>0)   {
         $MetaColumnNamesOptionsOnlyShowStatus[] = ['value'=>$Item, 'label'=>$Item];
     }
@@ -719,6 +722,12 @@ $edit_default_3['Batch_Approval'][]  = ['name' => "Change_Into_Value_When_Batch_
 $edit_default_3['Batch_Approval'][]  = ['name' => "Change_Field_When_Batch_Approval_6", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Approval_6"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_3['Batch_Approval'][]  = ['name' => "Change_Into_Value_When_Batch_Approval_6", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
 
+$edit_default_3['Batch_Approval'][]  = ['name' => "Change_Field_When_Batch_Approval_7", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Approval_7"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Approval'][]  = ['name' => "Change_Into_Value_When_Batch_Approval_7", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
+
+$edit_default_3['Batch_Approval'][]  = ['name' => "Change_Field_When_Batch_Approval_8", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("Change_Field_When_Batch_Approval_8"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_3['Batch_Approval'][]  = ['name' => "Change_Into_Value_When_Batch_Approval_8", 'show'=>true, 'type'=>"input", 'label' => __("Change_Into_Value"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['false' => true,'xs'=>12, 'sm'=>2, 'disabled' => false]];
+
 //$edit_default_3['Batch_Approval'][]  = ['name' => "Divider1", 'show'=>true, 'type'=>"divider", 'label' => __("Divider"), 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>12]];
 
 ##################################################################################################################################
@@ -996,7 +1005,10 @@ if(($_GET['action']=="edit_default_6_data") && $id!="")     {
     $FieldsArray['id']          = NULL;
     $FieldsArray['FlowName']    = ForSqlInjection($_POST['FlowName']);
     $FieldsArray['FaceTo']      = ForSqlInjection($_POST['FaceTo']);
-    $FieldsArray['Step']        += 1;
+    
+    $sql        = "select Max(Step) AS Step from form_formflow where FormId = '".$FieldsArray['FormId']."'";
+    $rs         = $db->Execute($sql);
+    $FieldsArray['Step']        = $rs->fields['Step']+1;
     [$rs,$sql] = InsertOrUpdateTableByArray("form_formflow",$FieldsArray,'FormId,Step',0);
     if($rs->EOF) {
         $RS['status'] = "OK";
