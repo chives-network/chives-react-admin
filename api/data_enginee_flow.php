@@ -578,6 +578,7 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                     $RS['MultiSql'] = $MultiSql;
                 }
             }
+            
             //functionNameIndividual
             $functionNameIndividual = "plugin_".$TableName."_".$Step."_add_default_data_after_submit";
             if(function_exists($functionNameIndividual))  {
@@ -780,13 +781,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             $Batch_Refuse_Status_Value    = $SettingMap['Batch_Refuse_Status_Value'];
             if($Batch_Refuse_Status_Value!="" && $_POST[$Batch_Refuse_Status_Field]==$Batch_Refuse_Status_Value)  {
                 option_multi_refuse_exection($FieldsArray['id'], $multiReviewInputValue='', $Reminder=0, $UpdateOtherTableField=0);
-            }
-            //functionNameIndividual
-            $functionNameIndividual = "plugin_".$TableName."_".$Step."_edit_default_data_after_submit";
-            if(function_exists($functionNameIndividual))  {
-                $functionNameIndividual($id);
-            }
-            
+            }            
             //Relative Child Table Support
             $Relative_Child_Table                   = $SettingMap['Relative_Child_Table'];
             $Relative_Child_Table_Field_Name        = $SettingMap['Relative_Child_Table_Field_Name'];
@@ -799,9 +794,10 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                 $ChildMetaColumnNames       = GLOBAL_MetaColumnNames($ChildTableName); 
                 if($Relative_Child_Table_Field_Name!="" && in_array($Relative_Child_Table_Field_Name, $ChildMetaColumnNames) &&strpos($ChildSettingMap['Actions_In_List_Row'],'Edit')!==false) {
                     //Get All Fields
+                    $readonlyIdArray            = explode(',',ForSqlInjection($_POST['readonlyIdArray']));
                     $db->BeginTrans();
                     $MultiSql                   = [];
-                    $sql                        = "delete from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name]."';";
+                    $sql                        = "delete from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$RecordOriginal->fields[$Relative_Child_Table_Parent_Field_Name]."' and id not in ('".join("','",$readonlyIdArray)."');";
                     $db->Execute($sql);
                     $MultiSql[]                 = $sql;
                     $sql                        = "select * from form_formfield where FormId='$ChildFormId' and IsEnable='1' order by SortNumber asc, id asc";
@@ -839,6 +835,12 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
                     $db->CommitTrans();
                     $RS['MultiSql'] = $MultiSql;
                 }
+            }
+            
+            //functionNameIndividual
+            $functionNameIndividual = "plugin_".$TableName."_".$Step."_edit_default_data_after_submit";
+            if(function_exists($functionNameIndividual))  {
+                $functionNameIndividual($id);
             }
             //SystemLogRecord
             if(in_array($SettingMap['OperationLogGrade'],["EditAndDeleteOperation","AddEditAndDeleteOperation","AllOperation"]))  {
@@ -974,6 +976,8 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
             $sql        = "select * from $ChildTableName where $Relative_Child_Table_Parent_Field_Name = '".$data[$Relative_Child_Table_Parent_Field_Name]."';";
             $rs         = $db->Execute($sql);
             $rs_a       = $rs->GetArray();
+            $readonlyIdArray            = [];
+            $deleteChildTableItemArray  = [];
             $RS['childtable']['sql']    = $sql;
             $RS['childtable']['data']   = $rs_a;
             $RS['childtable']['ChildItemCounter'] = sizeof($rs_a);
@@ -982,7 +986,17 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
                 foreach($Line AS $LineKey=>$LineValue) {
                     $data['ChildTable____'.$X.'____'.$LineKey] = $LineValue;
                 }
+                //LimitEditAndDelete
+                if($ChildSettingMap['LimitEditAndDelete_Edit_Field_One']!="" && $ChildSettingMap['LimitEditAndDelete_Edit_Field_One']!="None" && in_array($ChildSettingMap['LimitEditAndDelete_Edit_Field_One'], $ChildMetaColumnNames)) {
+                    $LimitEditAndDelete_Edit_Value_One_Array = explode(',',$ChildSettingMap['LimitEditAndDelete_Edit_Value_One']);
+                    if(in_array($Line[$ChildSettingMap['LimitEditAndDelete_Edit_Field_One']],$LimitEditAndDelete_Edit_Value_One_Array)) {
+                        $readonlyIdArray[] = $Line['id'];
+                        $deleteChildTableItemArray[] = $X;
+                    }
+                }
             }
+            $RS['childtable']['readonlyIdArray']                = $readonlyIdArray;
+            $RS['childtable']['deleteChildTableItemArray']      = $deleteChildTableItemArray;
             $RS['data']  = $data;
         }
     }

@@ -196,6 +196,10 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
     const [childItemCounter, setChildItemCounter] = useState<number>(1)
     const [deleteChildTableItemArray, setDeleteChildTableItemArray] = useState<number[]>([])
     const [jumpWindowIsShow, setJumpWindowIsShow] = useState(addFilesOrDatesDefault)
+    const [childTableData, setChildTableData] = useState(addFilesOrDatesDefault)
+    const [readonlyIdArray, setReadonlyIdArray] = useState<number[]>([])
+
+    
 
     const [activeTab, setActiveTab] = useState<string>('detailsTab')
 
@@ -284,12 +288,19 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                 setAaddEditStructInfo2(res.data.edit_default)
                                 setAllFields(res.data.edit_default.allFields)
                             }
-                            console.log(res.data.childtable, res.data.childtable.ChildItemCounter)
                             if(res.data.childtable && res.data.childtable.ChildItemCounter) {
                                 setChildItemCounter(res.data.childtable.ChildItemCounter)
-                                
-                                //setChildItemRecords(res.data.childtable.data)
                             }
+                            if(res.data.childtable && res.data.childtable.readonlyIdArray) {
+                                setReadonlyIdArray(res.data.childtable.readonlyIdArray)
+                            }
+                            if(res.data.childtable && res.data.childtable.deleteChildTableItemArray) {
+                                setDeleteChildTableItemArray(res.data.childtable.deleteChildTableItemArray)
+                            }
+                            if(res.data.childtable) {
+                                setChildTableData(res.data.childtable)
+                            }
+
                         }
                         
                         //end for condition
@@ -502,8 +513,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         }
         formData.append('ChildItemCounter', String(childItemCounter));
         formData.append('deleteChildTableItemArray', deleteChildTableItemArray.join(','));
-
-        
+        formData.append('readonlyIdArray', readonlyIdArray.join(','));
 
         const postUrl = authConfig.backEndApiHost + backEndApi + "?action=" + action + "_data&id=" + id + "&externalId=" + externalId
         fetch(
@@ -2964,6 +2974,11 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                     <Repeater count={childItemCounter}>
                                     {(i: number) => {
                                         const Tag = i === 0 ? Box : Collapse
+                                        const NewRowId = "ChildTable____" + i + "____id"
+                                        const NewRowIdValue = defaultValuesNew[NewRowId] ? defaultValuesNew[NewRowId] : 0
+                                        const isReadonlyChildRow = NewRowIdValue>0 && childTableData.readonlyIdArray && childTableData.readonlyIdArray.includes(NewRowIdValue) ? true : false
+
+                                        console.log("isReadonlyChildRow", isReadonlyChildRow)
 
                                         return (
                                         <Tag key={i} className='repeater-wrapper' {...(i !== 0 ? { in: true } : {})}>
@@ -2972,7 +2987,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 <Grid container sx={{ pl: 1, py: 2, width: '100%', pr: 1 }}>
                                                     {addEditStructInfo2.childtable.allFields.Default.map((FieldArray: any, FieldArray_index: number) => {
                                                         const NewFieldName = "ChildTable____" + i + "____" + FieldArray.name
-                                                        if (FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
+                                                        if (isReadonlyChildRow == false && FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
                                                             if (defaultValuesNew[NewFieldName] != undefined) {
                                                                 setValue(NewFieldName, defaultValuesNew[NewFieldName])
                                                             }
@@ -2982,7 +2997,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"ChildAllFields_" + FieldArray_index} sx={{ml:1, mr:1}} >
-                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <FormControl fullWidth sx={{ mr: 0, mt: 3, ml: 1 }}>
                                                                         <Controller
                                                                             name={NewFieldName}
                                                                             control={control}
@@ -3055,27 +3070,31 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 </Grid>
                                                             )
                                                         }
-                                                        else if (FieldArray.show && FieldArray.type == "readonly") {
+                                                        else if (isReadonlyChildRow == true || (FieldArray.show && FieldArray.type == "readonly") ) {
                                                             if (defaultValuesNew[NewFieldName] != undefined) {
                                                                 setValue(NewFieldName, defaultValuesNew[NewFieldName])
+                                                            }
+                                                            else if (defaultValuesNew["ChildTable____" + i + "____" + FieldArray.code] != undefined) {
+                                                                setValue(NewFieldName, defaultValuesNew["ChildTable____" + i + "____" + FieldArray.code])
                                                             }
                                                             else if (defaultValuesNew[NewFieldName] == undefined) {
                                                                 setValue(NewFieldName, "")
                                                             }
+                                                            console.log("defaultValuesNew[NewFieldName]", NewFieldName, defaultValuesNew[NewFieldName])
                                                             
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"ChildAllFields_" + FieldArray_index} sx={{ml:1, mr:1}} >
-                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <FormControl fullWidth sx={{ mr: 0, mt: 3, ml: 1 }}>
                                                                         <Controller
                                                                             name={NewFieldName}
                                                                             control={control}
                                                                             render={({ field: { value, onChange } }) => (
                                                                                 <TextField
                                                                                     size='small'
-                                                                                    disabled={FieldArray.rules.disabled}
+                                                                                    disabled={true}
                                                                                     value={value}
                                                                                     label={FieldArray.label}
-                                                                                    type={FieldArray.type}
+                                                                                    type={"readonly"}
                                                                                     InputProps={FieldArray.inputProps ? FieldArray.inputProps : {}}
                                                                                     onChange={(e) => {
                                                                                         onChange(e);
@@ -3107,7 +3126,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 </Grid>
                                                             )
                                                         }
-                                                        else if ((FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "autocomplete") {
+                                                        else if (isReadonlyChildRow == false && (FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "autocomplete") {
                                                             const NewFieldCode = "ChildTable____" + i + "____" + FieldArray.code
                                                             if(NewFieldName!=NewFieldCode) {
                                                                 if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
@@ -3138,7 +3157,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
-                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <FormControl fullWidth sx={{ mr: 0, mt: 3, ml: 1 }}>
                                                                         <Controller
                                                                             name={NewFieldName}
                                                                             control={control}
@@ -3204,7 +3223,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 </Grid>
                                                             )
                                                         }
-                                                        else if ((FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "jumpwindow") {
+                                                        else if (isReadonlyChildRow == false && (FieldArray.show || fieldArrayShow[NewFieldName]) && FieldArray.type == "jumpwindow") {
                                                             const NewFieldCode = "ChildTable____" + i + "____" + FieldArray.code
                                                             if(NewFieldName!=NewFieldCode) {
                                                                 if(defaultValuesNew[NewFieldCode]!="" && defaultValuesNew[NewFieldCode]!=undefined && defaultValuesNew[NewFieldName]==undefined && FieldArray && FieldArray.options && FieldArray.options.length>0 ) {
@@ -3233,7 +3252,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
                                                             return (
                                                                 <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
-                                                                    <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <FormControl fullWidth sx={{ mr: 0, mt: 3, ml: 1 }}>
                                                                         <Controller
                                                                             name={NewFieldName}
                                                                             control={control}

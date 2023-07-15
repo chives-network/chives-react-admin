@@ -12,6 +12,7 @@ import Icon from 'src/@core/components/icon'
 import Grid from '@mui/material/Grid'
 
 import ViewTableCore from './ViewTableCore'
+import { Breakpoint } from '@mui/system';
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -35,11 +36,12 @@ interface ViewTableType {
   addEditViewShowInWindow: boolean
   CSRF_TOKEN: string
   toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+  dialogMaxWidth: Breakpoint
 }
 
 const ViewTable = (props: ViewTableType) => {
   // ** Props
-  const { externalId, id, action, pageJsonInfor, open, toggleViewTableDrawer, backEndApi, editViewCounter, addEditViewShowInWindow, CSRF_TOKEN, toggleImagesPreviewListDrawer } = props
+  const { externalId, id, action, pageJsonInfor, open, toggleViewTableDrawer, backEndApi, editViewCounter, addEditViewShowInWindow, CSRF_TOKEN, toggleImagesPreviewListDrawer, dialogMaxWidth } = props
   
   const handleClose = () => {
     toggleViewTableDrawer()
@@ -55,7 +57,7 @@ const ViewTable = (props: ViewTableType) => {
       <Dialog
         fullWidth
         open={open}
-        maxWidth='md'
+        maxWidth={dialogMaxWidth}
         scroll='body'
         onClose={handleClose}
         TransitionComponent={Transition}

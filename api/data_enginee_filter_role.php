@@ -4,6 +4,7 @@ require_once('cors.php');
 require_once('include.inc.php');
 
 $USER_ID    = ForSqlInjection($GLOBAL_USER->USER_ID);
+$DEPT_ID    = ForSqlInjection($GLOBAL_USER->DEPT_ID);
 
 $Page_Role_Name = $SettingMap['Page_Role_Name'];
 global $AdditionalPermissionsSQL;
@@ -44,6 +45,9 @@ switch($Page_Role_Name)  {
         }
         elseif(in_array('学生班级',$MetaColumnNames))  {
             $AdditionalPermissionsSQL .= " and 学生班级 in ('".join("','",$班级名称Array)."')";
+        }
+        elseif(in_array('所属班级',$MetaColumnNames))  {
+            $AdditionalPermissionsSQL .= " and 所属班级 in ('".join("','",$班级名称Array)."')";
         }
         $AddSql .= $AdditionalPermissionsSQL;
         global $班级表额外过滤条件;
@@ -149,6 +153,8 @@ foreach($AllFieldsFromTable as $Item)  {
         case 'HiddenUsername':
             break;
         case 'HiddenDeptID':
+            $AdditionalPermissionsSQL .= " and $FieldName = '".$DEPT_ID."' ";
+            $AddSql .= $AdditionalPermissionsSQL;
             break;
         case 'HiddenDeptName':
             break;
