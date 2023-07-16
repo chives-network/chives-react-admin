@@ -50,7 +50,7 @@ foreach ($rs_a as $Line) {
 }
 
 $ShowTypeMap = [];
-$sql = "select * from form_formfield where FormId='$externalId' order by SortNumber asc";
+$sql = "select * from form_formfield where FormId='$externalId' order by SortNumber asc, id asc";
 $rs = $db->Execute($sql);
 $rs_a = $rs->GetArray();
 foreach ($rs_a as $Line) {
@@ -183,9 +183,10 @@ $YesOrNotOptions[] = ['value'=>'Yes', 'label'=>__('Yes')];
 $YesOrNotOptions[] = ['value'=>'No', 'label'=>__('No')];
 $edit_default_1 = [];
 $defaultValues_1 = [];
-for($i=1;$i<sizeof($MetaColumnNamesTarget);$i++)   {
-    $FieldName = $MetaColumnNamesTarget[$i];
-    $ShowTypeMapItem = $ShowTypeMap[$FieldName];
+//for($i=1;$i<sizeof($MetaColumnNamesTarget);$i++)   {
+foreach($ShowTypeMap as $FieldName=>$ShowTypeMapItem) {
+    //$FieldName = $MetaColumnNamesTarget[$i];
+    //$ShowTypeMapItem = $ShowTypeMap[$FieldName];
     if($ShowTypeMapItem!="Disable")  {
         //Check the default from the first column value
         //当第一次建立流程的时候,什么数据都是空的,这个时候需要默认为启用,如果是已经有数据,而新增加进入的字段,这个时候需要默认为禁用

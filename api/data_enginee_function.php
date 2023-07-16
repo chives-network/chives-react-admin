@@ -876,13 +876,19 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 if($TableNameTemp=="form_formdict" && sizeof($CurrentFieldTypeArray)==7)   {
                     $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label,ExtraControl from $TableNameTemp where 1=1 and $WhereField = '".$WhereValue."' order by SortNumber asc, `".$MetaColumnNamesTemp[$ValueField]."` asc";
                 }
+                elseif(sizeof($CurrentFieldTypeArray)==7 && in_array("排序号",$MetaColumnNamesTemp))   {
+                    $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where 1=1 $AddSqlTemp and $WhereField = '".$WhereValue."' order by 排序号 asc, `".$MetaColumnNamesTemp[$ValueField]."` asc";
+                }
                 elseif(sizeof($CurrentFieldTypeArray)==7 && in_array("SortNumber",$MetaColumnNamesTemp))   {
                     $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where 1=1 $AddSqlTemp and $WhereField = '".$WhereValue."' order by SortNumber asc, `".$MetaColumnNamesTemp[$ValueField]."` asc";
                 }
                 elseif(sizeof($CurrentFieldTypeArray)==7 && !in_array("SortNumber",$MetaColumnNamesTemp))   {
                     $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where 1=1 $AddSqlTemp and $WhereField = '".$WhereValue."' order by `".$MetaColumnNamesTemp[$ValueField]."` asc";
                 }
-                elseif(sizeof($CurrentFieldTypeArray)==5||sizeof($CurrentFieldTypeArray)==4)   {
+                elseif( (sizeof($CurrentFieldTypeArray)==5||sizeof($CurrentFieldTypeArray)==4) && in_array("排序号",$MetaColumnNamesTemp) )   {
+                    $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where 1=1 $AddSqlTemp order by `排序号` asc, id asc";
+                }
+                elseif( (sizeof($CurrentFieldTypeArray)==5||sizeof($CurrentFieldTypeArray)==4) && !in_array("排序号",$MetaColumnNamesTemp) )   {
                     $sql = "select `".$MetaColumnNamesTemp[$KeyField]."` as value, `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where 1=1 $AddSqlTemp order by `".$MetaColumnNamesTemp[$ValueField]."` asc, id asc";
                 }
                 else {
