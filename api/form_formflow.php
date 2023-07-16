@@ -194,7 +194,7 @@ for($i=1;$i<sizeof($MetaColumnNamesTarget);$i++)   {
         }
         else {
             //First initial, default enable
-            $FormFieldDefaultValue = $FormFieldSelectOptions[0]['value'];
+            $FormFieldDefaultValue = $FormFieldSelectOptions[7]['value'];
         }
         //print_R($FormFieldDefaultValue);
         //$edit_default_1['Default'][] = ['FieldName'=>$FieldName,'FieldType'=>"FieldTypeFollowByFormSetting",'FieldGoup'=>"No",'FieldSearch'=>"No",'FieldImport'=>"No"];
