@@ -613,6 +613,11 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                     $FieldTypeInFlow_Map['edit_default'] = "readonlyfiles";
                     $FieldTypeInFlow_Map['view_default'] = "files";
                 }
+                elseif(in_array($CurrentFieldTypeArray[0], ['tablefilter','tablefiltercolor','radiogroup','radiogroupcolor','autucomplete']))  {
+                    $FieldTypeInFlow_Map['edit_default'] = "readonly".$CurrentFieldTypeArray[0];
+                    //$FieldTypeInFlow_Map['view_default'] = "input";  
+                    $CurrentFieldTypeArray[0] = "readonly".$CurrentFieldTypeArray[0];
+                }
                 else {
                     $FieldTypeInFlow_Map['edit_default'] = "readonly";
                     $FieldTypeInFlow_Map['view_default'] = "input";                  
@@ -626,6 +631,11 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 else if($CurrentFieldTypeArray[0]=="files")  {
                     $FieldTypeInFlow_Map['add_default'] = "readonlyfiles";
                     $FieldTypeInFlow_Map['edit_default'] = "readonlyfiles";
+                }
+                elseif(in_array($CurrentFieldTypeArray[0], ['tablefilter','tablefiltercolor','radiogroup','radiogroupcolor','autucomplete']))  {
+                    $FieldTypeInFlow_Map['add_default'] = "readonly".$CurrentFieldTypeArray[0];
+                    $FieldTypeInFlow_Map['edit_default'] = "readonly".$CurrentFieldTypeArray[0];  
+                    $CurrentFieldTypeArray[0] = "readonly".$CurrentFieldTypeArray[0];
                 }
                 else {
                     $FieldTypeInFlow_Map['add_default'] = "readonly";
@@ -676,6 +686,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
             }
         }
         //print_R($FieldName." ".$FieldTypeInFlow_Map['edit_default']." ".$FieldTypeInFlow_Value." ".$CurrentFieldTypeArray[0]);print "\n";
+        $disabledItem = false;
         switch($CurrentFieldTypeArray[0])   {
             case 'Disable':
                 //Do Nothing
@@ -830,9 +841,12 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false,'min'=>$Min,'max'=>$Max]];
                 break;
+            case 'readonlyautocomplete':
+                $disabledItem = true;
+                $CurrentFieldTypeArray[0] = "autocomplete";
             case 'autocomplete':
             case 'autocompletemulti':
-                if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                if($actionType=="EDIT"&&$disabledItem == false) $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 $TableNameTemp      = $CurrentFieldTypeArray[1];
                 $KeyField           = $CurrentFieldTypeArray[2];
                 $ValueField         = $CurrentFieldTypeArray[3];
@@ -918,13 +932,22 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 if($FieldCodeName==$FieldName) {
                     $FieldName = $FieldName."_名称";
                 }
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValueTemp, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false]];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValueTemp, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => $disabledItem==true?true:false]];
                 break;
+            case 'readonlyradiogroup':
+                $CurrentFieldTypeArray[0] = "radiogroup";
+            case 'readonlytablefilter':
+                $CurrentFieldTypeArray[0] = "radiogroupcolor";
+            case 'readonlyradiogroupcolor':
+                $CurrentFieldTypeArray[0] = "autocomplete";
+            case 'readonlytablefiltercolor':
+                $CurrentFieldTypeArray[0] = "tablefiltercolor";
+                $disabledItem = true;
             case 'radiogroup':
             case 'tablefilter':
             case 'radiogroupcolor':
             case 'tablefiltercolor':
-                if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                if($actionType=="EDIT"&&$disabledItem == false) $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 $TableNameTemp      = $CurrentFieldTypeArray[1];
                 $KeyField           = $CurrentFieldTypeArray[2];
                 $ValueField         = $CurrentFieldTypeArray[3];
@@ -951,7 +974,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 }
                 $rs = $db->CacheExecute(10, $sql) or print($sql);
                 $FieldType = $rs->GetArray();
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => false, 'row'=>true], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'options'=>$FieldType, 'label' => $ShowTextName, 'value' => $DefaultValue, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth),'disabled' => $disabledItem==true?true:false, 'row'=>true], 'sql'=>$sql, 'CurrentFieldTypeArray'=>$CurrentFieldTypeArray, 'MetaColumnNamesTemp'=>$MetaColumnNamesTemp];
                 break;
             case 'avatar':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";

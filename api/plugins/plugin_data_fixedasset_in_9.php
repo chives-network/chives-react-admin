@@ -74,8 +74,12 @@ function plugin_data_fixedasset_in_9_edit_default_data_after_submit($id)  {
         //得到最大的资产编码
         $sql        = "select MAX(资产编码) AS 资产编码 from data_fixedasset";
         $rs         = $db->Execute($sql);
-        $资产编码   = $rs->fields['资产编码'];
+        $资产编码   = intval($rs->fields['资产编码']);
+        if($资产编码==0) {
+            $资产编码 = 100000;
+        }
         $最后五位   = substr($资产编码,-5);
+        
         $最后五位   += 1;
         if(strlen($最后五位)==4) $最后五位 = "0".$最后五位;
         if(strlen($最后五位)==3) $最后五位 = "00".$最后五位;

@@ -646,6 +646,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
     $FieldsArray        = [];
     $FieldsArray['id']  = $id;
     $IsExecutionSQL     = 0;
+    $IsExecutionSQLChildTable     = 0;
     //Filter data when do edit save operation
     require_once('data_enginee_filter_post.php');
 
@@ -666,6 +667,9 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         }
         if($_POST[$FieldName]!="") {
             $IsExecutionSQL = 1;
+        }        
+        if($_POST['ChildItemCounter']>0) {
+            $IsExecutionSQLChildTable = 1;
         }
     }
     //Check Permission For This Record
@@ -752,7 +756,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         }
     }
 
-    if($IsExecutionSQL)   {
+    if($IsExecutionSQL || $IsExecutionSQLChildTable)   {
         [$Record,$sql]  = InsertOrUpdateTableByArray($TableName, $FieldsArray, 'id', 0, "Update");
         if($Record->EOF) {
             UpdateOtherTableFieldAfterFormSubmit($FieldsArray['id']);
@@ -873,6 +877,8 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         $RS['sql'] = $sql;
         $RS['_GET'] = $_GET;
         $RS['_POST'] = $_POST;
+        $RS['IsExecutionSQL'] = $IsExecutionSQL;
+        $RS['IsExecutionSQLChildTable'] = $IsExecutionSQLChildTable;
         print json_encode($RS);
         exit;
     }
@@ -1460,10 +1466,7 @@ $groupField = [];
 $FieldNameToType = [];
 $UpdateFields = [];
 foreach($AllFieldsFromTable as $Item)  {
-    $FieldName      = $Item['FieldName'];
-    if(in_array($FieldName,$ApprovalNodeFieldsHidden)) {
-        continue;
-    }
+    $FieldName      = $Item['FieldName'];    
     $EnglishName    = $Item['EnglishName'];
     $ShowType       = $Item['ShowType'];
     $IsSearch       = $Item['IsSearch'];
@@ -1473,6 +1476,10 @@ foreach($AllFieldsFromTable as $Item)  {
     $CurrentFieldType = $AllShowTypesArray[$ShowType]['LIST'];
     $CurrentFieldTypeArray = explode(':',$CurrentFieldType);
     $FieldNameToType[$FieldName] = $CurrentFieldType;
+    //print $FieldName.":".$ShowType.":".$CurrentFieldType.'<BR>';
+    if(in_array($FieldName,$ApprovalNodeFieldsHidden)) {
+        continue;
+    }
 
     global $GLOBAL_LANGUAGE;
     switch($GLOBAL_LANGUAGE) {

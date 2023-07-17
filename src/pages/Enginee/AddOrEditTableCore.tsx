@@ -1198,6 +1198,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             size={componentsize}
                                                                             value={value}
                                                                             label={FieldArray.label}
+                                                                            disabled={FieldArray.rules.disabled}
                                                                             onChange={(e) => {
                                                                                 onChange(e);
                                                                                 const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
