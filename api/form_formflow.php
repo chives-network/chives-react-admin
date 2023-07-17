@@ -195,7 +195,7 @@ foreach($ShowTypeMap as $FieldName=>$ShowTypeMapItem) {
         }
         else {
             //First initial, default enable
-            $FormFieldDefaultValue = $FormFieldSelectOptions[7]['value'];
+            $FormFieldDefaultValue = $FormFieldSelectOptions[0]['value'];
         }
         //print_R($FormFieldDefaultValue);
         //$edit_default_1['Default'][] = ['FieldName'=>$FieldName,'FieldType'=>"FieldTypeFollowByFormSetting",'FieldGoup'=>"No",'FieldSearch'=>"No",'FieldImport'=>"No"];

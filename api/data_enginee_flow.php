@@ -343,6 +343,13 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
         $MetaColumnsInDb[$Item->name]       = $Item->type;
     }
     $MetaColumnNames    = GLOBAL_MetaColumnNames($TableName);
+    
+    //functionNameIndividual
+    $functionNameIndividual = "plugin_".$TableName."_".$Step."_add_default_data_before_submit";
+    if(function_exists($functionNameIndividual))  {
+        $functionNameIndividual();
+    }
+
     $FieldsArray        = [];
     $IsExecutionSQL     = 0;
     foreach($AllFieldsFromTable as $Item)  {
@@ -441,11 +448,6 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
             if($FieldValue!="")   {
                 $FieldsArray[$FieldName]       = $FieldValue;
             }
-        }
-        //functionNameIndividual
-        $functionNameIndividual = "plugin_".$TableName."_".$Step."_add_default_data_before_submit";
-        if(function_exists($functionNameIndividual))  {
-            $functionNameIndividual();
         }
 
         //Split Multi Records
@@ -760,9 +762,11 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
             $RS['Msg_Reminder_Object_From_Add_Or_Edit_Result'] = $Msg_Reminder_Object_From_Add_Or_Edit_Result;
             if($SettingMap['Debug_Sql_Show_On_Api']=="Yes")  {
                 global $GLOBAL_EXEC_KEY_SQL;
+                $RS['sql'] = $sql;  
                 $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;              
             }
-            $RS['_POST'] = $_POST;  
+            $RS['sql'] = $sql;  
+            $RS['_POST'] = $_POST; 
             $RS['_FILES'] = $_FILES;  
             //Batch_Approval
             $Batch_Approval_Status_Field    = $SettingMap['Batch_Approval_Status_Field'];
@@ -1754,15 +1758,18 @@ foreach ($rs_a as $Line) {
                     $sql = "select `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where $WhereField = '".$WhereValue."' and `".$MetaColumnNamesTemp[$KeyField]."`='".ForSqlInjection($Line[$FieldName])."' ;";
                     $rs = $db->CacheExecute(10, $sql) or print($sql);
                     $Line[$FieldName] = $rs->fields['label'];
+                    if($Line[$FieldName]=="") $Line[$FieldName] = $WhereValue;
                     $FieldDataColorValue[$FieldName][$Line[$FieldName]] = "#";
                     //print "TIME EXCEUTE 12:".(time()-$TIME_BEGIN)." ".$Line[$FieldName]." $sql <BR>\n";
                 }
                 elseif($MetaColumnNamesTemp[$KeyField]!="" && $Line[$FieldName]!="")    {
                     $sql = "select `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where `".$MetaColumnNamesTemp[$KeyField]."`='".ForSqlInjection($Line[$FieldName])."' ;";
                     $rs = $db->CacheExecute(10, $sql) or print($sql);
-                    $Line[$FieldName] = $rs->fields['label'];
+                    if($rs->fields['label']!="")  {
+                        $Line[$FieldName] = $rs->fields['label'];
+                    }
                     $FieldDataColorValue[$FieldName][$Line[$FieldName]] = "#";
-                    //print "TIME EXCEUTE 12:".(time()-$TIME_BEGIN)." ".$Line[$FieldName]." $sql <BR>\n";
+                    //print "TIME EXCEUTE 13:".(time()-$TIME_BEGIN)." ".$Line[$FieldName]." $sql <BR>\n";
                 }    
                 break;
             case 'autocompletemulti':

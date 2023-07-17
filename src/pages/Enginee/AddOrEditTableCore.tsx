@@ -907,6 +907,65 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     }
                                                                                 }
                                                                                 setDefaultValuesNew(defaultValuesNewTemp)
+
+                                                                                //Formula Method
+                                                                                if(FieldArray.Formula && FieldArray.Formula.FormulaMethod && FieldArray.Formula.FormulaMethod!="" && FieldArray.Formula.FormulaMethod!="None" && FieldArray.Formula.FormulaMethodField && FieldArray.Formula.FormulaMethodField!="" && FieldArray.Formula.FormulaMethodTarget && FieldArray.Formula.FormulaMethodTarget!="") {
+                                                                                    const NewFormulaMethodField = FieldArray.Formula.FormulaMethodField
+                                                                                    const NewFormulaMethodTarget = FieldArray.Formula.FormulaMethodTarget
+                                                                                    console.log(defaultValuesNewTemp[NewFormulaMethodField])
+                                                                                    console.log(e.target.value)
+                                                                                    if( defaultValuesNewTemp[NewFormulaMethodField] && e.target.value) {
+                                                                                        console.log("NewFormulaMethodField",NewFormulaMethodField)
+                                                                                        console.log("NewFormulaMethodTarget",NewFormulaMethodTarget)
+                                                                                        console.log("defaultValuesNewTemp",defaultValuesNewTemp)
+                                                                                        if(FieldArray.Formula.FormulaMethod=='*') {
+                                                                                            const ThisInputValue: any = e.target.value
+                                                                                            const NewValue = defaultValuesNewTemp[NewFormulaMethodField] * ThisInputValue
+                                                                                            if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                            }
+                                                                                            else {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                            }
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else if(FieldArray.Formula.FormulaMethod=='+' && ThisInputValue!=undefined) {
+                                                                                            const ThisInputValue: any = e.target.value
+                                                                                            const NewValue = defaultValuesNewTemp[NewFormulaMethodField] + ThisInputValue
+                                                                                            if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                            }
+                                                                                            else {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                            }
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else if(FieldArray.Formula.FormulaMethod=='-' && ThisInputValue!=undefined) {
+                                                                                            const ThisInputValue: any = e.target.value
+                                                                                            const NewValue = defaultValuesNewTemp[NewFormulaMethodField] - ThisInputValue
+                                                                                            if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                            }
+                                                                                            else {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                            }
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        }
+                                                                                        else if(FieldArray.Formula.FormulaMethod=='/'&&ThisInputValue>0) {
+                                                                                            const ThisInputValue: any = e.target.value
+                                                                                            const NewValue = defaultValuesNewTemp[NewFormulaMethodField] / ThisInputValue
+                                                                                            if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                            }
+                                                                                            else {
+                                                                                                defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                            }
+                                                                                            setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+
                                                                             }}
                                                                             placeholder={FieldArray.placeholder}
                                                                             error={Boolean(errors[FieldArray.name])}
@@ -956,7 +1015,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "readonly") {
                                                     
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
-                                                        
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    else if (action.indexOf("add_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
                                                     
@@ -3039,6 +3100,39 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                 if(FieldArray.Formula.FormulaMethod=='*') {
                                                                                                     const ThisInputValue: any = e.target.value
                                                                                                     const NewValue = defaultValuesNewTemp[NewFormulaMethodField] * ThisInputValue
+                                                                                                    if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                                    }
+                                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                                }
+                                                                                                else if(FieldArray.Formula.FormulaMethod=='+' && ThisInputValue!=undefined) {
+                                                                                                    const ThisInputValue: any = e.target.value
+                                                                                                    const NewValue = defaultValuesNewTemp[NewFormulaMethodField] + ThisInputValue
+                                                                                                    if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                                    }
+                                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                                }
+                                                                                                else if(FieldArray.Formula.FormulaMethod=='-' && ThisInputValue!=undefined) {
+                                                                                                    const ThisInputValue: any = e.target.value
+                                                                                                    const NewValue = defaultValuesNewTemp[NewFormulaMethodField] - ThisInputValue
+                                                                                                    if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        defaultValuesNewTemp[NewFormulaMethodTarget] = NewValue
+                                                                                                    }
+                                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                                }
+                                                                                                else if(FieldArray.Formula.FormulaMethod=='/'&&ThisInputValue>0) {
+                                                                                                    const ThisInputValue: any = e.target.value
+                                                                                                    const NewValue = defaultValuesNewTemp[NewFormulaMethodField] / ThisInputValue
                                                                                                     if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
                                                                                                     }
