@@ -311,6 +311,8 @@ $MenuTab_Options[] = ['value'=>'Yes', 'label'=>__('Yes')];
 $MenuTab_Options[] = ['value'=>'No', 'label'=>__('No')];
 $edit_default_2['Menu_Location'][] = ['name' => "MenuTab", 'show'=>true, 'type'=>'select', 'options'=>$MenuTab_Options, 'label' => __("Menu_Tab"), 'value' => "Yes", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
+$edit_default_2['Menu_Location'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MenuTab_Options, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+
 
 $edit_default_2['Tip_In_Interface'][] = ['name' => "List_Title_Name", 'show'=>true, 'type'=>"input", 'label' => __("List_Title_Name"), 'value' => $ShortNameTarget.__("List"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Import_Title_Name", 'show'=>true, 'type'=>"input", 'label' => __("Import_Title_Name"), 'value' => __("Import")."".$ShortNameTarget, 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -1124,6 +1126,7 @@ require_once("../data_enginee_flow.php");
     else {
         $FieldsArray['PageType']  = "FunctionPage";
     }
+    $FieldsArray['MobileEnd']   = $_POST['MobileEnd'];
     $FieldsArray['Setting']     = base64_encode(serialize($SettingMap));
     $FieldsArray['Creator']     = "admin";
     $FieldsArray['CreateTime'] = date("Y-m-d H:i:s");

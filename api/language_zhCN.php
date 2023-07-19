@@ -572,6 +572,7 @@ $MAP['FormulaMethod']    					= '公式方法';
 $MAP['FormulaMethodField']    				= '计算字段';
 $MAP['FormulaMethodTarget']    				= '目标字段';
 $MAP['Print']    				            = '打印';
+$MAP['MobileEnd']    				        = '移动端';
 
 
 

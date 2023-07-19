@@ -576,6 +576,7 @@ $MAP['FormulaMethod']    					    = 'Formula Method';
 $MAP['FormulaMethodField']    				    = 'Formula Field';
 $MAP['FormulaMethodTarget']    				    = 'Formula Target';
 $MAP['Print']    				                = 'Print';
+$MAP['MobileEnd']    				            = 'Mobile End';
 
 
 
