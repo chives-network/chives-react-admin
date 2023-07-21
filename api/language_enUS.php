@@ -578,6 +578,17 @@ $MAP['FormulaMethodTarget']    				    = 'Formula Target';
 $MAP['Print']    				                = 'Print';
 $MAP['MobileEnd']    				            = 'Mobile End';
 
+$MAP['IconName'] 	    = 'Icon  Name';
+$MAP['TitleName'] 	    = 'TitleName';
+$MAP['FirstLine'] 	    = 'First Line';
+$MAP['SecondLineLeft'] 	= 'Second Line Left';
+$MAP['SecondLineRight'] = 'Second Line Right';
+$MAP['SecondLineRight'] = 'Second Line Right';
+$MAP['SecondLineRightColor'] = 'Second Line Right Color';
+$MAP['SecondLineRightChooseFiled'] 	= 'Second Line Right Filed';
+$MAP['WhenFieldIsEqual'] 	= 'Is Equal';
+$MAP['WhenFieldShowColor'] 	= 'ShowColor';
+
 
 
 

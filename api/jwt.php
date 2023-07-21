@@ -34,7 +34,7 @@ if($_GET['action']=="login")                {
             if($StudentInfo['学号']=="")  {  
                 $RS = [];
                 $RS['status']   = "ERROR";
-                $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
+                $RS['msg']      = $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
                 $RS['sql']      = $sql;
                 $RS['_POST']    = $_POST;
                 SystemLogRecord("Login", __('USER NOT EXIST'), __("USER NOT EXIST OR PASSWORD IS ERROR!"),$USER_ID);
@@ -68,7 +68,7 @@ if($_GET['action']=="login")                {
 
             $RS = [];
             $RS['status']   = "ERROR";
-            $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
+            $RS['msg']      = $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
             $RS['sql']      = $sql;
             $RS['_POST']    = $_POST;
             SystemLogRecord("Login", __('PASSWORD IS ERROR'), __("USER NOT EXIST OR PASSWORD IS ERROR!"),$USER_ID);
@@ -86,6 +86,7 @@ if($_GET['action']=="login")                {
             $userData['DEPT_ID']    = $UserInfo['DEPT_ID'];
             $userData['DEPT_NAME']  = returntablefield("data_department","id",$UserInfo['DEPT_ID'],"DEPT_NAME")['DEPT_NAME'];
             $userData['PRIV_NAME']  = returntablefield("data_role","id",$UserInfo['USER_PRIV'],"name")['name'];
+            $userData['USER_PRIV']  = $UserInfo['USER_PRIV'];
             $userData['avatar']     = '/images/avatars/1.png';        
             $userData['username']   = $UserInfo['USER_ID'];
             $userData['email']      = $UserInfo['EMAIL'];
@@ -94,6 +95,15 @@ if($_GET['action']=="login")                {
             $accessToken            = JWT::encode($userData, $NEXT_PUBLIC_JWT_SECRET, 'HS256');
             $RS['accessToken']      = $accessToken;
             $RS['userData']         = $userData;
+            $RS['status']           = "OK";
+            //形成个人信息展示页面的数据列表
+            $USER_PROFILE 	= array();
+            $USER_PROFILE[] 	= array("左边"=>"用户类型","右边"=>"教职工");
+            $USER_PROFILE[] 	= array("左边"=>"用户名","右边"=>$UserInfo['USER_ID']);
+            $USER_PROFILE[] 	= array("左边"=>"姓名","右边"=>$UserInfo['USER_NAME']);
+            $USER_PROFILE[] 	= array("左边"=>"部门","右边"=>$userData['DEPT_NAME']);
+            $USER_PROFILE[] 	= array("左边"=>"角色","右边"=>$userData['PRIV_NAME']);
+            $RS['USER_PROFILE'] = $USER_PROFILE;
             SystemLogRecord("Login", __("Success"), __("Success"),$USER_ID);
             print_r(json_encode($RS));
             exit;
@@ -101,7 +111,7 @@ if($_GET['action']=="login")                {
         else {
             $RS = [];
             $RS['status']   = "ERROR";
-            $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
+            $RS['msg']      = $RS['email']    = __("USER NOT EXIST OR PASSWORD IS ERROR!");
             $RS['sql']      = $sql;
             $RS['_POST']    = $_POST;
             print json_encode($RS);

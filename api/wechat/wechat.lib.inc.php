@@ -59,13 +59,13 @@ if($_GET['action']=='update')							{
     $RESULT['version']			    = date("Ymd_His",time()+$缓存周期);
 	$RESULT['学校ID']			    = $学校ID;
 	$RESULT['小程序名称']		    = $小程序名称;
-	$RESULT['APP_SELF_NAME']	    = $授权方昵称;
+	$RESULT['APP_SELF_NAME']	    = $小程序名称;
 	$RESULT['小程序首页面介绍']	    = $小程序首页面介绍;
 	$RESULT['小程序认证页介绍']	    = $小程序认证页介绍;
 	$RESULT['小程序使用协议']	    = $用户使用协议;
 	$RESULT['小程序服务内容']	    = $服务内容;
 	$RESULT['小程序使用前说明']	    = $使用前说明;
-	$RESULT['小程序LOGO']		    = "/general/EDU/Interface/TDFORMICAMPUS/images/theme/logo.png";	
+	$RESULT['小程序LOGO']		    = "/images/wechat/logo.png";	
 	print_R(json_encode($RESULT));
     exit;
 }
@@ -119,27 +119,71 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 		$表单MAP[$表单编号] 				 = $rs_a[$R];
 		$FormIdLIST[]						= $表单编号;
 	}
-	
-	$sql 		= "select * from form_formflow where FormId in ('".join("','",$所有表单ARRAY)."') and FaceTo='AuthUser' and MobileEnd='Yes' order by FormId asc,Step asc";
+
+    //当前用户的权限
+    CheckAuthUserLoginStatus();
+    $USER_ID    = $GLOBAL_USER->USER_ID;
+    $RS         = returntablefield("data_user","USER_ID",$USER_ID,"USER_PRIV,USER_PRIV_OTHER");
+    $USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
+    $sql        = "select * from data_role where id in ('".join("','",$USER_PRIV_Array)."')";
+    $rsf        = $db->CacheExecute(180,$sql);
+    $RoleRSA    = $rsf->GetArray();
+    $RoleArray  = "";
+    foreach($RoleRSA as $Item)  {
+        $RoleArray .= $Item['content'].",";
+    }
+    $RoleArray = explode(',',$RoleArray);
+    $RoleArray = array_values($RoleArray);
+
+    //Menu From Database
+    $sql    = "select * from data_menuone order by SortNumber asc, MenuOneName asc";
+    $rsf    = $db->CacheExecute(180,$sql);
+    $MenuOneRSA  = $rsf->GetArray();
+
+    $sql 		= "select * from form_formflow where FormId in ('".join("','",$所有表单ARRAY)."') and FaceTo='AuthUser' and MobileEnd='Yes' order by FormId asc,Step asc";
 	$rs			= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);
 	$rs_a 		= $rs->GetArray();
-	$FlowMap 	= array();
+    $FlowIdMapArray = [];
 	for($R=0;$R<sizeof($rs_a);$R++)				{
-		$FlowId	 					    = $rs_a[$R]['id'];
-		$FlowName	 					= $rs_a[$R]['FlowName'];
-		$FormId	 						= $rs_a[$R]['FormId'];
-        $Setting                        = unserialize(base64_decode($rs_a[$R]['Setting']));
-		$FormName						= $表单MAP[$FormId]['ShortName'];
-		$TableName						= $表单MAP[$FormId]['TableName'];
-		$GroupName 						= $业务表单TEMPARRAY[$FormId];
-		$Step	 						= $rs_a[$R]['Step'];
-		$rs_a[$R]['URL']				= "apps_".$FlowId.".php";
-		$rs_a[$R]['Setting']            = "";
-		$rs_a[$R]['TableName']          = $TableName;
-		$rs_a[$R]['GroupName']          = $GroupName;
-		$rs_a[$R]['Icon']               = "mdi:".$Setting['Menu_Three_Icon'];
-		$所有菜单[$GroupName][$FlowId]     = $rs_a[$R];
-	}
+		$FlowIdMapArray[$rs_a[$R]['id']]  = $rs_a[$R];
+    }
+
+    //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
+    $sql    = "select * from data_menutwo where FaceTo='AuthUser' and id in ('".join("','",$RoleArray)."') order by MenuOneName asc,SortNumber asc";
+    $rsf    = $db->CacheExecute(180,$sql);
+    $MenuTwoRSA  = $rsf->GetArray();
+    $MenuTwoArray = [];
+    $TabMap = [];
+    foreach($MenuTwoRSA as $Item)  {
+        if($Item['MenuTab']=="Yes"||$Item['MenuTab']=="是") {
+            $TabMap[$Item['MenuOneName']][$Item['MenuTwoName']] = "Tab";
+        }
+        if($Item['MenuThreeName']!="")   {
+            $MenuTwoArray[$Item['MenuOneName']][$Item['MenuTwoName']][] = $Item;
+        }
+        else { 
+            $MenuTwoArray[$Item['MenuOneName']]['SystemMenuTwo_'.$Item['id']][] = $Item;
+        }
+        if(isset($FlowIdMapArray[$Item['FlowId']])) {
+            $RS = $FlowIdMapArray[$Item['FlowId']];
+            $FlowId	 					    = $RS['id'];
+            $FlowName	 					= $RS['FlowName'];
+            $FormId	 						= $RS['FormId'];
+            $Setting                        = unserialize(base64_decode($RS['Setting']));
+            $FormName						= $表单MAP[$FormId]['ShortName'];
+            $TableName						= $表单MAP[$FormId]['TableName'];
+            $GroupName 						= $业务表单TEMPARRAY[$FormId];
+            $Step	 						= $RS['Step'];
+            $RS['URL']				        = "/apps/apps_".$Item['id'].".php";
+            $RS['Setting']            = "";
+            $RS['TableName']          = $TableName;
+            $RS['GroupName']          = $GroupName;
+            $RS['FlowId']             = $FlowId;
+            $RS['MenuId']             = $Item['id'];
+            $RS['Icon']               = "mdi:".$Setting['Menu_Three_Icon'];
+            $所有菜单[$GroupName][$FlowId]     = $RS;
+        }
+    }
 
     $MainDataList = [];
 	$COUNTER 	= 0;
@@ -170,38 +214,39 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 			$当前分组下面的菜单KEY 	= $当前分组下面的菜单KEYS[$iR];
 			$Element				= array();
 			$Element['id']			= $COUNTER;
-			$Element['Name']		= $当前分组下面的菜单KEY;
+			$Element['Name']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['FlowName'];
 			$Element['GroupName']	= $分组KEY;
 			$Element['BackEndApi']	= $当前分组下面的菜单[$当前分组下面的菜单KEY]['URL'];
             $Element['PageType']	= $当前分组下面的菜单[$当前分组下面的菜单KEY]['PageType'];
 			$Element['PathUrl']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['PageType']."_".$COUNTER."_".$COUNTER;
 			$Element['ItemId']		= $COUNTER;
 			$Element['Number']		= "0";//图标的右上角提示信息
-			$Element['Icon']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['Icon'];
+			$Element['Icon']		= "https://oa.dyhsxmp.cn/general/EDU/Interface/TDFORMICAMPUS/images2020/2020_banzhurenluru.png";    //$当前分组下面的菜单[$当前分组下面的菜单KEY]['Icon'];
 			$Element['FormId']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['FormId'];
 			$Element['FlowId']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['id'];
 			$Element['ForceLogin']	= 1;//图标的右上角提示信息
 			$Element['UserDefineMobilePageUrl']	= strval($当前分组下面的菜单[$当前分组下面的菜单KEY]['UserDefineMobilePageUrl']);
 			
 			//通知公告的前面两个菜单项目,直接在微信小程序的代码中写死,需要在"校园"图标中显示出来.
-			$MainDataList[$分组KEY][]    = $Element;
+			$MainDataList[$分组KEY][]       = $Element;
+            $MainDataMap[$COUNTER]          = $Element;
 			$COUNTER ++;
 		}
 	}
 
 	$RESULT['MainDataGroup']	= $分组KEYS;                    //菜单分组
 	$RESULT['MainDataList']		= $MainDataList;                //主要数据区
+	$RESULT['MainDataMap']	    = $MainDataMap;                 //PAGEID=>MENU
 	$RESULT['MainImageList']	= $MainImageList;               //三张滚动截图
 	$RESULT['IsSearch']			= false;//是否显示搜索,目前需要关闭
 	$RESULT['IsUserAvator']		= false;//是否显示用户头像
 	$RESULT['UserType']		    = "教职工";
-	$RESULT['LOGIN_USER_EDUID']	= "admin";
 	$RESULT['IndexLogo']		= array();
 	$RESULT['SYSTEM_FORCE_TO_BIND_USER_STATUS']	= $SYSTEM_FORCE_TO_BIND_USER_STATUS;
 	//$RESULT['_REQUEST']			= $_REQUEST;
-	//$RESULT['_POST']			= $_POST;
-	$RESULT['所有菜单']			= $所有菜单;
-	//$RESULT['FormIdLIST']		= $FormIdLIST;
+	//$RESULT['_POST']			    = $_POST;
+	$RESULT['所有菜单']			    = $所有菜单;
+	//$RESULT['FormIdLIST']		    = $FormIdLIST;
 	//$RESULT['表单列表']			= $表单列表;
 	//$RESULT['_SESSION']			= $_SESSION;
 	

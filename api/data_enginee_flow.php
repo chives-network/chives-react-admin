@@ -47,7 +47,6 @@ if($FaceTo=="Student")         {
     CheckCsrsToken();
 }
 //print "TIME EXCEUTE 1:".(time()-$TIME_BEGIN)."<BR>\n";
-
 $rowHeight = 38;
 
 global $SettingMap;
@@ -1737,10 +1736,15 @@ $rs     = $db->Execute($sql_list) or print $sql_list;
 $rs_a   = $rs->GetArray();
 $FieldDataColorValue = [];
 $GetAllIDList = [];
+$MobileEndData = [];
 foreach ($rs_a as $Line) {
     $OriginalID         = $Line['id'];
     $GetAllIDList[]     = $Line['id'];
     $Line['id']         = EncryptID($Line['id']);
+    $MobileEndItem                                      = [];
+    $MobileEndItem['MobileEndFirstLine']                = $SettingMap['MobileEndFirstLine'];
+    $MobileEndItem['MobileEndSecondLineLeft']           = $SettingMap['MobileEndSecondLineLeft'];
+    $MobileEndItem['MobileEndSecondLineRight']          = $SettingMap['MobileEndSecondLineRight'];
     foreach($Line as $FieldName=>$FieldValue) {
         if($FieldValue=="1971-01-01" || $FieldValue=="1971-01-01 00:00:00" || $FieldValue=="1971-01")  {
             $Line[$FieldName] = "";
@@ -1818,8 +1822,22 @@ foreach ($rs_a as $Line) {
                 $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'xlsx',$Line[$FieldName]);
                 break;
         }
-        // filter data to show on the list page -- begin
+        // filter data to show on the list page -- End
+        // Mobile End Data Filter
+        $MobileEndItem['MobileEndFirstLine']            = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndFirstLine']);
+        $MobileEndItem['MobileEndSecondLineLeft']       = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndSecondLineLeft']);
+        $MobileEndItem['MobileEndSecondLineRight']      = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndSecondLineRight']);
+        $MobileEndItem['MobileEndSecondLineRightColor']  = $SettingMap['MobileEndSecondLineRightColor'];
+        if($FieldName == $SettingMap['MobileEndWhenField1'] && $SettingMap['MobileEndWhenFieldIsEqual1'] == $FieldValue) {
+            $MobileEndItem['MobileEndSecondLineRightColor'] = $SettingMap['MobileEndWhenFieldShowColor1'];
+        }
+        if($FieldName == $SettingMap['MobileEndWhenField2'] && $SettingMap['MobileEndWhenFieldIsEqual2'] == $FieldValue) {
+            $MobileEndItem['MobileEndSecondLineRightColor'] = $SettingMap['MobileEndWhenFieldShowColor2'];
+        }
+        $MobileEndItem['MobileEndRecordIcon']       = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoHIb59gP2qqbgj0aZOPtwX63YKJ1qA124SibEuISUG0fgrZkjVcQ52iclmDKRPGhw4Z6zIE066PWXA/132";
+        //print_R($SettingMap);exit;
     }
+    $MobileEndData[] = $MobileEndItem;
 
     //LimitEditAndDelete
     if($SettingMap['LimitEditAndDelete_Edit_Field_One']!="" && $SettingMap['LimitEditAndDelete_Edit_Field_One']!="None" && in_array($SettingMap['LimitEditAndDelete_Edit_Field_One'], $MetaColumnNames)) {
@@ -1899,6 +1917,7 @@ if($SettingMap['OperationLogGrade']=="AllOperation")  {
 }
 
 $RS['init_default']['data']                 = $NewRSA;
+$RS['init_default']['MobileEndData']        = $MobileEndData;
 $RS['init_default']['ForbiddenSelectRow']   = array_keys($ForbiddenSelectRow);
 $RS['init_default']['ForbiddenViewRow']     = array_keys($ForbiddenViewRow);
 $RS['init_default']['ForbiddenEditRow']     = array_keys($ForbiddenEditRow);

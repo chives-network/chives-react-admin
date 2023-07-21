@@ -921,11 +921,42 @@ for($i=1;$i<=$MaxMsgSections;$i++)     {
     $edit_default_4_mode[] = ['value'=>"Msg_Reminder_Rule_{$i}", 'label'=>__("Msg_Reminder_Rule_{$i}")];
 }
 
+//#########################################################################################################################
+//MobileEnd################################################################################################################
+//#########################################################################################################################
+$edit_default_5 = [];
+$edit_default_5_mode[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
+$edit_default_5_mode[] = ['value'=>"ListTemplate2", 'label'=>__("ListTemplate2")];
+
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndTitleName", 'show'=>true, 'type'=>"input", 'label' => __("TitleName"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
+
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndFirstLine", 'show'=>true, 'type'=>"input", 'label' => __("FirstLine"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndSecondLineLeft", 'show'=>true, 'type'=>"input", 'label' => __("SecondLineLeft"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndSecondLineRight", 'show'=>true, 'type'=>"input", 'label' => __("SecondLineRight"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndSecondLineRightColor", 'show'=>true, 'type'=>"input", 'label' => __("SecondLineRightColor"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+
+
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenField1", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("SecondLineRightChooseFiled"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldIsEqual1", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldIsEqual"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldShowColor1", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldShowColor"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenField2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("SecondLineRightChooseFiled"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldIsEqual2", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldIsEqual"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldShowColor2", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldShowColor"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+
 
 $defaultValues_4 = [];
 foreach($edit_default_4 as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
         $defaultValues_4[$ITEM['name']] = $ITEM['value'];
+    }
+}
+
+$defaultValues_5 = [];
+foreach($edit_default_5 as $ModeName=>$allFieldItem) {
+    foreach($allFieldItem as $ITEM) {
+        $defaultValues_5[$ITEM['name']] = $ITEM['value'];
     }
 }
 
@@ -1001,6 +1032,50 @@ if($_GET['action']=="edit_default_4"&&$id!='')         {
     exit;
 }
 
+
+
+if($_GET['action']=="edit_default_5"&&$id!='')         {    
+    $sql    = "select * from form_formflow where id = '$id'";
+    $rs     = $db->Execute($sql);
+    $FlowName   = $rs->fields['FlowName'];
+    $Setting    = $rs->fields['Setting'];
+    $SettingMap = unserialize(base64_decode($Setting));
+    $FlowName   = $rs->fields['FlowName'];
+    if(is_array($SettingMap))   {
+        $defaultValues_5_keys = array_keys($defaultValues_5);
+        foreach($SettingMap as $value => $label)  {
+            if(in_array($value, $defaultValues_5_keys))  {
+                $defaultValues_5[$value] = $label;
+            }
+        }        
+        if($defaultValues_5['MobileEndIconName']=="" || $defaultValues_5['MobileEndIconName']==null)     {
+            $defaultValues_5['MobileEndIconName'] = $SettingMap['Menu_Three']!=""?$SettingMap['Menu_Three']:$SettingMap['Menu_Two'];
+        }       
+        if($defaultValues_5['MobileEndTitleName']=="" || $defaultValues_5['MobileEndTitleName']==null)     {
+            $defaultValues_5['MobileEndTitleName'] = $SettingMap['Menu_Three']!=""?$SettingMap['Menu_Three']:$SettingMap['Menu_Two'];
+        }
+    } 
+    $edit_default['allFields']      = $edit_default_5;
+    $edit_default['allFieldsMode']  = $edit_default_5_mode;
+    $edit_default['defaultValues']  = $defaultValues_5;
+    $edit_default['dialogContentHeight']  = "90%";
+    $edit_default['componentsize']  = "small";
+    $edit_default['submitaction']   = "edit_default_5_data";
+    $edit_default['submittext']     = __("Submit");
+    $edit_default['canceltext']     = __("Cancel");
+    $edit_default['titletext']      = __("Mobile End Setting");
+    $edit_default['titlememo']      = __("");
+    $edit_default['tablewidth']     = 550;
+
+    $RS['edit_default'] = $edit_default;
+    $RS['status'] = "OK";
+    $RS['data'] = $defaultValues_5;
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    print_R(json_encode($RS));
+    exit;
+}
+
 if(($_GET['action']=="edit_default_6_data") && $id!="")     {
     $sql        = "select * from form_formflow where id = '$id'";
     $rs         = $db->Execute($sql);
@@ -1032,7 +1107,7 @@ if(($_GET['action']=="edit_default_6_data") && $id!="")     {
     }
 }
 
-if(($_GET['action']=="edit_default_1_data" || $_GET['action']=="edit_default_2_data" || $_GET['action']=="edit_default_3_data" || $_GET['action']=="edit_default_4_data") && $id!="")     {
+if(($_GET['action']=="edit_default_1_data" || $_GET['action']=="edit_default_2_data" || $_GET['action']=="edit_default_3_data" || $_GET['action']=="edit_default_4_data" || $_GET['action']=="edit_default_5_data") && $id!="")     {
     
     if($_POST['Menu_One']!=""&&$_POST['Menu_Two']!=""&&$id!="")   {
         $FieldsArray = [];
@@ -1207,6 +1282,7 @@ $columnName = "Field Type";     $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "Interface";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:cog-outline','apicolor'=>'warning.main', 'apiaction' => "edit_default_2", 'renderCell' => NULL ];
 $columnName = "Batch Approval";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:border-bottom','apicolor'=>'info.main', 'apiaction' => "edit_default_3", 'renderCell' => NULL ];
 $columnName = "Msg Reminder";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 170, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_4", 'renderCell' => NULL ];
+$columnName = "MobileEnd";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 170, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_5", 'renderCell' => NULL ];
 $columnName = "FaceTo";         $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 100, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 
 
@@ -1372,6 +1448,20 @@ $RS['edit_default']['titlememo']  = __("Manage All Form Fields in Table");
 $RS['edit_default']['tablewidth']  = 650;
 $RS['edit_default']['submitloading']    = __("SubmitLoading");
 $RS['edit_default']['loading']          = __("Loading");
+
+$RS['edit_default_5']['allFields']      = $edit_default_5;
+$RS['edit_default_5']['allFieldsMode']  = $edit_default_5_mode;
+$RS['edit_default_5']['defaultValues']  = $defaultValues_4;
+$RS['edit_default_5']['dialogContentHeight']  = "850px";
+$RS['edit_default_5']['submitaction']  = "edit_default_5_data";
+$RS['edit_default_5']['componentsize'] = "small";
+$RS['edit_default_5']['submittext']    = __("Submit");
+$RS['edit_default_5']['canceltext']    = __("Cancel");
+$RS['edit_default_5']['titletext']  = __("Design Form Bottom Button");
+$RS['edit_default_5']['titlememo']  = __("Manage All Bottom Button Related Attributes in Flow");
+$RS['edit_default_5']['tablewidth']  = 650;
+$RS['edit_default_5']['submitloading'] = __("SubmitLoading");
+$RS['edit_default_5']['loading']       = __("Loading");
 
 $RS['edit_default_6']['allFields']      = $allFieldsAdd;
 $RS['edit_default_6']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];

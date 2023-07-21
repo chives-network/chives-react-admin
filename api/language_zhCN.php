@@ -573,8 +573,19 @@ $MAP['FormulaMethodField']    				= '计算字段';
 $MAP['FormulaMethodTarget']    				= '目标字段';
 $MAP['Print']    				            = '打印';
 $MAP['MobileEnd']    				        = '移动端';
+$MAP['ListTemplate1']    				    = '列表模板1';
+$MAP['ListTemplate2']    				    = '列表模板2';
+$MAP['ListTemplate3']    				    = '列表模板3';
 
-
+$MAP['IconName'] 	    = '图标名称';
+$MAP['TitleName'] 	    = '页面标题';
+$MAP['FirstLine'] 	    = '第一行';
+$MAP['SecondLineLeft'] 	= '第二行左';
+$MAP['SecondLineRight'] = '第二行右';
+$MAP['SecondLineRightColor'] = '第二行右颜色';
+$MAP['SecondLineRightChooseFiled'] 	= '第二行右字段';
+$MAP['WhenFieldIsEqual'] 	= '等于值';
+$MAP['WhenFieldShowColor'] 	= '显示颜色';
 
 
 
