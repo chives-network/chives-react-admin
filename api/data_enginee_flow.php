@@ -1572,6 +1572,8 @@ $RS['init_action']['id']            = EncryptID($FlowId); //NOT USE THIS VALUE I
 //Search Field
 $RS['init_default']['searchFieldArray'] = $searchField;
 $RS['init_default']['searchFieldText'] = __("Search Item");
+if($_REQUEST['searchOneFieldName']=="") $_REQUEST['searchOneFieldName'] = $MetaColumnNames[1];
+$RS['init_default']['searchFieldName'] = ForSqlInjection($_REQUEST['searchOneFieldName']);
 
 $searchOneFieldName     = ForSqlInjection($_REQUEST['searchOneFieldName']);
 $searchOneFieldValue    = ForSqlInjection($_REQUEST['searchOneFieldValue']);
@@ -1633,7 +1635,13 @@ foreach($groupField as $FieldName) {
             break;
     }
     array_unshift($rs_a,['name'=>__('All Data'), 'value'=>'All Data', 'num'=>$ALL_NUM]);
-    $RS['init_default']['filter'][] = ['name' => $FieldName, 'text' => $ShowTextName, 'list' => $rs_a, 'selected' => "All Data"];
+    if($_POST[$FieldName]!="") {
+        $selected = ForSqlInjection($_POST[$FieldName]);
+    }
+    else {        
+        $selected = "All Data";
+    }
+    $RS['init_default']['filter'][] = ['name' => $FieldName, 'text' => $ShowTextName, 'list' => $rs_a, 'selected' => $selected];
     //Sql Filter
     $SqlFilterValue = ForSqlInjection($_REQUEST[$FieldName]);
     if ($SqlFilterValue != "" && $SqlFilterValue != "NULL" && $SqlFilterValue != "All Data") {
@@ -1837,7 +1845,6 @@ foreach ($rs_a as $Line) {
         $MobileEndItem['MobileEndRecordIcon']       = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoHIb59gP2qqbgj0aZOPtwX63YKJ1qA124SibEuISUG0fgrZkjVcQ52iclmDKRPGhw4Z6zIE066PWXA/132";
         //print_R($SettingMap);exit;
     }
-    $MobileEndData[] = $MobileEndItem;
 
     //LimitEditAndDelete
     if($SettingMap['LimitEditAndDelete_Edit_Field_One']!="" && $SettingMap['LimitEditAndDelete_Edit_Field_One']!="None" && in_array($SettingMap['LimitEditAndDelete_Edit_Field_One'], $MetaColumnNames)) {
@@ -1885,6 +1892,14 @@ foreach ($rs_a as $Line) {
         $ForbiddenDeleteRowOriginal[$OriginalID] = $OriginalID;
         $ForbiddenSelectRowOriginal[$OriginalID] = $OriginalID;
     }
+    if($ForbiddenEditRow[$Line['id']]!="") {
+        $MobileEndItem['EditUrl']   = "?action=edit_default&pageid=$page&id=".$Line['id'];
+    }
+    if($ForbiddenDeleteRow[$Line['id']]!="") {
+        $MobileEndItem['DeleteUrl'] = "?action=delete_array&pageid=$page&id=".$Line['id'];
+    }
+    $MobileEndItem['Template'] = "List";
+    $MobileEndData[] = $MobileEndItem;
 
 }
 
@@ -2123,6 +2138,7 @@ $RS['init_default']['dialogContentHeight']  = "90%";
 $RS['init_default']['dialogMaxWidth']  = $SettingMap['Init_Action_AddEditWidth']?$SettingMap['Init_Action_AddEditWidth']:'md';// xl lg md sm xs 
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
+$RS['init_default']['pageId']       = $page;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
 if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
     $RS['init_default']['sql']                              = $sql_list;

@@ -248,6 +248,7 @@ function CheckCsrsToken() {
 				$RS = [];
 				$RS['status'] 	= "ERROR";
 				$RS['code'] 	= "TimeOut";
+				$RS['DiffTime']	= $DiffTime;
 				$RS['msg'] 		= __("Timeout for operation");
 				print json_encode($RS);
 				exit;
