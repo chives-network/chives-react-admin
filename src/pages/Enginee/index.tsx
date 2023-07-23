@@ -92,13 +92,13 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   const [imagesPreviewList, setImagesPreviewList] = useState<string[]>([])
 
   const [filterMultiColumns, setFilterMultiColumns] = useState<GridFilterModel>()
-  const [searchOneFieldName, setSearchOneFieldName] = useState<string>('')
-  const [searchOneFieldValue, setSearchOneFieldValue] = useState<string>('')
+  const [searchFieldName, setsearchFieldName] = useState<string>('')
+  const [searchFieldValue, setsearchFieldValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<GridRowId[]>([])
   const [sortMethod, setSortMethod] = useState<string>('desc')
   const [sortColumn, setSortColumn] = useState<string>('')
 
-  const [allSubmitFields, setAllSubmitFields] = useState({ 'searchOneFieldName': '' });
+  const [allSubmitFields, setAllSubmitFields] = useState({ 'searchFieldName': '' });
 
   const [pageSize, setPageSize] = useState<number>(0)
   const [page, setPage] = useState<number>(0)
@@ -131,8 +131,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
     newAllFilters['externalId'] = params['externalId']
     newAllFilters['page'] = params['page']
     newAllFilters['pageSize'] = params['pageSize']
-    newAllFilters['searchOneFieldName'] = params['searchOneFieldName']
-    newAllFilters['searchOneFieldValue'] = params['searchOneFieldValue']
+    newAllFilters['searchFieldName'] = params['searchFieldName']
+    newAllFilters['searchFieldValue'] = params['searchFieldValue']
     newAllFilters['sortMethod'] = params['sortMethod']
     newAllFilters['sortColumn'] = params['sortColumn']
     if (params['filterMultiColumns'] != undefined) {
@@ -178,8 +178,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   useEffect(() => {
     dispatch(
       fetchData({
-        searchOneFieldName: searchOneFieldName,
-        searchOneFieldValue: searchOneFieldValue,
+        searchFieldName: searchFieldName,
+        searchFieldValue: searchFieldValue,
         allSubmitFields: allSubmitFields,
         filterMultiColumns: filterMultiColumns,
         page: page,
@@ -190,7 +190,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         externalId: externalId
       })
     ).then();
-  }, [dispatch, searchOneFieldName, searchOneFieldValue, allSubmitFields, page, pageSize, sortMethod, sortColumn, forceUpdate, filterMultiColumns, externalId])
+  }, [dispatch, searchFieldName, searchFieldValue, allSubmitFields, page, pageSize, sortMethod, sortColumn, forceUpdate, filterMultiColumns, externalId])
 
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -212,8 +212,8 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   //}
 
   const tableHeaderHandleFilter = useCallback((val: any) => {
-    setSearchOneFieldName(val.searchOneFieldName)
-    setSearchOneFieldValue(val.searchOneFieldValue)
+    setsearchFieldName(val.searchFieldName)
+    setsearchFieldValue(val.searchFieldValue)
   }, [])
 
   const multiReviewHandleFilter = useCallback((action: string, multiReviewInputValue: string, selectedRows: GridRowId[], CSRF_TOKEN:string) => {
@@ -251,7 +251,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   }, [])
 
   const addUserHandleFilter = useCallback(() => {
-    setSearchOneFieldValue("")
+    setsearchFieldValue("")
     setForceUpdate(Math.random())
     setAddEditActionId('')
     setEditViewCounter(0)
@@ -677,7 +677,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
             )
           })}
 
-          {store && store.init_default && store.init_default.searchFieldText && store.init_default.searchFieldArray && store.init_default.searchFieldArray.length>0 && isLoadingTip==false ? <IndexTableHeader filter={store.init_default.filter} handleFilterChange={handleFilterChange} value={searchOneFieldName} handleFilter={tableHeaderHandleFilter} toggleAddTableDrawer={toggleAddTableDrawer} toggleImportTableDrawer={toggleImportTableDrawer} toggleExportTableDrawer={toggleExportTableDrawer} searchFieldText={store.init_default.searchFieldText} searchFieldArray={store.init_default.searchFieldArray} selectedRows={selectedRows} multireview={store.init_default.multireview} multiReviewHandleFilter={multiReviewHandleFilter} button_search={store.init_default.button_search} button_add={store.init_default.button_add} button_import={store.init_default.button_import} button_export={store.init_default.button_export} isAddButton={store && store.add_default && store.add_default.allFields ? true : false} isImportButton={store && store.import_default && store.import_default.allFields ? true : false} isExportButton={store && store.export_default && store.export_default.allFields && store.export_default.exportUrl ? true : false} CSRF_TOKEN={store.init_default.CSRF_TOKEN}/> : ''}
+          {store && store.init_default && store.init_default.searchFieldText && store.init_default.searchFieldArray && store.init_default.searchFieldArray.length>0 && isLoadingTip==false ? <IndexTableHeader filter={store.init_default.filter} handleFilterChange={handleFilterChange} value={searchFieldName} handleFilter={tableHeaderHandleFilter} toggleAddTableDrawer={toggleAddTableDrawer} toggleImportTableDrawer={toggleImportTableDrawer} toggleExportTableDrawer={toggleExportTableDrawer} searchFieldText={store.init_default.searchFieldText} searchFieldArray={store.init_default.searchFieldArray} selectedRows={selectedRows} multireview={store.init_default.multireview} multiReviewHandleFilter={multiReviewHandleFilter} button_search={store.init_default.button_search} button_add={store.init_default.button_add} button_import={store.init_default.button_import} button_export={store.init_default.button_export} isAddButton={store && store.add_default && store.add_default.allFields ? true : false} isImportButton={store && store.import_default && store.import_default.allFields ? true : false} isExportButton={store && store.export_default && store.export_default.allFields && store.export_default.exportUrl ? true : false} CSRF_TOKEN={store.init_default.CSRF_TOKEN}/> : ''}
 
           {isLoadingTip ?
             <Grid item xs={12} sm={12} container justifyContent="space-around">

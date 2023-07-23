@@ -53,7 +53,7 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   
   // ** Props
   const { filter, handleFilterChange, handleFilter, toggleAddTableDrawer, toggleImportTableDrawer, toggleExportTableDrawer, searchFieldText, searchFieldArray, selectedRows, multireview, multiReviewHandleFilter, button_search, button_add, button_import, button_export, isAddButton, isImportButton, isExportButton, CSRF_TOKEN } = props
-  const defaultValuesInitial = { "searchOneFieldName": searchFieldArray && searchFieldArray[0] && searchFieldArray[0].value ? searchFieldArray[0].value : undefined, "searchOneFieldValue": "", "multiReviewInputName": "" }
+  const defaultValuesInitial = { "searchFieldName": searchFieldArray && searchFieldArray[0] && searchFieldArray[0].value ? searchFieldArray[0].value : undefined, "searchFieldValue": "", "multiReviewInputName": "" }
   
   //const [defaultValues, setDefaultValues] = useState(JSON.parse(JSON.stringify(defaultValuesInitial)))
   const defaultValues = JSON.parse(JSON.stringify(defaultValuesInitial))
@@ -187,14 +187,14 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                   <FormControl fullWidth size="small">
                     <InputLabel id={searchFieldText}>{searchFieldText}</InputLabel>
                     <Controller
-                      name='searchOneFieldName'
+                      name='searchFieldName'
                       control={control}
                       render={({ field: { value, onChange } }) => (
                         <Select
                           value={value}
                           label={searchFieldText}
                           onChange={onChange}
-                          error={Boolean(errors['searchOneFieldName'])}
+                          error={Boolean(errors['searchFieldName'])}
                           labelId='validation-basic-select'
                           aria-describedby='validation-basic-select'
                         >
@@ -211,7 +211,7 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                 <Grid item sm={2} xs={12}>
                   <FormControl fullWidth size="small" sx={{}}>
                     <Controller
-                      name="searchOneFieldValue"
+                      name="searchFieldValue"
                       control={control}
                       render={({ field: { value, onChange } }) => (
                         <TextField
@@ -221,7 +221,7 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                           label={searchFieldText}
                           onChange={onChange}
                           placeholder={searchFieldText}
-                          error={Boolean(errors['searchOneFieldValue'])}
+                          error={Boolean(errors['searchFieldValue'])}
                         />
                       )}
                     />

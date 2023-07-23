@@ -588,6 +588,7 @@ $MAP['SecondLineRightColor'] = 'Second Line Right Color';
 $MAP['SecondLineRightChooseFiled'] 	= 'Second Line Right Filed';
 $MAP['WhenFieldIsEqual'] 	= 'Is Equal';
 $MAP['WhenFieldShowColor'] 	= 'ShowColor';
+$MAP['Mobile End Setting'] 	= 'Mobile End Setting';
 
 
 

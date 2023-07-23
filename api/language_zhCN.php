@@ -586,6 +586,7 @@ $MAP['SecondLineRightColor'] = '第二行右颜色';
 $MAP['SecondLineRightChooseFiled'] 	= '第二行右字段';
 $MAP['WhenFieldIsEqual'] 	= '等于值';
 $MAP['WhenFieldShowColor'] 	= '显示颜色';
+$MAP['Mobile End Setting'] 	= '移动端设置';
 
 
 

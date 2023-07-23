@@ -680,7 +680,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Edit_Field_One']],$LimitEditAndDelete_Edit_Value_One_Array)) {
             $RS = [];
             $RS['status'] = "ERROR";
-            $RS['msg'] = __("Error Id Value");
+            $RS['msg'] = __("LimitEditAndDelete");
             $RS['_GET'] = $_GET;
             $RS['_POST'] = $_POST;
             print json_encode($RS);
@@ -692,7 +692,7 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         if(in_array($RecordOriginal->fields[$SettingMap['LimitEditAndDelete_Edit_Field_Two']],$LimitEditAndDelete_Edit_Value_Two_Array)) {
             $RS = [];
             $RS['status'] = "ERROR";
-            $RS['msg'] = __("Error Id Value");
+            $RS['msg'] = __("LimitEditAndDelete");
             $RS['_GET'] = $_GET;
             $RS['_POST'] = $_POST;
             print json_encode($RS);
@@ -1572,14 +1572,16 @@ $RS['init_action']['id']            = EncryptID($FlowId); //NOT USE THIS VALUE I
 //Search Field
 $RS['init_default']['searchFieldArray'] = $searchField;
 $RS['init_default']['searchFieldText'] = __("Search Item");
-if($_REQUEST['searchOneFieldName']=="") $_REQUEST['searchOneFieldName'] = $MetaColumnNames[1];
-$RS['init_default']['searchFieldName'] = ForSqlInjection($_REQUEST['searchOneFieldName']);
+if($_REQUEST['searchFieldName']=="") $_REQUEST['searchFieldName'] = $MetaColumnNames[1];
+$RS['init_default']['searchFieldName'] = ForSqlInjection($_REQUEST['searchFieldName']);
 
-$searchOneFieldName     = ForSqlInjection($_REQUEST['searchOneFieldName']);
-$searchOneFieldValue    = ForSqlInjection($_REQUEST['searchOneFieldValue']);
-if ($searchOneFieldName != "" && $searchOneFieldValue != "" && in_array($searchOneFieldName, $MetaColumnNames) ) {
-    $AddSql .= " and ($searchOneFieldName like '%" . $searchOneFieldValue . "%')";
+$searchFieldName     = ForSqlInjection($_REQUEST['searchFieldName']);
+$searchFieldValue    = ForSqlInjection($_REQUEST['searchFieldValue']);
+if ($searchFieldName != "" && $searchFieldValue != "" && in_array($searchFieldName, $MetaColumnNames) ) {
+    $AddSql .= " and ($searchFieldName like '%" . $searchFieldValue . "%')";
 }
+$RS['init_default']['searchFieldValue'] = ForSqlInjection($_REQUEST['searchFieldValue']);
+
 
 //Group Filter
 $RS['init_default']['filter'] = [];
@@ -1892,10 +1894,10 @@ foreach ($rs_a as $Line) {
         $ForbiddenDeleteRowOriginal[$OriginalID] = $OriginalID;
         $ForbiddenSelectRowOriginal[$OriginalID] = $OriginalID;
     }
-    if($ForbiddenEditRow[$Line['id']]!="") {
+    if($ForbiddenEditRow[$Line['id']]=="") {
         $MobileEndItem['EditUrl']   = "?action=edit_default&pageid=$page&id=".$Line['id'];
     }
-    if($ForbiddenDeleteRow[$Line['id']]!="") {
+    if($ForbiddenDeleteRow[$Line['id']]=="") {
         $MobileEndItem['DeleteUrl'] = "?action=delete_array&pageid=$page&id=".$Line['id'];
     }
     $MobileEndItem['Template'] = "List";

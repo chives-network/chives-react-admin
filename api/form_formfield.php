@@ -505,10 +505,10 @@ $RS['init_action']['id']            = 999; //NOT USE THIS VALUE IN FRONT END
 $RS['init_default']['searchFieldArray'] = $searchField;
 $RS['init_default']['searchFieldText'] = __("Search Item");
 
-$searchOneFieldName     = ForSqlInjection($_REQUEST['searchOneFieldName']);
-$searchOneFieldValue    = ForSqlInjection($_REQUEST['searchOneFieldValue']);
-if ($searchOneFieldName != "" && $searchOneFieldValue != "" && in_array($searchOneFieldName, $columnNames) ) {
-    $AddSql .= " and ($searchOneFieldName like '%" . $searchOneFieldValue . "%')";
+$searchFieldName     = ForSqlInjection($_REQUEST['searchFieldName']);
+$searchFieldValue    = ForSqlInjection($_REQUEST['searchFieldValue']);
+if ($searchFieldName != "" && $searchFieldValue != "" && in_array($searchFieldName, $columnNames) ) {
+    $AddSql .= " and ($searchFieldName like '%" . $searchFieldValue . "%')";
 }
 
 $sql        = "select count(*) as NUM from form_formfield $AddSql ";

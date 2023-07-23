@@ -217,10 +217,10 @@ $RS['init_default']['searchFieldText']  = __("Search Item");
 $RS['init_action']['action']        = "init_default";
 $RS['init_action']['id']            = 999; //NOT USE THIS VALUE IN FRONT END
 
-$searchOneFieldName     = ForSqlInjection($_REQUEST['searchOneFieldName']);
-$searchOneFieldValue    = ForSqlInjection($_REQUEST['searchOneFieldValue']);
-if ($searchOneFieldName != "" && $searchOneFieldValue != "" && in_array($searchOneFieldName, $columnNames) ) {
-    $AddSql .= " and ($searchOneFieldName like '%" . $searchOneFieldValue . "%')";
+$searchFieldName     = ForSqlInjection($_REQUEST['searchFieldName']);
+$searchFieldValue    = ForSqlInjection($_REQUEST['searchFieldValue']);
+if ($searchFieldName != "" && $searchFieldValue != "" && in_array($searchFieldName, $columnNames) ) {
+    $AddSql .= " and ($searchFieldName like '%" . $searchFieldValue . "%')";
 }
 
 $sql        = "select count(*) as NUM from form_formdict $AddSql ";

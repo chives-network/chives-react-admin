@@ -228,3 +228,6 @@ $MAP['Mobile End Setting'] 	= 'Mobile End Setting';
 $MAP['Mobile End Setting'] 	= 'Mobile End Setting';
 $MAP['Mobile End Setting'] 	= 'Mobile End Setting';
 $MAP['Mobile End Setting'] 	= 'Mobile End Setting';
+$MAP['Mobile End Setting'] 	= 'Mobile End Setting';
+$MAP['Mobile End Setting'] 	= 'Mobile End Setting';
+$MAP['Mobile End Setting'] 	= 'Mobile End Setting';
