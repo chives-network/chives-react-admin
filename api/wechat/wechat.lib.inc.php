@@ -77,6 +77,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 	$SYSTEM_APPSTORE_ID = $_REQUEST['SYSTEM_APPSTORE_ID'];
     $SYSTEM_APPSTORE_ID = 1;
 	$得到用户所属的FormId列表X = array();
+	$SqlList = [];
 	
 	//第一步 得到权限
 	global $systemprivate_rsa;
@@ -93,6 +94,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 	
 	//第二步 基本信息
 	$sql	= "SELECT 基础架构,业务表单,小程序名称 FROM data_miniprogram WHERE id='$SYSTEM_APPSTORE_ID'";
+	$SqlList[] = $sql;
 	$rs		= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);
 	$rs_a 	= $rs->GetArray();
 	$基础设置 = $业务表单 = "";
@@ -111,6 +113,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 	
 	//print_R($业务表单TEMPARRAY);exit;
 	$sql 			= "select id,ShortName,TableName from form_formname where id in ('".join("','",$所有表单ARRAY)."')";
+	$SqlList[] = $sql;
 	$rs				= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);
 	$rs_a 			= $rs->GetArray();
 	$表单编号ARRAY 	= array();	
@@ -124,8 +127,14 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
     CheckAuthUserLoginStatus();
     $USER_ID    = $GLOBAL_USER->USER_ID;
     $RS         = returntablefield("data_user","USER_ID",$USER_ID,"USER_PRIV,USER_PRIV_OTHER");
-    $USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
+	if($RS['USER_PRIV_OTHER']!="") {
+		$USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
+	}
+	else {		
+		$USER_PRIV_Array = explode(',',$RS['USER_PRIV']);
+	}
     $sql        = "select * from data_role where id in ('".join("','",$USER_PRIV_Array)."')";
+	$SqlList[] = $sql;
     $rsf        = $db->CacheExecute(180,$sql);
     $RoleRSA    = $rsf->GetArray();
     $RoleArray  = "";
@@ -141,6 +150,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
     $MenuOneRSA  = $rsf->GetArray();
 
     $sql 		= "select * from form_formflow where FormId in ('".join("','",$所有表单ARRAY)."') and FaceTo='AuthUser' and MobileEnd='Yes' order by FormId asc,Step asc";
+	$SqlList[] = $sql;
 	$rs			= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);
 	$rs_a 		= $rs->GetArray();
     $FlowIdMapArray = [];
@@ -148,9 +158,11 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 		$FlowIdMapArray[$rs_a[$R]['id']]  = $rs_a[$R];
     }
 
-    //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
-    $sql    = "select * from data_menutwo where FaceTo='AuthUser' and id in ('".join("','",$RoleArray)."') order by MenuOneName asc,SortNumber asc";
-    $rsf    = $db->CacheExecute(180,$sql);
+	$所有菜单 	 = [];
+    //$sql    	= "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
+    $sql    	= "select * from data_menutwo where FaceTo='AuthUser' and id in ('".join("','",$RoleArray)."') order by MenuOneName asc,SortNumber asc";
+	$SqlList[] 	= $sql;
+    $rsf    	= $db->CacheExecute(180,$sql);
     $MenuTwoRSA  = $rsf->GetArray();
     $MenuTwoArray = [];
     $TabMap = [];
@@ -245,10 +257,10 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 	$RESULT['SYSTEM_FORCE_TO_BIND_USER_STATUS']	= $SYSTEM_FORCE_TO_BIND_USER_STATUS;
 	//$RESULT['_REQUEST']			= $_REQUEST;
 	//$RESULT['_POST']			    = $_POST;
-	$RESULT['所有菜单']			    = $所有菜单;
-	//$RESULT['FormIdLIST']		    = $FormIdLIST;
-	//$RESULT['表单列表']			= $表单列表;
-	//$RESULT['_SESSION']			= $_SESSION;
+	$RESULT['所有菜单']			    	= $所有菜单;
+	$RESULT['FlowIdMapArray']			= $FlowIdMapArray;
+	$RESULT['MenuTwoRSA']				= $MenuTwoRSA;
+	$RESULT['SqlList']					= $SqlList;
 	
 	print_R(json_encode($RESULT));
 	exit;

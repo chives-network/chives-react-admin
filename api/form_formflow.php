@@ -311,8 +311,6 @@ $MenuTab_Options[] = ['value'=>'Yes', 'label'=>__('Yes')];
 $MenuTab_Options[] = ['value'=>'No', 'label'=>__('No')];
 $edit_default_2['Menu_Location'][] = ['name' => "MenuTab", 'show'=>true, 'type'=>'select', 'options'=>$MenuTab_Options, 'label' => __("Menu_Tab"), 'value' => "Yes", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
-$edit_default_2['Menu_Location'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MenuTab_Options, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
-
 
 $edit_default_2['Tip_In_Interface'][] = ['name' => "List_Title_Name", 'show'=>true, 'type'=>"input", 'label' => __("List_Title_Name"), 'value' => $ShortNameTarget.__("List"), 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_2['Tip_In_Interface'][] = ['name' => "Import_Title_Name", 'show'=>true, 'type'=>"input", 'label' => __("Import_Title_Name"), 'value' => __("Import")."".$ShortNameTarget, 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => true,'xs'=>12, 'sm'=>4, 'disabled' => false]];
@@ -925,8 +923,15 @@ for($i=1;$i<=$MaxMsgSections;$i++)     {
 //MobileEnd################################################################################################################
 //#########################################################################################################################
 $edit_default_5 = [];
+$edit_default_5_mode[] = ['value'=>"MenuAndIcon", 'label'=>__("MenuAndIcon")];
 $edit_default_5_mode[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
-$edit_default_5_mode[] = ['value'=>"ListTemplate2", 'label'=>__("ListTemplate2")];
+//$edit_default_5_mode[] = ['value'=>"ListTemplate2", 'label'=>__("ListTemplate2")];
+
+
+$MobileEnd = [];
+$MobileEnd[] = ['value'=>'Yes', 'label'=>__('Yes')];
+$MobileEnd[] = ['value'=>'No', 'label'=>__('No')];
+$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MobileEnd, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndTitleName", 'show'=>true, 'type'=>"input", 'label' => __("TitleName"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
@@ -1037,6 +1042,8 @@ if($_GET['action']=="edit_default_4"&&$id!='')         {
 if($_GET['action']=="edit_default_5"&&$id!='')         {    
     $sql    = "select * from form_formflow where id = '$id'";
     $rs     = $db->Execute($sql);
+    $FormId     = $rs->fields['FormId'];
+    $Step       = $rs->fields['Step'];
     $FlowName   = $rs->fields['FlowName'];
     $Setting    = $rs->fields['Setting'];
     $SettingMap = unserialize(base64_decode($Setting));
@@ -1055,6 +1062,26 @@ if($_GET['action']=="edit_default_5"&&$id!='')         {
             $defaultValues_5['MobileEndTitleName'] = $SettingMap['Menu_Three']!=""?$SettingMap['Menu_Three']:$SettingMap['Menu_Two'];
         }
     } 
+    if($FormId!="" && $Step>1)   {
+        $sql        = "select * from form_formflow where FormId = '$FormId' and Step='".($Step-1)."'";
+        $rs         = $db->Execute($sql);
+        $SettingPrevious    = $rs->fields['Setting'];
+        $SettingMapPrevious = unserialize(base64_decode($SettingPrevious));
+        $SettingMapKeys     = array_keys($SettingMap);
+        if($defaultValues_5['MobileEndIconName']=="")               $defaultValues_5['MobileEndIconName'] = $SettingMapPrevious['MobileEndIconName'];
+        if($defaultValues_5['MobileEndTitleName']=="")              $defaultValues_5['MobileEndTitleName'] = $SettingMapPrevious['MobileEndTitleName'];
+        if($defaultValues_5['MobileEndFirstLine']=="")              $defaultValues_5['MobileEndFirstLine'] = $SettingMapPrevious['MobileEndFirstLine'];
+        if($defaultValues_5['MobileEndSecondLineLeft']=="")         $defaultValues_5['MobileEndSecondLineLeft'] = $SettingMapPrevious['MobileEndSecondLineLeft'];
+        if($defaultValues_5['MobileEndSecondLineRight']=="")        $defaultValues_5['MobileEndSecondLineRight'] = $SettingMapPrevious['MobileEndSecondLineRight'];
+        if($defaultValues_5['MobileEndSecondLineRightColor']=="")   $defaultValues_5['MobileEndSecondLineRightColor'] = $SettingMapPrevious['MobileEndSecondLineRightColor'];
+        if(!in_array('MobileEndWhenField1',$SettingMapKeys))            $defaultValues_5['MobileEndWhenField1'] = $SettingMapPrevious['MobileEndWhenField1'];
+        if(!in_array('MobileEndWhenFieldIsEqual1',$SettingMapKeys))     $defaultValues_5['MobileEndWhenFieldIsEqual1'] = $SettingMapPrevious['MobileEndWhenFieldIsEqual1'];
+        if(!in_array('MobileEndWhenFieldShowColor1',$SettingMapKeys))   $defaultValues_5['MobileEndWhenFieldShowColor1'] = $SettingMapPrevious['MobileEndWhenFieldShowColor1'];
+        if(!in_array('MobileEndWhenField2',$SettingMapKeys))            $defaultValues_5['MobileEndWhenField2'] = $SettingMapPrevious['MobileEndWhenField2'];
+        if(!in_array('MobileEndWhenFieldIsEqual2',$SettingMapKeys))     $defaultValues_5['MobileEndWhenFieldIsEqual2'] = $SettingMapPrevious['MobileEndWhenFieldIsEqual2'];
+        if(!in_array('MobileEndWhenFieldShowColor2',$SettingMapKeys))   $defaultValues_5['MobileEndWhenFieldShowColor2'] = $SettingMapPrevious['MobileEndWhenFieldShowColor2'];
+    }
+
     $edit_default['allFields']      = $edit_default_5;
     $edit_default['allFieldsMode']  = $edit_default_5_mode;
     $edit_default['defaultValues']  = $defaultValues_5;
@@ -1201,7 +1228,9 @@ require_once("../data_enginee_flow.php");
     else {
         $FieldsArray['PageType']  = "FunctionPage";
     }
-    $FieldsArray['MobileEnd']   = $_POST['MobileEnd'];
+    if($_POST['MobileEnd']!="")  {
+        $FieldsArray['MobileEnd']   = $_POST['MobileEnd'];
+    }
     $FieldsArray['Setting']     = base64_encode(serialize($SettingMap));
     $FieldsArray['Creator']     = "admin";
     $FieldsArray['CreateTime'] = date("Y-m-d H:i:s");
@@ -1281,8 +1310,8 @@ $columnName = "FlowName";       $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "Field Type";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:chart-donut','apicolor'=>'success.main', 'apiaction' => "edit_default_1", 'renderCell' => NULL ];
 $columnName = "Interface";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:cog-outline','apicolor'=>'warning.main', 'apiaction' => "edit_default_2", 'renderCell' => NULL ];
 $columnName = "Batch Approval";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:border-bottom','apicolor'=>'info.main', 'apiaction' => "edit_default_3", 'renderCell' => NULL ];
-$columnName = "Msg Reminder";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 170, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_4", 'renderCell' => NULL ];
-$columnName = "MobileEnd";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 170, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_5", 'renderCell' => NULL ];
+$columnName = "Msg Reminder";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_4", 'renderCell' => NULL ];
+$columnName = "MobileEnd";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 100, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:cellphone','apicolor'=>'info.main', 'apiaction' => "edit_default_5", 'renderCell' => NULL ];
 $columnName = "FaceTo";         $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 100, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 
 
