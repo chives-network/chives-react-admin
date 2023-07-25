@@ -934,6 +934,22 @@ $MobileEnd[] = ['value'=>'No', 'label'=>__('No')];
 $edit_default_5['MenuAndIcon'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MobileEnd, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
+
+// Loading all images as the wechat app icons
+$ImagesList = [];
+$readdir = "./images/wechatIcon";
+if (is_dir($readdir)) {
+    if ($dh = opendir($readdir)) {
+        while (($file = readdir($dh)) !== false) {
+            if($file!='.' && $file!='..')  {
+                $ImagesList[] = ['value'=>substr($file,0,-4), 'label'=>"/images/wechatIcon/".$file];
+            }
+        }
+        closedir($dh);
+    }
+}
+$edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconImage", 'show'=>true, 'type'=>"autocompleteicons", 'options'=>$ImagesList, 'label' => __("Icon"), 'value' => '', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
+
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndTitleName", 'show'=>true, 'type'=>"input", 'label' => __("TitleName"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndFirstLine", 'show'=>true, 'type'=>"input", 'label' => __("FirstLine"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
@@ -1310,8 +1326,8 @@ $columnName = "FlowName";       $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "Field Type";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:chart-donut','apicolor'=>'success.main', 'apiaction' => "edit_default_1", 'renderCell' => NULL ];
 $columnName = "Interface";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:cog-outline','apicolor'=>'warning.main', 'apiaction' => "edit_default_2", 'renderCell' => NULL ];
 $columnName = "Batch Approval";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:border-bottom','apicolor'=>'info.main', 'apiaction' => "edit_default_3", 'renderCell' => NULL ];
-$columnName = "Msg Reminder";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_4", 'renderCell' => NULL ];
 $columnName = "MobileEnd";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 100, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:cellphone','apicolor'=>'info.main', 'apiaction' => "edit_default_5", 'renderCell' => NULL ];
+$columnName = "Msg Reminder";  $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:message-bulleted','apicolor'=>'info.main', 'apiaction' => "edit_default_4", 'renderCell' => NULL ];
 $columnName = "FaceTo";         $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 100, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 
 

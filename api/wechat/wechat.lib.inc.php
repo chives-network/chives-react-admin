@@ -192,7 +192,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
             $RS['GroupName']          = $GroupName;
             $RS['FlowId']             = $FlowId;
             $RS['MenuId']             = $Item['id'];
-            $RS['Icon']               = "mdi:".$Setting['Menu_Three_Icon'];
+            $RS['Icon']               = "/images/wechatIcon/".$Setting['MobileEndIconImage'].".png";
             $所有菜单[$GroupName][$FlowId]     = $RS;
         }
     }
@@ -220,10 +220,10 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 	//把[基础数据]这个值放到最下面-结束
 	for($i=0;$i<count($分组KEYS);$i++)			{
 		$分组KEY 				= $分组KEYS[$i];
-		$当前分组下面的菜单 	= $所有菜单[$分组KEY];
-		$当前分组下面的菜单KEYS = array_keys($当前分组下面的菜单);
+		$当前分组下面的菜单 	 = $所有菜单[$分组KEY];
+		$当前分组下面的菜单KEYS  = array_keys($当前分组下面的菜单);
 		for($iR=0;$iR<count($当前分组下面的菜单KEYS);$iR++)			{
-			$当前分组下面的菜单KEY 	= $当前分组下面的菜单KEYS[$iR];
+			$当前分组下面的菜单KEY 	 = $当前分组下面的菜单KEYS[$iR];
 			$Element				= array();
 			$Element['id']			= $COUNTER;
 			$Element['Name']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['FlowName'];
@@ -233,7 +233,7 @@ if($_GET['action']=='maindata'&&$SYSTEM_IS_CLOUD==0)															{
 			$Element['PathUrl']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['PageType']."_".$COUNTER."_".$COUNTER;
 			$Element['ItemId']		= $COUNTER;
 			$Element['Number']		= "0";//图标的右上角提示信息
-			$Element['Icon']		= "https://oa.dyhsxmp.cn/general/EDU/Interface/TDFORMICAMPUS/images2020/2020_banzhurenluru.png";    //$当前分组下面的菜单[$当前分组下面的菜单KEY]['Icon'];
+			$Element['Icon']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['Icon'];
 			$Element['FormId']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['FormId'];
 			$Element['FlowId']		= $当前分组下面的菜单[$当前分组下面的菜单KEY]['id'];
 			$Element['ForceLogin']	= 1;//图标的右上角提示信息

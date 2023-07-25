@@ -847,7 +847,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                     }
                                                 }
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {
-                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                    if ((action.indexOf("add_default") != -1 || action.indexOf("edit_default") != -1) && defaultValuesNew[FieldArray.name] != undefined) {
                                                         setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
                                                     }
                                                     
@@ -918,8 +918,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         console.log("NewFormulaMethodField",NewFormulaMethodField)
                                                                                         console.log("NewFormulaMethodTarget",NewFormulaMethodTarget)
                                                                                         console.log("defaultValuesNewTemp",defaultValuesNewTemp)
+                                                                                        const ThisInputValue: any = e.target.value
                                                                                         if(FieldArray.Formula.FormulaMethod=='*') {
-                                                                                            const ThisInputValue: any = e.target.value
                                                                                             const NewValue = defaultValuesNewTemp[NewFormulaMethodField] * ThisInputValue
                                                                                             if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                 defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -930,7 +930,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }
                                                                                         else if(FieldArray.Formula.FormulaMethod=='+' && ThisInputValue!=undefined) {
-                                                                                            const ThisInputValue: any = e.target.value
                                                                                             const NewValue = defaultValuesNewTemp[NewFormulaMethodField] + ThisInputValue
                                                                                             if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                 defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -941,7 +940,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }
                                                                                         else if(FieldArray.Formula.FormulaMethod=='-' && ThisInputValue!=undefined) {
-                                                                                            const ThisInputValue: any = e.target.value
                                                                                             const NewValue = defaultValuesNewTemp[NewFormulaMethodField] - ThisInputValue
                                                                                             if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                 defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -952,7 +950,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             setDefaultValuesNew(defaultValuesNewTemp)
                                                                                         }
                                                                                         else if(FieldArray.Formula.FormulaMethod=='/'&&ThisInputValue>0) {
-                                                                                            const ThisInputValue: any = e.target.value
                                                                                             const NewValue = defaultValuesNewTemp[NewFormulaMethodField] / ThisInputValue
                                                                                             if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                 defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -1564,7 +1561,62 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             </FormControl>
                                                         </Grid>
                                                     )
-                                                }    
+                                                }      
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "autocompleteicons") {
+                                                    
+                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined) {
+                                                        
+                                                        //console.log("defaultValuesNew[FieldArray.name]--------------------------------", defaultValuesNew[FieldArray.name])
+                                                        //setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <Controller
+                                                                    name={FieldArray.name}
+                                                                    control={control}
+                                                                    render={({ field: { value } }) => (
+                                                                        <Autocomplete
+                                                                            size={componentsize}
+                                                                            value={value}
+                                                                            freeSolo={FieldArray.freeSolo}
+                                                                            onChange={(event: any, newValue: any) => {
+                                                                                if (newValue != undefined) {
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[FieldArray.name] = newValue.value
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                }
+                                                                            }}
+                                                                            id="controllable-states-demo"
+                                                                            options={FieldArray.options}
+                                                                            isOptionEqualToValue={(option:any, value) => { return option.label === value; }}
+                                                                            renderInput={(params) => <TextField {...params} label={FieldArray.label} />}
+                                                                            renderOption={(props, option) => (
+                                                                                <Box component='li' sx={{ '& > img': { mr: 4, flexShrink: 0 } }} {...props}>
+                                                                                    <ImgStyled sx={{width:'50px',height:'50px'}} src={authConfig.backEndApiHost+option.label} alt={option.value} />
+                                                                                    {option.value}
+                                                                                </Box>
+                                                                            )}
+                                                                        />
+                                                                    )}
+                                                                />
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }   
                                                 else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "autocompletemulti") {
                                                     const DefaultValueForAutoComplete:any[] = []
                                                     const DefaultValueForAutoCompleteMap:{[key:string]:any} = {}
@@ -3098,8 +3150,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                 console.log("NewFormulaMethodField",NewFormulaMethodField)
                                                                                                 console.log("NewFormulaMethodTarget",NewFormulaMethodTarget)
                                                                                                 console.log("defaultValuesNewTemp",defaultValuesNewTemp)
+                                                                                                const ThisInputValue: any = e.target.value
                                                                                                 if(FieldArray.Formula.FormulaMethod=='*') {
-                                                                                                    const ThisInputValue: any = e.target.value
                                                                                                     const NewValue = defaultValuesNewTemp[NewFormulaMethodField] * ThisInputValue
                                                                                                     if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -3110,7 +3162,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                                 }
                                                                                                 else if(FieldArray.Formula.FormulaMethod=='+' && ThisInputValue!=undefined) {
-                                                                                                    const ThisInputValue: any = e.target.value
                                                                                                     const NewValue = defaultValuesNewTemp[NewFormulaMethodField] + ThisInputValue
                                                                                                     if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -3121,7 +3172,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                                 }
                                                                                                 else if(FieldArray.Formula.FormulaMethod=='-' && ThisInputValue!=undefined) {
-                                                                                                    const ThisInputValue: any = e.target.value
                                                                                                     const NewValue = defaultValuesNewTemp[NewFormulaMethodField] - ThisInputValue
                                                                                                     if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
@@ -3132,7 +3182,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                                 }
                                                                                                 else if(FieldArray.Formula.FormulaMethod=='/'&&ThisInputValue>0) {
-                                                                                                    const ThisInputValue: any = e.target.value
                                                                                                     const NewValue = defaultValuesNewTemp[NewFormulaMethodField] / ThisInputValue
                                                                                                     if(String(NewValue).split('.')[1] && String(NewValue).split('.')[1].length>2)  {
                                                                                                         defaultValuesNewTemp[NewFormulaMethodTarget] = parseFloat(String(NewValue)).toFixed(2)
