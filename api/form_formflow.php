@@ -925,13 +925,21 @@ for($i=1;$i<=$MaxMsgSections;$i++)     {
 $edit_default_5 = [];
 $edit_default_5_mode[] = ['value'=>"MenuAndIcon", 'label'=>__("MenuAndIcon")];
 $edit_default_5_mode[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
+$edit_default_5_mode[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
+$edit_default_5_mode[] = ['value'=>"NotificationTemplate1", 'label'=>__("NotificationTemplate1")];
 //$edit_default_5_mode[] = ['value'=>"ListTemplate2", 'label'=>__("ListTemplate2")];
 
 
 $MobileEnd = [];
 $MobileEnd[] = ['value'=>'Yes', 'label'=>__('Yes')];
 $MobileEnd[] = ['value'=>'No', 'label'=>__('No')];
-$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MobileEnd, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
+$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEnd", 'show'=>true, 'type'=>'select', 'options'=>$MobileEnd, 'label' => __("MobileEnd"), 'value' => "No", 'placeholder' => "", 'helptext' => __(""), 'rules' => ['required' => true, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+
+$MobileEndShowType = [];
+$MobileEndShowType[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
+$MobileEndShowType[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
+$MobileEndShowType[] = ['value'=>"NotificationTemplate1", 'label'=>__("NotificationTemplate1")];
+$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowType", 'show'=>true, 'type'=>'select', 'options'=>$MobileEndShowType, 'label' => __("MobileEndShowType"), 'value' => 'List', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 
@@ -965,6 +973,16 @@ $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldShowColor1", 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenField2", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("SecondLineRightChooseFiled"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>4]];
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldIsEqual2", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldIsEqual"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndWhenFieldShowColor2", 'show'=>true, 'type'=>"input", 'label' => __("WhenFieldShowColor"), 'value' => "", 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+
+
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsTitle", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsTitle"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsGroup", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsGroup"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsContent", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsContent"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsReadCounter", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsReadCounter"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsReadUsers", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsReadUsers"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsCreator", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreator"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsCreateTime", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreateTime"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['NewsTemplate1'][] = ['name' => "MobileEndNewsLeftImage", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsLeftImage"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
 
 $defaultValues_4 = [];

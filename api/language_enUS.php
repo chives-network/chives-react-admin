@@ -591,6 +591,18 @@ $MAP['WhenFieldShowColor'] 	= 'ShowColor';
 $MAP['Mobile End Setting'] 	= 'Mobile End Setting';
 $MAP['Icon'] 	            = 'Icon';
 
+$MAP['MenuAndIcon'] 	            = 'Menu And Icon';
+$MAP['NewsTemplate1'] 	            = 'News Template 1';
+$MAP['NotificationTemplate1'] 	    = 'Notification Template 1';
+$MAP['MobileEndShowType'] 	        = 'Show Type';
+$MAP['MobileEndNewsTitle'] 	        = 'Title';
+$MAP['MobileEndNewsGroup'] 	        = 'Group';
+$MAP['MobileEndNewsContent'] 	    = 'Content';
+$MAP['MobileEndNewsReadCounter'] 	= 'Read Counter';
+$MAP['MobileEndNewsReadUsers'] 	    = 'Read Users';
+$MAP['MobileEndNewsCreateTime'] 	= 'Create Time';
+$MAP['MobileEndNewsCreator'] 	    = 'Creator';
+$MAP['MobileEndNewsLeftImage'] 	    = 'Left Image';
 
 
 

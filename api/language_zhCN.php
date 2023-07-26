@@ -589,6 +589,18 @@ $MAP['WhenFieldShowColor'] 	= '显示颜色';
 $MAP['Mobile End Setting'] 	= '移动端设置';
 $MAP['Icon'] 	            = '图标';
 
+$MAP['MenuAndIcon'] 	            = '菜单和图标';
+$MAP['NewsTemplate1'] 	            = '新闻模板1';
+$MAP['NotificationTemplate1'] 	    = '通知模板1';
+$MAP['MobileEndShowType'] 	        = '显示类型';
+$MAP['MobileEndNewsTitle'] 	        = '标题';
+$MAP['MobileEndNewsGroup'] 	        = '分类';
+$MAP['MobileEndNewsContent'] 	    = '内容';
+$MAP['MobileEndNewsReadCounter'] 	= '阅读次数';
+$MAP['MobileEndNewsReadUsers'] 	    = '阅读人员';
+$MAP['MobileEndNewsCreateTime'] 	= '创建时间';
+$MAP['MobileEndNewsCreator'] 	    = '创建人';
+$MAP['MobileEndNewsLeftImage'] 	    = '左侧图片';
 
 
 ?>

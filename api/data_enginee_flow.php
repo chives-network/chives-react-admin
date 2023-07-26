@@ -48,6 +48,7 @@ if($FaceTo=="Student")         {
 }
 //print "TIME EXCEUTE 1:".(time()-$TIME_BEGIN)."<BR>\n";
 $rowHeight = 38;
+$sqlList = [];
 
 global $SettingMap;
 $SettingMap = unserialize(base64_decode($Setting));
@@ -376,7 +377,7 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
                     $rs  = $db->Execute($sql);
                     $NUM = intval($rs->fields['NUM']);
                     $NUM += 1;
-                    $FROM = 10000;
+                    $FROM = 100000;
                     $NUM += $FROM;
                     $_POST[$Item['FieldName']] = $NUM;
                     break;
@@ -1672,10 +1673,6 @@ $fromRecord = $page * $pageSize;
 
 
 //print "TIME EXCEUTE 9:".(time()-$TIME_BEGIN)."<BR>\n";
-
-$sql    = "select count(*) AS NUM from $TableName " . $AddSql . "";
-$rs     = $db->CacheExecute(10, $sql);
-$RS['init_default']['total'] = intval($rs->fields['NUM']);
 if($FromInfo['TableName']!="")   {
     $RS['init_default']['searchtitle']  = $FromInfo['ShortName'];
 }
@@ -1739,10 +1736,18 @@ $ForbiddenViewRowOriginal   = [];
 $ForbiddenEditRowOriginal   = [];
 $ForbiddenDeleteRowOriginal = [];
 
-$sql_list    = "select * from $TableName " . $AddSql . " $orderby limit $fromRecord,$pageSize";
+//Get Total Records Number
+$sql    = "select count(*) AS NUM from $TableName " . $AddSql . "";
+$sqlList[] = $sql;
+$rs     = $db->CacheExecute(10, $sql);
+$RS['init_default']['total'] = intval($rs->fields['NUM']);
+
+//Get All Data
+$sql         = "select * from $TableName " . $AddSql . " $orderby limit $fromRecord,$pageSize";
+$sqlList[]   = $sql;
 //print $sql;
 $NewRSA = [];
-$rs     = $db->Execute($sql_list) or print $sql_list;
+$rs     = $db->Execute($sql) or print $sql;
 $rs_a   = $rs->GetArray();
 $FieldDataColorValue = [];
 $GetAllIDList = [];
@@ -1752,9 +1757,21 @@ foreach ($rs_a as $Line) {
     $GetAllIDList[]     = $Line['id'];
     $Line['id']         = EncryptID($Line['id']);
     $MobileEndItem                                      = [];
+    //List Template
     $MobileEndItem['MobileEndFirstLine']                = $SettingMap['MobileEndFirstLine'];
     $MobileEndItem['MobileEndSecondLineLeft']           = $SettingMap['MobileEndSecondLineLeft'];
     $MobileEndItem['MobileEndSecondLineRight']          = $SettingMap['MobileEndSecondLineRight'];
+    //News Template
+    $MobileEndItem['MobileEndNewsTitle']                = $Line[$SettingMap['MobileEndNewsTitle']];
+    $MobileEndItem['MobileEndNewsGroup']                = $Line[$SettingMap['MobileEndNewsGroup']];
+    $MobileEndItem['MobileEndNewsContent']              = $Line[$SettingMap['MobileEndNewsContent']];
+    $MobileEndItem['MobileEndNewsReadCounter']          = $Line[$SettingMap['MobileEndNewsReadCounter']];
+    $MobileEndItem['MobileEndNewsReadUsers']            = $Line[$SettingMap['MobileEndNewsReadUsers']];
+    $MobileEndItem['MobileEndNewsCreator']              = $Line[$SettingMap['MobileEndNewsCreator']];
+    $MobileEndItem['MobileEndNewsCreateTime']           = $Line[$SettingMap['MobileEndNewsCreateTime']];
+    $MobileEndItem['MobileEndNewsLeftImage']            = $Line[$SettingMap['MobileEndNewsLeftImage']];
+    //Notification Template
+
     foreach($Line as $FieldName=>$FieldValue) {
         if($FieldValue=="1971-01-01" || $FieldValue=="1971-01-01 00:00:00" || $FieldValue=="1971-01")  {
             $Line[$FieldName] = "";
@@ -1834,6 +1851,7 @@ foreach ($rs_a as $Line) {
         }
         // filter data to show on the list page -- End
         // Mobile End Data Filter
+        // List Template 1
         $MobileEndItem['MobileEndFirstLine']            = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndFirstLine']);
         $MobileEndItem['MobileEndSecondLineLeft']       = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndSecondLineLeft']);
         $MobileEndItem['MobileEndSecondLineRight']      = str_replace("[".$FieldName."]",$FieldValue,$MobileEndItem['MobileEndSecondLineRight']);
@@ -1844,10 +1862,10 @@ foreach ($rs_a as $Line) {
         if($FieldName == $SettingMap['MobileEndWhenField2'] && $SettingMap['MobileEndWhenFieldIsEqual2'] == $FieldValue) {
             $MobileEndItem['MobileEndSecondLineRightColor'] = $SettingMap['MobileEndWhenFieldShowColor2'];
         }
-        $MobileEndItem['MobileEndRecordIcon']       = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoHIb59gP2qqbgj0aZOPtwX63YKJ1qA124SibEuISUG0fgrZkjVcQ52iclmDKRPGhw4Z6zIE066PWXA/132";
+        $MobileEndItem['MobileEndIconImage']        = "/images/wechatIcon/".$SettingMap['MobileEndIconImage'].".png";
         //print_R($SettingMap);exit;
     }
-
+    
     //LimitEditAndDelete
     if($SettingMap['LimitEditAndDelete_Edit_Field_One']!="" && $SettingMap['LimitEditAndDelete_Edit_Field_One']!="None" && in_array($SettingMap['LimitEditAndDelete_Edit_Field_One'], $MetaColumnNames)) {
         $LimitEditAndDelete_Edit_Value_One_Array = explode(',',$SettingMap['LimitEditAndDelete_Edit_Value_One']);
@@ -1894,12 +1912,14 @@ foreach ($rs_a as $Line) {
         $ForbiddenDeleteRowOriginal[$OriginalID] = $OriginalID;
         $ForbiddenSelectRowOriginal[$OriginalID] = $OriginalID;
     }
-    if($ForbiddenEditRow[$Line['id']]=="") {
+    if($ForbiddenEditRow[$Line['id']]=="" && in_array('Edit',$Actions_In_List_Row_Array)) {
         $MobileEndItem['EditUrl']   = "?action=edit_default&pageid=$page&id=".$Line['id'];
     }
-    if($ForbiddenDeleteRow[$Line['id']]=="") {
-        $MobileEndItem['DeleteUrl'] = "?action=delete_array&pageid=$page&id=".$Line['id'];
+    if($ForbiddenDeleteRow[$Line['id']]=="" && in_array('Delete',$Actions_In_List_Row_Array)) {
+        $MobileEndItem['DeleteUrl'] = "?action=delete_array&pageid=$page";
     }
+    $MobileEndItem['PageId']    = $page;
+    $MobileEndItem['Id']        = $Line['id'];
     $MobileEndItem['Template'] = "List";
     $MobileEndData[] = $MobileEndItem;
 
@@ -1935,6 +1955,7 @@ if($SettingMap['OperationLogGrade']=="AllOperation")  {
 
 $RS['init_default']['data']                 = $NewRSA;
 $RS['init_default']['MobileEndData']        = $MobileEndData;
+$RS['init_default']['MobileEndShowType']    = $SettingMap['MobileEndShowType'];
 $RS['init_default']['ForbiddenSelectRow']   = array_keys($ForbiddenSelectRow);
 $RS['init_default']['ForbiddenViewRow']     = array_keys($ForbiddenViewRow);
 $RS['init_default']['ForbiddenEditRow']     = array_keys($ForbiddenEditRow);
@@ -2143,8 +2164,8 @@ $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageId']       = $page;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
 if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
-    $RS['init_default']['sql']                              = $sql_list;
-    $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sql_list;
+    $RS['init_default']['sql']                              = $sqlList;
+    $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sqlList;
 }
 $RS['init_default']['ApprovalNodeFields']['Memo']           = $SettingMap['Init_Action_Memo'];
 
