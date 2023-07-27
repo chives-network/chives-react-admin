@@ -1974,9 +1974,12 @@ if($SettingMap['OperationLogGrade']=="AllOperation")  {
     SystemLogRecord("init_default", $BeforeRecord='', $AfterRecord='');
 }
 
-$RS['init_default']['data']                 = $NewRSA;
-$RS['init_default']['MobileEndData']        = $MobileEndData;
-$RS['init_default']['MobileEndShowType']    = $SettingMap['MobileEndShowType'];
+$RS['init_default']['data']                     = $NewRSA;
+$RS['init_default']['MobileEndData']            = $MobileEndData;
+$RS['init_default']['MobileEndShowType']        = $SettingMap['MobileEndShowType'];
+$RS['init_default']['MobileEndShowSearch']      = $SettingMap['MobileEndShowSearch'];
+$RS['init_default']['MobileEndShowGroupFilter'] = $SettingMap['MobileEndShowGroupFilter'];
+
 $RS['init_default']['ForbiddenSelectRow']   = array_keys($ForbiddenSelectRow);
 $RS['init_default']['ForbiddenViewRow']     = array_keys($ForbiddenViewRow);
 $RS['init_default']['ForbiddenEditRow']     = array_keys($ForbiddenEditRow);

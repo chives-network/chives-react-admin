@@ -941,6 +941,10 @@ $MobileEndShowType[] = ['value'=>"NotificationTemplate1", 'label'=>__("Notificat
 $MobileEndShowType[] = ['value'=>"NotificationTemplate2", 'label'=>__("NotificationTemplate2")];
 $edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowType", 'show'=>true, 'type'=>'select', 'options'=>$MobileEndShowType, 'label' => __("MobileEndShowType"), 'value' => 'List', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
+$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowSearch", 'show'=>true, 'type'=>'select', 'options'=>$YesOrNotOptions, 'label' => __("MobileEndShowSearch"), 'value' => 'Yes', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowGroupFilter", 'show'=>true, 'type'=>'select', 'options'=>$YesOrNotOptions, 'label' => __("MobileEndShowGroupFilter"), 'value' => 'Yes', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+
+
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 
 // Loading all images as the wechat app icons
