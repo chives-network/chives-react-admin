@@ -602,6 +602,7 @@ $MAP['MobileEndNewsReadUsers'] 	    = '阅读人员';
 $MAP['MobileEndNewsCreateTime'] 	= '创建时间';
 $MAP['MobileEndNewsCreator'] 	    = '创建人';
 $MAP['MobileEndNewsLeftImage'] 	    = '左侧图片';
-
+$MAP['MobileEndShowSearch'] 	    = '列表搜索';
+$MAP['MobileEndShowGroupFilter'] 	= '列表过滤';
 
 ?>

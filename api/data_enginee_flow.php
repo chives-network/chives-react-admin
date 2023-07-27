@@ -1222,17 +1222,17 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
 
     if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","NotificationTemplate1","NotificationTemplate2"]))           {
         //News Template
-        $RS['MobileEnd']['MobileEndNewsTitle']                = $data[$SettingMap['MobileEndNewsTitle']];
-        $RS['MobileEnd']['MobileEndNewsGroup']                = $data[$SettingMap['MobileEndNewsGroup']];
-        $RS['MobileEnd']['MobileEndNewsContent']              = $data[$SettingMap['MobileEndNewsContent']];
-        $RS['MobileEnd']['MobileEndNewsReadCounter']          = $data[$SettingMap['MobileEndNewsReadCounter']];
-        $RS['MobileEnd']['MobileEndNewsReadUsers']            = $data[$SettingMap['MobileEndNewsReadUsers']];
-        $RS['MobileEnd']['MobileEndNewsCreator']              = returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"];
-        $RS['MobileEnd']['MobileEndNewsCreateTime']           = $data[$SettingMap['MobileEndNewsCreateTime']];
-        //if($data[$SettingMap['MobileEndNewsLeftImage']]=="") {
-        //    $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus.png";
-        //}
-        $RS['MobileEnd']['MobileEndNewsLeftImage']            = $data[$SettingMap['MobileEndNewsLeftImage']];
+        $RS['MobileEnd']['MobileEndNewsTitle']                = strval($data[$SettingMap['MobileEndNewsTitle']]);
+        $RS['MobileEnd']['MobileEndNewsGroup']                = strval($data[$SettingMap['MobileEndNewsGroup']]);
+        $RS['MobileEnd']['MobileEndNewsContent']              = strval($data[$SettingMap['MobileEndNewsContent']]);
+        $RS['MobileEnd']['MobileEndNewsReadCounter']          = strval($data[$SettingMap['MobileEndNewsReadCounter']]);
+        $RS['MobileEnd']['MobileEndNewsReadUsers']            = strval($data[$SettingMap['MobileEndNewsReadUsers']]);
+        $RS['MobileEnd']['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);
+        $RS['MobileEnd']['MobileEndNewsCreateTime']           = strval($data[$SettingMap['MobileEndNewsCreateTime']]);
+        if($data[$SettingMap['MobileEndNewsLeftImage']]=="") {
+            $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
+        }
+        $RS['MobileEnd']['MobileEndNewsLeftImage']            = strval($data[$SettingMap['MobileEndNewsLeftImage']]);
     }
 
     print json_encode($RS);
@@ -1777,17 +1777,17 @@ foreach ($rs_a as $Line) {
     $MobileEndItem['MobileEndSecondLineLeft']           = $SettingMap['MobileEndSecondLineLeft'];
     $MobileEndItem['MobileEndSecondLineRight']          = $SettingMap['MobileEndSecondLineRight'];
     //News Template
-    $MobileEndItem['MobileEndNewsTitle']                = $Line[$SettingMap['MobileEndNewsTitle']];
-    $MobileEndItem['MobileEndNewsGroup']                = $Line[$SettingMap['MobileEndNewsGroup']];
-    $MobileEndItem['MobileEndNewsContent']              = $Line[$SettingMap['MobileEndNewsContent']];
-    $MobileEndItem['MobileEndNewsReadCounter']          = $Line[$SettingMap['MobileEndNewsReadCounter']];
-    $MobileEndItem['MobileEndNewsReadUsers']            = $Line[$SettingMap['MobileEndNewsReadUsers']];
-    $MobileEndItem['MobileEndNewsCreator']              = returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"];;
-    $MobileEndItem['MobileEndNewsCreateTime']           = $Line[$SettingMap['MobileEndNewsCreateTime']];
+    $MobileEndItem['MobileEndNewsTitle']                = strval($Line[$SettingMap['MobileEndNewsTitle']]);
+    $MobileEndItem['MobileEndNewsGroup']                = strval($Line[$SettingMap['MobileEndNewsGroup']]);
+    $MobileEndItem['MobileEndNewsContent']              = strval($Line[$SettingMap['MobileEndNewsContent']]);
+    $MobileEndItem['MobileEndNewsReadCounter']          = strval($Line[$SettingMap['MobileEndNewsReadCounter']]);
+    $MobileEndItem['MobileEndNewsReadUsers']            = strval($Line[$SettingMap['MobileEndNewsReadUsers']]);
+    $MobileEndItem['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);;
+    $MobileEndItem['MobileEndNewsCreateTime']           = strval($Line[$SettingMap['MobileEndNewsCreateTime']]);
     if($Line[$SettingMap['MobileEndNewsLeftImage']]=="") {
         $Line[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
     }
-    $MobileEndItem['MobileEndNewsLeftImage']            = $Line[$SettingMap['MobileEndNewsLeftImage']];
+    $MobileEndItem['MobileEndNewsLeftImage']            = strval($Line[$SettingMap['MobileEndNewsLeftImage']]);
     //Notification Template
 
     foreach($Line as $FieldName=>$FieldValue) {

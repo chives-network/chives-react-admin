@@ -604,6 +604,8 @@ $MAP['MobileEndNewsReadUsers'] 	    = 'Read Users';
 $MAP['MobileEndNewsCreateTime'] 	= 'Create Time';
 $MAP['MobileEndNewsCreator'] 	    = 'Creator';
 $MAP['MobileEndNewsLeftImage'] 	    = 'Left Image';
+$MAP['MobileEndShowSearch'] 	    = 'List Search';
+$MAP['MobileEndShowGroupFilter'] 	= 'Group Filter';
 
 
 
