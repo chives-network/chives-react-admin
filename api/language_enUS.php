@@ -594,6 +594,7 @@ $MAP['Icon'] 	            = 'Icon';
 $MAP['MenuAndIcon'] 	            = 'Menu And Icon';
 $MAP['NewsTemplate1'] 	            = 'News Template 1';
 $MAP['NotificationTemplate1'] 	    = 'Notification Template 1';
+$MAP['NotificationTemplate2'] 	    = 'Notification Template 2';
 $MAP['MobileEndShowType'] 	        = 'Show Type';
 $MAP['MobileEndNewsTitle'] 	        = 'Title';
 $MAP['MobileEndNewsGroup'] 	        = 'Group';

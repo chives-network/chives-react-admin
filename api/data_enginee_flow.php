@@ -1220,6 +1220,21 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         }
     }
 
+    if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","NotificationTemplate1","NotificationTemplate2"]))           {
+        //News Template
+        $RS['MobileEnd']['MobileEndNewsTitle']                = $data[$SettingMap['MobileEndNewsTitle']];
+        $RS['MobileEnd']['MobileEndNewsGroup']                = $data[$SettingMap['MobileEndNewsGroup']];
+        $RS['MobileEnd']['MobileEndNewsContent']              = $data[$SettingMap['MobileEndNewsContent']];
+        $RS['MobileEnd']['MobileEndNewsReadCounter']          = $data[$SettingMap['MobileEndNewsReadCounter']];
+        $RS['MobileEnd']['MobileEndNewsReadUsers']            = $data[$SettingMap['MobileEndNewsReadUsers']];
+        $RS['MobileEnd']['MobileEndNewsCreator']              = returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"];
+        $RS['MobileEnd']['MobileEndNewsCreateTime']           = $data[$SettingMap['MobileEndNewsCreateTime']];
+        //if($data[$SettingMap['MobileEndNewsLeftImage']]=="") {
+        //    $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus.png";
+        //}
+        $RS['MobileEnd']['MobileEndNewsLeftImage']            = $data[$SettingMap['MobileEndNewsLeftImage']];
+    }
+
     print json_encode($RS);
     exit;  
 }
@@ -1767,8 +1782,11 @@ foreach ($rs_a as $Line) {
     $MobileEndItem['MobileEndNewsContent']              = $Line[$SettingMap['MobileEndNewsContent']];
     $MobileEndItem['MobileEndNewsReadCounter']          = $Line[$SettingMap['MobileEndNewsReadCounter']];
     $MobileEndItem['MobileEndNewsReadUsers']            = $Line[$SettingMap['MobileEndNewsReadUsers']];
-    $MobileEndItem['MobileEndNewsCreator']              = $Line[$SettingMap['MobileEndNewsCreator']];
+    $MobileEndItem['MobileEndNewsCreator']              = returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"];;
     $MobileEndItem['MobileEndNewsCreateTime']           = $Line[$SettingMap['MobileEndNewsCreateTime']];
+    if($Line[$SettingMap['MobileEndNewsLeftImage']]=="") {
+        $Line[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
+    }
     $MobileEndItem['MobileEndNewsLeftImage']            = $Line[$SettingMap['MobileEndNewsLeftImage']];
     //Notification Template
 
@@ -1917,6 +1935,9 @@ foreach ($rs_a as $Line) {
     }
     if($ForbiddenDeleteRow[$Line['id']]=="" && in_array('Delete',$Actions_In_List_Row_Array)) {
         $MobileEndItem['DeleteUrl'] = "?action=delete_array&pageid=$page";
+    }    
+    if($ForbiddenViewRow[$Line['id']]=="" && in_array('View',$Actions_In_List_Row_Array)) {
+        $MobileEndItem['ViewUrl']   = "?action=view_default&pageid=$page&id=".$Line['id'];
     }
     $MobileEndItem['PageId']    = $page;
     $MobileEndItem['Id']        = $Line['id'];

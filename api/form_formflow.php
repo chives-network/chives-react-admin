@@ -926,7 +926,6 @@ $edit_default_5 = [];
 $edit_default_5_mode[] = ['value'=>"MenuAndIcon", 'label'=>__("MenuAndIcon")];
 $edit_default_5_mode[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
 $edit_default_5_mode[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
-$edit_default_5_mode[] = ['value'=>"NotificationTemplate1", 'label'=>__("NotificationTemplate1")];
 //$edit_default_5_mode[] = ['value'=>"ListTemplate2", 'label'=>__("ListTemplate2")];
 
 
@@ -939,6 +938,7 @@ $MobileEndShowType = [];
 $MobileEndShowType[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
 $MobileEndShowType[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
 $MobileEndShowType[] = ['value'=>"NotificationTemplate1", 'label'=>__("NotificationTemplate1")];
+$MobileEndShowType[] = ['value'=>"NotificationTemplate2", 'label'=>__("NotificationTemplate2")];
 $edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowType", 'show'=>true, 'type'=>'select', 'options'=>$MobileEndShowType, 'label' => __("MobileEndShowType"), 'value' => 'List', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
 $edit_default_5['ListTemplate1'][] = ['name' => "MobileEndIconName", 'show'=>true, 'type'=>"input", 'label' => __("IconName"), 'value' => $SettingMap['Menu_Three'], 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false,'xs'=>12, 'sm'=>6, 'disabled' => false]];

@@ -592,6 +592,7 @@ $MAP['Icon'] 	            = '图标';
 $MAP['MenuAndIcon'] 	            = '菜单和图标';
 $MAP['NewsTemplate1'] 	            = '新闻模板1';
 $MAP['NotificationTemplate1'] 	    = '通知模板1';
+$MAP['NotificationTemplate2'] 	    = '通知模板2';
 $MAP['MobileEndShowType'] 	        = '显示类型';
 $MAP['MobileEndNewsTitle'] 	        = '标题';
 $MAP['MobileEndNewsGroup'] 	        = '分类';
