@@ -1773,9 +1773,9 @@ foreach ($rs_a as $Line) {
     $Line['id']         = EncryptID($Line['id']);
     $MobileEndItem                                      = [];
     //List Template
-    $MobileEndItem['MobileEndFirstLine']                = $SettingMap['MobileEndFirstLine'];
-    $MobileEndItem['MobileEndSecondLineLeft']           = $SettingMap['MobileEndSecondLineLeft'];
-    $MobileEndItem['MobileEndSecondLineRight']          = $SettingMap['MobileEndSecondLineRight'];
+    $MobileEndItem['MobileEndFirstLine']                = strval($SettingMap['MobileEndFirstLine']);
+    $MobileEndItem['MobileEndSecondLineLeft']           = strval($SettingMap['MobileEndSecondLineLeft']);
+    $MobileEndItem['MobileEndSecondLineRight']          = strval($SettingMap['MobileEndSecondLineRight']);
     //News Template
     $MobileEndItem['MobileEndNewsTitle']                = strval($Line[$SettingMap['MobileEndNewsTitle']]);
     $MobileEndItem['MobileEndNewsGroup']                = strval($Line[$SettingMap['MobileEndNewsGroup']]);

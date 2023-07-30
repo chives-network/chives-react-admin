@@ -1106,12 +1106,12 @@ if($_GET['action']=="edit_default_5"&&$id!='')         {
         $SettingPrevious    = $rs->fields['Setting'];
         $SettingMapPrevious = unserialize(base64_decode($SettingPrevious));
         $SettingMapKeys     = array_keys($SettingMap);
-        if($defaultValues_5['MobileEndIconName']=="")               $defaultValues_5['MobileEndIconName'] = $SettingMapPrevious['MobileEndIconName'];
-        if($defaultValues_5['MobileEndTitleName']=="")              $defaultValues_5['MobileEndTitleName'] = $SettingMapPrevious['MobileEndTitleName'];
-        if($defaultValues_5['MobileEndFirstLine']=="")              $defaultValues_5['MobileEndFirstLine'] = $SettingMapPrevious['MobileEndFirstLine'];
-        if($defaultValues_5['MobileEndSecondLineLeft']=="")         $defaultValues_5['MobileEndSecondLineLeft'] = $SettingMapPrevious['MobileEndSecondLineLeft'];
-        if($defaultValues_5['MobileEndSecondLineRight']=="")        $defaultValues_5['MobileEndSecondLineRight'] = $SettingMapPrevious['MobileEndSecondLineRight'];
-        if($defaultValues_5['MobileEndSecondLineRightColor']=="")   $defaultValues_5['MobileEndSecondLineRightColor'] = $SettingMapPrevious['MobileEndSecondLineRightColor'];
+        if($defaultValues_5['MobileEndIconName']==""&&isset($SettingMapPrevious['MobileEndIconName']))               $defaultValues_5['MobileEndIconName'] = $SettingMapPrevious['MobileEndIconName'];
+        if($defaultValues_5['MobileEndTitleName']==""&&isset($SettingMapPrevious['MobileEndTitleName']))              $defaultValues_5['MobileEndTitleName'] = $SettingMapPrevious['MobileEndTitleName'];
+        if($defaultValues_5['MobileEndFirstLine']==""&&isset($SettingMapPrevious['MobileEndFirstLine']))              $defaultValues_5['MobileEndFirstLine'] = $SettingMapPrevious['MobileEndFirstLine'];
+        if($defaultValues_5['MobileEndSecondLineLeft']==""&&isset($SettingMapPrevious['MobileEndSecondLineLeft']))         $defaultValues_5['MobileEndSecondLineLeft'] = $SettingMapPrevious['MobileEndSecondLineLeft'];
+        if($defaultValues_5['MobileEndSecondLineRight']==""&&isset($SettingMapPrevious['MobileEndSecondLineRight']))        $defaultValues_5['MobileEndSecondLineRight'] = $SettingMapPrevious['MobileEndSecondLineRight'];
+        if($defaultValues_5['MobileEndSecondLineRightColor']==""&&isset($SettingMapPrevious['MobileEndSecondLineRightColor']))   $defaultValues_5['MobileEndSecondLineRightColor'] = $SettingMapPrevious['MobileEndSecondLineRightColor'];
         if(!in_array('MobileEndWhenField1',$SettingMapKeys))            $defaultValues_5['MobileEndWhenField1'] = $SettingMapPrevious['MobileEndWhenField1'];
         if(!in_array('MobileEndWhenFieldIsEqual1',$SettingMapKeys))     $defaultValues_5['MobileEndWhenFieldIsEqual1'] = $SettingMapPrevious['MobileEndWhenFieldIsEqual1'];
         if(!in_array('MobileEndWhenFieldShowColor1',$SettingMapKeys))   $defaultValues_5['MobileEndWhenFieldShowColor1'] = $SettingMapPrevious['MobileEndWhenFieldShowColor1'];

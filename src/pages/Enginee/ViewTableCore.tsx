@@ -57,7 +57,6 @@ interface ViewTableType {
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
-  height: 120,
   borderRadius: 4,
   marginRight: theme.spacing(5)
 }))
@@ -268,7 +267,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }}><div dangerouslySetInnerHTML={{ __html: CellData.Value }} /></MUITableCell>
                               </Fragment>
                             )
                           }    
