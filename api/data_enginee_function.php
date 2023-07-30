@@ -81,7 +81,7 @@ function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
             $RS['Type']             = $Type;
             $RS['Time']             = time();
             $DATA   = EncryptID(serialize($RS));
-            $URL    = "data_image.php?DATA=".$DATA;
+            $URL    = "/data_image.php?DATA=".$DATA;
 
             //Return Avatar 
             if($Type=="avatar")  {

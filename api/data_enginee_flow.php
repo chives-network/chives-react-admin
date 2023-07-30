@@ -1787,6 +1787,9 @@ foreach ($rs_a as $Line) {
     if($Line[$SettingMap['MobileEndNewsLeftImage']]=="") {
         $Line[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
     }
+    else {
+        $Line[$SettingMap['MobileEndNewsLeftImage']] = AttachFieldValueToUrl($TableName,$OriginalID,$SettingMap['MobileEndNewsLeftImage'],'avatar',$Line[$SettingMap['MobileEndNewsLeftImage']]);
+    }
     $MobileEndItem['MobileEndNewsLeftImage']            = strval($Line[$SettingMap['MobileEndNewsLeftImage']]);
     //Notification Template
 
@@ -1941,7 +1944,7 @@ foreach ($rs_a as $Line) {
     }
     $MobileEndItem['PageId']    = $page;
     $MobileEndItem['Id']        = $Line['id'];
-    $MobileEndItem['Template'] = "List";
+    $MobileEndItem['Template']      = "List";
     $MobileEndData[] = $MobileEndItem;
 
 }
@@ -1979,6 +1982,7 @@ $RS['init_default']['MobileEndData']            = $MobileEndData;
 $RS['init_default']['MobileEndShowType']        = $SettingMap['MobileEndShowType'];
 $RS['init_default']['MobileEndShowSearch']      = $SettingMap['MobileEndShowSearch'];
 $RS['init_default']['MobileEndShowGroupFilter'] = $SettingMap['MobileEndShowGroupFilter'];
+$RS['init_default']['MainImageList']	        = array("/images/wechat/logo_18.png","/images/wechat/logo_icampus.png");
 
 $RS['init_default']['ForbiddenSelectRow']   = array_keys($ForbiddenSelectRow);
 $RS['init_default']['ForbiddenViewRow']     = array_keys($ForbiddenViewRow);
