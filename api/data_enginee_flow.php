@@ -63,7 +63,7 @@ $rs         = $db->CacheExecute(180, $sql);
 $FromInfo   = $rs->fields;
 $TableName  = $FromInfo['TableName'];
 global $FormName;
-$FormName   = $FromInfo['ShortName'];
+$FormName   = $FromInfo['FullName'];
 
 //EnablePluginsForIndividual
 if($SettingMap['EnablePluginsForIndividual']=="Enable" && $TableName!="" && $Step>0 && is_file("../plugins/plugin_".$TableName."_".$Step.".php"))    {
@@ -1689,7 +1689,7 @@ $fromRecord = $page * $pageSize;
 
 //print "TIME EXCEUTE 9:".(time()-$TIME_BEGIN)."<BR>\n";
 if($FromInfo['TableName']!="")   {
-    $RS['init_default']['searchtitle']  = $FromInfo['ShortName'];
+    $RS['init_default']['searchtitle']  = $FromInfo['FullName'];
 }
 else {
     $RS['init_default']['searchtitle']  = "Unknown Form";
@@ -2191,7 +2191,7 @@ $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageId']       = $page;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
     $RS['init_default']['sql']                              = $sqlList;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sqlList;
 }
