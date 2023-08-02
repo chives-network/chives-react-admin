@@ -3098,7 +3098,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         <Tag key={i} className='repeater-wrapper' {...(i !== 0 ? { in: true } : {})}>
                                             <Grid container>
                                             <RepeatingContent item xs={12}>
-                                                <Grid container sx={{ pl: 1, py: 2, width: '100%', pr: 1 }}>
+                                                <Grid container sx={{ pl: 1, py: 2, pr: 1 }}>
                                                     {addEditStructInfo2.childtable.allFields.Default.map((FieldArray: any, FieldArray_index: number) => {
                                                         const NewFieldName = "ChildTable____" + i + "____" + FieldArray.name
                                                         if (isReadonlyChildRow == false && FieldArray.show && (FieldArray.type == "input" || FieldArray.type == "email" || FieldArray.type == "number")) {

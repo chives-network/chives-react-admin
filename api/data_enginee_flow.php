@@ -2083,7 +2083,7 @@ $RS['add_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
 $RS['add_default']['defaultValues'] = $defaultValuesAdd;
 $RS['add_default']['dialogContentHeight']  = "90%";
 $RS['add_default']['submitaction']  = "add_default_data";
-$RS['add_default']['componentsize'] = "medium";
+$RS['add_default']['componentsize'] = "small";
 $RS['add_default']['submittext']    = $SettingMap['Rename_Add_Submit_Button'];
 $RS['add_default']['canceltext']    = __("Cancel");
 $RS['add_default']['titletext']     = $SettingMap['Add_Title_Name'];
@@ -2191,7 +2191,7 @@ $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageId']       = $page;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
     $RS['init_default']['sql']                              = $sqlList;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sqlList;
 }

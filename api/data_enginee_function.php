@@ -1274,7 +1274,7 @@ function option_multi_approval_exection($selectedRows, $multiReviewInputValue, $
             SystemLogRecord("option_multi_approval", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;
@@ -1479,7 +1479,7 @@ function option_multi_cancel_exection($selectedRows, $multiReviewInputValue, $Re
             SystemLogRecord("option_multi_cancel", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;

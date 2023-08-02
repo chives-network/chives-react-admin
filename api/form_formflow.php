@@ -18,9 +18,9 @@ if($externalId==""&&$selectedRows!="")    {
     $selectedRowsArray = explode(',',$selectedRows);
     $externalId = returntablefield("form_formflow","id",$selectedRowsArray[0],"FormId")['FormId'];
 }
-$FormInfor = returntablefield("form_formname","id",$externalId,"TableName,ShortName");
+$FormInfor = returntablefield("form_formname","id",$externalId,"TableName,FullName");
 $TableNameTarget = $FormInfor['TableName'];
-$ShortNameTarget = $FormInfor['ShortName'];
+$ShortNameTarget = $FormInfor['FullName'];
 if($TableNameTarget=="")  {
     $RS = [];
     $RS['init_default']['data'] = [];
@@ -516,6 +516,7 @@ $edit_default_2['Page_Sort'][] = ['name' => "Page_Default_Show_Record_Number", '
 
 $Init_Action_Value = [];
 $Init_Action_Value[] = ['value'=>"init_default", 'label'=>__("init_default")];
+$Init_Action_Value[] = ['value'=>"add_default", 'label'=>__("add_default")];
 $Init_Action_Value[] = ['value'=>"edit_default", 'label'=>__("edit_default")];
 $Init_Action_Value[] = ['value'=>"view_default", 'label'=>__("view_default")];
 $Init_Action_Value[] = ['value'=>"edit_default_configsetting", 'label'=>__("edit_default_configsetting")];
@@ -1342,7 +1343,7 @@ $columnsactions[]   = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi
 $columnsactions[]   = ['action'=>'edit_default_6','text'=>__('Copy'),'mdi'=>'mdi:content-copy','double_check'=>'Do you want to copy this item?'];
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
-//$columnName = "ShortName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
+//$columnName = "FullName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "Step";           $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 50, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "FlowName";       $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "Field Type";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 130, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>false, 'show'=>true, 'type'=>'api','apimdi'=>'mdi:chart-donut','apicolor'=>'success.main', 'apiaction' => "edit_default_1", 'renderCell' => NULL ];
@@ -1411,7 +1412,7 @@ $rs_a   = $rs->GetArray();
 foreach ($rs_a as $Line)            {
     $Line['id']             = intval($Line['id']);
     $Line['TableName']      = returntablefield("form_formname","id",$Line['FormId'],"TableName")['TableName'];
-    $Line['ShortName']      = returntablefield("form_formname","id",$Line['FormId'],"ShortName")['ShortName'];
+    $Line['FullName']      = returntablefield("form_formname","id",$Line['FormId'],"FullName")['FullName'];
     $NewRSA[]               = $Line;
     if(in_array($Line['TableName'],['data_user','data_department','data_role','data_unit','data_interface','data_menuone','data_menutwo','form_formflow'])) {
         $ForbiddenSelectRow[] = $Line['id'];

@@ -154,7 +154,13 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         setEditViewCounter(0)
         setAddEditViewShowInWindow(true)
       }
-      if(response.data && response.data.init_action.action.indexOf("edit_default") != -1) {
+      else if(response.data && response.data.init_action.action.indexOf("edit_default") != -1) {
+        setAddEditActionName(response.data.init_action.action)
+        setAddEditActionId(response.data.init_action.id)
+        setAddEditActionOpen(!addEditActionOpen)
+        setAddEditViewShowInWindow(true)
+      }
+      else if(response.data && response.data.init_action.action.indexOf("add_default") != -1) {
         setAddEditActionName(response.data.init_action.action)
         setAddEditActionId(response.data.init_action.id)
         setAddEditActionOpen(!addEditActionOpen)
