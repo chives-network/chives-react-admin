@@ -1,3 +1,3 @@
 <?php
-print date("Y-m-d H:is");
+print date("Y-m-d H:i:s");
 ?>

@@ -30,7 +30,7 @@ $子目录[] 	= "/public/images/screenshot";
 
 同步库($开发库, $目标库="G:\icampus-exam", $子目录);
 同步库($开发库, $目标库="G:\chives-react-admin", $子目录);
-同步库($开发库, $目标库="G:\Gitee-icampus-student-affairs-manage", $子目录);
+同步库($开发库, $目标库="D:\MYEDUDEV\Gitee-icampus-student-affairs-manage", $子目录);
 同步库($开发库, $目标库="D:\MYEDUDEV\datacenter", $子目录);
 
 
