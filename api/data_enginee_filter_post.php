@@ -8,6 +8,7 @@ if( $_GET['action']=="add_default_data" || $_GET['action']=="edit_default_data")
     foreach($AllFieldsFromTable as $Item)  {
         $FieldTypeInFlow = $SettingMap['FieldType_'.$Item['FieldName']];
         if($_POST[$Item['FieldName']]!="")    {
+            //print $Item['ShowType']."<BR>";
             switch($Item['ShowType']) {
                 case 'Banji:Name':
                     $sql     = "select * from data_banji where 班级名称 = '".ForSqlInjection($_POST[$Item['FieldName']])."'";
@@ -58,6 +59,11 @@ if( $_GET['action']=="add_default_data" || $_GET['action']=="edit_default_data")
                 case 'Input:Password':
                     if($_POST[$Item['FieldName']]!="")   {
                         $_POST[$Item['FieldName']] = password_make($_POST[$Item['FieldName']]);
+                    }
+                    break;
+                case 'Input:EncryptField':
+                    if($_POST[$Item['FieldName']]!="")   {
+                        $_POST[$Item['FieldName']] = EncryptID($_POST[$Item['FieldName']]);
                     }
                     break;
                 case '德育量化:积分项目':
@@ -123,7 +129,7 @@ if( $_GET['action']=="add_default_data" || $_GET['action']=="edit_default_data")
                 $_POST[$Item['FieldName']] = $GLOBAL_USER->班级;
                 break;
         }
-        //print_R($Item);
+        //print_R($_POST);
     }
 }
 

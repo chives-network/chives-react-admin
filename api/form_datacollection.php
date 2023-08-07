@@ -44,7 +44,7 @@ $FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')
 foreach($allFieldsEdit as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];
 }
-if($_GET['action']=="add_default_data"&&$_POST['TableName']!="")  {
+if($_GET['action']=="add_default_data"&&$_POST['TableName']!=""&&0)  {
     $MetaTables = $db->MetaTables();
     $TableName = strtolower($_POST['TableName']);
     $FullName = $_POST['FullName'];
@@ -309,7 +309,7 @@ $init_default_columns[]        = ['flex' => 0.1, 'minWidth' => 150, 'sortable' =
 
 $columnName = "id";             $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 80, 'maxWidth' => 80, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
-$columnName = "FullName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
+$columnName = "FullName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "DesignForm";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formfield/?FormId=", "urlmdi"=>"mdi:chart-donut",'urlcolor'=>'success.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "DesignFlow";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formflow/?FormId=", "urlmdi"=>"mdi:cog-outline",'urlcolor'=>'warning.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "FormGroup";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
@@ -318,7 +318,7 @@ $columnName = "TableName";      $searchField[] = ['label' => __($columnName), 'v
 $columnName = "FullName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 
 $RS['init_default']['button_search']    = __("Search");
-$RS['init_default']['button_add']       = __("Add");
+//$RS['init_default']['button_add']       = __("Add");
 $RS['init_default']['columns']          = $init_default_columns;
 $RS['init_default']['columnsactions']   = $columnsactions;
 
@@ -412,7 +412,7 @@ $RS['init_default']['ApprovalNodeFields']['Memo']       = "";
 $RS['init_default']['rowdelete'] = [];
 $RS['init_default']['rowdelete'][] = ["text"=>__("Delete Item"),"action"=>"delete_array","title"=>__("Delete Item"),"content"=>__("Do you really want to delete this item? This operation will delete table and data in Database."),"memoname"=>"","inputmust"=>false,"inputmusttip"=>"","submit"=>__("Confirm Delete"),"cancel"=>__("Cancel")];
 
-
+/*
 $RS['add_default']['allFields']['Default']  = $allFieldsAdd;
 $RS['add_default']['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
 $RS['add_default']['defaultValues']  = $defaultValues;
@@ -425,7 +425,7 @@ $RS['add_default']['titletext']   = __("Create Form");
 $RS['add_default']['tablewidth']  = 550;
 $RS['add_default']['submitloading'] = __("SubmitLoading");
 $RS['add_default']['loading']       = __("Loading");
-
+*/
 
 
 $RS['edit_default'] = $RS['add_default'];

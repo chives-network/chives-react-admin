@@ -66,6 +66,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType)  {
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'label' => $EnglishName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => true,'min'=>$Min,'max'=>$Max]];
                 break;
             case 'password':
+            case 'EncryptField':
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'type'=>$CurrentFieldTypeArray[0], 'label' => $EnglishName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => true,'min'=>$Min,'max'=>$Max]];
                 break;
             case 'confirmpassword':
@@ -213,7 +214,7 @@ if( ($_GET['action']=="add_default_data") && $TableName!="")  {
                     $rs  = $db->Execute($sql);
                     $NUM = intval($rs->fields['NUM']);
                     $NUM += 1;
-                    $FROM = 10000;
+                    $FROM = 100000;
                     $NUM += $FROM;
                     $_POST[$Item['FieldName']] = $NUM;
                     break;
@@ -426,7 +427,7 @@ $sql    = "select count(*) AS NUM from $TableName " . $AddSql . "";
 $rs     = $db->CacheExecute(10, $sql);
 $RS['init_default']['total'] = intval($rs->fields['NUM']);
 if($FromInfo['TableName']!="")   {
-    $RS['init_default']['searchtitle']  = $FromInfo['ShortName'];
+    $RS['init_default']['searchtitle']  = $FromInfo['FullName'];
 }
 else {
     $RS['init_default']['searchtitle']  = "Unknown Form";

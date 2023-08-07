@@ -172,8 +172,14 @@ const ViewTableCore = (props: ViewTableType) => {
                               </Fragment>
                             )
                           }//end if
-                          else if (FieldArray.type == "password" || FieldArray.type == "comfirmpassword") {
-                            // Nothing to do                
+                          else if (FieldArray.type == "password" || FieldArray.type == "EncryptField" || FieldArray.type == "comfirmpassword") {
+                            // Nothing to do   
+                            return (
+                              <Fragment key={FieldArray_index}>
+                                <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
+                                <MUITableCell sx={{ width: '35%', whiteSpace: 'wrap', wordWrap: 'break-word' }}>******</MUITableCell>
+                              </Fragment>
+                            )            
                           }
                           else if (FieldArray.type == "select" || FieldArray.type == "autocomplete" || FieldArray.type == "radiogroup") {
                             

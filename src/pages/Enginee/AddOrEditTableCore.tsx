@@ -1056,12 +1056,12 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         </Grid>
                                                     )
                                                 }
-                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "password") {
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "password"||FieldArray.type == "EncryptField") ) {
                                                                                                       
                                                     return (
                                                         <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
                                                             <FormControl fullWidth sx={{ mb: 0 }}>
-                                                                <InputLabel htmlFor='input-confirm-new-password' error={Boolean(errors[FieldArray.name])}>
+                                                                <InputLabel error={Boolean(errors[FieldArray.name])}>
                                                                 {FieldArray.label}
                                                                 </InputLabel>
                                                                 <Controller
