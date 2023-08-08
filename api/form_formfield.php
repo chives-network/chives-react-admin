@@ -67,14 +67,17 @@ $allFieldsAdd[] = ['name' => 'FormulaMethodTarget', 'show'=>false, 'type'=>'inpu
 $allFieldsAdd[] = ['name' => 'StartDate', 'show'=>false, 'type'=>'date', 'label' => __('Start Date'), 'value' => '', 'placeholder' => __('Start Date'), 'helptext' => __('Start Date'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'EndDate', 'show'=>false, 'type'=>'date', 'label' => __('End Date'), 'value' => '', 'placeholder' => __('End Date'), 'helptext' => __('End Date'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'FieldDefaultDate', 'show'=>false, 'type'=>'date', 'label' => __('Field Default Date'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value, or blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
+$allFieldsAdd[] = ['name' => 'DateFormat', 'show'=>false, 'type'=>'input', 'label' => __('DateFormat'), 'value' => 'yyyyMMdd', 'placeholder' => __('DateFormat'), 'helptext' => __('DateFormat').":yyyy-MM-dd", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles'];
 
 $allFieldsAdd[] = ['name' => 'StartDateTime', 'show'=>false, 'type'=>'datetime', 'label' => __('Start DateTime'), 'value' => '', 'placeholder' => __('Start DateTime'), 'helptext' => __('Start DateTime'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd HH:mm','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'EndDateTime', 'show'=>false, 'type'=>'datetime', 'label' => __('End DateTime'), 'value' => '', 'placeholder' => __('End DateTime'), 'helptext' => __('End DateTime'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd HH:mm','timeZone'=>'America/Los_Angeles'];
-$allFieldsAdd[] = ['name' => 'FieldDefaultDateTime', 'show'=>false, 'type'=>'datetime', 'label' => __('Field Default Date Time'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value, or blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd HH:mm','timeZone'=>'America/Los_Angeles'];
+$allFieldsAdd[] = ['name' => 'FieldDefaultDateTime', 'show'=>false, 'type'=>'datetime', 'label' => __('Field Default Date Time'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value, or blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd HH:mm:ss','timeZone'=>'America/Los_Angeles'];
+$allFieldsAdd[] = ['name' => 'DateTimeFormat', 'show'=>false, 'type'=>'input', 'label' => __('DateTimeFormat'), 'value' => 'yyyyMMddHHmmss', 'placeholder' => __('DateTimeFormat'), 'helptext' => __('DateTimeFormat').":yyyy-MM-dd", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM-dd HH:mm:ss','timeZone'=>'America/Los_Angeles'];
 
 $allFieldsAdd[] = ['name' => 'StartMonth', 'show'=>false, 'type'=>'month', 'label' => __('Start Month'), 'value' => '', 'placeholder' => __('Start Month'), 'helptext' => __('Start Month'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'EndMonth', 'show'=>false, 'type'=>'month', 'label' => __('End Month'), 'value' => '', 'placeholder' => __('End Month'), 'helptext' => __('End Month'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'FieldDefaultMonth', 'show'=>false, 'type'=>'month', 'label' => __('Field Default Month'), 'value' => '', 'placeholder' => __('Field default value, you can leave it blank'), 'helptext' => __('Default value, or blank'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4,'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles'];
+$allFieldsAdd[] = ['name' => 'MonthFormat', 'show'=>false, 'type'=>'input', 'label' => __('MonthFormat'), 'value' => 'yyyyMM', 'placeholder' => __('MonthFormat'), 'helptext' => __('MonthFormat').":yyyy-MM", 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles'];
 
 $allFieldsAdd[] = ['name' => 'StartYear', 'show'=>false, 'type'=>'year', 'label' => __('Start Year'), 'value' => '', 'placeholder' => __('Start Year'), 'helptext' => __('Start Year'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy','timeZone'=>'America/Los_Angeles'];
 $allFieldsAdd[] = ['name' => 'EndYear', 'show'=>false, 'type'=>'year', 'label' => __('End Year'), 'value' => '', 'placeholder' => __('End Year'), 'helptext' => __('End Year'), 'rules' => ['required' => false,'xs'=>12, 'sm'=>4, 'disabled' => false, 'nullable'=>true], 'dateFormat' => 'yyyy','timeZone'=>'America/Los_Angeles'];
@@ -104,6 +107,8 @@ $ColumnWidth[] = ['value'=>220, 'label'=>'220px'];
 $ColumnWidth[] = ['value'=>240, 'label'=>'240px'];
 $ColumnWidth[] = ['value'=>260, 'label'=>'260px'];
 $ColumnWidth[] = ['value'=>280, 'label'=>'280px'];
+$ColumnWidth[] = ['value'=>300, 'label'=>'300px'];
+$ColumnWidth[] = ['value'=>320, 'label'=>'320px'];
 $allFieldsAdd[] = ['name' => 'ColumnWidth', 'show'=>true, 'type'=>'select', 'options'=>$ColumnWidth, 'label' => __('Column Width'), 'value' => $ColumnWidth[5]['value'], 'placeholder' => __(''), 'helptext' => __('Column Width In List Page'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false]];
 
 
@@ -338,6 +343,42 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
         else {
             $sql    = "ALTER TABLE `".$TableName."` CHANGE `".$FieldNameOld."` `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci default '' NOT NULL;";
         }        
+        $alterSql = $sql;
+        $rs     = $db->Execute($sql);
+        if(!$rs->EOF) {      
+            $RS = [];
+            $RS['status'] = "ERROR";
+            $RS['sql'] = $sql;
+            $RS['msg'] = "Update Error!";
+            print json_encode($RS);
+            exit; 
+        }
+    }
+    if(!in_array($FieldNameOld, $MetaColumnNames)) {
+        if(substr($FieldsArray['FieldType'],0,3)=="int")   {
+            $FieldsArray['FieldDefault'] = intval($FieldsArray['FieldDefault']);
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        elseif(substr($FieldsArray['FieldType'],0,5)=="float")   {
+            $FieldsArray['FieldDefault'] = floatval($FieldsArray['FieldDefault']);
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '".$FieldsArray['FieldDefault']."' NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        elseif(substr($FieldsArray['FieldType'],0,4)=="date")   {
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default '1971-01-01' NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        elseif(substr($FieldsArray['FieldType'],0,8)=="datetime")   {
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." default CURRENT_TIMESTAMP NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        elseif(substr($FieldsArray['FieldType'],0,4)=="text")   {
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        elseif(substr($FieldsArray['FieldType'],0,10)=="mediumtext")   {
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }
+        else {
+            $sql    = "ALTER TABLE `".$TableName."` ADD `".$FieldsArray['FieldName']."` ".$FieldsArray['FieldType']." CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci default '' NOT NULL COMMENT '".$FieldsArray['ChineseName']."';";
+        }        
+        $alterSql = $sql;
         $rs     = $db->Execute($sql);
         if(!$rs->EOF) {      
             $RS = [];
@@ -353,6 +394,8 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
         [$rs,$sql] = InsertOrUpdateTableByArray("form_formfield",$FieldsArray,"id",0,"Update");
         if($rs->EOF) {
             $RS['status'] = "OK";
+            $RS['sql'] = $sql;
+            $RS['alterSql'] = $alterSql;
             $RS['msg'] = __("Submit Success");
             print json_encode($RS);
             exit;  

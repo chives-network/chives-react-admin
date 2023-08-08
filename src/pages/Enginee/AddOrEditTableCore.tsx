@@ -2004,7 +2004,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         </Grid>
                                                     )
                                                 }
-                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2")) {
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2") && FieldArray.dateFormat == "yyyy-MM-dd") {
                                                     
                                                     // Add ' 00:00:00' to avoid the date minus one day in the DatePicker
                                                     //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
@@ -2023,7 +2023,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     render={({ field: { value, onChange, onBlur } }) => (
                                                                         <DatePickerWrapper sx={{ zIndex: 'tooltip' }}>
                                                                             <DatePicker 
-                                                                                selected={defaultValuesNew[FieldArray.name]!="" && defaultValuesNew[FieldArray.name] != "0000-00-00" && defaultValuesNew[FieldArray.name] != "1971-01-01" && defaultValuesNew[FieldArray.name].length == 10 ? (new Date(defaultValuesNew[FieldArray.name] + ' 00:00:00')) : (value ? new Date(value) : null)  }
+                                                                                selected={defaultValuesNew[FieldArray.name]!=undefined && defaultValuesNew[FieldArray.name]!="" && defaultValuesNew[FieldArray.name] != "0000-00-00" && defaultValuesNew[FieldArray.name] != "1971-01-01" && defaultValuesNew[FieldArray.name].length == 10 ? (new Date(defaultValuesNew[FieldArray.name] + ' 00:00:00')) : (value ? new Date(value) : null)  }
                                                                                 id={FieldArray.name}
                                                                                 showYearDropdown
                                                                                 showMonthDropdown
@@ -2037,6 +2037,70 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     }
                                                                                     else {
                                                                                         defaultValuesNewTemp[FieldArray.name] = "1971-01-01";
+                                                                                    }
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                    const allDatesTemp:{[key:string]:any} = { ...allDates }
+                                                                                    allDatesTemp[FieldArray.name] = defaultValuesNewTemp[FieldArray.name]
+                                                                                    setAllDates(allDatesTemp)
+                                                                                    onChange(date);
+                                                                                    onBlur();
+                                                                                }}
+                                                                                todayButton='Today'
+                                                                                minDate={FieldArray.StartDate != "" && FieldArray.StartDate != undefined && FieldArray.StartDate != "1971-01-01" ? new Date(FieldArray.StartDate + ' 00:00:00') : new Date("1971-01-01 00:00:00")}
+                                                                                maxDate={FieldArray.EndDate != "" && FieldArray.EndDate != undefined && FieldArray.EndDate != "1971-01-01" ? new Date(FieldArray.EndDate + ' 00:00:00') : new Date("2099-12-31 00:00:00")}
+                                                                                placeholderText={FieldArray.placeholder}
+                                                                                customInput={<TextField fullWidth size={componentsize} label={FieldArray.label || ''} autoComplete='off'/>}
+                                                                            />
+                                                                        </DatePickerWrapper>
+                                                                    )}
+                                                                />
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "date" || FieldArray.type == "date1" || FieldArray.type == "date2") && FieldArray.dateFormat == "yyyyMMdd") {
+                                                    
+                                                    // Add ' 00:00:00' to avoid the date minus one day in the DatePicker
+                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined && defaultValuesNew[FieldArray.name] != "" && defaultValuesNew[FieldArray.name] != "00000000" && defaultValuesNew[FieldArray.name] != "19710101" && defaultValuesNew[FieldArray.name].length == 8) {
+                                                        
+                                                        //console.log("defaultValuesNew[FieldArray.name]***************************", defaultValuesNew[FieldArray.name])
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <Controller
+                                                                    name={FieldArray.name}
+                                                                    control={control}
+                                                                    render={({ field: { value, onChange, onBlur } }) => (
+                                                                        <DatePickerWrapper sx={{ zIndex: 'tooltip' }}>
+                                                                            <DatePicker 
+                                                                                selected={defaultValuesNew[FieldArray.name]!=undefined && defaultValuesNew[FieldArray.name]!="" && defaultValuesNew[FieldArray.name] != "00000000" && defaultValuesNew[FieldArray.name] != "19710101" && defaultValuesNew[FieldArray.name].length == 8 ? (new Date(Number(defaultValuesNew[FieldArray.name].substring(0,4)) + '-' + Number(defaultValuesNew[FieldArray.name].substring(4,6)) + '-' + Number(defaultValuesNew[FieldArray.name].substring(6,8)) + '-' + ' 00:00:00')) : (value ? new Date(value) : null)  }
+                                                                                id={FieldArray.name}
+                                                                                showYearDropdown
+                                                                                showMonthDropdown
+                                                                                locale={i18n.language}
+                                                                                dateFormat={FieldArray.dateFormat}
+                                                                                popperPlacement='bottom-start'
+                                                                                onChange={(date: Date) => {
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    if (date != undefined) {
+                                                                                        defaultValuesNewTemp[FieldArray.name] = date.getFullYear() + "" + formatDateItem(date.getMonth() + 1) + "" + formatDateItem(date.getDate())
+                                                                                    }
+                                                                                    else {
+                                                                                        defaultValuesNewTemp[FieldArray.name] = "19710101";
                                                                                     }
                                                                                     setDefaultValuesNew(defaultValuesNewTemp)
                                                                                     const allDatesTemp:{[key:string]:any} = { ...allDates }
@@ -2131,7 +2195,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                         </Grid>
                                                     )
                                                 }
-                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "month") {
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "month" && FieldArray.dateFormat == "yyyy-MM") {
                                                     
                                                     //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
                                                     if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined && defaultValuesNew[FieldArray.name] != "" && defaultValuesNew[FieldArray.name] != "0000-00" && defaultValuesNew[FieldArray.name] != "1971-01" && defaultValuesNew[FieldArray.name].length == 7) {
@@ -2174,6 +2238,69 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 }}
                                                                                 minDate={FieldArray.StartMonth != "" && FieldArray.StartMonth != undefined && FieldArray.StartMonth != "1971-01" ? new Date(FieldArray.StartMonth + '-01 00:00:00') : new Date("1971-01-01 00:00:00")}
                                                                                 maxDate={FieldArray.EndMonth != "" && FieldArray.EndMonth != undefined && FieldArray.EndMonth != "1971-01" ? new Date(FieldArray.EndMonth + '-01 00:00:00') : new Date("2099-12-31 00:00:00")}
+                                                                                placeholderText={FieldArray.placeholder}
+                                                                                customInput={<TextField fullWidth size={componentsize} label={FieldArray.label || ''} />}
+                                                                            />
+                                                                        </DatePickerWrapper>
+                                                                    )}
+                                                                />
+                                                                {FieldArray.helptext && (
+                                                                    <FormHelperText>
+                                                                        {FieldArray.helptext}
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {errors[FieldArray.name] && (
+                                                                    <FormHelperText sx={{ color: 'error.main' }}>
+                                                                        {(errors[FieldArray.name]?.message as string)??''}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )
+                                                }
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && FieldArray.type == "month" && FieldArray.dateFormat == "yyyyMM") {
+                                                    
+                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
+                                                    if (action.indexOf("edit_default") != -1 && defaultValuesNew[FieldArray.name] != undefined && defaultValuesNew[FieldArray.name] != "" && defaultValuesNew[FieldArray.name] != "000000" && defaultValuesNew[FieldArray.name] != "197101" && defaultValuesNew[FieldArray.name].length == 6) {
+                                                        
+                                                        //console.log("FieldArray***************************", FieldArray)
+                                                        setValue(FieldArray.name, defaultValuesNew[FieldArray.name])
+                                                    }
+                                                    
+                                                    // Add ' 00:00:00' to avoid the date minus one day in the DatePicker
+                                                    
+                                                    return (
+                                                        <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_" + FieldArray_index}>
+                                                            <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                <Controller
+                                                                    name={FieldArray.name}
+                                                                    control={control}
+                                                                    render={({ field: { value, onChange, onBlur } }) => (
+                                                                        <DatePickerWrapper>
+                                                                            <DatePicker
+                                                                                selected={defaultValuesNew[FieldArray.name] && defaultValuesNew[FieldArray.name] != "0000-00" && defaultValuesNew[FieldArray.name] != "197101" && defaultValuesNew[FieldArray.name].length == 6 ? (new Date(Number(defaultValuesNew[FieldArray.name].substring(0,4)) + '-' + Number(defaultValuesNew[FieldArray.name].substring(4,6)) + '-01 00:00:00')) : (value ? new Date(value) : null)   }
+                                                                                id={FieldArray.name}
+                                                                                showMonthYearPicker
+                                                                                locale={i18n.language}
+                                                                                dateFormat={FieldArray.dateFormat}
+                                                                                popperPlacement='bottom-start'
+                                                                                onChange={(date: Date) => {
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    if (date != undefined) {
+                                                                                        defaultValuesNewTemp[FieldArray.name] = date.getFullYear() + "" + formatDateItem(date.getMonth() + 1);
+                                                                                    }
+                                                                                    else {
+                                                                                        defaultValuesNewTemp[FieldArray.name] = "197101";
+                                                                                    }
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                    const allDatesTemp:{[key:string]:any} = { ...allDates }
+                                                                                    allDatesTemp[FieldArray.name] = defaultValuesNewTemp[FieldArray.name]
+                                                                                    setAllDates(allDatesTemp)
+                                                                                    onChange(date);
+                                                                                    onBlur();
+                                                                                }}
+                                                                                minDate={FieldArray.StartMonth != "" && FieldArray.StartMonth != undefined && FieldArray.StartMonth != "197101" ? new Date(FieldArray.StartMonth + '-01 00:00:00') : new Date("1971-01-01 00:00:00")}
+                                                                                maxDate={FieldArray.EndMonth != "" && FieldArray.EndMonth != undefined && FieldArray.EndMonth != "197101" ? new Date(FieldArray.EndMonth + '-01 00:00:00') : new Date("2099-12-31 00:00:00")}
                                                                                 placeholderText={FieldArray.placeholder}
                                                                                 customInput={<TextField fullWidth size={componentsize} label={FieldArray.label || ''} />}
                                                                             />

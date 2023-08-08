@@ -372,6 +372,22 @@ if( $_GET['action']=="add_default_data" && in_array('Add',$Actions_In_List_Heade
             }
             $CurrentFieldType = $AllShowTypesArray[$AllFieldsMap[$Item['FieldName']]['ShowType']]['ADD'];
             switch($CurrentFieldType) {
+                case '32位全局唯一编码字符串':
+                    $学校十位代码   = returntablefield("ods_zzxxgkjcsj","id",1,"XXDM")['XXDM'];
+                    $数据项编号     = $AllFieldsMap[$Item['FieldName']]['Placeholder'];
+                    $唯一编码前缀   = $学校十位代码.$数据项编号;
+                    $剩余位数       = 32-strlen($唯一编码前缀);
+                    $sql = "select max(id) as NUM from $TableName";
+                    $rs  = $db->Execute($sql);
+                    $NUM = intval($rs->fields['NUM']);
+                    $NUM += 1;
+                    $补齐0数量      = $剩余位数-strlen($NUM);
+                    while($补齐0数量>0) {
+                        $唯一编码前缀 .= "0";
+                        $补齐0数量 --;
+                    }
+                    $_POST[$Item['FieldName']] = $唯一编码前缀.$NUM;
+                    break;
                 case 'autoincrement':
                     $sql = "select max(id) as NUM from $TableName";
                     $rs  = $db->Execute($sql);
@@ -1093,19 +1109,19 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
             $FieldName              = $ITEM['name'];
             $CurrentFieldTypeArray  = $ITEM['FieldTypeArray'];
             switch($CurrentFieldTypeArray[0])   {
+                case 'autocomplete':
+                    $FieldName              = $ITEM['code'];
                 case 'radiogroup':
                 case 'radiogroupcolor':
                 case 'tablefilter':
                 case 'tablefiltercolor':
-                case 'autocomplete':
-                    //print_R($CurrentFieldTypeArray);
                     $TableNameTemp      = $CurrentFieldTypeArray[1];
                     $KeyField           = $CurrentFieldTypeArray[2];
                     $ValueField         = $CurrentFieldTypeArray[3];
                     $DefaultValue       = $CurrentFieldTypeArray[4];
                     $WhereField         = ForSqlInjection($CurrentFieldTypeArray[5]);
                     $WhereValue         = ForSqlInjection($CurrentFieldTypeArray[6]);
-                    $MetaColumnNamesTemp    = GLOBAL_MetaColumnNames($TableNameTemp);               
+                    $MetaColumnNamesTemp    = GLOBAL_MetaColumnNames($TableNameTemp);            
                     if($WhereField!="" && $WhereValue!="" && $MetaColumnNamesTemp[$KeyField]!="" && $RS['data'][$FieldName]!="") {
                         $sql = "select `".$MetaColumnNamesTemp[$ValueField]."` as label from $TableNameTemp where $WhereField = '".$WhereValue."' and `".$MetaColumnNamesTemp[$KeyField]."`='".ForSqlInjection($RS['data'][$FieldName])."' ;";
                         $rs = $db->CacheExecute(10, $sql) or print($sql);

@@ -561,8 +561,8 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $ShowTextName    = $Item['EnglishName'];
                 break;
         }
-
         $Placeholder    = $Item['Placeholder'];
+        $Format         = $Item['Format'];
         $Helptext       = $Item['Helptext'];
         $Max            = intval($Item['Max']);
         $Min            = intval($Item['Min']);
@@ -695,7 +695,15 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 break;
             case 'system_datetime':
-                if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = date("Y-m-d H:i:s");
+                if($actionType=="ADD"||$actionType=="EDIT")  {
+                    //print_R($Item);print "\n";
+                    if($Setting['DateTimeFormat']!="") {
+                        $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = date($Setting['DateTimeFormat']);    
+                    }
+                    else {
+                        $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = date("Y-m-d H:i:s");  
+                    }
+                }
                 break;
             case 'CurrentUserIdAddEdit':
                 if($actionType=="ADD"||$actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = $GLOBAL_USER->USER_ID;
@@ -787,7 +795,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
             case 'date1':
             case 'date2':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'yyyy-MM-dd','timeZone'=>'America/Los_Angeles','StartDate'=>$Setting['StartDate'],'EndDate'=>$Setting['EndDate']];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => $Setting['DateFormat']!=""?$Setting['DateFormat']:'yyyy-MM-dd','timeZone'=>'America/Los_Angeles','StartDate'=>$Setting['StartDate'],'EndDate'=>$Setting['EndDate']];
                 break;
             case 'year':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
@@ -799,22 +807,22 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 break;
             case 'month':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles','StartMonth'=>$Setting['StartMonth'],'EndMonth'=>$Setting['EndMonth']];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => $Setting['MonthFormat']!=""?$Setting['MonthFormat']:'yyyy-MM','timeZone'=>'America/Los_Angeles','StartMonth'=>$Setting['StartMonth'],'EndMonth'=>$Setting['EndMonth']];
                 break;
             case 'monthrange':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'yyyy-MM','timeZone'=>'America/Los_Angeles'];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => $Setting['MonthFormat']!=""?$Setting['MonthFormat']:'yyyy-MM','timeZone'=>'America/Los_Angeles'];
                 break;
             case 'quarter':
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'yyyy-QQQ','timeZone'=>'America/Los_Angeles'];
                 break;
             case 'datetime':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'yyyy-MM-dd HH:mm','timeZone'=>'America/Los_Angeles','StartDateTime'=>$Setting['StartDateTime'],'EndDateTime'=>$Setting['EndDateTime']];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => $Setting['DateTimeFormat']!=""?$Setting['DateTimeFormat']:'yyyy-MM-dd HH:mm:ss','timeZone'=>'America/Los_Angeles','StartDateTime'=>$Setting['StartDateTime'],'EndDateTime'=>$Setting['EndDateTime']];
                 break;
             case 'time':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
-                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => 'HH:mm','timeZone'=>'America/Los_Angeles','StartTime'=>$Setting['StartTime'],'EndTime'=>$Setting['EndTime']];
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false], 'dateFormat' => $Setting['TimeFormat']!=""?$Setting['TimeFormat']:'HH:mm:ss','timeZone'=>'America/Los_Angeles','StartTime'=>$Setting['StartTime'],'EndTime'=>$Setting['EndTime']];
                 break;
             case 'textarea':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
