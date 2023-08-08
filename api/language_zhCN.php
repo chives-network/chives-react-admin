@@ -209,7 +209,7 @@ $MAP['Batch_Refuse'] 		= '批量拒绝';
 $MAP['Batch_Cancel'] 		= '批量退回';
 $MAP['TableName'] 	        = '数据表';
 $MAP['Only accepted lower case letters'] 	= '只接受小写字母';
-$MAP['ShortName'] 	        = '简写';
+$MAP['FullName'] 	        = '简写';
 $MAP['System'] 	            = '系统';
 $MAP['User Create']         = '用户创建';
 $MAP['FormGroup'] 	        = '表单分组';
@@ -393,7 +393,7 @@ $MAP['Input new table name'] 				= '请输入新的数据表名称,全英文或�
 $MAP['New short name'] 						= '新的数据表简称';
 $MAP['Copy Form And Flow Success'] 			= '复制表单和流程成功';
 $MAP['Copy Form And Flow Failed'] 			= '复制表单和流程失败';
-$MAP['TableName and ShortName Can Not Be Empty']   = '数据表或简称不能为空';
+$MAP['TableName and FullName Can Not Be Empty']   = '数据表或简称不能为空';
 $MAP['Today'] 	                = '今天';
 $MAP['BeforeDays'] 	            = '之前天数';
 $MAP['AfterDays'] 	            = '之后天数';
@@ -604,5 +604,9 @@ $MAP['MobileEndNewsCreator'] 	    = '创建人';
 $MAP['MobileEndNewsLeftImage'] 	    = '左侧图片';
 $MAP['MobileEndShowSearch'] 	    = '列表搜索';
 $MAP['MobileEndShowGroupFilter'] 	= '列表过滤';
+
+$MAP['中职数据标准'] 	             = '中职数据标准';
+$MAP['高职数据标准'] 	             = '高职数据标准';
+$MAP['datasource'] 	                = '数据源';
 
 ?>

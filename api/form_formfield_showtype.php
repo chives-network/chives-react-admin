@@ -88,7 +88,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="")  {
     }
 }
 
-if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['action']=="view_default")&&$_GET['id']!="")  {
+if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_formfield_showtype where id = '$id'";
     $rsf     = $db->Execute($sql);
@@ -97,6 +97,43 @@ if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['a
     $RS['data'] = $rsf->fields;
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
+    print json_encode($RS);
+    exit;  
+}
+
+if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
+    $id     = ForSqlInjection($_GET['id']);
+    $sql    = "select * from form_formfield_showtype where ID = '$id'";
+    $rsf     = $db->Execute($sql);
+    $EditValue = $rsf->fields;
+    $RS = [];
+    $RS['status'] = "OK";
+    $RS['data'] = $EditValue;
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    
+    $FieldNameArray             = array_keys($EditValue);
+    $ApprovalNodeFieldsHidden   = [];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X];
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']         = $FieldName1;
+            $RowData[0]['Value']        = $EditValue[$FieldName1];
+            $RowData[0]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName1),'value'=>$EditValue[$FieldName1],'type'=>'input'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1];
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']         = $FieldName2;
+            $RowData[1]['Value']        = $EditValue[$FieldName2];
+            $RowData[1]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName2),'value'=>$EditValue[$FieldName2],'type'=>'input'];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS['newTableRowData']          = $NewTableRowData;
+
     print json_encode($RS);
     exit;  
 }
@@ -288,6 +325,7 @@ $RS['export_default'] = [];
 $RS['import_default'] = [];
 
 $RS['init_default']['rowHeight']    = 38;
+$RS['init_default']['dialogMaxWidth']   = "md";
 $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageNumberArray']  = [10,20,30,40,50,100,200,500];

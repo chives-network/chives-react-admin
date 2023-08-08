@@ -14,36 +14,51 @@ $rs_a = $rs->GetArray();
 foreach ($rs_a as $Line) {
     $columnNames[] = $Line['Field'];
 }
-
+/*
 //新建页面时的启用字段列表
 $allFieldsAdd = [];
 $allFieldsAdd[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => 'Input your table name', 'helptext' => 'Only accepted lower case letters', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50,'format'=>'onlylowerletter','invalidtext'=>__('Only accepted lower case letters')]];
-$allFieldsAdd[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50]];
-$FormGroup = [];
-$FormGroup[] = ['value'=>'System', 'label'=>__('System')];
-$FormGroup[] = ['value'=>'User Create', 'label'=>__('User Create')];
-$FormGroup[] = ['value'=>'Student', 'label'=>__('Student')];
-$FormGroup[] = ['value'=>'中职数据标准', 'label'=>__('中职数据标准')];
-$FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')];
-$allFieldsAdd[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => '', 'helptext' => 'Form group', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsAdd[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50]];
+$DataSource = [];
+$sql    = "select * from data_datasource where 连接状态='正常' order by id asc";
+$rs = $db->Execute($sql) or print $sql;
+$rs_a = $rs->GetArray();
+foreach ($rs_a as $Line) {
+    $DataSource[] = ['value'=>$Line['id'], 'label'=>$Line['连接池名称']];
+}
+$allFieldsEdit[] = ['name' => 'datasource', 'show'=>true, 'type'=>'select', 'options'=>$DataSource, 'label' => __('datasource'), 'value' => $DataSource[0]['id'], 'placeholder' => '', 'helptext' => '选择一个数据源', 'rules' => ['required' => true,'disabled' => false]];
 foreach($allFieldsAdd as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];
 }
+*/
 
 //编辑页面时的启用字段列表
 $allFieldsEdit = [];
-$allFieldsEdit[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => 'Readonly for tablename', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => true]];
-$allFieldsEdit[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
-$FormGroup = [];
-$FormGroup[] = ['value'=>'System', 'label'=>'System'];
-$FormGroup[] = ['value'=>'User Create', 'label'=>'User Create'];
-$FormGroup[] = ['value'=>'Student', 'label'=>'Student'];
-$FormGroup[] = ['value'=>'中职数据标准', 'label'=>__('中职数据标准')];
-$FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')];
-//$allFieldsEdit[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => 'Form group', 'helptext' => 'Form group', 'rules' => ['required' => true,'disabled' => false]];
+$allFieldsEdit[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => true]];
+$allFieldsEdit[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$DataSource     = [];
+$DataSource[]   = ['value'=>0, 'label'=>__("手动管理数据")];
+$sql    = "select * from data_datasource where 连接状态='正常' order by id asc";
+$rs = $db->Execute($sql) or print $sql;
+$rs_a = $rs->GetArray();
+foreach ($rs_a as $Line) {
+    $DataSource[] = ['value'=>$Line['id'], 'label'=>$Line['连接池名称']];
+}
+$allFieldsEdit[] = ['name' => '数据源', 'show'=>true, 'type'=>'select', 'options'=>$DataSource, 'label' => __('datasource'), 'value' => $DataSource[0]['id'], 'placeholder' => '', 'helptext' => '选择一个数据源', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+$allFieldsEdit[] = ['name' => '远程数据表', 'show'=>true, 'type'=>'input', 'label' => "远程数据表", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据类', 'show'=>true, 'type'=>'input', 'label' => "数据类", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据子类', 'show'=>true, 'type'=>'input', 'label' => "数据子类", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据表序号', 'show'=>true, 'type'=>'input', 'label' => "数据表序号", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据表英文名称', 'show'=>true, 'type'=>'input', 'label' => "数据表英文名称", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据表中文名称', 'show'=>true, 'type'=>'input', 'label' => "数据表中文名称", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '主要来源', 'show'=>true, 'type'=>'input', 'label' => "主要来源", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '上报频率', 'show'=>true, 'type'=>'input', 'label' => "上报频率", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '上报范围', 'show'=>true, 'type'=>'input', 'label' => "上报范围", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+
 foreach($allFieldsEdit as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];
 }
+
 if($_GET['action']=="add_default_data"&&$_POST['TableName']!=""&&0)  {
     $MetaTables = $db->MetaTables();
     $TableName = strtolower($_POST['TableName']);
@@ -105,7 +120,7 @@ if($_GET['action']=="add_default_data"&&$_POST['TableName']!=""&&0)  {
     }
 }
 
-if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['action']=="view_default")&&$_GET['id']!="")  {
+if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_formname where ID = '$id'";
     $rsf     = $db->Execute($sql);
@@ -118,9 +133,76 @@ if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['a
     exit;  
 }
 
+if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
+    $id     = ForSqlInjection($_GET['id']);
+    $sql    = "select * from form_formname where ID = '$id'";
+    $rsf     = $db->Execute($sql);
+    
+    $FieldNameArray             = $allFieldsEdit;
+    $ApprovalNodeFieldsHidden   = [];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X]['name'];
+        if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
+            $FieldName1 = $FieldNameArray[$X]['code'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1]['name'];
+        if($FieldNameArray[$X+1]['type']=="autocomplete" && $FieldNameArray[$X+1]['code']!="") {
+            $FieldName2 = $FieldNameArray[$X+1]['code'];
+        }
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']     = $FieldName1;
+            $RowData[0]['Value']    = $rsf->fields[$FieldName1];
+            $RowData[0]['FieldArray']   = $FieldNameArray[$X];
+        }
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']     = $FieldName2;
+            $RowData[1]['Value']    = $rsf->fields[$FieldName2];
+            $RowData[1]['FieldArray']   = $FieldNameArray[$X+1];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS = [];
+    $RS['newTableRowData']          = $NewTableRowData;
+
+    $RS['status'] = "OK";
+    $RS['data'] = $rsf->fields;
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    print json_encode($RS);
+    exit;  
+}
+
+
+
+
+
+
 if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
+    $数据源         = intval($_POST['数据源']);
+    $远程数据表     = ForSqlInjection($_POST['远程数据表']);
+    $远程数据库信息  = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
+    if($远程数据库信息['数据库用户名']!="")    {
+        $db_test = NewADOConnection($DB_TYPE='mysqli');
+        $db_test->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
+        if($db_test->database==$远程数据库信息['数据库名称']) {
+            $远程数据表列表    = $db_test->MetaTables();
+            if(!in_array($远程数据表,$远程数据表列表)) {
+                $RS = [];
+                $RS['status'] = "ERROR";
+                $RS['msg'] = __("您输入的数据表名称在指定数据源中不存在");
+                print json_encode($RS);
+                exit;  
+            }
+        }
+        else {
+
+        }
+    }
     $NewArray = [];
-    foreach($allFieldsAdd as $Line) {
+    foreach($allFieldsEdit as $Line) {
         $NewArray[] = $Line['name']."='".str_replace("'","&#39",$_POST[$Line['name']])."'";
         if($_POST[$Line['name']]!="")  {
             $IsExecutionSQL = 1;
@@ -303,8 +385,9 @@ $ColumnColor['Student']     = $ColorArray[3];
 $ColumnColor['中职数据标准'] = $ColorArray[4];
 $ColumnColor['高职数据标准'] = $ColorArray[5];
 
-$columnsactions = [];
-$columnsactions[] = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pencil-outline'];
+$columnsactions     = [];
+$columnsactions[]   = ['action'=>'view_default','text'=>__('View'),'mdi'=>'mdi:eye-outline'];
+$columnsactions[]   = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pencil-outline'];
 $init_default_columns[]        = ['flex' => 0.1, 'minWidth' => 150, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 
 $columnName = "id";             $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 80, 'maxWidth' => 80, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
@@ -312,8 +395,15 @@ $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "FullName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "DesignForm";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formfield/?FormId=", "urlmdi"=>"mdi:chart-donut",'urlcolor'=>'success.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "DesignFlow";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formflow/?FormId=", "urlmdi"=>"mdi:cog-outline",'urlcolor'=>'warning.main', "target"=>"", 'renderCell' => NULL];
-$columnName = "FormGroup";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
-
+$columnName = "数据源";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "远程数据表";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "数据子集";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "数据类";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "数据子类";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "数据表中文名称";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "主要来源";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "上报频率";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
+$columnName = "上报范围";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
 $columnName = "TableName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 $columnName = "FullName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 
@@ -387,6 +477,12 @@ foreach ($rs_a as $Line) {
     $Line['id']         = intval($Line['id']);
     $Line['DesignForm'] = __("Design Form");
     $Line['DesignFlow'] = __("Design Flow");
+    if($Line["数据源"]==0) {
+        $Line["数据源"] = "手动管理数据";
+    }
+    else {
+        $Line["数据源"] = returntablefield("data_datasource","id",$Line["数据源"],"连接池名称")['连接池名称'];
+    }
     $NewRSA[] = $Line;
     if(in_array($Line['TableName'],['data_user','data_department','data_role','data_unit','data_interface','data_menuone','data_menutwo','form_formflow'])) {
         $ForbiddenSelectRow[] = $Line['id'];
@@ -436,15 +532,15 @@ $RS['edit_default']['dialogContentHeight']  = "90%";
 $RS['edit_default']['submitaction']  = "edit_default_data";
 $RS['edit_default']['submittext']    = __("Submit");
 $RS['edit_default']['canceltext']    = __("Cancel");
-$RS['edit_default']['titletext']    = __("Edit Form");
-$RS['edit_default']['titlememo']    = __("Manage All Forms in Table");
+$RS['edit_default']['componentsize'] = "small";
+$RS['edit_default']['titletext']    = "管理数据集";
 $RS['edit_default']['tablewidth']  = 550;
 $RS['edit_default']['submitloading']    = __("SubmitLoading");
 $RS['edit_default']['loading']          = __("Loading");
 
 $allFieldsEdit1 = [];
 $allFieldsEdit1[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => __('Input new table name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
-$allFieldsEdit1[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => __('New short name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+$allFieldsEdit1[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => '', 'helptext' => __('New short name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 $FormGroup = [];
 $FormGroup[] = ['value'=>'System', 'label'=>'System'];
 $FormGroup[] = ['value'=>'User Create', 'label'=>'User Create'];
@@ -466,16 +562,18 @@ $RS['edit_default_1']['titletext']    = __("Copy Form And Flow");
 $RS['edit_default_1']['tablewidth']  = 550;
 
 
-$RS['view_default'] = $RS['add_default'];
-$RS['view_default']['titletext']  = __("View Form");
-$RS['view_default']['titlememo']  = __("View All Forms in Table");
+$RS['view_default']                     = $RS['edit_default'];
+$RS['view_default']['defaultValues']    = $defaultValues;
+$RS['view_default']['componentsize']    = "small";
+$RS['view_default']['titletext']        = "查看数据集";
 
 $RS['export_default'] = [];
 $RS['import_default'] = [];
 
-$RS['init_default']['rowHeight']  = 38;
-$RS['init_default']['timeline']  = time();
-$RS['init_default']['pageNumber']  = $pageSize;
+$RS['init_default']['rowHeight']        = 38;
+$RS['init_default']['dialogMaxWidth']   = "md";
+$RS['init_default']['timeline']         = time();
+$RS['init_default']['pageNumber']       = $pageSize;
 $RS['init_default']['pageNumberArray']  = [10,20,30,40,50,100,200,500];
 
 if(sizeof($columnNames)>5) {

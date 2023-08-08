@@ -11,7 +11,7 @@ $sql        = "select * from form_formname where id='$externalId'";
 $rs         = $db->CacheExecute(10, $sql);
 $FromInfo   = $rs->fields;
 $TableName  = $FromInfo['TableName'];
-$ShortName  = $FromInfo['ShortName'];
+$FullName  = $FromInfo['FullName'];
 
 $columnNames = [];
 $sql = "show columns from form_formfield";
@@ -273,7 +273,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
         $DefaultValue   = "";
         foreach($NewDictArray as $Item) {
             $ElementX   = [];
-            $ElementX['DictMark']       = $ShortName."_".$FieldsArray['FieldName'];
+            $ElementX['DictMark']       = $FullName."_".$FieldsArray['FieldName'];
             $ElementX['EnglishName']    = $Item;
             $ElementX['ChineseName']    = $Item;
             $ElementX['Code']           = $SortNumber;
@@ -289,7 +289,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
         }
         if($ElementX['DictMark']!="")   {
             $ElementT                   = [];
-            $ElementT['Name']           = $ShortName.":".$FieldsArray['FieldName'];;
+            $ElementT['Name']           = $FullName.":".$FieldsArray['FieldName'];;
             $ElementT['LIST']           = "autocomplete:form_formdict:3:3:".$DefaultValue.":DictMark:".$ElementX['DictMark'];
             $ElementT['ADD']            = $ElementT['LIST'];
             $ElementT['EDIT']           = $ElementT['LIST'];
@@ -369,7 +369,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     }
 }
 
-if(($_GET['action']=="edit_default"||$_GET['action']=="view_default")&&$_GET['id']!="")  {
+if(($_GET['action']=="edit_default")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_formfield where ID = '$id'";
     $rsf     = $db->Execute($sql);
@@ -392,6 +392,56 @@ if(($_GET['action']=="edit_default"||$_GET['action']=="view_default")&&$_GET['id
     $RS['EnableFields'] = explode(",",$EnableFields['EnableFields']);
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
+    print json_encode($RS);
+    exit;  
+}
+
+if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
+    $id     = ForSqlInjection($_GET['id']);
+    $sql    = "select * from form_formfield where ID = '$id'";
+    $rsf     = $db->Execute($sql);
+    $EditValue = [];
+    $Setting = $rsf->fields['Setting'];
+    if($Setting!="")    {
+        $Setting = json_decode($Setting,true);
+        foreach($Setting as $FieldName=>$FieldValue)  {
+            $EditValue[$FieldName] = $FieldValue;
+        }
+        $EditValue['Setting'] = '';
+    }    
+    foreach($rsf->fields as $FieldName=>$FieldValue)  {
+        $EditValue[$FieldName] = $FieldValue;
+    }
+    $EnableFields = returntablefield("form_formfield_showtype","Name",$EditValue['ShowType'],"EnableFields");
+    $RS = [];
+    $RS['status'] = "OK";
+    $RS['data'] = $EditValue;
+    $RS['EnableFields'] = explode(",",$EnableFields['EnableFields']);
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    
+    $FieldNameArray             = array_keys($EditValue);
+    $ApprovalNodeFieldsHidden   = [];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X];
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']         = $FieldName1;
+            $RowData[0]['Value']        = $EditValue[$FieldName1];
+            $RowData[0]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName1),'value'=>$EditValue[$FieldName1],'type'=>'input'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1];
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']         = $FieldName2;
+            $RowData[1]['Value']        = $EditValue[$FieldName2];
+            $RowData[1]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName2),'value'=>$EditValue[$FieldName2],'type'=>'input'];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS['newTableRowData']          = $NewTableRowData;
+
     print json_encode($RS);
     exit;  
 }
@@ -540,7 +590,7 @@ $sql    = "select count(*) AS NUM from form_formfield " . $AddSql . "";
 $rs     = $db->CacheExecute(10, $sql);
 $RS['init_default']['total'] = intval($rs->fields['NUM']);
 if($FromInfo['TableName']!="")   {
-    $RS['init_default']['searchtitle']  = $FromInfo['ShortName'];
+    $RS['init_default']['searchtitle']  = $FromInfo['FullName'];
 }
 else {
     $RS['init_default']['searchtitle']  = "Unknown Form";

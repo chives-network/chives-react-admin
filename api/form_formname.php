@@ -18,11 +18,13 @@ foreach ($rs_a as $Line) {
 //新建页面时的启用字段列表
 $allFieldsAdd = [];
 $allFieldsAdd[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => 'Input your table name', 'helptext' => 'Only accepted lower case letters', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50,'format'=>'onlylowerletter','invalidtext'=>__('Only accepted lower case letters')]];
-$allFieldsAdd[] = ['name' => 'ShortName', 'show'=>true, 'type'=>'input', 'label' => __('ShortName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50]];
+$allFieldsAdd[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'min'=>2,'max'=>50]];
 $FormGroup = [];
 $FormGroup[] = ['value'=>'System', 'label'=>__('System')];
 $FormGroup[] = ['value'=>'User Create', 'label'=>__('User Create')];
 $FormGroup[] = ['value'=>'Student', 'label'=>__('Student')];
+$FormGroup[] = ['value'=>'中职数据标准', 'label'=>__('中职数据标准')];
+$FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')];
 $allFieldsAdd[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => '', 'helptext' => 'Form group', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
 foreach($allFieldsAdd as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];
@@ -31,11 +33,13 @@ foreach($allFieldsAdd as $ITEM) {
 //编辑页面时的启用字段列表
 $allFieldsEdit = [];
 $allFieldsEdit[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => 'Readonly for tablename', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => true]];
-$allFieldsEdit[] = ['name' => 'ShortName', 'show'=>true, 'type'=>'input', 'label' => __('ShortName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => 'Readable name, e.g. Chinese name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
 $FormGroup = [];
 $FormGroup[] = ['value'=>'System', 'label'=>'System'];
 $FormGroup[] = ['value'=>'User Create', 'label'=>'User Create'];
 $FormGroup[] = ['value'=>'Student', 'label'=>'Student'];
+$FormGroup[] = ['value'=>'中职数据标准', 'label'=>__('中职数据标准')];
+$FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')];
 $allFieldsEdit[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => 'Form group', 'helptext' => 'Form group', 'rules' => ['required' => true,'disabled' => false]];
 foreach($allFieldsEdit as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];
@@ -43,7 +47,7 @@ foreach($allFieldsEdit as $ITEM) {
 if($_GET['action']=="add_default_data"&&$_POST['TableName']!="")  {
     $MetaTables = $db->MetaTables();
     $TableName = strtolower($_POST['TableName']);
-    $ShortName = $_POST['ShortName'];
+    $FullName = $_POST['FullName'];
     if(substr($TableName,0,5)!="data_")   {
         $TableName = "data_".$TableName;
     }
@@ -55,7 +59,7 @@ if($_GET['action']=="add_default_data"&&$_POST['TableName']!="")  {
         print json_encode($RS);
         exit;
     }
-    $sql = "CREATE TABLE `".$TableName."` ( `id` int(11) NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`)) ENGINE=Innodb  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='".$ShortName."' AUTO_INCREMENT=1 ;";
+    $sql = "CREATE TABLE `".$TableName."` ( `id` int(11) NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`)) ENGINE=Innodb  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='".$FullName."' AUTO_INCREMENT=1 ;";
     $rs = $db->Execute($sql);
     if(!$rs->EOF) {
         $RS = [];
@@ -101,7 +105,7 @@ if($_GET['action']=="add_default_data"&&$_POST['TableName']!="")  {
     }
 }
 
-if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['action']=="view_default")&&$_GET['id']!="")  {
+if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_formname where ID = '$id'";
     $rsf     = $db->Execute($sql);
@@ -110,6 +114,44 @@ if(($_GET['action']=="edit_default"||$_GET['action']=="edit_default_1"||$_GET['a
     $RS['data'] = $rsf->fields;
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
+    print json_encode($RS);
+    exit;  
+}
+
+
+if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
+    $id     = ForSqlInjection($_GET['id']);
+    $sql    = "select * from form_formname where ID = '$id'";
+    $rsf     = $db->Execute($sql);
+    $EditValue = $rsf->fields;
+    $RS = [];
+    $RS['status'] = "OK";
+    $RS['data'] = $EditValue;
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    
+    $FieldNameArray             = array_keys($EditValue);
+    $ApprovalNodeFieldsHidden   = [];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X];
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']         = $FieldName1;
+            $RowData[0]['Value']        = $EditValue[$FieldName1];
+            $RowData[0]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName1),'value'=>$EditValue[$FieldName1],'type'=>'input'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1];
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']         = $FieldName2;
+            $RowData[1]['Value']        = $EditValue[$FieldName2];
+            $RowData[1]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName2),'value'=>$EditValue[$FieldName2],'type'=>'input'];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS['newTableRowData']          = $NewTableRowData;
+
     print json_encode($RS);
     exit;  
 }
@@ -149,17 +191,17 @@ function CopyFormAndFlowByID($ID)  {
     global $db;
     $db->StartTrans();
     //F494-DF8C
-    if($_POST['TableName']=="" || $_POST['ShortName']=="") {        
+    if($_POST['TableName']=="" || $_POST['FullName']=="") {        
         $RS = [];
         $RS['status'] = "ERROR";
         $RS['_POST'] = $_POST;
-        $RS['msg'] = __("TableName and ShortName Can Not Be Empty");
+        $RS['msg'] = __("TableName and FullName Can Not Be Empty");
         print json_encode($RS);
         exit; 
     }
     $MetaTables = $db->MetaTables();
     $TableName = strtolower($_POST['TableName']);
-    $ShortName = $_POST['ShortName'];
+    $FullName = $_POST['FullName'];
     if(substr($TableName,0,5)!="data_")   {
         $TableName = "data_".$TableName;
     }
@@ -179,12 +221,12 @@ function CopyFormAndFlowByID($ID)  {
     //Copy Table Structure
     $sql = "CREATE TABLE ".$_POST['TableName']." LIKE ".$Element['TableName'].";";
     $db->Execute($sql) or print $sql;
-    $ShortName = $Element['ShortName'];
+    $FullName = $Element['FullName'];
 
     //Copy form_formname
     $Element['id'] = null;
     $Element['TableName'] = $_POST['TableName'];
-    $Element['ShortName'] = $_POST['ShortName'];
+    $Element['FullName'] = $_POST['FullName'];
     $Element['FormGroup'] = $_POST['FormGroup'];
     [$rs,$sql] = InsertOrUpdateTableByArray("form_formname",$Element,'id',0,"Insert");
     if($rs->EOF) {
@@ -211,7 +253,7 @@ function CopyFormAndFlowByID($ID)  {
             $Setting = $Element['Setting'];
             $SettingMap = unserialize(base64_decode($Setting));
             foreach($SettingMap as $SettingKey=>$SettingValue) {
-                $SettingMap[$SettingKey] = str_replace($ShortName,$_POST['ShortName'],$SettingValue);
+                $SettingMap[$SettingKey] = str_replace($FullName,$_POST['FullName'],$SettingValue);
             }
             $Element['Setting']     = base64_encode(serialize($SettingMap));
             $Element['id']          = null;
@@ -389,10 +431,11 @@ $ColorArray[] = ['icon'=>'mdi:chart-donut','color'=>'success.main'];
 $ColorArray[] = ['icon'=>'mdi:account-outline','color'=>'primary.main'];
 $ColumnColor['System']      = $ColorArray[2];
 $ColumnColor['User Create'] = $ColorArray[3];
-$ColumnColor['Student'] = $ColorArray[3];
+$ColumnColor['Student']     = $ColorArray[3];
+$ColumnColor['中职数据标准'] = $ColorArray[4];
+$ColumnColor['高职数据标准'] = $ColorArray[5];
 
 $columnsactions = [];
-$columnsactions[] = ['action'=>'view_default','text'=>__('View'),'mdi'=>'mdi:eye-outline'];
 $columnsactions[] = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pencil-outline'];
 $columnsactions[] = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
 $columnsactions[] = ['action'=>'edit_default_1','text'=>__('Copy'),'mdi'=>'mdi:content-copy','double_check'=>'Do you want to copy this form and flow?'];
@@ -400,13 +443,13 @@ $init_default_columns[]        = ['flex' => 0.1, 'minWidth' => 150, 'sortable' =
 
 $columnName = "id";             $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 80, 'maxWidth' => 80, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
-$columnName = "ShortName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
+$columnName = "FullName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "DesignForm";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formfield/?FormId=", "urlmdi"=>"mdi:chart-donut",'urlcolor'=>'success.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "DesignFlow";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formflow/?FormId=", "urlmdi"=>"mdi:cog-outline",'urlcolor'=>'warning.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "FormGroup";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
 
 $columnName = "TableName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
-$columnName = "ShortName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
+$columnName = "FullName";      $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 
 $RS['init_default']['button_search']    = __("Search");
 $RS['init_default']['button_add']       = __("Add");
@@ -539,12 +582,14 @@ $RS['edit_default']['loading']          = __("Loading");
 
 $allFieldsEdit1 = [];
 $allFieldsEdit1[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => __('Input new table name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
-$allFieldsEdit1[] = ['name' => 'ShortName', 'show'=>true, 'type'=>'input', 'label' => __('ShortName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => __('New short name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+$allFieldsEdit1[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => 'Readable name, e.g. Chinese name', 'helptext' => __('New short name'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 $FormGroup = [];
 $FormGroup[] = ['value'=>'System', 'label'=>'System'];
 $FormGroup[] = ['value'=>'User Create', 'label'=>'User Create'];
 $FormGroup[] = ['value'=>'Student', 'label'=>'Student'];
-$allFieldsEdit1[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => 'Form group', 'helptext' => 'Form group', 'rules' => ['required' => true, 'disabled' => false]];
+$FormGroup[] = ['value'=>'中职数据标准', 'label'=>__('中职数据标准')];
+$FormGroup[] = ['value'=>'高职数据标准', 'label'=>__('高职数据标准')];
+$allFieldsEdit1[] = ['name' => 'FormGroup', 'show'=>true, 'type'=>'select', 'options'=>$FormGroup, 'label' => __('FormGroup'), 'value' => $FormGroup[0], 'placeholder' => 'Form group', 'helptext' => 'Form group', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 foreach($allFieldsEdit1 as $ITEM) {
     $defaultValues1[$ITEM['name']] = $ITEM['value'];
 }
@@ -567,6 +612,7 @@ $RS['export_default'] = [];
 $RS['import_default'] = [];
 
 $RS['init_default']['rowHeight']  = 38;
+$RS['init_default']['dialogMaxWidth']   = "md";
 $RS['init_default']['timeline']  = time();
 $RS['init_default']['pageNumber']  = $pageSize;
 $RS['init_default']['pageNumberArray']  = [10,20,30,40,50,100,200,500];

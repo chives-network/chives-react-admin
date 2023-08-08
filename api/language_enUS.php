@@ -213,7 +213,7 @@ $MAP['Batch_Refuse'] 		= 'Batch refuse';
 $MAP['Batch_Cancel'] 		= 'Batch cancel';
 $MAP['TableName'] 	        = 'Table name';
 $MAP['Only accepted lower case letters'] 	= 'Only accepted lower case letters';
-$MAP['ShortName'] 	        = 'Short name';
+$MAP['FullName'] 	        = 'Short name';
 $MAP['System'] 	            = 'System';
 $MAP['User Create']         = 'User Create';
 $MAP['FormGroup'] 	        = 'Form group';
@@ -397,7 +397,7 @@ $MAP['Input new table name'] 				= 'Please enter a new table name, using only En
 $MAP['New short name'] 						= 'New table short name';
 $MAP['Copy Form And Flow Success'] 			= 'Form and Flow copied successfully';
 $MAP['Copy Form And Flow Failed'] 			= 'Failed to copy Form and Flow';
-$MAP['TableName and ShortName Can Not Be Empty']   = 'Table name and short name cannot be empty';
+$MAP['TableName and FullName Can Not Be Empty']   = 'Table name and short name cannot be empty';
 $MAP['Today'] 	                = 'Today';
 $MAP['BeforeDays'] 	            = 'Days before';
 $MAP['AfterDays'] 	            = 'Days after';
@@ -607,8 +607,9 @@ $MAP['MobileEndNewsLeftImage'] 	    = 'Left Image';
 $MAP['MobileEndShowSearch'] 	    = 'List Search';
 $MAP['MobileEndShowGroupFilter'] 	= 'Group Filter';
 
-
-
+$MAP['中职数据标准'] 	             = '中职数据标准';
+$MAP['高职数据标准'] 	             = '高职数据标准';
+$MAP['datasource'] 	                = 'Data Source';
 
 
 

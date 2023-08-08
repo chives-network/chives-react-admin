@@ -13,10 +13,10 @@ $FormId     = $FlowInfo['FormId'];
 $sql        = "select * from form_formname where id='$FormId'";
 $rs         = $db->CacheExecute(10, $sql);
 $FormInfo   = $rs->fields;
-$ShortName  = $FormInfo['ShortName'];
+$FullName  = $FormInfo['FullName'];
 $TableName  = $FormInfo['TableName'];
 
-$TitleName  = $ShortName."-".$FlowInfo['FlowName'];
+$TitleName  = $FullName."-".$FlowInfo['FlowName'];
 
 $columnNames = [];
 $sql = "show columns from form_configsetting";
@@ -200,7 +200,7 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="" && $externalId!=""
     }
 }
 
-if(($_GET['action']=="edit_default"||$_GET['action']=="view_default")&&$_GET['id']!="")  {
+if(($_GET['action']=="edit_default")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_configsetting where ID = '$id'";
     $rsf     = $db->Execute($sql);
@@ -223,6 +223,56 @@ if(($_GET['action']=="edit_default"||$_GET['action']=="view_default")&&$_GET['id
     $RS['EnableFields'] = explode(",",$EnableFields['EnableFields']);
     $RS['sql'] = $sql;
     $RS['msg'] = __("Get Data Success");
+    print json_encode($RS);
+    exit;  
+}
+
+if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
+    $id     = ForSqlInjection($_GET['id']);
+    $sql    = "select * from form_configsetting where ID = '$id'";
+    $rsf     = $db->Execute($sql);
+    $EditValue = [];
+    $Setting = $rsf->fields['Setting'];
+    if($Setting!="")    {
+        $Setting = json_decode($Setting,true);
+        foreach($Setting as $FieldName=>$FieldValue)  {
+            $EditValue[$FieldName] = $FieldValue;
+        }
+        $EditValue['Setting'] = '';
+    }    
+    foreach($rsf->fields as $FieldName=>$FieldValue)  {
+        $EditValue[$FieldName] = $FieldValue;
+    }
+    $EnableFields = returntablefield("form_formfield_showtype","Name",$EditValue['ShowType'],"EnableFields");
+    $RS = [];
+    $RS['status'] = "OK";
+    $RS['data'] = $EditValue;
+    $RS['EnableFields'] = explode(",",$EnableFields['EnableFields']);
+    $RS['sql'] = $sql;
+    $RS['msg'] = __("Get Data Success");
+    
+    $FieldNameArray             = array_keys($EditValue);
+    $ApprovalNodeFieldsHidden   = [];
+    for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
+        $FieldName1 = $FieldNameArray[$X];
+        $RowData = [];
+        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+            $RowData[0]['Name']         = $FieldName1;
+            $RowData[0]['Value']        = $EditValue[$FieldName1];
+            $RowData[0]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName1),'value'=>$EditValue[$FieldName1],'type'=>'input'];
+        }
+        $FieldName2 = $FieldNameArray[$X+1];
+        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+            $RowData[1]['Name']         = $FieldName2;
+            $RowData[1]['Value']        = $EditValue[$FieldName2];
+            $RowData[1]['FieldArray']   = ['name'=>$FieldName1,'label'=>__($FieldName2),'value'=>$EditValue[$FieldName2],'type'=>'input'];
+        }
+        if(sizeof($RowData)>0) {
+            $NewTableRowData[] = $RowData;
+        }
+    }
+    $RS['newTableRowData']          = $NewTableRowData;
+
     print json_encode($RS);
     exit;  
 }
