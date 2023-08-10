@@ -498,7 +498,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
                     if (!store.init_default.ForbiddenViewRow.includes(row.id)) {
                       
                       return (
-                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)} key={action_index}>
                           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
                             {row[column.field]}
                           </Typography>
@@ -510,7 +510,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
                     if (!store.init_default.ForbiddenEditRow.includes(row.id)) {
                       
                       return (
-                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)} key={action_index}>
                             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
                               {row[column.field]}
                             </Typography>
@@ -522,7 +522,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
                     if (!store.init_default.ForbiddenDeleteRow.includes(row.id)) {
                       
                       return (
-                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)} key={action_index}>
                           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
                             {row[column.field]}
                           </Typography>
@@ -534,7 +534,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
                       if (!store.init_default.ForbiddenEditRow.includes(row.id)) {
                         
                         return (
-                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)} key={action_index}>
                             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
                               {row[column.field]}
                             </Typography>
@@ -759,6 +759,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
             </Grid>
           :
             <DataGridPro
+              page={page}
               autoHeight
               pagination
               rows={store.data}

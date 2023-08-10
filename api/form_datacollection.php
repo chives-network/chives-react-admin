@@ -37,7 +37,7 @@ $allFieldsEdit = [];
 $allFieldsEdit[] = ['name' => 'TableName', 'show'=>true, 'type'=>'input', 'label' => __('TableName'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => true]];
 $allFieldsEdit[] = ['name' => 'FullName', 'show'=>true, 'type'=>'input', 'label' => __('FullName'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
 $DataSource     = [];
-$DataSource[]   = ['value'=>0, 'label'=>__("手动管理数据")];
+$DataSource[]   = ['value'=>0, 'label'=>"手动管理数据"];
 $sql    = "select * from data_datasource where 连接状态='正常' order by id asc";
 $rs = $db->Execute($sql) or print $sql;
 $rs_a = $rs->GetArray();
@@ -50,6 +50,11 @@ $数据同步方式   = [];
 $数据同步方式[] = ['value'=>'增量同步', 'label'=>'增量同步'];
 $数据同步方式[] = ['value'=>'全量同步', 'label'=>'全量同步'];
 $allFieldsEdit[] = ['name' => '数据同步方式', 'show'=>true, 'type'=>'select', 'options'=>$数据同步方式, 'label' => "数据同步方式", 'value' => $数据同步方式[0]['value'], 'placeholder' => '', 'helptext' => '数据同步方式', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+
+$数据同步周期   = [];
+$数据同步周期[] = ['value'=>'每天', 'label'=>'每天'];
+$数据同步周期[] = ['value'=>'每小时', 'label'=>'每小时'];
+$allFieldsEdit[] = ['name' => '数据同步周期', 'show'=>true, 'type'=>'select', 'options'=>$数据同步周期, 'label' => "数据同步周期", 'value' => $数据同步周期[0]['value'], 'placeholder' => '', 'helptext' => '数据同步周期', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
 
 $allFieldsEdit[] = ['name' => '远程数据表', 'show'=>true, 'type'=>'input', 'label' => "远程数据表", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
 $allFieldsEdit[] = ['name' => '远程数据表主键', 'show'=>true, 'type'=>'input', 'label' => "远程数据表主键", 'value' => '', 'placeholder' => '如果没有主键,则不用填写.', 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
@@ -253,6 +258,19 @@ if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
         $RS['sql'] = $sql;
         $RS['msg'] = __("Update Success");
         print json_encode($RS);
+        //加入数据同步规则数据表
+        $sql    = "select * from form_formname where ID = '$id'";
+        $rs     = $db->Execute($sql);
+        $Element = [];
+        $Element['数据源']          = ForSqlInjection($_POST['数据源']);
+        $Element['远程数据表']      = ForSqlInjection($_POST['远程数据表']);
+        $Element['远程数据表主键']  = ForSqlInjection($_POST['远程数据表主键']);
+        $Element['数据同步方式']    = ForSqlInjection($_POST['数据同步方式']);
+        $Element['数据同步周期']    = ForSqlInjection($_POST['数据同步周期']);
+        $Element['TableName']       = $rs->fields['TableName'];
+        $Element['FullName']        = $rs->fields['FullName'];
+        $Element['FormId']          = $rs->fields['id'];
+        InsertOrUpdateTableByArray("data_datasyncedrules",$Element,"FormId",0);        
         exit;  
     }
     else {        

@@ -1,3 +1,6 @@
+// ** React Imports
+import { useEffect } from 'react'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -25,6 +28,10 @@ const LanguageDropdown = ({ settings, saveSettings }: Props) => {
   const handleLangItemClick = (lang: 'zh') => {
     i18n.changeLanguage(lang)
   }
+
+  useEffect(() => {
+    handleLangItemClick('zh')
+  })
 
   return (
     <OptionsMenu
