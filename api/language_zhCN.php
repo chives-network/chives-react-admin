@@ -609,4 +609,12 @@ $MAP['中职数据标准'] 	             = '中职数据标准';
 $MAP['高职数据标准'] 	             = '高职数据标准';
 $MAP['datasource'] 	                = '数据源';
 
+
+$MAP['DateFormat'] 	    = '日期格式';
+$MAP['Start Time'] 	    = '开始时间';
+$MAP['End Time'] 	    = '结束时间';
+$MAP['TimeFormat'] 	    = '时间格式';
+$MAP['DateTimeFormat'] 	= '日期和时间格式';
+$MAP['MonthFormat'] 	= '月份格式';
+
 ?>

@@ -611,7 +611,11 @@ $MAP['中职数据标准'] 	             = '中职数据标准';
 $MAP['高职数据标准'] 	             = '高职数据标准';
 $MAP['datasource'] 	                = 'Data Source';
 
-
-
+$MAP['DateFormat'] 	    = 'DateFormat';
+$MAP['Start Time'] 	    = 'Start Time';
+$MAP['End Time'] 	    = 'End Time';
+$MAP['TimeFormat'] 	    = 'TimeFormat';
+$MAP['DateTimeFormat'] 	= 'DateTimeFormat';
+$MAP['MonthFormat'] 	= 'MonthFormat';
 
 ?>
