@@ -18,6 +18,7 @@ function plugin_data_datasource_1_init_default()  {
         //Check Mysql Db
         $db_test = NewADOConnection($DB_TYPE);
         $db_test->connect($Item['数据库主机'], $Item['数据库用户名'], DecryptID($Item['数据库密码']), $Item['数据库名称']);
+        $db_test->Execute("Set names utf8;");
         if($db_test->database==$Item['数据库名称']) {
             $sql = "update data_datasource set 连接状态='正常' where id='".$Item['id']."'";
         }

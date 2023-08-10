@@ -485,6 +485,71 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
       )
       columns_for_datagrid[column_index] = columnRenderCell
     }
+    else if (column && column.type == "actionInRow") {
+      const columnRenderCell = { ...column }
+      const columnTempArray = [column.action]
+      columnRenderCell['renderCell'] = ({ row }: any) => (
+          <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: column.urlcolor } }}>
+            <Icon icon={column.urlmdi} fontSize={20} />
+            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {columnTempArray.map((action: any, action_index: number) => {
+                switch (action) {
+                  case 'view_default':
+                    if (!store.init_default.ForbiddenViewRow.includes(row.id)) {
+                      
+                      return (
+                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                            {row[column.field]}
+                          </Typography>
+                        </IconButton>
+                      )
+                    }
+                    break;
+                  case 'edit_default':
+                    if (!store.init_default.ForbiddenEditRow.includes(row.id)) {
+                      
+                      return (
+                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                              {row[column.field]}
+                            </Typography>
+                          </IconButton>
+                      )
+                    }
+                    break;
+                  case 'delete_array':
+                    if (!store.init_default.ForbiddenDeleteRow.includes(row.id)) {
+                      
+                      return (
+                        <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                            {row[column.field]}
+                          </Typography>
+                        </IconButton>
+                      )
+                    }
+                    break;
+                  default:
+                      if (!store.init_default.ForbiddenEditRow.includes(row.id)) {
+                        
+                        return (
+                          <IconButton size='small' onClick={() => togglePageActionDrawer(action, row.id)}>
+                            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                              {row[column.field]}
+                            </Typography>
+                          </IconButton>
+                        )
+                      }
+                      break;
+                }
+
+              })}
+            </Typography>
+          </Box>
+      )
+      columns_for_datagrid[column_index] = columnRenderCell
+    }
     else if (column && column.type == "url") {
       const columnRenderCell = { ...column }
       columnRenderCell['renderCell'] = ({ row }: any) => (

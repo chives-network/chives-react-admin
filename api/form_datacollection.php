@@ -44,8 +44,16 @@ $rs_a = $rs->GetArray();
 foreach ($rs_a as $Line) {
     $DataSource[] = ['value'=>$Line['id'], 'label'=>$Line['连接池名称']];
 }
-$allFieldsEdit[] = ['name' => '数据源', 'show'=>true, 'type'=>'select', 'options'=>$DataSource, 'label' => __('datasource'), 'value' => $DataSource[0]['id'], 'placeholder' => '', 'helptext' => '选择一个数据源', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+$allFieldsEdit[] = ['name' => '数据源', 'show'=>true, 'type'=>'select', 'options'=>$DataSource, 'label' => __('datasource'), 'value' => $DataSource[0]['value'], 'placeholder' => '', 'helptext' => '选择一个数据源', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+
+$数据同步方式   = [];
+$数据同步方式[] = ['value'=>'增量同步', 'label'=>'增量同步'];
+$数据同步方式[] = ['value'=>'全量同步', 'label'=>'全量同步'];
+$allFieldsEdit[] = ['name' => '数据同步方式', 'show'=>true, 'type'=>'select', 'options'=>$数据同步方式, 'label' => "数据同步方式", 'value' => $数据同步方式[0]['value'], 'placeholder' => '', 'helptext' => '数据同步方式', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12, 'disabled' => false]];
+
 $allFieldsEdit[] = ['name' => '远程数据表', 'show'=>true, 'type'=>'input', 'label' => "远程数据表", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
+$allFieldsEdit[] = ['name' => '远程数据表主键', 'show'=>true, 'type'=>'input', 'label' => "远程数据表主键", 'value' => '', 'placeholder' => '如果没有主键,则不用填写.', 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false]];
+
 $allFieldsEdit[] = ['name' => '数据类', 'show'=>true, 'type'=>'input', 'label' => "数据类", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
 $allFieldsEdit[] = ['name' => '数据子类', 'show'=>true, 'type'=>'input', 'label' => "数据子类", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
 $allFieldsEdit[] = ['name' => '数据表序号', 'show'=>true, 'type'=>'input', 'label' => "数据表序号", 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
@@ -176,23 +184,50 @@ if(($_GET['action']=="view_default")&&$_GET['id']!="")  {
 }
 
 
-
-
-
-
 if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
-    $数据源         = intval($_POST['数据源']);
-    $远程数据表     = ForSqlInjection($_POST['远程数据表']);
-    $远程数据库信息  = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
+    $数据源             = intval($_POST['数据源']);
+    $远程数据表         = ForSqlInjection($_POST['远程数据表']);
+    $远程数据表主键     = ForSqlInjection($_POST['远程数据表主键']);
+    $数据同步方式       = ForSqlInjection($_POST['数据同步方式']);
+    $远程数据库信息     = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
     if($远程数据库信息['数据库用户名']!="")    {
         $db_test = NewADOConnection($DB_TYPE='mysqli');
         $db_test->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
+        $db_test->Execute("Set names utf8;");
         if($db_test->database==$远程数据库信息['数据库名称']) {
-            $远程数据表列表    = $db_test->MetaTables();
-            if(!in_array($远程数据表,$远程数据表列表)) {
+            $MetaColumnNamesTemp    = $db_test->MetaColumnNames($远程数据表);
+            if(!$MetaColumnNamesTemp) {
                 $RS = [];
                 $RS['status'] = "ERROR";
-                $RS['msg'] = __("您输入的数据表名称在指定数据源中不存在");
+                $RS['msg'] = "【远程数据表】在远程数据库中不存在";
+                print json_encode($RS);
+                exit;  
+            }
+            //print_R($MetaColumnNamesTemp);
+    	    $远程数据表结构      = array_values($MetaColumnNamesTemp);
+            //print_R($远程数据表结构);
+            if(is_array($远程数据表结构) && $远程数据表结构[0]!="")     {
+                if($远程数据表主键!="" && !in_array($远程数据表主键, $远程数据表结构))     {
+                    $RS = [];
+                    $RS['status'] = "ERROR";
+                    $RS['远程数据表主键'] = $远程数据表主键;
+                    $RS['远程数据表结构'] = $远程数据表结构;
+                    $RS['msg'] = "您输入的【远程数据表主键】在【远程数据表】中不存在,请输入正确的【远程数据表主键】";
+                    print json_encode($RS);
+                    exit;  
+                }
+                if($数据同步方式=="增量同步" && $远程数据表主键=='')     {
+                    $RS = [];
+                    $RS['status'] = "ERROR";
+                    $RS['msg'] = "增量同步时,要求必须设置【远程数据表主键】";
+                    print json_encode($RS);
+                    exit;  
+                }
+            }
+            else {
+                $RS = [];
+                $RS['status'] = "ERROR";
+                $RS['msg'] = "您输入的数据表名称在指定数据源中不存在";
                 print json_encode($RS);
                 exit;  
             }
@@ -393,6 +428,7 @@ $init_default_columns[]        = ['flex' => 0.1, 'minWidth' => 150, 'sortable' =
 $columnName = "id";             $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 80, 'maxWidth' => 80, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "TableName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "FullName";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 250, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'editable'=>true, 'type'=>'string', 'renderCell' => NULL];
+$columnName = "DesignDataSource";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'actionInRow', 'action' => "edit_default", "urlmdi"=>"mdi:database",'urlcolor'=>'info.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "DesignForm";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formfield/?FormId=", "urlmdi"=>"mdi:chart-donut",'urlcolor'=>'success.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "DesignFlow";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'show'=>true, 'type'=>'url', 'href' => "formname/formflow/?FormId=", "urlmdi"=>"mdi:cog-outline",'urlcolor'=>'warning.main', "target"=>"", 'renderCell' => NULL];
 $columnName = "数据源";      $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 380, 'field' => $columnName, 'headerName' => $columnName, 'show'=>true, 'type'=>'input', 'renderCell' => NULL, "color"=>$ColumnColor];
@@ -474,9 +510,10 @@ $NewRSA = [];
 $rs = $db->Execute($sql) or print $sql;
 $rs_a = $rs->GetArray();
 foreach ($rs_a as $Line) {
-    $Line['id']         = intval($Line['id']);
-    $Line['DesignForm'] = __("Design Form");
-    $Line['DesignFlow'] = __("Design Flow");
+    $Line['id']                 = intval($Line['id']);
+    $Line['DesignDataSource']   = __("DesignDataSource");
+    $Line['DesignForm']         = __("Design Form");
+    $Line['DesignFlow']         = __("Design Flow");
     if($Line["数据源"]==0) {
         $Line["数据源"] = "手动管理数据";
     }
