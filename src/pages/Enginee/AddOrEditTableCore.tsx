@@ -169,11 +169,18 @@ interface AddOrEditTableType {
 const AddOrEditTableCore = (props: AddOrEditTableType) => {
     // ** Props
     const { externalId, id, action, addEditStructInfo, toggleAddTableDrawer, addUserHandleFilter, backEndApi, editViewCounter, IsGetStructureFromEditDefault, AddtionalParams, CSRF_TOKEN, dataGridLanguageCode, toggleImagesPreviewListDrawer, handleIsLoadingTipChange } = props
+    
+    const { i18n } = useTranslation()
 
-    //Yup Language
-    if(dataGridLanguageCode=="zhCN") {
-        setLocale(AddOrEditTableLanguage);
-    }
+    useEffect(() => {
+        if(dataGridLanguageCode=="zhCN") {
+            i18n.changeLanguage('zh')
+            registerLocale(i18n.language, langObj[i18n.language])
+            
+            //Yup Language
+            setLocale(AddOrEditTableLanguage);
+        }
+    })
 
     const router = useRouter();
     
@@ -734,9 +741,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         
         return str;
     }
-
-    const { i18n } = useTranslation()
-    registerLocale(i18n.language, langObj[i18n.language])
 
     interface FileUrl extends File {
         url: string;
