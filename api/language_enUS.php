@@ -617,5 +617,8 @@ $MAP['End Time'] 	    = 'End Time';
 $MAP['TimeFormat'] 	    = 'TimeFormat';
 $MAP['DateTimeFormat'] 	= 'DateTimeFormat';
 $MAP['MonthFormat'] 	= 'MonthFormat';
+$MAP['DesignDataSource'] 	    = 'Design Data Source';
+$MAP['UseDefault'] 	            = 'Use Default';
+$MAP['RemoteRelativeField'] 	= 'Remote Relative Field';
 
 ?>

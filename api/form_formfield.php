@@ -155,6 +155,41 @@ $IsEnable[] = ['value'=>'1', 'label'=>__('Enable')];
 $IsEnable[] = ['value'=>'0', 'label'=>__('Disable')];
 $allFieldsAdd[] = ['name' => 'IsEnable', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsEnable, 'label' => __('Is Enable'), 'value' => $IsEnable[0]['value'], 'placeholder' => __('Is Enable for this field'), 'helptext' => __('Is Enable for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
+//判断是否需要显示远程数据表字段列表
+$远程数据表字段列表 = [];
+$远程数据表字段列表[] = ['value'=>'None', 'label'=>__('None')];
+$远程数据表字段列表[] = ['value'=>'Default', 'label'=>__('UseDefault')];
+
+$数据源         = $FromInfo['数据源'];
+$远程数据表     = $FromInfo['远程数据表'];
+$远程数据表主键  = $FromInfo['远程数据表主键'];
+$数据同步方式   = $FromInfo['数据同步方式'];
+$数据同步周期   = $FromInfo['数据同步周期'];
+$远程数据库信息     = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
+if($远程数据库信息['数据库用户名']!="")    {
+    $db_remote = NewADOConnection($DB_TYPE='mysqli');
+    $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
+    $db_remote->Execute("Set names utf8;");
+    if($db_remote->database==$远程数据库信息['数据库名称']) {
+        $MetaColumnNamesTemp    = $db_remote->MetaColumnNames($远程数据表);
+        $远程数据表结构          = array_values($MetaColumnNamesTemp);
+        //print_R($远程数据表结构);
+        if(is_array($远程数据表结构) && $远程数据表结构[0]!="")     {
+            if($远程数据表主键!="" && in_array($远程数据表主键, $远程数据表结构))     {
+                foreach($远程数据表结构 as $字段名称) {
+                    $远程数据表字段列表[] = ['value'=>$字段名称, 'label'=>$字段名称];
+                }
+            }
+            if($远程数据表主键=="")     {
+                foreach($远程数据表结构 as $字段名称) {
+                    $远程数据表字段列表[] = ['value'=>$字段名称, 'label'=>$字段名称];
+                }
+            }
+        }
+    }
+    $allFieldsAdd[] = ['name' => 'RemoteRelativeField', 'show'=>true, 'type'=>'select', 'options'=>$远程数据表字段列表, 'label' => __('RemoteRelativeField'), 'value' => $远程数据表字段列表[0]['value'], 'placeholder' => __('RemoteRelativeField'), 'helptext' => __('RemoteRelativeField'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false, 'row'=>true]];
+}
+
 
 foreach($allFieldsAdd as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];

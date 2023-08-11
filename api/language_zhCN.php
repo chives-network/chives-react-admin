@@ -616,7 +616,9 @@ $MAP['End Time'] 	    = '结束时间';
 $MAP['TimeFormat'] 	    = '时间格式';
 $MAP['DateTimeFormat'] 	= '日期和时间格式';
 $MAP['MonthFormat'] 	= '月份格式';
-$MAP['DesignDataSource'] 	= '设置数据源';
+$MAP['DesignDataSource'] 	    = '设置数据源';
+$MAP['UseDefault'] 	            = '使用默认值';
+$MAP['RemoteRelativeField'] 	= '远程数据表关联字段';
 
 
 

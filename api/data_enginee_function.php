@@ -59,6 +59,7 @@ function AttachValueMinusOneFile($OriginalValue, $ExistFileNameArray, $UploadFil
     }
     return join("*",$FieldNameArrayNew)."||".join(",",$FieldIdArrayNew)."||".join(",",$FieldSizeArrayNew);;
 }
+
 function AttachFieldValueToUrl($TableName,$Id,$FieldName,$Type,$FieldValue) {
     global $FileStorageLocation;
     global $SettingMap;
@@ -1107,6 +1108,7 @@ function Extra_Priv_Filter_Field_To_SQL() {
     $AddSql .= Extra_Priv_Filter_Field_To_SQL_Item('Four');
     $AddSql .= Extra_Priv_Filter_Field_To_SQL_Item('Five');
 }
+
 function Extra_Priv_Filter_Field_To_SQL_Item($Item) {
     global $db, $SettingMap, $MetaColumnNames;
     $tempsql_One = "";
@@ -1304,7 +1306,6 @@ function option_multi_approval_exection($selectedRows, $multiReviewInputValue, $
         return json_encode($RS);
     }  
 }
-
 
 function option_multi_refuse_exection($selectedRows, $multiReviewInputValue, $Reminder=1, $UpdateOtherTableField=1) {
     global $db, $SettingMap, $MetaColumnNames, $TableName, $GLOBAL_USER;
@@ -1509,7 +1510,6 @@ function option_multi_cancel_exection($selectedRows, $multiReviewInputValue, $Re
         return json_encode($RS);
     } 
 }
-
 
 function UpdateOtherTableFieldAfterFormSubmit($id)  {
     global $db, $SettingMap, $MetaColumnNames, $TableName, $GLOBAL_USER;

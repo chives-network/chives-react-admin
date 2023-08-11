@@ -428,7 +428,7 @@ function CheckCsrsToken() {
 function returntablefield($tablename,$where,$value,$return)  {
 	global $db;
 	$sql	= "select $return from $tablename where $where = '".$value."' ";
-	$rs		= $db->Execute($sql);
+	$rs		= $db->CacheExecute(60,$sql);
 	return $rs->fields;
 }
 
@@ -469,7 +469,7 @@ function InsertOrUpdateTableByArray($Tablename, $Element, $primarykey="username,
 		}
 		else	{
 			//print "<font color=green>".$sql."</font><BR>Not execute sql in Debug mode";
-			return [null, $sql];
+			return [true, $sql];
 		}
 	}
 	else

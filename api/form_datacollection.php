@@ -196,11 +196,11 @@ if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
     $数据同步方式       = ForSqlInjection($_POST['数据同步方式']);
     $远程数据库信息     = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
     if($远程数据库信息['数据库用户名']!="")    {
-        $db_test = NewADOConnection($DB_TYPE='mysqli');
-        $db_test->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
-        $db_test->Execute("Set names utf8;");
-        if($db_test->database==$远程数据库信息['数据库名称']) {
-            $MetaColumnNamesTemp    = $db_test->MetaColumnNames($远程数据表);
+        $db_remote = NewADOConnection($DB_TYPE='mysqli');
+        $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
+        $db_remote->Execute("Set names utf8;");
+        if($db_remote->database==$远程数据库信息['数据库名称']) {
+            $MetaColumnNamesTemp    = $db_remote->MetaColumnNames($远程数据表);
             if(!$MetaColumnNamesTemp) {
                 $RS = [];
                 $RS['status'] = "ERROR";
