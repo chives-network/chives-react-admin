@@ -19,7 +19,6 @@ foreach ($rs_a as $Line) {
 //新建页面时的启用字段列表
 $allFieldsAdd = [];
 $allFieldsAdd['Default'][] = ['name' => 'DictMark', 'show'=>true, 'type'=>'input', 'label' => __('DictMark'), 'value' => '', 'placeholder' => 'DictMark', 'helptext' => 'DictMark', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
-$allFieldsAdd['Default'][] = ['name' => 'EnglishName', 'show'=>true, 'type'=>'input', 'label' => __('English Name'), 'value' => '', 'placeholder' => 'English Name input', 'helptext' => 'English Name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $allFieldsAdd['Default'][] = ['name' => 'ChineseName', 'show'=>true, 'type'=>'input', 'label' => __('Chinese Name'), 'value' => '', 'placeholder' => 'Chinese Name input', 'helptext' => 'Chinese Name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $allFieldsAdd['Default'][] = ['name' => 'Code', 'show'=>true, 'type'=>'input', 'label' => __('Code'), 'value' => '', 'placeholder' => 'Code input', 'helptext' => 'Code', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $allFieldsAdd['Default'][] = ['name' => 'SortNumber', 'show'=>true, 'type'=>'number', 'label' => __('SortNumber'), 'value' => '0', 'placeholder' => 'Sort number in form', 'helptext' => 'Sort number', 'rules' => ['required' => true,'xs'=>12, 'sm'=>2,'disabled' => false]];
@@ -39,18 +38,16 @@ if( ($_GET['action']=="add_default_data") && $_POST['DictMark']!="")  {
     $MetaColumnNames    = $db->MetaColumnNames($TableName);
     $MetaColumnNames    = array_values($MetaColumnNames);
     
-    $EnglishNameArray   = explode(',',trim($_POST['EnglishName']));    
     $ChineseNameArray   = explode(',',trim($_POST['ChineseName']));    
     $CodeArray          = explode(',',trim($_POST['Code']));
 
     $_POST['DictMark']  = str_replace(":","_",$_POST['DictMark']);
 
     $Exec_Total             = 1;
-    for($i=0;$i<sizeof($EnglishNameArray);$i++)    {
+    for($i=0;$i<sizeof($ChineseNameArray);$i++)    {
         $FieldsArray                    = [];
         $FieldsArray['DictMark']        = $_POST['DictMark'];
         $FieldsArray['SortNumber']      = intval($_POST['SortNumber']);
-        $FieldsArray['EnglishName']     = $EnglishNameArray[$i];
         $FieldsArray['ChineseName']     = $ChineseNameArray[$i];
         if($CodeArray[$i]=="") {
             $CodeArray[$i] = $i;
@@ -58,7 +55,7 @@ if( ($_GET['action']=="add_default_data") && $_POST['DictMark']!="")  {
         $FieldsArray['Code']            = $CodeArray[$i];
         $FieldsArray['ExtraControl']    = $_POST['ExtraControl'];
         if(1)   {
-            [$rs,$sql] = InsertOrUpdateTableByArray("form_formdict",$FieldsArray,"DictMark,EnglishName",0,"Insert");
+            [$rs,$sql] = InsertOrUpdateTableByArray("form_formdict",$FieldsArray,"DictMark,ChineseName",0,"Insert");
         }
     }
     if($Exec_Total) {        
@@ -85,7 +82,6 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="")  {
     $FieldsArray                    = [];
     $FieldsArray['DictMark']        = $_POST['DictMark'];
     $FieldsArray['SortNumber']      = intval($_POST['SortNumber']);
-    $FieldsArray['EnglishName']     = $_POST['EnglishName'];
     $FieldsArray['ChineseName']     = $_POST['ChineseName'];
     $FieldsArray['Code']            = $_POST['Code'];
     $FieldsArray['ExtraControl']    = $_POST['ExtraControl'];
@@ -245,7 +241,6 @@ $columnsactions[] = ['action'=>'edit_default','text'=>__('Edit'),'mdi'=>'mdi:pen
 $columnsactions[] = ['action'=>'delete_array','text'=>__('Delete'),'mdi'=>'mdi:delete-outline','double_check'=>__('Do you want to delete this item?')];
 $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 120, 'sortable' => false, 'field' => "actions", 'headerName' => __("Actions"), 'show'=>true, 'type'=>'actions', 'actions' => $columnsactions];
 $columnName = "DictMark";       $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 350, 'maxWidth' => 500, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
-$columnName = "EnglishName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "ChineseName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "Code";           $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL ];
 $columnName = "SortNumber";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
@@ -256,7 +251,6 @@ $RS['init_default']['button_add']       = __("Add");
 $RS['init_default']['columns']          = $init_default_columns;
 $RS['init_default']['columnsactions']   = $columnsactions;
 
-$columnName = "EnglishName";        $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 $columnName = "ChineseName";        $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 $columnName = "DictMark";           $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 $columnName = "ExtraControl";       $searchField[] = ['label' => __($columnName), 'value' => $columnName];
