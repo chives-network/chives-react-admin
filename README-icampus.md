@@ -1,7 +1,7 @@
 <p align="center">
 	<img alt="logo" src="https://www.dandian.net/cn/wp-content/uploads/20171021044351_57.png">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">单点数字化校园 v0.3</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">单点数字化校园 v0.5</h1>
 <h4 align="center">基于React和PHP开发的快速开发框架</h4>
 
 ## 平台简介
