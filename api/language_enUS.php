@@ -620,5 +620,9 @@ $MAP['MonthFormat'] 	= 'MonthFormat';
 $MAP['DesignDataSource'] 	    = 'Design Data Source';
 $MAP['UseDefault'] 	            = 'Use Default';
 $MAP['RemoteRelativeField'] 	= 'Remote Relative Field';
+$MAP['OtherPossibleValues'] 	= 'Other Possible Values';
+
+
+
 
 ?>

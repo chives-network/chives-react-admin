@@ -619,6 +619,7 @@ $MAP['MonthFormat'] 	= '月份格式';
 $MAP['DesignDataSource'] 	    = '设置数据源';
 $MAP['UseDefault'] 	            = '使用默认值';
 $MAP['RemoteRelativeField'] 	= '远程数据表关联字段';
+$MAP['OtherPossibleValues'] 	= '其它可用于关联的值';
 
 
 

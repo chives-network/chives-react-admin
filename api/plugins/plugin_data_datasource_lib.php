@@ -32,7 +32,7 @@ foreach($rs_a as $Line) {
     $数据同步周期       = $Line['数据同步周期'];
     $执行状态           = $Line['执行状态'];
     $执行时间           = $Line['执行时间'];
-    $远程数据库信息      = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
+    $远程数据库信息      = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称,连接池名称");
     if($远程数据库信息['数据库用户名']!="")    {
         $db_remote = NewADOConnection($DB_TYPE='mysqli');
         $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
@@ -49,6 +49,7 @@ foreach($rs_a as $Line) {
                 
                 //开始做远程数据表同步到本数据中心的操作
                 if($数据同步方式=="全量同步")  {
+                    $数据字典同步异常数据 = [];
                     $新编号 = 0;
                     //第一步:清空本地表
                     $sql = "truncate table $TableName";
@@ -63,6 +64,7 @@ foreach($rs_a as $Line) {
                         foreach($rs_a_fields as $Item) {
                             $FieldsSeting           = json_decode($Item['Setting'], true);
                             $RemoteRelativeField    = $FieldsSeting['RemoteRelativeField'];
+                            //第三步:不使用远程数据表使用,而是使用本地数据的配置来产生一个默认值
                             if($RemoteRelativeField=="Default")  {
                                 switch($FieldsSeting['ShowType']) {
                                     case 'Hidden:Createandupdatetime':
@@ -77,7 +79,7 @@ foreach($rs_a as $Line) {
                                         $学校十位代码   = returntablefield("ods_zzxxgkjcsj","id",1,"XXDM")['XXDM'];
                                         $唯一编码前缀   = $学校十位代码.$FieldsSeting['Placeholder'];
                                         $剩余位数       = 32-strlen($唯一编码前缀);
-                                        $新编号 += 1;
+                                        $新编号         += 1;
                                         $补齐0数量      = $剩余位数-strlen($新编号);
                                         while($补齐0数量>0) {
                                             $唯一编码前缀 .= "0";
@@ -102,15 +104,58 @@ foreach($rs_a as $Line) {
                                         break;
                                 }
                             }
-                            else if(in_array($RemoteRelativeField,$远程数据表结构))  {
-                                //进行数据清洗
-                                $NewRecord[$FieldsSeting['FieldName']] = $Line[$RemoteRelativeField];
+                            else if($RemoteRelativeField!="" && $RemoteRelativeField!="None" && in_array($RemoteRelativeField, $远程数据表结构))  {
+                                //第四步:同步远程数据表数据,并且进行数据清洗
+                                $FieledShowTypeArray = explode(':',$FieldsSeting['ShowType']);
+                                switch($FieledShowTypeArray[0]) {
+                                    case 'Input':
+                                        $NewRecord[$FieldsSeting['FieldName']] = $Line[$RemoteRelativeField];
+                                        break;
+                                    case '中职标准':
+                                        //数据字典的名称转代码
+                                        $ADDTYPE        = returntablefield("form_formfield_showtype","Name",$FieldsSeting['ShowType'],"`ADD`")['ADD'];
+                                        $ADDTYPE_ARRAY  = explode(':',$ADDTYPE);
+                                        if(sizeof($ADDTYPE_ARRAY)==7&&$ADDTYPE_ARRAY[1]=="form_formdict") {
+                                            $Temp_MetaColumnNames = GLOBAL_MetaColumnNames($ADDTYPE_ARRAY[1]);
+                                            $sql        = "select ".$Temp_MetaColumnNames[$ADDTYPE_ARRAY[2]]." AS CODE,".$Temp_MetaColumnNames[$ADDTYPE_ARRAY[3]]." AS NAME, OtherPossibleValues from ".$ADDTYPE_ARRAY[1]." where ".$ADDTYPE_ARRAY[5]."='".$ADDTYPE_ARRAY[6]."'";
+                                            $rs_temp    = $db->CacheExecute(180,$sql);
+                                            $rs_a_temp  = $rs_temp->GetArray();
+                                            $数据字典合集 = [];
+                                            foreach($rs_a_temp as $LineTemp) {
+                                                $OtherPossibleValuesArray = explode(',',$OtherPossibleValues);
+                                                foreach($OtherPossibleValues as $TEMP) {
+                                                    $数据字典合集[$TEMP] = $LineTemp['NAME'];
+                                                }
+                                                $数据字典合集[$LineTemp['CODE']] = $LineTemp['CODE'];
+                                                $数据字典合集[$LineTemp['NAME']] = $LineTemp['CODE'];
+                                            }
+                                            if($数据字典合集[$Line[$RemoteRelativeField]]!="")  {
+                                                $NewRecord[$FieldsSeting['FieldName']] = $数据字典合集[$Line[$RemoteRelativeField]];
+                                            }
+                                            elseif(0) {
+                                                print_R($sql);
+                                                print "没有命中:".$Line[$RemoteRelativeField];
+                                                print_R($数据字典合集);
+                                                print "<BR>";
+                                                exit;
+                                            }
+                                            else {
+                                                $数据字典同步异常数据[$FieldsSeting['FieldName']][$RemoteRelativeField][$Line[$RemoteRelativeField]] +=1;
+                                            }
+                                        }
+                                        break;
+                                    
+                                }
                             }
                             //print_R($FieldsSeting);//exit;
                         }
-                        //exit;
                         $BatchSqlBody[] = "('".join("','",array_values($NewRecord))."')";
                     }
+                    $所有异常数据                           = [];
+                    $所有异常数据['数据源']                 = $远程数据库信息['连接池名称'];
+                    $所有异常数据['远程数据表']             = $远程数据表;
+                    $所有异常数据['数据字典同步异常数据']   = $数据字典同步异常数据;
+                    $所有异常数据['同步异常数据解决方法']   = "把异常数据的数据字典重新跟标准库的数据字典做一下关联.";
                     //每次插入的记录数
                     $batchSize = 50;
                     //将SQL语句拆分成批次进行插入
@@ -122,10 +167,11 @@ foreach($rs_a as $Line) {
                             print $insertSql;
                         }
                         else {
-                            print "插入成功";
+                            print " $i 插入成功";
                         }
                     }
                 }
+                print_R($所有异常数据);
                 exit;
             }
         }

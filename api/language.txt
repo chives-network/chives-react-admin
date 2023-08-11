@@ -1,0 +1,13 @@
+
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';
+$MAP['OtherPossibleValues_名称'] 	= 'OtherPossibleValues_名称';

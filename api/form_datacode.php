@@ -6,6 +6,9 @@ require_once('include.inc.php');
 CheckAuthUserLoginStatus();
 CheckAuthUserRoleHaveMenu(0, "/form/formdict");
 
+$_GET['IsGetStructureFromEditDefault']  = 1;
+$_GET['id']                             = intval($_GET['id']);
+
 $TableName  = "form_formdict";
 
 $columnNames = [];
@@ -22,8 +25,6 @@ $allFieldsAdd['Default'][] = ['name' => 'DictMark', 'show'=>true, 'type'=>'input
 $allFieldsAdd['Default'][] = ['name' => 'ChineseName', 'show'=>true, 'type'=>'input', 'label' => __('Chinese Name'), 'value' => '', 'placeholder' => 'Chinese Name input', 'helptext' => 'Chinese Name', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $allFieldsAdd['Default'][] = ['name' => 'Code', 'show'=>true, 'type'=>'input', 'label' => __('Code'), 'value' => '', 'placeholder' => 'Code input', 'helptext' => 'Code', 'rules' => ['required' => true,'xs'=>12, 'sm'=>6, 'disabled' => false]];
 $allFieldsAdd['Default'][] = ['name' => 'SortNumber', 'show'=>true, 'type'=>'number', 'label' => __('SortNumber'), 'value' => '0', 'placeholder' => 'Sort number in form', 'helptext' => 'Sort number', 'rules' => ['required' => true,'xs'=>12, 'sm'=>2,'disabled' => false]];
-$allFieldsAdd['Default'][] = ['name' => 'ExtraControl', 'show'=>true, 'type'=>'textarea', 'label' => __('ExtraControl'), 'value' => '', 'placeholder' => __('ExtraControl'), 'helptext' => '', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12]];
-
 
 foreach($allFieldsAdd as $ModeName=>$allFieldItem) {
     foreach($allFieldItem as $ITEM) {
@@ -53,7 +54,7 @@ if( ($_GET['action']=="add_default_data") && $_POST['DictMark']!="")  {
             $CodeArray[$i] = $i;
         }
         $FieldsArray['Code']            = $CodeArray[$i];
-        $FieldsArray['ExtraControl']    = $_POST['ExtraControl'];
+        $FieldsArray['OtherPossibleValues']    = $_POST['OtherPossibleValues'];
         if(1)   {
             [$rs,$sql] = InsertOrUpdateTableByArray("form_formdict",$FieldsArray,"DictMark,ChineseName",0,"Insert");
         }
@@ -80,11 +81,12 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="")  {
     $MetaColumnNames    = $db->MetaColumnNames($TableName);
     $MetaColumnNames    = array_values($MetaColumnNames);
     $FieldsArray                    = [];
+    $FieldsArray['id']              = $_GET['id'];
     $FieldsArray['DictMark']        = $_POST['DictMark'];
     $FieldsArray['SortNumber']      = intval($_POST['SortNumber']);
     $FieldsArray['ChineseName']     = $_POST['ChineseName'];
     $FieldsArray['Code']            = $_POST['Code'];
-    $FieldsArray['ExtraControl']    = $_POST['ExtraControl'];
+    $FieldsArray['OtherPossibleValues']    = $_POST['OtherPossibleValues'];
     if(1)   {
         [$rs,$sql] = InsertOrUpdateTableByArray("form_formdict",$FieldsArray,"id",0,"Update");
         if($rs->EOF) {
@@ -108,9 +110,9 @@ if( ($_GET['action']=="edit_default_data") && $_GET['id']!="")  {
 if(($_GET['action']=="edit_default")&&$_GET['id']!="")  {
     $id     = ForSqlInjection($_GET['id']);
     $sql    = "select * from form_formdict where ID = '$id'";
-    $rsf     = $db->Execute($sql);
-    $EditValue = [];
-    $Setting = $rsf->fields['Setting'];
+    $rsf        = $db->Execute($sql);
+    $EditValue  = [];
+    $Setting    = $rsf->fields['Setting'];
     if($Setting!="")    {
         $Setting = json_decode($Setting,true);
         foreach($Setting as $FieldName=>$FieldValue)  {
@@ -123,11 +125,74 @@ if(($_GET['action']=="edit_default")&&$_GET['id']!="")  {
     }
     $EnableFields = returntablefield("form_formdict_showtype","Name",$EditValue['ShowType'],"EnableFields");
     $RS = [];
-    $RS['status'] = "OK";
-    $RS['data'] = $EditValue;
+    //IsGetStructureFromEditDefault
+    if($_GET['IsGetStructureFromEditDefault']==1)  {        
+        //print_R($CurrentFieldTypeArray);
+        $RemoteFieldArray   = [];
+        $FieldName          = "OtherPossibleValues";
+        $DictMark           = $EditValue['DictMark'];
+        $DictName           = returntablefield("form_formfield_showtype","`ADD`","autocomplete:form_formdict:4:3::DictMark:".$DictMark,"Name")['Name'];
+        //得到相匹配的字段
+        if($DictName!="")     {
+            $sql            = "select * from form_formfield where ShowType='$DictName'";
+            $rs_temp        = $db->CacheExecute(180, $sql);
+            $SettingTemp    = json_decode($rs_temp->fields['Setting'], true);
+            $RemoteRelativeField = $SettingTemp['RemoteRelativeField'];
+            $FormId             = $rs_temp->fields['FormId'];
+            $TableName          = $rs_temp->fields['FormName'];
+            $sql                = "select * from data_datasyncedrules where FormId='$FormId'";
+            $rs                 = $db->CacheExecute(180,$sql);
+            $数据源             = $rs->fields['数据源'];
+            $远程数据表         = $rs->fields['远程数据表'];
+            $远程数据库信息      = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
+            if($远程数据库信息['数据库用户名']!=""&&$RemoteRelativeField!=""&&$FormId>0)    {
+                $db_remote = NewADOConnection($DB_TYPE='mysqli');
+                $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
+                $db_remote->Execute("Set names utf8;");
+                if($db_remote->database==$远程数据库信息['数据库名称']) {
+                    $MetaColumnNamesTemp    = $db_remote->MetaColumnNames($远程数据表);
+                    $远程数据表结构          = array_values($MetaColumnNamesTemp);
+                    if(is_array($远程数据表结构) && in_array($RemoteRelativeField,$远程数据表结构))     {
+                        //得到远程数据表的数据字典结构
+                        $sql            = "select distinct $RemoteRelativeField from $远程数据表 where $RemoteRelativeField != ''";
+                        $rs_temp        = $db_remote->CacheExecute(180, $sql);
+                        $rs_a_temp      = $rs_temp->GetArray();
+                        foreach($rs_a_temp as $temp) {
+                            $RemoteFieldArray[] = ['value'=>$temp[$RemoteRelativeField], "label"=>$temp[$RemoteRelativeField]];
+                        }
+                    }
+                }
+            }
+            $CurrentFieldTypeArray = [];
+            $FieldCodeName = $FieldName;
+            if($FieldCodeName==$FieldName) {
+                $FieldName = $FieldName."_名称";
+            }
+            $FieldType[] = ['value'=>'22222',"label"=>"22222"];
+            $allFieldsEdit['Default'][] = ['name' => $FieldName, 'code' => $FieldCodeName, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'show'=>true, 'type'=>'autocompletemulti', 'options'=>$RemoteFieldArray, 'label' => __($FieldCodeName), 'value' => "", 'placeholder' => __('OtherPossibleValues'), 'helptext' => '其它可用于关联的值.注意这些值是远程数据表的值,而不是本地数据库的值.主要用于远程数据表的数据字典和标准数据字典的值不匹配时而做的映射关系.', 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>12,'disabled' => $disabledItem==true?true:false]];
+
+            $edit_default = [];
+            $edit_default['allFields']      = $allFieldsEdit;
+            $edit_default['allFieldsMode']  = [['value'=>"Default", 'label'=>__("")]];
+            $edit_default['defaultValues']  = $EditValue;
+            $edit_default['dialogContentHeight']  = "90%";
+            $edit_default['submitaction']   = "edit_default_data";
+            $edit_default['submittext']     = __("Submit");
+            $edit_default['componentsize']  = "small";
+            $edit_default['canceltext']     = "";
+            $edit_default['titletext']      = "";
+            $edit_default['titlememo']      = "";
+            $edit_default['tablewidth']     = 650;
+            $RS['edit_default'] = $edit_default;
+            $RS['forceuse'] = true; //强制使用当前结构数据来渲染表单
+        }
+    }
+    
+    $RS['status']       = "OK";
+    $RS['data']         = $EditValue;
     $RS['EnableFields'] = explode(",",$EnableFields['EnableFields']);
-    $RS['sql'] = $sql;
-    $RS['msg'] = __("Get Data Success");
+    $RS['sql']          = $sql;
+    $RS['msg']          = __("Get Data Success");
     print json_encode($RS);
     exit;  
 }
@@ -244,7 +309,7 @@ $columnName = "DictMark";       $init_default_columns[] = ['flex' => 0.1, 'minWi
 $columnName = "ChineseName";    $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 $columnName = "Code";           $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 200, 'maxWidth' => 300, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL ];
 $columnName = "SortNumber";     $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
-$columnName = "ExtraControl";   $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
+$columnName = "OtherPossibleValues";   $init_default_columns[] = ['flex' => 0.1, 'minWidth' => 150, 'maxWidth' => 250, 'field' => $columnName, 'headerName' => __($columnName), 'editable'=>true, 'show'=>true, 'type'=>'string', 'renderCell' => NULL];
 
 $RS['init_default']['button_search']    = __("Search");
 $RS['init_default']['button_add']       = __("Add");
@@ -253,7 +318,7 @@ $RS['init_default']['columnsactions']   = $columnsactions;
 
 $columnName = "ChineseName";        $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 $columnName = "DictMark";           $searchField[] = ['label' => __($columnName), 'value' => $columnName];
-$columnName = "ExtraControl";       $searchField[] = ['label' => __($columnName), 'value' => $columnName];
+$columnName = "OtherPossibleValues";       $searchField[] = ['label' => __($columnName), 'value' => $columnName];
 
 $RS['init_default']['searchFieldArray'] = $searchField;
 $RS['init_default']['searchFieldText']  = __("Search Item");
