@@ -19,7 +19,6 @@ $db->connect($DB_HOST, $DB_USERNAME, $DB_PASSWORD, $DB_DATABASE);
 $db->setFetchMode(ADODB_FETCH_ASSOC);
 $db->Execute("SET NAMES 'utf8'");
 
-$ADODB_CACHE_DIR = "./cache";
 //$db->debug=true;
 
 function __($Value) {
@@ -167,7 +166,7 @@ function CheckAuthUserRoleHaveMenu($FlowId, $MenuPath='')  {
 		$RS         = returntablefield("data_user","USER_ID",$GLOBAL_USER->USER_ID,"USER_PRIV,USER_PRIV_OTHER");
 		$USER_PRIV_Array = explode(',',$RS['USER_PRIV'].",".$RS['USER_PRIV_OTHER']);
 		$sql        = "select * from data_role where id in ('".join("','",$USER_PRIV_Array)."')";
-		$rsf        = $db->Execute($sql);
+		$rsf        = $db->CacheExecute(180,$sql);
 		$RoleRSA    = $rsf->GetArray();
 		$RoleArray  = "";
 		foreach($RoleRSA as $Item)  {
@@ -585,4 +584,18 @@ function 修复班级积分项目数据() {
 		//print $sql."<BR>";
 		//$db->Execute($sql);
 	}
+}
+
+function RSA2HTML($rs_a,$width='100%')										{
+	if(count($rs_a)>0)									{
+		$Header = array_keys($rs_a[0]);
+		$RS  = "<table width=$width border=0 class=TableList align=center>\n";
+		$RS .= "<tr class=TableContent><td nowrap>&nbsp;序号</td><td nowrap>&nbsp;".join("</td><td nowrap>&nbsp;",$Header)."</td></tr>\n";
+		for($i=0;$i<sizeof($rs_a);$i++)			{
+			$Data	= array_values($rs_a[$i]);
+			$RS    .= "<tr class=TableData><td>&nbsp;".($i+1)."</td><td nowrap>&nbsp;".join("</td><td nowrap>&nbsp;",$Data)."</td></tr>\n";
+		}
+		$RS .= "</table>\n";
+	}
+	return $RS;
 }
