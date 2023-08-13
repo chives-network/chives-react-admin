@@ -252,22 +252,8 @@ const LoginPage = () => {
             </Box>
             <Box sx={{ mb: 6 }}>
               <TypographyStyled variant='h5'>欢迎来到 {themeConfig.templateName}! 👋🏻</TypographyStyled>
-              <Typography variant='body2'>单点数字化校园之智慧学工系统</Typography>
+              <Typography variant='body2'>单点职校数据中心</Typography>
             </Box>
-            <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
-              <Typography variant='caption' sx={{ mb: 2, display: 'block', color: 'primary.main' }}>
-                管理员: <strong>admin</strong> / 密码: <strong>123654</strong>
-              </Typography>
-              <Typography variant='caption' sx={{ mb: 2, display: 'block', color: 'primary.main' }}>
-                系部: <strong>xibu</strong> / 密码: <strong>123654</strong>
-              </Typography>
-              <Typography variant='caption' sx={{ mb: 2, display: 'block', color: 'primary.main' }}>
-                班主任: <strong>banzhuren</strong> / 密码: <strong>123654</strong>
-              </Typography>
-              <Typography variant='caption' sx={{ display: 'block', color: 'primary.main' }}>
-                学生: <strong>20230101</strong> / 密码: <strong>123654</strong>
-              </Typography>
-            </Alert>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
