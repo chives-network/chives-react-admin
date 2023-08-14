@@ -159,6 +159,7 @@ $allFieldsAdd[] = ['name' => 'IsEnable', 'show'=>true, 'type'=>'radiogroup', 'op
 $远程数据表字段列表 = [];
 $远程数据表字段列表[] = ['value'=>'None', 'label'=>__('None')];
 $远程数据表字段列表[] = ['value'=>'Default', 'label'=>__('UseDefault')];
+$远程数据表字段列表[] = ['value'=>'LocalFieldExtraFilter', 'label'=>__('LocalFieldExtraFilter')];
 
 $数据源         = $FromInfo['数据源'];
 $远程数据表     = $FromInfo['远程数据表'];
@@ -188,6 +189,7 @@ if($远程数据库信息['数据库用户名']!="")    {
         }
     }
     $allFieldsAdd[] = ['name' => 'RemoteRelativeField', 'show'=>true, 'type'=>'select', 'options'=>$远程数据表字段列表, 'label' => __('RemoteRelativeField'), 'value' => $远程数据表字段列表[0]['value'], 'placeholder' => __('RemoteRelativeField'), 'helptext' => __('RemoteRelativeField'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false, 'row'=>true]];
+    $allFieldsAdd[] = ['name' => 'LocalFieldExtraFilter', 'show'=>true, 'type'=>'input', 'label' => __('LocalFieldExtraFilter'), 'value' => '', 'placeholder' => __('LocalFieldExtraFilter'), 'helptext' => '远程数据表额外过滤, 如: KCH:ods_zzkcxxsj:KCDM:KCXZM', 'rules' => ['required' => false,'xs'=>12, 'sm'=>12,'disabled' => false, 'row'=>true]];
 }
 
 

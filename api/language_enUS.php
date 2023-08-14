@@ -621,8 +621,50 @@ $MAP['DesignDataSource'] 	    = 'Design Data Source';
 $MAP['UseDefault'] 	            = 'Use Default';
 $MAP['RemoteRelativeField'] 	= 'Remote Relative Field';
 $MAP['OtherPossibleValues'] 	= 'Other Possible Values';
+$MAP['LocalFieldExtraFilter'] 	= 'Local Field Extra Filter';
 
-
+$MAP['FieldDefault'] 	= 'FieldDefault';
+$MAP['StartDate'] 	= 'StartDate';
+$MAP['EndDate'] 	= 'EndDate';
+$MAP['FieldDefaultDate'] 	= 'FieldDefaultDate';
+$MAP['StartTime'] 	= 'StartTime';
+$MAP['EndTime'] 	= 'EndTime';
+$MAP['FieldDefaultTime'] 	= 'FieldDefaultTime';
+$MAP['StartDateTime'] 	= 'StartDateTime';
+$MAP['EndDateTime'] 	= 'EndDateTime';
+$MAP['FieldDefaultDateTime'] 	= 'FieldDefaultDateTime';
+$MAP['StartMonth'] 	= 'StartMonth';
+$MAP['EndMonth'] 	= 'EndMonth';
+$MAP['FieldDefaultMonth'] 	= 'FieldDefaultMonth';
+$MAP['StartYear'] 	= 'StartYear';
+$MAP['EndYear'] 	= 'EndYear';
+$MAP['FieldDefaultYear'] 	= 'FieldDefaultYear';
+$MAP['StartQuarter'] 	= 'StartQuarter';
+$MAP['EndQuarter'] 	= 'EndQuarter';
+$MAP['FieldDefaultQuarter'] 	= 'FieldDefaultQuarter';
+$MAP['Placeholder'] 	= 'Placeholder';
+$MAP['Helptext'] 	= 'Helptext';
+$MAP['ColumnWidth'] 	= 'ColumnWidth';
+$MAP['IsFullWidth'] 	= 'IsFullWidth';
+$MAP['IsMustFill'] 	= 'IsMustFill';
+$MAP['IsGroupFilter'] 	= 'IsGroupFilter';
+$MAP['IsDbIndex'] 	= 'IsDbIndex';
+$MAP['IsEnable'] 	= 'IsEnable';
+$MAP['AddtionalParams'] 	= 'AddtionalParams';
+$MAP['ChildItemCounter'] 	= 'ChildItemCounter';
+$MAP['deleteChildTableItemArray'] 	= 'deleteChildTableItemArray';
+$MAP['readonlyIdArray'] 	= 'readonlyIdArray';
+$MAP['Setting'] 	= 'Setting';
+$MAP['FormId'] 	= 'FormId';
+$MAP['FormName'] 	= 'FormName';
+$MAP['FieldSize'] 	= 'FieldSize';
+$MAP['IsAdvSearch'] 	= 'IsAdvSearch';
+$MAP['IsHiddenGroupFilter'] 	= 'IsHiddenGroupFilter';
+$MAP['DictType'] 	= 'DictType';
+$MAP['Creator'] 	= 'Creator';
+$MAP['CreateTime'] 	= 'CreateTime';
+$MAP['FrenchName'] 	= 'FrenchName';
+$MAP['GermanName'] 	= 'GermanName';
 
 
 ?>

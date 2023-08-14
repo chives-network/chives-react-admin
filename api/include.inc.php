@@ -589,11 +589,11 @@ function 修复班级积分项目数据() {
 function RSA2HTML($rs_a,$width='100%')										{
 	if(count($rs_a)>0)									{
 		$Header = array_keys($rs_a[0]);
-		$RS  = "<table width=$width border=0 class=TableList align=center>\n";
-		$RS .= "<tr class=TableContent><td nowrap>&nbsp;序号</td><td nowrap>&nbsp;".join("</td><td nowrap>&nbsp;",$Header)."</td></tr>\n";
+		$RS  = "<table width=$width border=0 class=TableList align=center style=\"border: 1px #dddddd solid;border-collapse: collapse;font-size: 16px;\">\n";
+		$RS .= "<tr class=TableContent><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">&nbsp;".join("</td><td nowrap>&nbsp;",$Header)."</td></tr>\n";
 		for($i=0;$i<sizeof($rs_a);$i++)			{
 			$Data	= array_values($rs_a[$i]);
-			$RS    .= "<tr class=TableData><td>&nbsp;".($i+1)."</td><td nowrap>&nbsp;".join("</td><td nowrap>&nbsp;",$Data)."</td></tr>\n";
+			$RS    .= "<tr class=TableData><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">".join("</td><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">",$Data)."</td></tr>\n";
 		}
 		$RS .= "</table>\n";
 	}
