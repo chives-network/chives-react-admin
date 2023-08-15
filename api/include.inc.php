@@ -586,14 +586,79 @@ function 修复班级积分项目数据() {
 	}
 }
 
-function RSA2HTML($rs_a,$width='100%')										{
+
+
+function page_css($add="",$title="在线升级系统")	{
+	global $_SESSION,$action_type;
+	$pageText 			= $title." - ".$add;
+    $DIRNAME 			= "EDU";
+    $LOGIN_THEME_TEXT 	= 13;
+    print "
+    <!DOCTYPE html>
+    <!--[if IE 6 ]> <html class=\"ie6 lte_ie6 lte_ie7 lte_ie8 lte_ie9\"> <![endif]-->
+    <!--[if lte IE 6 ]> <html class=\"lte_ie6 lte_ie7 lte_ie8 lte_ie9\"> <![endif]-->
+    <!--[if lte IE 7 ]> <html class=\"lte_ie7 lte_ie8 lte_ie9\"> <![endif]-->
+    <!--[if lte IE 8 ]> <html class=\"lte_ie8 lte_ie9\"> <![endif]-->
+    <!--[if lte IE 9 ]> <html class=\"lte_ie9\"> <![endif]-->
+    <!--[if (gte IE 10)|!(IE)]><!--><html><!--<![endif]-->
+    <TITLE>$pageText</TITLE>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=gbk\" />
+    <meta name=\"renderer\" content=\"webkit\">
+    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0\">
+    <link rel=\"stylesheet\" href=\"https://oa.gdgxjx.cn/general/EDU/Enginee/layui/css/layui-pc.css?random=2023081306\" media=\"all\">
+	<link rel=\"stylesheet\" href=\"https://oa.gdgxjx.cn/general/EDU/Enginee/layui/css/admin.css?random=2023081306\" media=\"all\">
+    <script type=\"text/javascript\" language=\"javascript\" src=\"https://oa.gdgxjx.cn/general/$DIRNAME/Enginee/jquery/jquery.js\"></script>
+    <script type=\"text/javascript\" language=\"javascript\" src=\"https://oa.gdgxjx.cn/general/$DIRNAME/Enginee/lib/base64.min.js\"></script>
+    <script src=\"https://code.jquery.com/jquery-3.5.1.min.js\"></script>
+    ";
+    print "<BODY class=bodycolor topMargin=1 >";
+}
+
+function table_begin($width="450",$class="TableBlock")				{
+	global $是否启用新版本HTML5样式以及布局;
+	global $是否是移动端;
+	print "<table class=\"$class\"  align=center  id='table' width=\"$width\" cellspacing=0 cellpadding=0>";
+}
+
+function table_end()	{
+	print "</table>\n";
+}
+
+function form_begin($name="form1",$action="init",$method="post",$infor='')	{
+	if(is_array($infor))	{
+		formcheck($name,$infor);
+		print "<div id=MainData0>
+					<FORM name=$name id=form onsubmit=\"return FormCheck();\" \n action=\"$PHP_SELF?$action&pageid=".$_GET['pageid']."\" method=$method encType=multipart/form-data>
+						<input type=hidden name='FORM_POST_IS_ENCRYPT', id='FORM_POST_IS_ENCRYPT' value=''>
+						<input type=hidden name='FORM_POST_ENCRYPT_CONTENT', id='FORM_POST_ENCRYPT_CONTENT' value=''>
+					";
+	}
+	else	{
+		print "<div id=MainData0>
+					<FORM name=$name id=form action=\"$PHP_SELF?$action&pageid=".$_GET['pageid']."\" method=$method encType=multipart/form-data>
+						<input type=hidden name='FORM_POST_IS_ENCRYPT', id='FORM_POST_IS_ENCRYPT' value=''>
+						<input type=hidden name='FORM_POST_ENCRYPT_CONTENT', id='FORM_POST_ENCRYPT_CONTENT' value=''>
+					";
+	}
+	if($_GET['origCallUrl']!='')
+		print "<input type=hidden name='origCallUrl' value='".$_GET['origCallUrl']."'>";
+	//print "<input type=hidden name=userdefine value=''>";
+}
+
+function form_end()	{
+	print "</form></div>\n";
+}
+
+function RSA2HTML($rs_a, $width='100%', $Title="")										{
 	if(count($rs_a)>0)									{
 		$Header = array_keys($rs_a[0]);
-		$RS  = "<table width=$width border=0 class=TableList align=center style=\"border: 1px #dddddd solid;border-collapse: collapse;font-size: 16px;\">\n";
-		$RS .= "<tr class=TableContent><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">&nbsp;".join("</td><td nowrap>&nbsp;",$Header)."</td></tr>\n";
+		$RS  = "<table width=$width border=0 class=layui-table align=center>\n";
+		$RS .= "<tr class=TableContent><td nowrap  colspan=\"".(sizeof($Header))."\">$Title</td></tr>";
+		$RS .= "<tr class=TableContent><td nowrap  class=TableData>".join("</td><td nowrap class=TableData>",$Header)."</td></tr>\n";
 		for($i=0;$i<sizeof($rs_a);$i++)			{
 			$Data	= array_values($rs_a[$i]);
-			$RS    .= "<tr class=TableData><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">".join("</td><td nowrap style=\"background: #FEFEFE;border-bottom: 1px #dddddd ;border-top: 1px #dddddd solid;border-right: 1px #dddddd solid;padding: 3px;height: 30px;line-height: 30px;\">",$Data)."</td></tr>\n";
+			$RS    .= "<tr class=TableData><td nowrap class=TableData>".join("</td><td nowrap class=TableData>",$Data)."</td></tr>\n";
 		}
 		$RS .= "</table>\n";
 	}
