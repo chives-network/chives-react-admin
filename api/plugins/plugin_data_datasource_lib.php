@@ -54,8 +54,9 @@ foreach($rs_a as $LineX) {
 
                 //得到当前数据中心表的结构
                 $sql            = "select * from form_formfield where FormId='$FormId' and IsEnable='1' order by SortNumber asc";
-                $rs_fields      = $db->CacheExecute(180,$sql);
+                $rs_fields      = $db->Execute($sql);
                 $rs_a_fields    = $rs_fields->GetArray();
+                $字段名称转中文名称 = [];
                 
                 //开始做远程数据表同步到本数据中心的操作
                 if($数据同步方式=="全量同步")  {
@@ -63,6 +64,7 @@ foreach($rs_a as $LineX) {
                     $数据字典同步异常数据       = [];
                     $数据字典同步异常数据Detail = [];
                     $数据必须填写项数据         = [];
+                    $错误设置远程数据表关联字段  = [];
                     $新编号 = 0;
                     //第一步:清空本地表
                     $sql = "truncate table $TableName";
@@ -74,9 +76,10 @@ foreach($rs_a as $LineX) {
                     $rs_a_remote    = $rs_remote->GetArray();
                     $NewRecord      = [];
                     $远程数据表记录数量 = sizeof($rs_a_remote);
-                    foreach($rs_a_remote as $Line)  {
+                    foreach($rs_a_remote as $RomoteLine)  {
                         $远程记录是否执行 = 1;
                         foreach($rs_a_fields as $Item) {
+                            $字段名称转中文名称[$Item['FieldName']] = $Item['ChineseName'];
                             $FieldsSeting               = json_decode($Item['Setting'], true);
                             $RemoteRelativeField        = $FieldsSeting['RemoteRelativeField'];    
                             $LocalFieldExtraFilter      = $FieldsSeting['LocalFieldExtraFilter'];   
@@ -86,7 +89,7 @@ foreach($rs_a as $LineX) {
                                 $FieledShowTypeArray = explode(':',$FieldsSeting['ShowType']);
                                 switch($FieledShowTypeArray[0]) {
                                     case 'Input':
-                                        $NewRecord[$FieldsSeting['FieldName']] = $Line[$RemoteRelativeField];
+                                        $NewRecord[$FieldsSeting['FieldName']] = $RomoteLine[$RemoteRelativeField];
                                         break;
                                     case '中职标准':
                                         //数据字典的名称转代码
@@ -95,7 +98,7 @@ foreach($rs_a as $LineX) {
                                         if(sizeof($ADDTYPE_ARRAY)==7 && $ADDTYPE_ARRAY[1]=="form_formdict") {
                                             $Temp_MetaColumnNames = GLOBAL_MetaColumnNames($ADDTYPE_ARRAY[1]);
                                             $sql        = "select ".$Temp_MetaColumnNames[$ADDTYPE_ARRAY[2]]." AS CODE,".$Temp_MetaColumnNames[$ADDTYPE_ARRAY[3]]." AS NAME, OtherPossibleValues from ".$ADDTYPE_ARRAY[1]." where ".$ADDTYPE_ARRAY[5]."='".$ADDTYPE_ARRAY[6]."'";
-                                            $rs_temp    = $db->CacheExecute(180,$sql);
+                                            $rs_temp    = $db->Execute($sql);
                                             $rs_a_temp  = $rs_temp->GetArray();
                                             $数据字典合集 = [];
                                             foreach($rs_a_temp as $LineTemp) {
@@ -107,31 +110,31 @@ foreach($rs_a as $LineX) {
                                                 $数据字典合集[$LineTemp['NAME']] = $LineTemp['CODE'];
                                             }
                                             if($ADDTYPE_ARRAY[6]=="XQDM（学期代码）")  {
-                                                if(strpos($Line[$RemoteRelativeField],"第一学期")) {
-                                                    $Line[$RemoteRelativeField] = "秋季学期";
+                                                if(strpos($RomoteLine[$RemoteRelativeField],"第一学期")) {
+                                                    $RomoteLine[$RemoteRelativeField] = "秋季学期";
                                                 }
-                                                else if(strpos($Line[$RemoteRelativeField],"第二学期")) {
-                                                    $Line[$RemoteRelativeField] = "春季学期";
+                                                else if(strpos($RomoteLine[$RemoteRelativeField],"第二学期")) {
+                                                    $RomoteLine[$RemoteRelativeField] = "春季学期";
                                                 }
                                             }
                                             else if($ADDTYPE_ARRAY[6]=="XQDM（学期代码）")  {
-                                                if(strpos($Line[$RemoteRelativeField],"第一学期")) {
-                                                    $Line[$RemoteRelativeField] = "秋季学期";
+                                                if(strpos($RomoteLine[$RemoteRelativeField],"第一学期")) {
+                                                    $RomoteLine[$RemoteRelativeField] = "秋季学期";
                                                 }
-                                                else if(strpos($Line[$RemoteRelativeField],"第二学期")) {
-                                                    $Line[$RemoteRelativeField] = "春季学期";
+                                                else if(strpos($RomoteLine[$RemoteRelativeField],"第二学期")) {
+                                                    $RomoteLine[$RemoteRelativeField] = "春季学期";
                                                 }
                                             }
-                                            if($数据字典合集[$Line[$RemoteRelativeField]]!="")  {
-                                                $NewRecord[$FieldsSeting['FieldName']] = $数据字典合集[$Line[$RemoteRelativeField]];
+                                            if($数据字典合集[$RomoteLine[$RemoteRelativeField]]!="")  {
+                                                $NewRecord[$FieldsSeting['FieldName']] = $数据字典合集[$RomoteLine[$RemoteRelativeField]];
                                             }
                                             elseif(1) {
                                                 //记录数据字典同步时,是哪一个记录出的问题
-                                                $数据字典同步异常数据Detail[$Line[$RemoteRelativeField]] = ["远程数据记录的值"=>"<font color=red>".$Line[$RemoteRelativeField]."</font><BR>在本地库匹配不到", "本地数据字典"=>$ADDTYPE_ARRAY[6], "远程数据表字段"=>$RemoteRelativeField,"允许值列表"=>join(",",array_keys($数据字典合集)),"涉及数据"=>$数据字典同步异常数据Detail[$Line[$RemoteRelativeField]]['涉及数据']+1];
+                                                $数据字典同步异常数据Detail[$RomoteLine[$RemoteRelativeField]] = ["远程数据记录的值"=>"<font color=red>".$RomoteLine[$RemoteRelativeField]."</font><BR>在本地库匹配不到", "本地数据字典"=>$ADDTYPE_ARRAY[6], "远程数据表字段"=>$RemoteRelativeField,"允许值列表"=>join(",",array_keys($数据字典合集)),"涉及数据"=>$数据字典同步异常数据Detail[$RomoteLine[$RemoteRelativeField]]['涉及数据']+1];
                                                 $远程记录是否执行 = 0;
                                             }
                                             else {
-                                                $数据字典同步异常数据[$FieldsSeting['FieldName']][$RemoteRelativeField][$Line[$RemoteRelativeField]] += 1;
+                                                $数据字典同步异常数据[$FieldsSeting['FieldName']][$RemoteRelativeField][$RomoteLine[$RemoteRelativeField]] += 1;
                                             }
                                         }
                                         break;
@@ -175,18 +178,17 @@ foreach($rs_a as $LineX) {
                                             //$sql        = "select ".$Temp_MetaColumnNames[$ADDTYPE_ARRAY[2]]." AS NAME from ".$ADDTYPE_ARRAY[1]."";
                                             //$rs_temp    = $db->CacheExecute(180, $sql);
                                             //$NewRecord[$FieldsSeting['FieldName']] = $rs_temp->fields['NAME'];
+                                            print_R($ADDTYPE_ARRAY);
                                             print_R($NewRecord);;exit;
                                         }
                                         else {
-                                            print "<BR>出现异常,需要处理.";
-                                            print_R($FieldsSeting['ShowType']);
-                                            print_R($ADDTYPE_ARRAY);
+                                            $错误设置远程数据表关联字段[$FieldsSeting['FieldName']] = ['本地数据表字段'=>$FieldsSeting['FieldName'],'本地数据表字段类型'=>$FieldsSeting['ShowType'],'关联远程数据表'=>$RemoteRelativeField,'解决办法'=>'在使用默认值时,需要有指定的一个默认值,目前没有获得到指定的默认值,请修改[远程数据表关联字段]的值'];
                                         }
                                         break;
                                 }
                             }
                             //第五步:LocalFieldExtraFilter 必须要先过滤有效的值,才能在这一步拿到值
-                            else if($RemoteRelativeField=="LocalFieldExtraFilter"&&$LocalFieldExtraFilter!="")  {
+                            else if($RemoteRelativeField=="LocalFieldExtraFilter"&&$LocalFieldExtraFilter!=""&&sizeof(explode(":",$LocalFieldExtraFilter))==4)  {
                                 $LocalFieldExtraFilterArray = explode(":",$LocalFieldExtraFilter);
                                 $Temp_MetaColumnNames = GLOBAL_MetaColumnNames($LocalFieldExtraFilterArray[1]);
                                 if(in_array($LocalFieldExtraFilterArray[2],$Temp_MetaColumnNames) && in_array($LocalFieldExtraFilterArray[3],$Temp_MetaColumnNames) && $LocalFieldExtraFilterArray[0]!="" && $NewRecord[$LocalFieldExtraFilterArray[0]]!="") {
@@ -203,9 +205,62 @@ foreach($rs_a as $LineX) {
                                     //为空,无需过滤
                                 }
                             }
+                            //第五步:LocalFieldExtraFilter 自定义的数据同步和转换规则
+                            else if($RemoteRelativeField=="LocalFieldExtraFilter"&&$LocalFieldExtraFilter!=""&&sizeof(explode(":",$LocalFieldExtraFilter))==2)  {
+                                $LocalFieldExtraFilterArray = explode(":",$LocalFieldExtraFilter);
+                                $自定义的数据同步和转换规则  = $LocalFieldExtraFilterArray[0];
+                                $有值的远程字段             = $LocalFieldExtraFilterArray[1];
+                                $有值的远程字段的值         = $RomoteLine[$有值的远程字段];
+                                if($有值的远程字段的值!="") {
+                                    switch($自定义的数据同步和转换规则) {
+                                        case '班级转系部名称':
+                                            $sql        = "select 所属系 from edu_banji where 班级名称='$有值的远程字段的值'";
+                                            $RST        = $db_remote->Execute($sql);
+                                            $所属系      = $RST->fields['所属系'];
+                                            if($所属系!="")   {
+                                                $sql        = "select 系名称 from edu_xi where 系代码='$所属系'";
+                                                $RST        = $db_remote->Execute($sql);
+                                                $NewRecord[$FieldsSeting['FieldName']]  = $RST->fields['系名称'];                                            
+                                            }
+                                            else {
+                                                $NewRecord[$FieldsSeting['FieldName']]  = "";
+                                            }
+                                            break;
+                                        case '班级转年级':
+                                            $sql        = "select 入学年份 from edu_banji where 班级名称='$有值的远程字段的值'";
+                                            $RST        = $db_remote->Execute($sql);
+                                            $NewRecord[$FieldsSeting['FieldName']]  = $RST->fields['入学年份'];
+                                            break;
+                                        case '班级转专业名称':
+                                            $sql        = "select 所属专业 from edu_banji where 班级名称='$有值的远程字段的值'";
+                                            $RST        = $db_remote->Execute($sql);
+                                            $所属专业      = $RST->fields['所属专业'];
+                                            if($所属专业!="")   {
+                                                $sql        = "select 专业名称 from edu_zhuanye where 专业代码='$所属专业'";
+                                                $RST        = $db_remote->Execute($sql);
+                                                $NewRecord[$FieldsSeting['FieldName']]  = $RST->fields['专业名称'];                                            
+                                            }
+                                            else {
+                                                $NewRecord[$FieldsSeting['FieldName']]  = "";
+                                            }
+                                            break;
+                                        case '班级转专业代码':
+                                            $sql        = "select 所属专业 from edu_banji where 班级名称='$有值的远程字段的值'";
+                                            $RST        = $db_remote->Execute($sql);
+                                            $NewRecord[$FieldsSeting['FieldName']]  = $RST->fields['所属专业'];
+                                            break;
+                                        default:
+                                            print_R($LocalFieldExtraFilterArray);
+                                            exit;
+                                            break;
+                                    }
+                                }
+                            }
+
+                            //必填写项
                             if($IsMustFill && $NewRecord[$FieldsSeting['FieldName']]=="" && $RemoteRelativeField!="None")  {
-                                if($RemoteRelativeField=="LocalFieldExtraFilter") {
-                                    $数据必须填写项数据[$FieldsSeting['FieldName']."____".$FieldsSeting['ChineseName']."____本地数据转换 ".$FieldsSeting['LocalFieldExtraFilter']] += 1;
+                                if($RemoteRelativeField=="LocalFieldExtraFilter")   {
+                                    $数据必须填写项数据[$FieldsSeting['FieldName']."____".$FieldsSeting['ChineseName']."____数据转换 ".$FieldsSeting['LocalFieldExtraFilter']] += 1;
                                 }
                                 else {
                                     $数据必须填写项数据[$FieldsSeting['FieldName']."____".$FieldsSeting['ChineseName']."____".$RemoteRelativeField] += 1;
@@ -246,9 +301,19 @@ foreach($rs_a as $LineX) {
                         $必须填写项字段ARRAY = explode('____',$必须填写项字段);
                         $FieldElement['本地数据表字段名称']     = $必须填写项字段ARRAY[0];
                         $FieldElement['本地数据表字段描述']     = $必须填写项字段ARRAY[1];
-                        $FieldElement['远程数据表字段']         = $必须填写项字段ARRAY[2];
+                        if($必须填写项字段ARRAY[2]=="") {
+                            $FieldElement['远程数据表字段']         = "<font color=red>没有配置,请先在[设计表单]中配置远程数据表关联字段</font>";
+                        }
+                        else {
+                            $FieldElement['远程数据表字段']         = $必须填写项字段ARRAY[2];
+                        }
                         $FieldElement['空值记录数量']           = $必须填写项数量;
-                        $FieldElement['修复数据使用SQL模板,仅供参数,不要乱用']    = "update $远程数据表 set ".$FieldElement['远程数据表字段']." = '?' where ".$FieldElement['远程数据表字段']." = '';";
+                        if($必须填写项字段ARRAY[2]=="") {
+                            $FieldElement['修复数据使用SQL模板,仅供参数,不要乱用']    = "";
+                        }
+                        else {
+                            $FieldElement['修复数据使用SQL模板,仅供参数,不要乱用']    = "update $远程数据表 set ".$FieldElement['远程数据表字段']." = '?' where ".$FieldElement['远程数据表字段']." = '';";
+                        }
                         $数据必须填写项数据Array[]              = $FieldElement;
                     }
                     //print_R($数据必须填写项数据Array);
@@ -271,22 +336,37 @@ foreach($rs_a as $LineX) {
                         $sql = "update data_datasyncedrules set 执行时间='".date('Y-m-d H:i:s')."',执行状态='已完成',执行明细='".json_encode($所有异常数据)."',异常数据='".json_encode($数据字典同步异常数据Array)."' where id='".$LineX['id']."'";
                         $db->Execute($sql);
                         //print $sql."<BR>";
-                        $同步结果数据['远程数据表记录数量'] = "<font color=red>$远程数据表记录数量</font>";
-                        $同步结果数据['本次同步数据']       = "<font color=red>".count($BatchSqlBody)."</font>";
-                        $同步结果数据['本地数据表']         = "<font color=red>$TableName</font>";
-                        $同步结果数据['远程数据表']         = "<font color=red>$远程数据表</font>";
-                        $同步结果数据['未同步数据记录数']    = "<font color=red>".($远程数据表记录数量-count($BatchSqlBody))."</font>";
-                        $同步结果数据['同步状态']           = "<font color=red>执行成功</font>";
+                        if($远程数据表记录数量==count($BatchSqlBody)) {
+                            $Color = "blue";
+                            $Status = "数据全部同步完成";
+                        }
+                        else {
+                            $Color = "red";
+                            $Status = "数据部分同步完成";
+                        }
+                        $同步结果数据['远程数据表记录数量'] = "<font color=$Color>$远程数据表记录数量</font>";
+                        $同步结果数据['本次同步数据']       = "<font color=$Color>".count($BatchSqlBody)."</font>";
+                        $同步结果数据['本地数据表']         = "<font color=$Color>$TableName</font>";
+                        $同步结果数据['远程数据表']         = "<font color=$Color>$远程数据表</font>";
+                        $同步结果数据['未同步数据记录数']    = "<font color=$Color>".($远程数据表记录数量-count($BatchSqlBody))."</font>";
+                        $同步结果数据['同步状态']           = "<font color=$Color>$Status</font>";
                         $同步结果数据Array[]                = $同步结果数据;
                         print RSA2HTML($同步结果数据Array,$width='95%',"数据同步结果");  
+                        print RSA2HTML(array_values($错误设置远程数据表关联字段),$width='95%',"错误设置远程数据表关联字段");
                         print RSA2HTML($数据字典同步异常数据Array,$width='95%',"数据字典同步异常数据");  
                         print RSA2HTML($数据必须填写项数据Array,$width='95%',"数据必须填写项数据校验");    
                         print RSA2HTML(array_values($数据字典同步异常数据Detail),$width='95%',"数据字典同步异常数据");
-                        //显示最近100条记录
-                        $sql    = "select * from $TableName order by id desc limit 100";
+                        //显示最近200条记录
+                        $sql    = "select * from $TableName order by id desc limit 200";
                         $rsX    = $db->Execute($sql);
                         $rsX_a  = $rsX->GetArray();  
-                        print RSA2HTML($rsX_a,$width='95%',"过滤以后的数据显示,只显示最近100条数据");
+                        $NewElement = [];
+                        foreach($rsX_a[0] as $FieldName=>$FieldName) {
+                            $NewElement[$FieldName] = $字段名称转中文名称[$FieldName];
+                        }
+                        $NewElement['id'] = "编号";
+                        array_unshift($rsX_a,$NewElement);
+                        print RSA2HTML($rsX_a,$width='95%',"过滤以后的数据显示,只显示最近200条数据");
                     }
                     else {
                         $sql = "update data_datasyncedrules set 执行时间='".date('Y-m-d H:i:s')."',执行状态='已执行,但没有获取任何数据',执行明细='".json_encode($所有异常数据)."' where id='".$LineX['id']."'";
@@ -301,6 +381,7 @@ foreach($rs_a as $LineX) {
                         $同步结果数据['同步状态']           = "<font color=red>已执行,但没有获取任何数据</font>";
                         $同步结果数据Array[]                = $同步结果数据;
                         print RSA2HTML($同步结果数据Array,$width='95%',"数据同步结果");  
+                        print RSA2HTML(array_values($错误设置远程数据表关联字段),$width='95%',"错误设置远程数据表关联字段");
                         print RSA2HTML($数据字典同步异常数据Array,$width='95%',"数据字典同步异常数据");  
                         print RSA2HTML($数据必须填写项数据Array,$width='95%',"数据必须填写项数据校验");    
                         print RSA2HTML(array_values($数据字典同步异常数据Detail),$width='95%',"数据字典同步异常数据");
