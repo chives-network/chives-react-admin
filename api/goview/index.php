@@ -99,6 +99,12 @@ else if($param1=="project" && $param2=="copy")  {
     if(is_file($FileStorageLocation."/".$id."_index_preview.png") && $NewId>0)  {
         copy($FileStorageLocation."/".$id."_index_preview.png", $FileStorageLocation."/".$NewId."_index_preview.png");
     }
+    if(is_file($FileStorageLocation."/".$id."_index_preview.png") && $NewId>0)  {
+        //$修改创建人和创建时间
+        $createUserId = $GLOBAL_USER->USER_ID;
+        $sql = "update data_goview_project set createUserId='$createUserId',createTime='".date('Y-m-d H:i:s')."' where id ='$NewId'";
+        $db->Execute($sql);
+    }
     $RS     = [];
     $RS['msg']  = "操作成功";
     $RS['code'] = 200;
@@ -122,6 +128,13 @@ else if($param1=="project" && $param2=="edit")  {
     exit;
 }
 else if($param1=="project" && $param2=="list")  {
+    CheckAuthUserLoginStatus();
+    if($GLOBAL_USER->USER_ID!="admin" && $GLOBAL_USER->USER_PRIV!="1") {
+        $RS['msg']      = "权限认证失败";
+        $RS['code']     = 200;
+        print_R(json_encode($RS));
+        exit;
+    }
     $page = intval($_GET['page']);
     if($page<1) $page = 1;
     $limit = intval($_GET['limit']);
@@ -157,7 +170,8 @@ else if($param1=="project" && $param2=="myproject")  {
     if($limit<6) $limit = 6;
     $from = ($page-1)*$limit;
     $projectId      = intval(DecryptID($_GET['projectId']));
-    $sql    = "select id,projectName,state,indexImage,remarks,isDelete,createUserId,createTime from data_goview_project where projectName!='' and isDelete='-1' and createUserId='2' order by id desc limit ".$from.", ".$limit."";
+    $createUserId   = $GLOBAL_USER->USER_ID;
+    $sql    = "select id,projectName,state,indexImage,remarks,isDelete,createUserId,createTime from data_goview_project where projectName!='' and isDelete='-1' and createUserId='$createUserId' order by id desc limit ".$from.", ".$limit."";
     $rs     = $db->Execute($sql);
     $rs_a   = $rs->GetArray();
     $Counter = 0;
@@ -377,11 +391,16 @@ else if($param1=="project" && $param2=="upload")  {
     }
     exit;
 }
-else if($param1=="project" && $param2=="login")  {
+else if($param1=="sys" && $param2=="login")  {
 
 }
-else if($param1=="project" && $param2=="login")  {
-
+else if($param1=="sys" && $param2=="logout")  {
+    $RS     = [];
+    $RS['msg'] = "退出成功!";
+    $RS['code'] = 200;
+    $RS['_POST'] = $_POST;
+    print_R(json_encode($RS));
+    exit;
 }
 
 ?>
