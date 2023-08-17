@@ -28,6 +28,7 @@ else if($param1=="sys" && $param2=="getOssInfo")  {
     exit;
 }
 else if($param1=="project" && $param2=="create")  {
+    CheckAuthUserLoginStatus();
     $payload                    = file_get_contents('php://input');
     $_POST                      = json_decode($payload,true);
     $Element                    = [];
@@ -76,14 +77,37 @@ else if($param1=="project" && $param2=="getData")  {
     exit;
 }
 else if($param1=="project" && $param2=="delete")  {
-    $RS = [];
+    CheckAuthUserLoginStatus();
+    $id     = DecryptID($_GET['ids']);
+    $sql    = "delete from data_goview_project where id='$id'";
+    $rs     = $db->Execute($sql);
+    $RS     = [];
     $RS['msg']  = "操作成功";
     $RS['code'] = 200;
-    $RS['sql']  = $sql;
+    $RS['id']   = $_GET['ids'];
+    print_R(json_encode($RS));
+    exit;
+}
+else if($param1=="project" && $param2=="copy")  {
+    CheckAuthUserLoginStatus();
+    $id     = DecryptID($_GET['ids']);
+    $sql    = "INSERT INTO data_goview_project (`projectName`, `indexImage`, `remarks`, `isDelete`, `createUserId`, `createTime`, `content`) SELECT `projectName`, `indexImage`, `remarks`, `isDelete`, `createUserId`, `createTime`, `content` FROM data_goview_project WHERE id = '$id'";
+    $rs     = $db->Execute($sql);
+    $NewId  = $db->Insert_ID();
+    global $FileStorageLocation;
+    $FileStorageLocation = $FileStorageLocation."/GoView";
+    if(is_file($FileStorageLocation."/".$id."_index_preview.png") && $NewId>0)  {
+        copy($FileStorageLocation."/".$id."_index_preview.png", $FileStorageLocation."/".$NewId."_index_preview.png");
+    }
+    $RS     = [];
+    $RS['msg']  = "操作成功";
+    $RS['code'] = 200;
+    $RS['id']   = $_GET['ids'];
     print_R(json_encode($RS));
     exit;
 }
 else if($param1=="project" && $param2=="edit")  {
+    CheckAuthUserLoginStatus();
     $payload        = file_get_contents('php://input');
     $_POST          = json_decode($payload,true);
     $id             = intval(DecryptID($_POST['id']));
@@ -125,7 +149,65 @@ else if($param1=="project" && $param2=="list")  {
     print_R(json_encode($RS));
     exit;
 }
+else if($param1=="project" && $param2=="myproject")  {
+    CheckAuthUserLoginStatus();
+    $page = intval($_GET['page']);
+    if($page<1) $page = 1;
+    $limit = intval($_GET['limit']);
+    if($limit<6) $limit = 6;
+    $from = ($page-1)*$limit;
+    $projectId      = intval(DecryptID($_GET['projectId']));
+    $sql    = "select id,projectName,state,indexImage,remarks,isDelete,createUserId,createTime from data_goview_project where projectName!='' and isDelete='-1' and createUserId='2' order by id desc limit ".$from.", ".$limit."";
+    $rs     = $db->Execute($sql);
+    $rs_a   = $rs->GetArray();
+    $Counter = 0;
+    foreach($rs_a as $Line) {
+        $rs_a[$Counter]['id']           = EncryptID($Line['id']);
+        $rs_a[$Counter]['indexImage']   = $BackEndApi."/".$rs_a[$Counter]['id'];
+        $rs_a[$Counter]['state']        = intval($Line['state']);
+        $rs_a[$Counter]['createUserId']        = intval($Line['createUserId']);
+        $Counter ++;
+    }
+    $RS     = [];
+    $RS['msg']      = "操作成功";
+    $RS['code']     = 200;
+    $RS['count']    = count($rs_a);
+    $RS['data']     = $rs_a;
+    $RS['sql']      = $sql;
+    $RS['_GET']     = $_GET;
+    print_R(json_encode($RS));
+    exit;
+}
+else if($param1=="project" && $param2=="listtemplate")  {
+    $page = intval($_GET['page']);
+    if($page<1) $page = 1;
+    $limit = intval($_GET['limit']);
+    if($limit<6) $limit = 6;
+    $from = ($page-1)*$limit;
+    $projectId      = intval(DecryptID($_GET['projectId']));
+    $sql    = "select id,projectName,state,indexImage,remarks,isDelete,createUserId,createTime from data_goview_project where projectName!='' and isDelete='-1' and `state`='1' order by id desc limit ".$from.", ".$limit."";
+    $rs     = $db->Execute($sql);
+    $rs_a   = $rs->GetArray();
+    $Counter = 0;
+    foreach($rs_a as $Line) {
+        $rs_a[$Counter]['id']           = EncryptID($Line['id']);
+        $rs_a[$Counter]['indexImage']   = $BackEndApi."/".$rs_a[$Counter]['id'];
+        $rs_a[$Counter]['state']        = intval($Line['state']);
+        $rs_a[$Counter]['createUserId']        = intval($Line['createUserId']);
+        $Counter ++;
+    }
+    $RS     = [];
+    $RS['msg']      = "操作成功";
+    $RS['code']     = 200;
+    $RS['count']    = count($rs_a);
+    $RS['data']     = $rs_a;
+    $RS['sql']      = $sql;
+    $RS['_GET']     = $_GET;
+    print_R(json_encode($RS));
+    exit;
+}
 else if($param1=="project" && $param2=="publish")  {
+    CheckAuthUserLoginStatus();
     $payload        = file_get_contents('php://input');
     $_POST          = json_decode($payload,true);
     $id             = intval(DecryptID($_POST['id']));
@@ -140,6 +222,7 @@ else if($param1=="project" && $param2=="publish")  {
     exit;
 }
 else if($param1=="project" && $param2=="save" && $param3=="data")  {
+    CheckAuthUserLoginStatus();
     $id             = intval(DecryptID($_POST['projectId']));
     $content        = base64_encode($_POST['content']);
     $sql    = "update data_goview_project set content='$content' where id='$id'";
@@ -220,6 +303,7 @@ else if($param1=="bucket" && $param2!="")  {
     exit;
 }
 else if($param1=="project" && $param2=="upload")  {
+    CheckAuthUserLoginStatus();
     global $FileStorageLocation;
     $FileStorageLocation = $FileStorageLocation."/GoView";
     if(!is_dir($FileStorageLocation)) {
