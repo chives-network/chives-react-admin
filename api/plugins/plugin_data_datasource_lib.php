@@ -47,6 +47,7 @@ foreach($rs_a as $LineX) {
         $db_remote = NewADOConnection($DB_TYPE='mysqli');
         $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
         $db_remote->Execute("Set names utf8;");
+        $db_remote->setFetchMode(ADODB_FETCH_ASSOC);
         if($db_remote->database==$远程数据库信息['数据库名称']) {
             $MetaColumnNamesTemp    = $db_remote->MetaColumnNames($远程数据表);
             $远程数据表结构          = array_values($MetaColumnNamesTemp);

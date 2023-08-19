@@ -69,6 +69,28 @@ function DecryptID($data) {
     return $decrypted;
 }
 
+function EncryptIDFixed($data) {
+	global $EncryptAESKey;
+	$cipher = "AES-256-CBC";
+    $options = OPENSSL_RAW_DATA;
+	$byteValue 		= 0xFF;
+	$EncryptAESIV 	= str_repeat(chr($byteValue), 16);
+    $encrypted 		= openssl_encrypt($data, $cipher, $EncryptAESKey, $options, $EncryptAESIV);
+    return base64_safe_encode(base64_safe_encode($encrypted)."::".base64_safe_encode($EncryptAESIV));
+}
+
+function DecryptIDFixed($data) {
+	$data = base64_safe_decode($data);
+	$dataArray = explode("::",$data);
+	global $EncryptAESKey;
+	$data = $dataArray[0];
+	$iv = base64_safe_decode($dataArray[1]);
+	$cipher = "AES-256-CBC";
+    $options = OPENSSL_RAW_DATA;
+    $decrypted = openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
+    return $decrypted;
+}
+
 function ParamsFilter($str) {
 	$str  = str_replace("'","",$str);
 	$str  = str_replace('"',"",$str);

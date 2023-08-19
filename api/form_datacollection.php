@@ -199,6 +199,7 @@ if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
         $db_remote = NewADOConnection($DB_TYPE='mysqli');
         $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
         $db_remote->Execute("Set names utf8;");
+        $db_remote->setFetchMode(ADODB_FETCH_ASSOC);
         if($db_remote->database==$远程数据库信息['数据库名称']) {
             $MetaColumnNamesTemp    = $db_remote->MetaColumnNames($远程数据表);
             if(!$MetaColumnNamesTemp) {
@@ -267,6 +268,7 @@ if($_GET['action']=="edit_default_data"&&$_GET['id']!="")  {
         $Element['远程数据表主键']  = ForSqlInjection($_POST['远程数据表主键']);
         $Element['数据同步方式']    = ForSqlInjection($_POST['数据同步方式']);
         $Element['数据同步周期']    = ForSqlInjection($_POST['数据同步周期']);
+        $Element['同步程序']        = '/plugins/plugin_data_datasource_lib.php?id=[id]';
         $Element['TableName']       = $rs->fields['TableName'];
         $Element['FullName']        = $rs->fields['FullName'];
         $Element['FormId']          = $rs->fields['id'];

@@ -19,6 +19,7 @@ function plugin_data_datasource_1_init_default()  {
         $db_remote = NewADOConnection($DB_TYPE);
         $db_remote->connect($Item['数据库主机'], $Item['数据库用户名'], DecryptID($Item['数据库密码']), $Item['数据库名称']);
         $db_remote->Execute("Set names utf8;");
+        $db_remote->setFetchMode(ADODB_FETCH_ASSOC);
         if($db_remote->database==$Item['数据库名称']) {
             $sql = "update data_datasource set 连接状态='正常' where id='".$Item['id']."'";
         }
