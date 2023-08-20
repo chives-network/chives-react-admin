@@ -82,6 +82,7 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   //console.log("searchFieldArray*******************************", searchFieldArray)
   
   const {
+    setValue,
     control,
     handleSubmit,
     formState: { errors }
@@ -126,6 +127,9 @@ const IndexTableHeader = (props: TableHeaderProps) => {
   }
 
   const myRef:Ref<any> = useRef(null)
+
+  setValue("searchFieldName", searchFieldArray[0].value)
+  console.log("searchFieldArray", searchFieldArray[0].value)
 
   return (
     <>

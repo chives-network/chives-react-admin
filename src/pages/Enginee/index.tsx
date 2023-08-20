@@ -100,7 +100,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
 
   const [allSubmitFields, setAllSubmitFields] = useState({ 'searchFieldName': '' });
 
-  const [pageSize, setPageSize] = useState<number>(0)
+  const [pageSize, setPageSize] = useState<number>(10)
   const [page, setPage] = useState<number>(0)
 
   //const [filter, setFilter] = useState<any[]>([])
@@ -554,6 +554,20 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
       const columnRenderCell = { ...column }
       columnRenderCell['renderCell'] = ({ row }: any) => (
         <StyledLink href={`${column.href}${row.id}`} target={column.target}>
+          <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: column.urlcolor } }}>
+            <Icon icon={column.urlmdi} fontSize={20} />
+            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {row[column.field]}
+            </Typography>
+          </Box>
+        </StyledLink>
+      )
+      columns_for_datagrid[column_index] = columnRenderCell
+    }    
+    else if (column && column.type == "ExternalUrl") {
+      const columnRenderCell = { ...column }
+      columnRenderCell['renderCell'] = ({ row }: any) => (
+        <StyledLink href={`${authConfig.backEndApiHost}${row[column.field].replace("[id]",row.id)}`} target={column.target}>
           <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: column.urlcolor } }}>
             <Icon icon={column.urlmdi} fontSize={20} />
             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>

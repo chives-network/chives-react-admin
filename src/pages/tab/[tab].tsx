@@ -32,7 +32,7 @@ const TabHeaderTab = () => {
     
   }, []) 
   
-  console.log("Object.keys(tabData).length----------------", Object.keys(tabData).length)
+  //console.log("Object.keys(tabData).length----------------", Object.keys(tabData).length)
   
   return (
     <Fragment>

@@ -75,13 +75,8 @@ import Icon from 'src/@core/components/icon'
 import Grid, { GridProps } from '@mui/material/Grid'
 
 // Date Locale
-import DatePicker, { registerLocale } from 'react-datepicker'
+import DatePicker from 'react-datepicker'
 import { useTranslation } from 'react-i18next'
-import { Locale } from 'date-fns'
-import en from 'date-fns/locale/en-US'
-import zh from 'date-fns/locale/zh-CN'
-
-const langObj: { [key: string]: Locale } = { en, zh }
 
 // ** Date Style Imports
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
@@ -174,8 +169,9 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
 
     useEffect(() => {
         if(dataGridLanguageCode=="zhCN") {
-            i18n.changeLanguage('zh')
-            registerLocale(i18n.language, langObj[i18n.language])
+            //Will cause loop in here if add this code
+            //i18n.changeLanguage('zh')
+            //registerLocale(i18n.language, langObj[i18n.language])
             
             //Yup Language
             setLocale(AddOrEditTableLanguage);

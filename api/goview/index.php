@@ -90,6 +90,18 @@ else if($param1=="project" && $param2=="delete")  {
     $RS['code'] = 200;
     $RS['id']   = $_GET['ids'];
     print_R(json_encode($RS));
+    
+    global $FileStorageLocation;
+    $FileStorageLocation = $FileStorageLocation."/GoView";
+    $FilePath = $FileStorageLocation."/".$id."_index_preview.png";
+    if (file_exists($FilePath))             {
+        unlink($FilePath);      
+    }
+    $FilePath = $FileStorageLocation."/".$id."_index_background.png";
+    if (file_exists($FilePath))             {
+        unlink($FilePath);      
+    }
+
     exit;
 }
 else if($param1=="project" && $param2=="copy")  {
@@ -102,6 +114,9 @@ else if($param1=="project" && $param2=="copy")  {
     $FileStorageLocation = $FileStorageLocation."/GoView";
     if(is_file($FileStorageLocation."/".$id."_index_preview.png") && $NewId>0)  {
         copy($FileStorageLocation."/".$id."_index_preview.png", $FileStorageLocation."/".$NewId."_index_preview.png");
+    }
+    if(is_file($FileStorageLocation."/".$id."_index_background.png") && $NewId>0)  {
+        copy($FileStorageLocation."/".$id."_index_background.png", $FileStorageLocation."/".$NewId."_index_background.png");
     }
     if(is_file($FileStorageLocation."/".$id."_index_preview.png") && $NewId>0)  {
         //$修改创建人和创建时间
@@ -133,7 +148,7 @@ else if($param1=="project" && $param2=="edit")  {
 }
 else if($param1=="project" && $param2=="list")  {
     CheckAuthUserLoginStatus();
-    if($GLOBAL_USER->USER_ID!="admin" && $GLOBAL_USER->USER_PRIV!="1") {
+    if($GLOBAL_USER->USER_ID!="admin" && $GLOBAL_USER->USER_PRIV!="1" && 0) {
         $RS['msg']      = "权限认证失败";
         $RS['code']     = 200;
         print_R(json_encode($RS));
