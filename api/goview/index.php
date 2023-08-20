@@ -101,7 +101,6 @@ else if($param1=="project" && $param2=="delete")  {
     if (file_exists($FilePath))             {
         unlink($FilePath);      
     }
-
     exit;
 }
 else if($param1=="project" && $param2=="copy")  {

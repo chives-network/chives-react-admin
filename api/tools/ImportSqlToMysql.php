@@ -10,6 +10,8 @@ header("Content-Type: application/json");
 require_once('../cors.php');
 require_once('../include.inc.php');
 
+exit;
+
 if($_SERVER['SERVER_NAME']=="data.dandian.net") {
     $File = file("../database/database.sql");
     $sqlContent = "";
