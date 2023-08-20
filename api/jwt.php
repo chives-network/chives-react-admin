@@ -95,6 +95,19 @@ if($_GET['action']=="login")                {
             $accessToken            = JWT::encode($userData, $NEXT_PUBLIC_JWT_SECRET, 'HS256');
             $RS['accessToken']      = $accessToken;
             $RS['userData']         = $userData;
+
+            $GO_SYSTEM                          = [];
+            $userInfoX                          = [];
+            $userInfoX['userToken']             = $accessToken;
+            $userInfoX['tokenName']             = "satoken";
+            $userInfoX['userId']                = $UserInfo['id'];
+            $userInfoX['userName']              = $UserInfo['USER_ID'];
+            $userInfoX['nickName']              = $UserInfo['USER_NAME'];
+            $userInfoX['t']                     = "function H(...q){return $(re=>Reflect.apply(er.translate,null,[re,...q]),()=>er.parseTranslateArgs(...q),\"translate\",re=>Reflect.apply(re.t,re,[...q]),re=>re,re=>Re.isString(re))}";
+            $GO_SYSTEM['userInfo']              = $userInfoX;
+            $GO_SYSTEM['fetchInfo']['OSSUrl']   = "/api/goview/bucket/";
+            $RS['GO_SYSTEM']        = $GO_SYSTEM;
+
             $RS['status']           = "OK";
             //形成个人信息展示页面的数据列表
             $USER_PROFILE 	= array();
