@@ -53,7 +53,7 @@ const AnalyticsDashboard = () => {
 
   useEffect(() => {
     if (auth.user && auth.user.type=="Student") {
-      const backEndApi = "charts/dashboard_deyu_banji_student.php"
+      const backEndApi = "charts/StatisticsStudentsbyClass.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data.charts);
@@ -62,7 +62,7 @@ const AnalyticsDashboard = () => {
       })
     }
     else if (auth.user && auth.user.type=="User") {
-      const backEndApi = "charts/dashboard_deyu_banji_banji.php"
+      const backEndApi = "charts/StatisticsStudentsbyClass.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data.charts);

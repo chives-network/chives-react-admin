@@ -41,8 +41,8 @@ const AnalyticsDashboard = () => {
   const [optionsMenuItem, setOptionsMenuItem] = useState<string>("")
   const auth = useAuth()
 
-  const toggleSetClassName = (classNameTemp: string) => {
-    setClassName(classNameTemp)
+  const toggleSetClassName = (studentCodeTemp: string) => {
+    setClassName(studentCodeTemp)
   }
   
   const handleOptionsMenuItemClick = (Item: string) => {
@@ -53,7 +53,7 @@ const AnalyticsDashboard = () => {
 
   useEffect(() => {
     if (auth.user && auth.user.type=="Student") {
-      const backEndApi = "charts/dashboard_deyu_banji_student.php"
+      const backEndApi = "charts/StatisticsStudentsbyIndividual.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data.charts);
@@ -62,7 +62,7 @@ const AnalyticsDashboard = () => {
       })
     }
     else if (auth.user && auth.user.type=="User") {
-      const backEndApi = "charts/dashboard_deyu_banji_banji.php"
+      const backEndApi = "charts/StatisticsStudentsbyIndividual.php"
       axios.get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken }, params: { className, optionsMenuItem } })
       .then(res => {
           setDashboardData(res.data.charts);
@@ -91,7 +91,7 @@ const AnalyticsDashboard = () => {
                       if(item.type=="AnalyticsTrophy") {
                         return (
                           <Grid item xs={12} md={item.grid} key={index}>
-                            <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} className={className} />
+                          <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} className={className} />
                           </Grid>
                         )
                       }

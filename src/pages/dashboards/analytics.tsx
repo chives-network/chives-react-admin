@@ -91,7 +91,7 @@ const AnalyticsDashboard = () => {
                       if(item.type=="AnalyticsTrophy") {
                         return (
                           <Grid item xs={12} md={item.grid} key={index}>
-                            <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} />
+                            <AnalyticsTrophy data={item} toggleSetClassName={toggleSetClassName} className={className} />
                           </Grid>
                         )
                       }

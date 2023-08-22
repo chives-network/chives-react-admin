@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/router'
-
-import ButtonGroupSplit from 'src/views/dashboards/analytics/ButtonGroupSplit'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 
 // Styled component for the trophy image
 const TrophyImg = styled('img')({
@@ -17,19 +17,20 @@ const TrophyImg = styled('img')({
 })
 
 interface DataType {
+  className: string
   data: {[key:string]:any}
   toggleSetClassName: (arg0: string) => void
 }
 
 const AnalyticsTrophy = (props: DataType) => {
 
-  const { data, toggleSetClassName } = props
+  const { className, data, toggleSetClassName } = props
 
   const router = useRouter();
 
   return (
     <Card sx={{ position: 'relative' }}>
-      <CardContent>
+      <CardContent style={{ overflow: 'auto' }}>
         <Typography variant='h6'>{data.Welcome}</Typography>
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
         {data.SubTitle}
@@ -38,7 +39,23 @@ const AnalyticsTrophy = (props: DataType) => {
           {data.TotalScore}
         </Typography>
         {data.TopRightOptions ? 
-          <ButtonGroupSplit data={data.TopRightOptions} toggleSetClassName={toggleSetClassName} />
+          <Autocomplete
+            autoSelect
+            size="small"
+            sx={{ width: 200 }}
+            options={data.TopRightOptions}
+            id='autocomplete-autoSelect'
+            getOptionLabel={option => option.name || ''}
+            renderInput={params => <TextField {...params} label='请选择' />}
+            onChange={(event: any, newValue: any) => {
+              console.log("newValue",newValue)
+              if(newValue && newValue!=undefined && newValue.code) {
+                toggleSetClassName(newValue.code)
+              }
+            }}
+            isOptionEqualToValue={(option, value) => option.code === value.code}
+            value={data.TopRightOptions.find((option: { code: string }) => option.code == className)}
+          />
         :
           <Button size='small' variant='contained' onClick={() => router.push(data.ViewButton.url)}>
             {data.ViewButton.name}
