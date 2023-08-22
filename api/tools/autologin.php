@@ -14,13 +14,45 @@ require_once('../include.inc.php');
 ini_set('max_execution_time', 7200);
 
 session_start();
+
+function DecryptIDForUserName($data) {
+	$data 		= base64_safe_decode($data);
+	$dataArray 	= explode("::",$data);
+	$data 		= $dataArray[0];
+	$iv 		= base64_safe_decode($dataArray[1]);
+	$cipher 	= "AES-256-CBC";
+    $options 	= OPENSSL_RAW_DATA;
+	$EncryptAESKey	= "DDKJ2023";
+    $decrypted 	= openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
+    return $decrypted;
+}
+
 //$_SESSION['LOGIN_USER_EDUID'] = "admin";
-//$_SESSION['LOGIN_USER_UID']   = "1";
 //print_R($_SESSION);
-if($_SESSION['LOGIN_USER_UID']>0)  { 
+if($_POST['ddsso']!="")			{
+	$ddsso			= str_replace(' ','+',$_POST['ddsso']);
+	$ddsso_id		= DecryptIDForUserName($ddsso);
+	$ddsso_id		= iconv("GB18030//ignore","UTF-8", $ddsso_id);
+	$ddsso_id_array	= explode('||||',$ddsso_id);
+	$_SESSION['LOGIN_USER_EDUID']	= $ddsso_id_array[0];
+	$sql 	= "select * from data_user where USER_ID='".$_SESSION['LOGIN_USER_EDUID']."'";
+	$rs		= $db->Execute($sql);
+	$UserInfo = $rs->fields;
+	if($UserInfo['USER_ID']=="")  { 
+		$sql = "INSERT INTO data_user (USER_ID,USER_NAME,NICKNAME,USEING_KEY,PASSWORD,USER_PRIV,DEPT_ID,GENDER,BIRTHDAY,TEL_NO_DEPT,MOBILE_NO,EMAIL,AVATAR,LAST_VISIT_TIME,LAST_PASS_TIME,THEME,USER_PRIV_OTHER,USER_NO,NOT_LOGIN,NOT_SEARCH,BIND_IP,LAST_VISIT_IP,WEATHER_CITY,MENU_EXPAND,LIMIT_LOGIN,NOT_MOBILE_LOGIN,SKIN,MODE,PRIMARYCOLOR,CONTENTWIDTH,APPBARBLUR,FOOTERTYPE,MENUTOGGLE,MENUCOLLAPSED,MENUHIDDEN,STATUS,`LANGUAGE`) VALUES ('".$ddsso_id_array[0]."','".$ddsso_id_array[1]."','".$ddsso_id_array[1]."','','','5','3','','','','','','','1971-01-01 00:00:00','1971-01-01 00:00:00','','',0,1,0,'','','',1,1,1,'Default','Light','Primary','Full','Full','Static','1','1','1','1','Chinese');";
+		$db->Execute($sql);
+	}
+	//print_R($ddsso_id_array);
+	//$json_encode	= json_encode(array("RESULT1"=>"OK","RESULT2"=>"OK"));
+	//print ''.$_GET['callback'].'(';
+	//print $json_encode;
+	//print ");";
+}
+	
+if($_SESSION['LOGIN_USER_EDUID']!="")  { 
     JWT::$leeway    = $NEXT_PUBLIC_JWT_EXPIRATION;
     if(1)   {
-        $sql = "select * from data_user where USER_ID='".$_SESSION['LOGIN_USER_EDUID']."'";
+        $sql 	= "select * from data_user where USER_ID='".$_SESSION['LOGIN_USER_EDUID']."'";
         $rs		= $db->Execute($sql);
         $UserInfo = $rs->fields;
         if($UserInfo['USER_ID']=="")  {  
@@ -62,8 +94,7 @@ if($_SESSION['LOGIN_USER_UID']>0)  {
                 exit;
             }
         }
-        $PASSWORD_IN_DB         = $UserInfo['PASSWORD'];
-        if($PASSWORD_IN_DB!="")  {
+        if($UserInfo['USER_ID']!="")  {
             //Reform userData
             $userData = [];
             $userData['id']         = $UserInfo['id'];

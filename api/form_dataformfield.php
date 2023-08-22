@@ -169,6 +169,7 @@ $数据同步周期   = $FromInfo['数据同步周期'];
 $远程数据库信息     = returntablefield("data_datasource","id",$数据源,"数据库主机,数据库用户名,数据库密码,数据库名称");
 if($远程数据库信息['数据库用户名']!="")    {
     $db_remote = NewADOConnection($DB_TYPE='mysqli');
+    $db_remote->connectTimeout = 2;
     $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptID($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
     $db_remote->Execute("Set names utf8;");
     $db_remote->setFetchMode(ADODB_FETCH_ASSOC);

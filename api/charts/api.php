@@ -106,13 +106,28 @@ if($_POST['action']=="sql"&&$id>0&&$table!=""&&$Targetsql!="") {
         $db_remote->setFetchMode(ADODB_FETCH_ASSOC);
         if($db_remote->database==$远程数据库信息['数据库名称']) {
             $rs_remote          = $db_remote->Execute($Targetsql);            
-            if($rs_remote)        {
+            if($rs_remote && strpos($Targetsql, "group by")!==false)        {
                 $rs_a_remote        = $rs_remote->GetArray();
                 $dimensions         = array_keys($rs_a_remote[0]);
                 $RS = [];
                 //$RS['rs_a_remote']  = $rs_a_remote;
                 $RS['status']       = "OK";
                 $RS['data']         = ['dimensions'=>$dimensions,'source'=>$rs_a_remote];
+                $RS['msg']          = "获取远程数据成功";
+                print json_encode($RS);
+                exit;
+            }
+            if($rs_remote && strpos($Targetsql, "group by")===false)        {
+                $rs_a_remote        = $rs_remote->GetArray();
+                $dimensions         = array_keys($rs_a_remote[0]);
+                $RS         = [];
+                $NewRSA     = [];
+                foreach($rs_a_remote as $Line) {
+                    $NewRSA[]       = array_values($Line);
+                }
+                //$RS['rs_a_remote']  = $rs_a_remote;
+                $RS['status']       = "OK";
+                $RS['data']         = $NewRSA;
                 $RS['msg']          = "获取远程数据成功";
                 print json_encode($RS);
                 exit;
