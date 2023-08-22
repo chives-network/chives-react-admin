@@ -64,7 +64,7 @@ switch($optionsMenuItem) {
 //奖杯模块
 $sql = "select SUM(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql";
 $rs = $db->CacheExecute(180,$sql);
-$AnalyticsTrophy['Welcome']     = "您好,".$GLOBAL_USER->USER_NAME."!🥳";
+$AnalyticsTrophy['Welcome']     = "您好，".$班级."！🥳";
 $AnalyticsTrophy['SubTitle']    = $班级."总积分";
 $AnalyticsTrophy['TotalScore']  = $rs->fields['NUM'];
 $AnalyticsTrophy['ViewButton']['name']  = "查看明细";
@@ -210,7 +210,7 @@ $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一周','selected'=>$op
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'最近一月','selected'=>$optionsMenuItem=='最近一月'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'当前学期','selected'=>$optionsMenuItem=='当前学期'?true:false];
 $ApexLineChart['TopRightOptions'][]    = ['name'=>'所有学期','selected'=>$optionsMenuItem=='所有学期'?true:false];
-$ApexLineChart['grid']                  = 8;
+$ApexLineChart['grid']                  = 4;
 $ApexLineChart['type']                  = "ApexLineChart";
 
 //输出GoView结构
@@ -242,37 +242,6 @@ foreach($输出数据T as $输出数据X=>$输出数据Y)  {
 $ApexLineChart['GoView2']['source']    = $GoViewSource;
 //额外一个班级的统计数据 -- 结束
 
-
-//AnalyticsWeeklyOverview
-$sql = "select 积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 积分时间 order by 积分时间 desc limit 7";
-$rs = $db->CacheExecute(180,$sql);
-$rs_a = $rs->GetArray();
-$输出数据 = [];
-for($i=0;$i<sizeof($rs_a);$i++) {
-    $输出数据[$rs_a[$i]['积分时间']] = $rs_a[$i]['NUM'];
-}
-ksort($输出数据);
-$dataY = [];
-$dataX = array_keys($输出数据);
-$dataYItem = array_values($输出数据);
-$dataY[] = ["name"=>"班级总积分","data"=>$dataYItem];
-
-$AnalyticsWeeklyOverview['Title']         = "班级学生加分周报";
-$AnalyticsWeeklyOverview['SubTitle']      = "最近一周班级学生加分之和";
-$AnalyticsWeeklyOverview['dataX']         = $dataX;
-$AnalyticsWeeklyOverview['dataY']         = $dataY;
-$AnalyticsWeeklyOverview['sql']           = $sql;
-$AnalyticsWeeklyOverview['TopRightOptions'][]       = ['name'=>'最近一周','selected'=>$optionsMenuItem=='最近一周'?true:false];
-
-$AnalyticsWeeklyOverview['BottomText']['Left']      = array_sum($dataYItem);
-$AnalyticsWeeklyOverview['BottomText']['Right']     = "最近一周总积分为".array_sum($dataYItem).", 比上周增加13%";
-
-$AnalyticsWeeklyOverview['ViewButton']['name']  = "明细";
-$AnalyticsWeeklyOverview['ViewButton']['url']   = "/tab/apps_180";
-$AnalyticsWeeklyOverview['grid']                = 4;
-$AnalyticsWeeklyOverview['type']                = "AnalyticsWeeklyOverview";
-
-
 //AnalyticsPerformance
 $sql = "select 一级指标,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标 order by 一级指标 asc";
 $rs = $db->CacheExecute(180,$sql);
@@ -300,7 +269,7 @@ $AnalyticsPerformance['type']                 = "AnalyticsPerformance";
 
 
 //ApexDonutChart
-$sql = "select 一级指标,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql and 积分分值>0 group by 一级指标 order by 一级指标 asc";
+$sql = "select 一级指标,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$班级' $whereSql group by 一级指标 order by 一级指标 asc";
 $rs = $db->CacheExecute(180,$sql);
 $rs_a = $rs->GetArray();
 $输出数据 = [];
@@ -312,7 +281,7 @@ $dataX = array_keys($输出数据);
 $dataY[] = ["name"=>"班级总积分百分比","data"=>array_values($输出数据)];
 
 $ApexDonutChart['Title']       = "按一级指标统计百分比";
-$ApexDonutChart['SubTitle']    = "按一级指标统计加分之和的百分比";
+$ApexDonutChart['SubTitle']    = "按一级指标统计积分之和的百分比";
 $ApexDonutChart['dataX']       = $dataX;
 $ApexDonutChart['dataY']       = $dataY;
 $ApexDonutChart['sql']         = $sql;
@@ -359,12 +328,12 @@ $RS['charts'][]       = $AnalyticsTrophy;
 $RS['charts'][]       = $AnalyticsTransactionsCard;
 $RS['charts'][]       = $AnalyticsSalesByCountries;
 $RS['charts'][]       = $AnalyticsDepositWithdraw;
-$RS['charts'][]       = $AnalyticsWeeklyOverview;
+//$RS['charts'][]       = $AnalyticsWeeklyOverview;
 //$RS['charts'][]       = $ApexAreaChart;
-$RS['charts'][]       = $ApexLineChart;
 $RS['charts'][]       = $AnalyticsPerformance;
 $RS['charts'][]       = $ApexDonutChart;
-$RS['charts'][]       = $ApexRadialBarChart;
+$RS['charts'][]       = $ApexLineChart;
+//$RS['charts'][]       = $ApexRadialBarChart;
 
 
 print_R(json_encode($RS));
