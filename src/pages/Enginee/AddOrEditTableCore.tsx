@@ -226,6 +226,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     if (res.data.status == "OK") {
                         
                         const defaultValuesNewTemp:{[key:string]:any} = { ...res.data.data }
+                        
                         //Show the field when the value is match the condition
                         //This field will control other fields show or not
                         if (res.data.EnableFields) {
@@ -280,8 +281,6 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                         defaultValuesNewTemp[FieldArray.所在省] = all3Value[0] || ''
                                         defaultValuesNewTemp[FieldArray.所在市] = all3Value[1] || ''
                                         defaultValuesNewTemp[FieldArray.所在区县] = all3Value[2] || ''
-                                        //setDefaultValuesNew(defaultValuesNewTemp)
-                                        console.log("defaultValuesNewTemp",defaultValuesNewTemp)
                                     }
                                     
                                     //处理身份证件类型为非居民身份证时,需要自动修改身份证件号的类型为input                       
