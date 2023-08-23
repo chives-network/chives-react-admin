@@ -700,10 +700,10 @@ if(!in_array($_REQUEST['sortColumn'], $columnNames)) {
     $_REQUEST['sortColumn'] = $columnNames[0];
 }
 if($_REQUEST['sortMethod']=="desc") {
-    $orderby = "order by `".$_REQUEST['sortColumn']."` desc";
+    $orderby = "order by `".$_REQUEST['sortColumn']."` desc, id desc";
 }
 else {
-    $orderby = "order by `".$_REQUEST['sortColumn']."` asc";
+    $orderby = "order by `".$_REQUEST['sortColumn']."` asc, id desc";
 }
 
 $ForbiddenSelectRow = [];

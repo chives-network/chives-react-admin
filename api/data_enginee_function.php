@@ -1009,6 +1009,14 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $行政区划   = $FieldName;
                 $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, '所在省'=>$所在省, '所在市'=>$所在市, '所在区县'=>$所在区县, '行政区划'=>$行政区划, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>intval($IsFullWidth), 'disabled' => false]];
                 break;
+            case 'ProvinceAndCityOneLine':
+                if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
+                $所在省     = $FieldName."所在省";
+                $所在市     = $FieldName."所在市";
+                $所在区县   = $FieldName."所在区县";
+                $行政区划   = $FieldName;
+                $allFieldsMap['Default'][] = ['name' => $FieldName, 'show'=>true, 'FieldTypeArray'=>$CurrentFieldTypeArray, 'type'=>$CurrentFieldTypeArray[0], 'label' => $ShowTextName, 'value' => $FieldDefault, '所在省'=>$所在省, '所在市'=>$所在市, '所在区县'=>$所在区县, '行政区划'=>$行政区划, 'placeholder' => $Placeholder, 'helptext' => $Helptext, 'rules' => ['required' => $IsMustFill==1?true:false,'xs'=>12, 'sm'=>4, 'disabled' => false]];
+                break;
             case 'UserRoleMenuDetail':
                 if($actionType=="EDIT") $InsertOrUpdateFieldArrayForSql[$actionType][$FieldName] = "";
                 //Menu From Database
@@ -1016,7 +1024,7 @@ function getAllFields($AllFieldsFromTable, $AllShowTypesArray, $actionType, $Fil
                 $rsf    = $db->Execute($sql);
                 $MenuOneRSA  = $rsf->GetArray();
                 //$sql    = "select * from data_menutwo where FaceTo='AnonymousUser' order by MenuOneName asc,SortNumber asc";
-                $sql    = "select * from data_menutwo where FaceTo='AuthUser' order by SortNumber asc";
+                $sql    = "select * from data_menutwo where FaceTo='AuthUser' order by SortNumber asc, id asc";
                 $rsf    = $db->Execute($sql);
                 $MenuTwoRSA  = $rsf->GetArray();
                 $MenuTwoArray1 = [];
@@ -1288,7 +1296,7 @@ function option_multi_approval_exection($selectedRows, $multiReviewInputValue, $
             SystemLogRecord("option_multi_approval", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;
@@ -1492,7 +1500,7 @@ function option_multi_cancel_exection($selectedRows, $multiReviewInputValue, $Re
             SystemLogRecord("option_multi_cancel", '', json_encode($sqlArray));
         }
         $RS['status']   = "OK";
-        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
+        if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
             $RS['sqlArray'] = $sqlArray;
             global $GLOBAL_EXEC_KEY_SQL;
             $RS['GLOBAL_EXEC_KEY_SQL'] = $GLOBAL_EXEC_KEY_SQL;

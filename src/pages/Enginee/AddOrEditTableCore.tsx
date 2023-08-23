@@ -97,6 +97,7 @@ import { useDropzone } from 'react-dropzone'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 import chinacity from 'src/types/forms/chinacity';
+import chinacityshort from 'src/types/forms/chinacityshort';
 import mdi from 'src/types/forms/mdi';
 
 // ** Tab Content Imports
@@ -223,9 +224,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                 .get(authConfig.backEndApiHost + backEndApi, { headers: { Authorization: storedToken+"::::"+CSRF_TOKEN }, params: params })
                 .then(res => {
                     if (res.data.status == "OK") {
-                        setDefaultValuesNew(res.data.data)
                         
-                        //console.log("defaultValuesNew--------------------------------", defaultValuesNew)
+                        const defaultValuesNewTemp:{[key:string]:any} = { ...res.data.data }
                         //Show the field when the value is match the condition
                         //This field will control other fields show or not
                         if (res.data.EnableFields) {
@@ -275,6 +275,14 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                             setUploadFiles(res.data.data[FieldArray.name])
                                         }
                                     } 
+                                    if (FieldArray.type == "ProvinceAndCityOneLine" && res.data.data[FieldArray.name]) {
+                                        const all3Value = res.data.data[FieldArray.name].split('-')
+                                        defaultValuesNewTemp[FieldArray.所在省] = all3Value[0] || ''
+                                        defaultValuesNewTemp[FieldArray.所在市] = all3Value[1] || ''
+                                        defaultValuesNewTemp[FieldArray.所在区县] = all3Value[2] || ''
+                                        //setDefaultValuesNew(defaultValuesNewTemp)
+                                        console.log("defaultValuesNewTemp",defaultValuesNewTemp)
+                                    }
                                     
                                     //处理身份证件类型为非居民身份证时,需要自动修改身份证件号的类型为input                       
                                     if(action!="edit_default_1" && action!="edit_default_2" && FieldArray.name.includes("身份证件类型") && res.data.data[FieldArray.name]!="居民身份证") {
@@ -305,6 +313,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                             }
 
                         }
+                        
+                        setDefaultValuesNew(defaultValuesNewTemp)
                         
                         //end for condition
                     }
@@ -1377,6 +1387,136 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     />
                                                                 </FormControl>
                                                             </Grid>
+                                                        </Fragment>
+                                                        
+                                                    )
+                                                } 
+                                                else if ((FieldArray.show || fieldArrayShow[FieldArray.name]) && (FieldArray.type == "ProvinceAndCityOneLine")) {
+                                                    
+                                                    //console.log("defaultValuesNew[FieldArray.name]***************Begin", FieldArray)
+                                                    if (defaultValuesNew[FieldArray.行政区划] != undefined) { 
+                                                        setValue(FieldArray.行政区划, defaultValuesNew[FieldArray.行政区划])
+                                                        setValue(FieldArray.所在省, defaultValuesNew[FieldArray.所在省])
+                                                        setValue(FieldArray.所在市, defaultValuesNew[FieldArray.所在市])
+                                                        setValue(FieldArray.所在区县, defaultValuesNew[FieldArray.所在区县])                                                        
+                                                    }
+                                                    
+                                                    //console.log("errors select--------------------------------", errors)
+                                                    
+                                                    return (
+                                                        <Fragment key={"AllFields_1_" + FieldArray_index}> 
+                                                            <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm}>
+                                                                <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <InputLabel
+                                                                        id='validation-basic-select'
+                                                                        error={Boolean(errors[FieldArray.所在省])}
+                                                                        htmlFor='validation-basic-select'
+                                                                    >
+                                                                        {FieldArray.所在省}
+                                                                    </InputLabel>
+                                                                    <Controller
+                                                                        name={FieldArray.所在省}
+                                                                        control={control}
+                                                                        render={({ field: { value, onChange } }) => (
+                                                                            <Select
+                                                                                size={componentsize}
+                                                                                value={value}
+                                                                                label={FieldArray.所在省}
+                                                                                onChange={(e) => {
+                                                                                    onChange(e);
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[FieldArray.所在省] = e.target.value
+                                                                                    defaultValuesNewTemp[FieldArray.行政区划] = ""
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                }}
+                                                                                error={Boolean(errors[FieldArray.所在省])}
+                                                                                labelId='validation-basic-select'
+                                                                                aria-describedby='validation-basic-select'
+                                                                            >
+                                                                                {Object.keys(chinacityshort).map((ProvinceName: any, ItemArray_index: number) => {
+                                                                                    return <MenuItem value={ProvinceName} key={ItemArray_index}>{ProvinceName}</MenuItem>
+                                                                                })}
+                                                                            </Select>
+                                                                        )}
+                                                                    />
+                                                                </FormControl>
+                                                            </Grid>
+                                                            <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_2_" + FieldArray_index}>
+                                                                <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <InputLabel
+                                                                        id='validation-basic-select'
+                                                                        error={Boolean(errors[FieldArray.所在市])}
+                                                                        htmlFor='validation-basic-select'
+                                                                    >
+                                                                        {FieldArray.所在市}
+                                                                    </InputLabel>
+                                                                    <Controller
+                                                                        name={FieldArray.所在市}
+                                                                        control={control}
+                                                                        render={({ field: { value, onChange } }) => (
+                                                                            <Select
+                                                                                size={componentsize}
+                                                                                value={value}
+                                                                                label={FieldArray.label}
+                                                                                onChange={(e) => {
+                                                                                    onChange(e);
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[FieldArray.所在市] = e.target.value
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                }}
+                                                                                error={Boolean(errors[FieldArray.所在市])}
+                                                                                labelId='validation-basic-select'
+                                                                                aria-describedby='validation-basic-select'
+                                                                            >
+                                                                                {chinacityshort[defaultValuesNew[FieldArray.所在省]] && Object.keys(chinacityshort[defaultValuesNew[FieldArray.所在省]]).map((CityName: any, ItemArray_index: number) => {
+                                                                                    return <MenuItem value={CityName} key={ItemArray_index}>{CityName}</MenuItem>
+                                                                                })}
+                                                                            </Select>
+                                                                        )}
+                                                                    />
+                                                                </FormControl>
+                                                            </Grid>                                                            
+                                                            <Grid item xs={FieldArray.rules.xs} sm={FieldArray.rules.sm} key={"AllFields_3_" + FieldArray_index}>
+                                                                <FormControl fullWidth sx={{ mb: 0 }}>
+                                                                    <InputLabel
+                                                                        id='validation-basic-select'
+                                                                        error={Boolean(errors[FieldArray.所在区县])}
+                                                                        htmlFor='validation-basic-select'
+                                                                    >
+                                                                        {FieldArray.所在区县}
+                                                                    </InputLabel>
+                                                                    <Controller
+                                                                        name={FieldArray.所在区县}
+                                                                        control={control}
+                                                                        render={({ field: { value, onChange } }) => (
+                                                                            <Select
+                                                                                size={componentsize}
+                                                                                value={value}
+                                                                                label={FieldArray.label}
+                                                                                onChange={(e) => {
+                                                                                    onChange(e);
+                                                                                    const defaultValuesNewTemp:{[key:string]:any} = { ...defaultValuesNew }
+                                                                                    defaultValuesNewTemp[FieldArray.所在区县] = e.target.value
+                                                                                    {chinacityshort[defaultValuesNew[FieldArray.所在省]] && chinacityshort[defaultValuesNew[FieldArray.所在省]][defaultValuesNew[FieldArray.所在市]] && chinacityshort[defaultValuesNew[FieldArray.所在省]][defaultValuesNew[FieldArray.所在市]].map((DistrictArray: any) => {
+                                                                                        if(DistrictArray.DistrictName==e.target.value) {
+                                                                                            defaultValuesNewTemp[FieldArray.行政区划] = defaultValuesNewTemp[FieldArray.所在省] + "-" + defaultValuesNewTemp[FieldArray.所在市] + "-" + defaultValuesNewTemp[FieldArray.所在区县]
+                                                                                        }
+                                                                                    })}
+                                                                                    setDefaultValuesNew(defaultValuesNewTemp)
+                                                                                    
+                                                                                }}
+                                                                                error={Boolean(errors[FieldArray.所在区县])}
+                                                                                labelId='validation-basic-select'
+                                                                                aria-describedby='validation-basic-select'
+                                                                            >
+                                                                                {chinacityshort[defaultValuesNew[FieldArray.所在省]] && chinacityshort[defaultValuesNew[FieldArray.所在省]][defaultValuesNew[FieldArray.所在市]] && chinacityshort[defaultValuesNew[FieldArray.所在省]][defaultValuesNew[FieldArray.所在市]].map((DistrictArray: any, ItemArray_index: number) => {
+                                                                                    return <MenuItem value={DistrictArray.DistrictName} key={ItemArray_index}>{DistrictArray.DistrictName}</MenuItem>
+                                                                                })}
+                                                                            </Select>
+                                                                        )}
+                                                                    />
+                                                                </FormControl>
+                                                            </Grid> 
                                                         </Fragment>
                                                         
                                                     )

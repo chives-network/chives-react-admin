@@ -54,7 +54,7 @@ foreach($rs_a as $LineX) {
             if(is_array($远程数据表结构) && $远程数据表结构[0]!="")     {
 
                 //得到当前数据中心表的结构
-                $sql            = "select * from form_formfield where FormId='$FormId' and IsEnable='1' order by SortNumber asc";
+                $sql            = "select * from form_formfield where FormId='$FormId' and IsEnable='1' order by SortNumber asc, id asc";
                 $rs_fields      = $db->Execute($sql);
                 $rs_a_fields    = $rs_fields->GetArray();
                 $字段名称转中文名称 = [];

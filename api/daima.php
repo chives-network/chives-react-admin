@@ -18,12 +18,14 @@ foreach((array)$rsp_a as $keyp=>$value)
     foreach((array)$rsc_a as $keyc=>$valuep)
     {
         $CityName = $valuep['CityName'];
+        if($ProvinceName!=$CityName)  $CityName = str_replace($ProvinceName,"",$CityName);
         $CityID = $valuep['CityID'];
         $sql	= "select 代码 as DistrictID,行政区 as DistrictName from edu_xingzhengdaima where left(代码,4)='$CityID' and substr(代码,5,2)<>'00' and right(代码,6)='000000'";
         $rs		= $db->CacheExecute(600,$sql);
         $rsd_a	= $rs->GetArray();
         foreach((array)$rsd_a as $keyd=>$valued)
         {
+            $valued['DistrictName'] = str_replace($CityName,"",$valued['DistrictName']);
             $result[$ProvinceName][$CityName][$keyd] = $valued;
         }
         if(sizeof($rsd_a)==0)
@@ -41,12 +43,14 @@ foreach((array)$rsp_a as $keyp=>$value)
         $rs		= $db->CacheExecute(600,$sql);
         $rsc_a	= $rs->GetArray();
         $CityName = $rsc_a[0]['CityName'];
+        if($ProvinceName!=$CityName)  $CityName = str_replace($ProvinceName,"",$CityName);
         $CityID = $rsc_a[0]['CityID'].'01';
         $sql	= "select 代码 as DistrictID,行政区 as DistrictName from edu_xingzhengdaima where left(代码,4)='$CityID' and substr(代码,5,2)<>'00' and right(代码,6)='000000'";
         $rs		= $db->CacheExecute(600,$sql);
         $rsd_a	= $rs->GetArray();
         foreach((array)$rsd_a as $keyd=>$valued)
         {
+            $valued['DistrictName'] = str_replace($CityName,"",$valued['DistrictName']);
             $result[$ProvinceName][$CityName][$keyd] = $valued;
         }
         if(sizeof($rsd_a)==0)
