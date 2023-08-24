@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
+import HelpIcon from '@mui/icons-material/Help'
 import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
 import List from '@mui/material/List'
@@ -978,7 +979,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         />
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1050,8 +1061,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             error={Boolean(errors[FieldArray.name])}
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1104,8 +1125,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             }
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1160,8 +1191,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             }
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1220,8 +1261,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             })}
                                                                         </Select>
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1631,8 +1682,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             }}
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1686,8 +1747,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             )}
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1741,8 +1812,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             )}
                                                                         />
                                                                     )}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1833,8 +1914,18 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                             </Fragment>    
                                                                         )
                                                                     }}
-                                                                />
-                                                                {FieldArray.helptext && (
+                                                                />                                                                
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1943,7 +2034,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Fragment>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -1998,7 +2099,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </RadioGroup>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2081,7 +2192,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </FormGroup>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2129,7 +2250,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         />
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2193,7 +2324,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2257,7 +2398,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2320,7 +2471,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2383,7 +2544,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2446,7 +2617,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2532,7 +2713,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                     }
                                                                     }
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2602,7 +2793,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </DatePickerWrapper>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2660,7 +2861,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         customInput={<TextField fullWidth style={{ width: '100%' }} size={componentsize} label={FieldArray.label || ''} />}
                                                                     />
                                                                 </DatePickerWrapper>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2733,7 +2944,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Fragment>
                                                                     ) : null}
                                                                 </DropzoneWrapper>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2806,7 +3027,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Fragment>
                                                                     ) : null}
                                                                 </DropzoneWrapper>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2884,7 +3115,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Fragment>
                                                                     ) : null}
                                                                 </DropzoneWrapper>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -2950,7 +3191,29 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </List>
                                                                         </Fragment>
                                                                     ) : null}
-                                                                    {FieldArray.helptext && (
+                                                                    {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                        <FormHelperText>
+                                                                            <Tooltip    
+                                                                                    title={<Fragment>{FieldArray.helptext}</Fragment>} 
+                                                                                    PopperProps={{
+                                                                                        modifiers: [
+                                                                                          {
+                                                                                            name: 'offset',
+                                                                                            options: {
+                                                                                              offset: [0, 0], // [horizontal, vertical] offset. Set it to 0 to reduce the gap.
+                                                                                            },
+                                                                                          },
+                                                                                        ],
+                                                                                      }}
+                                                                            >
+                                                                                <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                    <HelpIcon />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                            {FieldArray.helptext.substring(0,12)}...
+                                                                        </FormHelperText>
+                                                                    )}
+                                                                    {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                         <FormHelperText>
                                                                             {FieldArray.helptext}
                                                                         </FormHelperText>
@@ -2998,7 +3261,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Typography>
                                                                     </div>
                                                                 </Box>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -3026,7 +3299,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         : (<ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} />)
                                                                     }
                                                                 </Box>
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -3077,7 +3360,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Box>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -3126,7 +3419,17 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         </Box>
                                                                     )}
                                                                 />
-                                                                {FieldArray.helptext && (
+                                                                {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                    <FormHelperText>
+                                                                        <Tooltip title={<Fragment>{FieldArray.helptext}</Fragment>} >
+                                                                            <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                <HelpIcon />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                    </FormHelperText>
+                                                                )}
+                                                                {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                     <FormHelperText>
                                                                         {FieldArray.helptext}
                                                                     </FormHelperText>
@@ -3466,7 +3769,29 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 />
                                                                             )}
                                                                         />
-                                                                        {FieldArray.helptext && (
+                                                                        {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                            <FormHelperText>
+                                                                                <Tooltip    
+                                                                                        title={<Fragment>{FieldArray.helptext}</Fragment>} 
+                                                                                        PopperProps={{
+                                                                                            modifiers: [
+                                                                                              {
+                                                                                                name: 'offset',
+                                                                                                options: {
+                                                                                                  offset: [0, 0], // [horizontal, vertical] offset. Set it to 0 to reduce the gap.
+                                                                                                },
+                                                                                              },
+                                                                                            ],
+                                                                                          }}
+                                                                                >
+                                                                                    <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                        <HelpIcon />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                             <FormHelperText>
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>
@@ -3522,7 +3847,29 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 />
                                                                             )}
                                                                         />
-                                                                        {FieldArray.helptext && (
+                                                                        {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                            <FormHelperText>
+                                                                                <Tooltip    
+                                                                                        title={<Fragment>{FieldArray.helptext}</Fragment>} 
+                                                                                        PopperProps={{
+                                                                                            modifiers: [
+                                                                                              {
+                                                                                                name: 'offset',
+                                                                                                options: {
+                                                                                                  offset: [0, 0], // [horizontal, vertical] offset. Set it to 0 to reduce the gap.
+                                                                                                },
+                                                                                              },
+                                                                                            ],
+                                                                                          }}
+                                                                                >
+                                                                                    <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                        <HelpIcon />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                             <FormHelperText>
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>
@@ -3619,7 +3966,29 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 />
                                                                             )}
                                                                         />
-                                                                        {FieldArray.helptext && (
+                                                                        {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                            <FormHelperText>
+                                                                                <Tooltip    
+                                                                                        title={<Fragment>{FieldArray.helptext}</Fragment>} 
+                                                                                        PopperProps={{
+                                                                                            modifiers: [
+                                                                                              {
+                                                                                                name: 'offset',
+                                                                                                options: {
+                                                                                                  offset: [0, 0], // [horizontal, vertical] offset. Set it to 0 to reduce the gap.
+                                                                                                },
+                                                                                              },
+                                                                                            ],
+                                                                                          }}
+                                                                                >
+                                                                                    <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                        <HelpIcon />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                             <FormHelperText>
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>
@@ -3727,7 +4096,29 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 </Fragment>
                                                                             )}
                                                                         />
-                                                                        {FieldArray.helptext && (
+                                                                        {FieldArray.helptext && FieldArray.helptext.length>12 && (
+                                                                            <FormHelperText>
+                                                                                <Tooltip    
+                                                                                        title={<Fragment>{FieldArray.helptext}</Fragment>} 
+                                                                                        PopperProps={{
+                                                                                            modifiers: [
+                                                                                              {
+                                                                                                name: 'offset',
+                                                                                                options: {
+                                                                                                  offset: [0, 0], // [horizontal, vertical] offset. Set it to 0 to reduce the gap.
+                                                                                                },
+                                                                                              },
+                                                                                            ],
+                                                                                          }}
+                                                                                >
+                                                                                    <IconButton style={{ padding: 0, margin: '0px 0px 0px 5px'}}>
+                                                                                        <HelpIcon />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                            </FormHelperText>
+                                                                        )}
+                                                                        {FieldArray.helptext && FieldArray.helptext.length<=12 && (
                                                                             <FormHelperText>
                                                                                 {FieldArray.helptext}
                                                                             </FormHelperText>

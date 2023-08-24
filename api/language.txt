@@ -34,3 +34,4 @@ $MAP['Last6digitsPlus'] 	= 'Last6digitsPlus';
 $MAP['DataMask'] 	= 'DataMask';
 $MAP['Data Mask for this field'] 	= 'Data Mask for this field';
 $MAP['Data Mask for this field'] 	= 'Data Mask for this field';
+$MAP['ShowType_名称'] 	= 'ShowType_名称';
