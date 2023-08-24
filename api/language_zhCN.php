@@ -664,6 +664,13 @@ $MAP['Creator'] 	    = '创建人';
 $MAP['CreateTime'] 	    = '创建时间';
 $MAP['FrenchName'] 	    = '法语';
 $MAP['GermanName'] 	    = '德语';
+$MAP['Import Unique Fields Not Config'] 	= '导入主键在流程中没有配置,请先进行配置';
 
+$MAP['Description'] 	            = '描述';
+$MAP['DisableFields'] 	            = '禁用字段';
+$MAP['Pre6digitsPlusStar'] 	        = '前六位加*号';
+$MAP['Last6digitsPlusStar'] 	    = '后六位加*号';
+$MAP['DataMask'] 	                = '数据蒙板';
+$MAP['Data Mask for this field'] 	= '如: 123456******';
 
 ?>

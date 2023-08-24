@@ -147,8 +147,9 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                     <FormControl fullWidth size="small">
                       <InputLabel id={Filter.name}>{Filter.text}</InputLabel>
                       <Select
+                        multiple
                         fullWidth
-                        value={filterSelectValue[Filter_index] || ''}
+                        value={filterSelectValue[Filter_index] || []}
                         id={Filter.text}
                         label={Filter.name}
                         labelId={Filter.text}
@@ -156,8 +157,6 @@ const IndexTableHeader = (props: TableHeaderProps) => {
                         //onChange={ (e: SelectChangeEvent) => {handleStatusChange(e)} }
                         //onChange={e: SelectChangeEvent => handleChange(Filter.name, e.target.value)}
                         onChange={(e: SelectChangeEvent) => {
-                          
-                          //console.log("filter", filter); 
                           handleFilterChange(Filter.name, e.target.value)
                           filterSelectValue[Filter_index] = e.target.value
                           setFilterSelectValue(filterSelectValue);

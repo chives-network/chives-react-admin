@@ -978,6 +978,9 @@ if( ( ($_GET['action']=="edit_default"&&in_array('Edit',$Actions_In_List_Row_Arr
             case 'xlsx':
                 $data[$Item['FieldName']] = AttachFieldValueToUrl($TableName,$id,$Item['FieldName'],'xlsx',$data[$Item['FieldName']]);
                 break;
+            case 'password':
+                $data[$Item['FieldName']] = "******";
+                break;
         }
     }
 
@@ -1158,16 +1161,38 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
                     }
                     $RS['data'][$FieldName] = join(',',$MultiValueRS);
                     break;
+                case 'password':
+                    $RS['data'][$FieldName] = "******";
+                    break;
                 default:
                     break;
             }
         }
     }
 
+    //Rerest the layout in View Model
+    $LayoutWidth = [];
+    foreach($allFieldsView as $ModeName=>$allFieldItem) {
+        if(is_array($allFieldItem)) {
+            for($i=0;$i<sizeof($allFieldItem);$i+=2)        {
+                $FieldName              = $allFieldItem[$i]['name'];
+                $Width                  = $allFieldItem[$i]['rules']['sm'];
+                if($allFieldItem[$i]['rules']['sm']==12) {
+                    $LayoutWidth[] = [$allFieldItem[$i]['name']];
+                    $i -= 1;
+                }
+                else {
+                    $LayoutWidth[] = [$allFieldItem[$i]['name'],$allFieldItem[$i+1]['name']];
+                }
+            }
+        }
+    }
+    $RS['LayoutWidth']          = $LayoutWidth;
+
     //Convert data to Table
-    $ApprovalNodeFieldsArray = explode(',',$SettingMap['ApprovalNodeFields']);
-    $ApprovalNodeFieldsHidden = [];
-    $ApprovalNodeFieldsStatus = [];
+    $ApprovalNodeFieldsArray    = explode(',',$SettingMap['ApprovalNodeFields']);
+    $ApprovalNodeFieldsHidden   = [];
+    $ApprovalNodeFieldsStatus   = [];
     foreach($ApprovalNodeFieldsArray as $TempField) {
         $ApprovalNodeFieldsHidden[] = $TempField."审核状态";
         //$ApprovalNodeFieldsHidden[] = $TempField."申请时间";
@@ -1181,25 +1206,40 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
     $NewTableRowData    = [];
     $FieldNameArray     = $allFieldsView['Default'];
     for($X=0;$X<sizeof($FieldNameArray);$X=$X+2)        {
-        $FieldName1 = $FieldNameArray[$X]['name'];
-        if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
-            $FieldName1 = $FieldNameArray[$X]['code'];
+        if($FieldNameArray[$X]['rules']['sm']==12) {
+            $FieldName1     = $FieldNameArray[$X]['name'];
+            if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
+                $FieldName1 = $FieldNameArray[$X]['code'];
+            }
+            $RowData = [];
+            if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+                $RowData[0]['Name']     = $FieldName1;
+                $RowData[0]['Value']    = $RS['data'][$FieldName1];
+                $RowData[0]['FieldArray']   = $FieldNameArray[$X];
+            }
+            $X -= 1;
         }
-        $FieldName2 = $FieldNameArray[$X+1]['name'];
-        if($FieldNameArray[$X+1]['type']=="autocomplete" && $FieldNameArray[$X+1]['code']!="") {
-            $FieldName2 = $FieldNameArray[$X+1]['code'];
-        }
-        $RowData = [];
-        if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
-            $RowData[0]['Name']     = $FieldName1;
-            $RowData[0]['Value']    = $RS['data'][$FieldName1];
-            $RowData[0]['FieldArray']   = $FieldNameArray[$X];
-        }
-        if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
-            $RowData[1]['Name']     = $FieldName2;
-            $RowData[1]['Value']    = $RS['data'][$FieldName2];
-            $RowData[1]['FieldArray']   = $FieldNameArray[$X+1];
-        }
+        else {
+            $FieldName1 = $FieldNameArray[$X]['name'];
+            if($FieldNameArray[$X]['type']=="autocomplete" && $FieldNameArray[$X]['code']!="") {
+                $FieldName1 = $FieldNameArray[$X]['code'];
+            }
+            $FieldName2 = $FieldNameArray[$X+1]['name'];
+            if($FieldNameArray[$X+1]['type']=="autocomplete" && $FieldNameArray[$X+1]['code']!="") {
+                $FieldName2 = $FieldNameArray[$X+1]['code'];
+            }
+            $RowData = [];
+            if(!in_array($FieldName1,$ApprovalNodeFieldsHidden) && $FieldName1!="") {
+                $RowData[0]['Name']     = $FieldName1;
+                $RowData[0]['Value']    = $RS['data'][$FieldName1];
+                $RowData[0]['FieldArray']   = $FieldNameArray[$X];
+            }
+            if(!in_array($FieldName2,$ApprovalNodeFieldsHidden) && $FieldName2!="") {
+                $RowData[1]['Name']     = $FieldName2;
+                $RowData[1]['Value']    = $RS['data'][$FieldName2];
+                $RowData[1]['FieldArray']   = $FieldNameArray[$X+1];
+            }
+        }        
         if(sizeof($RowData)>0) {
             $NewTableRowData[] = $RowData;
         }
@@ -1586,6 +1626,9 @@ foreach($AllFieldsFromTable as $Item)  {
         case 'xlsx':            
             $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
             break;
+        case 'ExternalUrl':
+            $init_default_columns[] = ['flex' => 0.1, 'type'=>$CurrentFieldTypeArray[0], "href"=>"", "target"=>"_blank", 'minWidth' => $ColumnWidth, 'maxWidth' => $ColumnWidth+100, 'field' => $FieldName, 'headerName' => $ShowTextName, 'show'=>true, 'renderCell' => NULL, 'editable'=>$editable];
+            break;
         default:
             $FieldType = "string";
             if(in_array($FieldName,$ApprovalNodeFieldsStatus))  {
@@ -1689,15 +1732,42 @@ foreach($groupField as $FieldName) {
     }
     $RS['init_default']['filter'][] = ['name' => $FieldName, 'text' => $ShowTextName, 'list' => $rs_a, 'selected' => $selected];
     //Sql Filter
-    $SqlFilterValue = ForSqlInjection($_REQUEST[$FieldName]);
-    if ($SqlFilterValue != "" && $SqlFilterValue != "NULL" && $SqlFilterValue != "All Data") {
-        $AddSql .= " and (`$FieldName` = '" . $SqlFilterValue . "')";
+    if(is_array($_REQUEST[$FieldName]))         {
+        $TempArray = $_REQUEST[$FieldName];
+        $NewFilterArray = [];
+        $IsHaveAllData  = 0;
+        foreach($TempArray as $Temp) {
+            if ($Temp != "" && $Temp != "NULL" && $Temp != "All Data") {
+                $NewFilterArray[] = ForSqlInjection($Temp);
+            }
+            else if ($Temp == "NULL") {
+                $NewFilterArray[] = '';
+            }
+            else if ($Temp == "All Data") {
+                $IsHaveAllData = 1;
+            }
+        }
+        if($IsHaveAllData) {
+            //Get All Data
+        }
+        elseif(sizeof($NewFilterArray)==1) {
+            $AddSql .= " and `$FieldName` = '".$NewFilterArray[0]."'";
+        }
+        elseif(sizeof($NewFilterArray)>0) {
+            $AddSql .= " and `$FieldName` in ('".join("','",$NewFilterArray)."')";
+        }
     }
-    else if ($SqlFilterValue == "NULL") {
-        $AddSql .= " and (`$FieldName` = '')";
-    }
-    else {
-        //Get All Data
+    else    {
+        $SqlFilterValue = ForSqlInjection($_REQUEST[$FieldName]);
+        if ($SqlFilterValue != "" && $SqlFilterValue != "NULL" && $SqlFilterValue != "All Data") {
+            $AddSql .= " and (`$FieldName` = '" . $SqlFilterValue . "')";
+        }
+        else if ($SqlFilterValue == "NULL") {
+            $AddSql .= " and (`$FieldName` = '')";
+        }
+        else {
+            //Get All Data
+        }
     }
 }
 
@@ -1813,10 +1883,10 @@ foreach ($rs_a as $Line) {
     $MobileEndItem['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);;
     $MobileEndItem['MobileEndNewsCreateTime']           = strval($Line[$SettingMap['MobileEndNewsCreateTime']]);
     if($Line[$SettingMap['MobileEndNewsLeftImage']]=="") {
-        $Line[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
+        $Line[$SettingMap['MobileEndNewsLeftImage']]    = "/images/wechat/logo_icampus_left.png";
     }
     else {
-        $Line[$SettingMap['MobileEndNewsLeftImage']] = AttachFieldValueToUrl($TableName,$OriginalID,$SettingMap['MobileEndNewsLeftImage'],'avatar',$Line[$SettingMap['MobileEndNewsLeftImage']]);
+        $Line[$SettingMap['MobileEndNewsLeftImage']]    = AttachFieldValueToUrl($TableName,$OriginalID,$SettingMap['MobileEndNewsLeftImage'],'avatar',$Line[$SettingMap['MobileEndNewsLeftImage']]);
     }
     $MobileEndItem['MobileEndNewsLeftImage']            = strval($Line[$SettingMap['MobileEndNewsLeftImage']]);
     //Notification Template
@@ -1896,6 +1966,24 @@ foreach ($rs_a as $Line) {
                 break;
             case 'xlsx':
                 $Line[$FieldName] = AttachFieldValueToUrl($TableName,$OriginalID,$FieldName,'xlsx',$Line[$FieldName]);
+                break;
+            case 'password':
+                $Line[$FieldName] = "******";
+                break;
+        }
+        //Data Mask
+        $SettingTempMap = json_decode($AllFieldsMap[$FieldName]['Setting'],true);
+        $DataMask       = $SettingTempMap['DataMask'];
+        switch($DataMask) {
+            case 'Last6digitsPlusStar':
+                if(strlen($Line[$FieldName])>6) {
+                    $Line[$FieldName] = "******".substr($Line[$FieldName],-6);
+                }
+                break;
+            case 'Pre6digitsPlusStar':
+                if(strlen($Line[$FieldName])>6) {
+                    $Line[$FieldName] = substr($Line[$FieldName],0,-6)."******";
+                }
                 break;
         }
         // filter data to show on the list page -- End
@@ -2219,7 +2307,7 @@ $RS['init_default']['timeline']     = time();
 $RS['init_default']['pageNumber']   = $pageSize;
 $RS['init_default']['pageId']       = $page;
 $RS['init_default']['pageNumberArray']  = $pageNumberArray;
-if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" || 1)  {
+if($SettingMap['Debug_Sql_Show_On_Api']=="Yes" && 1)  {
     $RS['init_default']['sql']                              = $sqlList;
     $RS['init_default']['ApprovalNodeFields']['DebugSql']   = $sqlList;
 }

@@ -666,5 +666,13 @@ $MAP['CreateTime'] 	= 'CreateTime';
 $MAP['FrenchName'] 	= 'FrenchName';
 $MAP['GermanName'] 	= 'GermanName';
 
+$MAP['Description'] 	            = 'Description';
+$MAP['DisableFields'] 	            = 'Disable Fields';
+$MAP['Pre6digitsPlusStar'] 	        = 'Pre 6 digits plus star';
+$MAP['Last6digitsPlusStar'] 	    = 'Last 6 digits plus star*号';
+$MAP['DataMask'] 	                = 'Data Mask';
+$MAP['Data Mask for this field'] 	= 'Data Mask for this field';
+
+
 
 ?>

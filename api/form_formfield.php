@@ -155,6 +155,12 @@ $IsEnable[] = ['value'=>'1', 'label'=>__('Enable')];
 $IsEnable[] = ['value'=>'0', 'label'=>__('Disable')];
 $allFieldsAdd[] = ['name' => 'IsEnable', 'show'=>true, 'type'=>'radiogroup', 'options'=>$IsEnable, 'label' => __('Is Enable'), 'value' => $IsEnable[0]['value'], 'placeholder' => __('Is Enable for this field'), 'helptext' => __('Is Enable for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
+$DataMask = [];
+$DataMask[] = ['value'=>'None', 'label'=>__('None')];
+$DataMask[] = ['value'=>'Pre6digitsPlusStar', 'label'=>__('Pre6digitsPlusStar')];
+$DataMask[] = ['value'=>'Last6digitsPlusStar', 'label'=>__('Last6digitsPlusStar')];
+$allFieldsAdd[] = ['name' => 'DataMask', 'show'=>true, 'type'=>'tablefilter', 'options'=>$DataMask, 'label' => __('DataMask'), 'value' => $DataMask[0]['value'], 'placeholder' => __('Data Mask for this field'), 'helptext' => __('Data Mask for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
+
 //判断是否需要显示远程数据表字段列表
 $远程数据表字段列表 = [];
 $远程数据表字段列表[] = ['value'=>'None', 'label'=>__('None')];
