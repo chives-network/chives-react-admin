@@ -14,7 +14,6 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import ListItem from '@mui/material/ListItem'
-import Link from "@mui/material/Link"
 import Button from '@mui/material/Button'
 
 // ** Icon Imports
@@ -52,7 +51,7 @@ interface ViewTableType {
   externalId: number
   pageJsonInfor: {}
   CSRF_TOKEN: string
-  toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+  toggleImagesPreviewListDrawer: (imagesPreviewList: string[], imagetype: string[]) => void
 }
 
 const ImgStyled = styled('img')(({ theme }) => ({
@@ -61,14 +60,9 @@ const ImgStyled = styled('img')(({ theme }) => ({
   marginRight: theme.spacing(5)
 }))
 
-const CustomLink = styled(Link)({
-  textDecoration: "none",
-  color: "inherit",
-});
-
 const ViewTableCore = (props: ViewTableType) => {
   // ** Props
-  const { externalId, id, action, toggleViewTableDrawer, backEndApi, editViewCounter, CSRF_TOKEN,toggleImagesPreviewListDrawer } = props
+  const { externalId, id, action, toggleViewTableDrawer, backEndApi, editViewCounter, CSRF_TOKEN, toggleImagesPreviewListDrawer } = props
   console.log("externalId props", externalId)
   
   // ** Hooks
@@ -91,7 +85,7 @@ const ViewTableCore = (props: ViewTableType) => {
     }
   });
 
-  console.log("defaultValuesView--------------------------------", defaultValuesView)
+  //console.log("defaultValuesView--------------------------------", defaultValuesView)
 
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
 
@@ -142,7 +136,9 @@ const ViewTableCore = (props: ViewTableType) => {
               <Table>
                 <TableBody>
                   {newTableRowData && newTableRowData.length>0 && newTableRowData.map((RowData: any, RowData_index: number) => {
-
+                    
+                    const colSpan = RowData.length == 2 ? 1 : 3 ;
+                    
                     return (
                       <TableRow key={RowData_index}>
                         {RowData && RowData.map((CellData: any, FieldArray_index: number) => {
@@ -168,7 +164,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }//end if
@@ -186,7 +182,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -195,7 +191,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -204,7 +200,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -213,7 +209,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }
@@ -222,8 +218,8 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+CellData.Value])}>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>
+                                <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+CellData.Value], ['image'])}>
                                   <ImgStyled src={authConfig.backEndApiHost+CellData.Value} alt={FieldArray.helptext} />
                                 </Box>
                                 </MUITableCell>
@@ -235,20 +231,26 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>
                                   {CellData.Value && CellData.Value.length>0 && CellData.Value.map((FileUrl: any)=>{
                                     
                                     return (
                                       <ListItem key={FileUrl['name']} style={{padding: "3px"}}>
                                       <div className='file-details' style={{display: "flex"}}>
                                           <div style={{padding: "0 3px 0 0"}}>
-                                          {FileUrl.type.startsWith('image') ? <img width={45} height={45} alt={FileUrl['name']} src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} /> : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
+                                          {FileUrl.type.startsWith('image') ? 
+                                          <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+FileUrl['webkitRelativePath']], ['image'])}>
+                                            <ImgStyled src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} alt={FieldArray.helptext} />
+                                          </Box>
+                                          : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
                                           </div>
                                           <div>
                                           {FileUrl['type']=="file" ? 
-                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']}>{FileUrl['name']}</CustomLink></Typography>
+                                            <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+FileUrl['webkitRelativePath']], ['pdf'])}>
+                                              {FileUrl['name']}
+                                            </Box>
                                           :
-                                            <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']} target="_blank">{FileUrl['name']}</CustomLink></Typography>
+                                            ''
                                           }
                                           
                                           {FileUrl['size']>0 ? 
@@ -273,7 +275,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}><div dangerouslySetInnerHTML={{ __html: CellData.Value }} /></MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}><div dangerouslySetInnerHTML={{ __html: CellData.Value }} /></MUITableCell>
                               </Fragment>
                             )
                           }    
@@ -286,7 +288,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }                      
@@ -295,7 +297,7 @@ const ViewTableCore = (props: ViewTableType) => {
                             return (
                               <Fragment key={FieldArray_index}>
                                 <MUITableCell sx={{ width: '15%', whiteSpace: 'nowrap' }}>{FieldArray.label}:</MUITableCell>
-                                <MUITableCell sx={{ width: '35%' }}>{CellData.Value}</MUITableCell>
+                                <MUITableCell sx={{ width: '35%' }} colSpan={colSpan}>{CellData.Value}</MUITableCell>
                               </Fragment>
                             )
                           }

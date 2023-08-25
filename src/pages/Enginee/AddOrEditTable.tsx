@@ -35,7 +35,7 @@ interface AddOrEditTableType {
   CSRF_TOKEN: string
   dataGridLanguageCode: string
   dialogMaxWidth: Breakpoint
-  toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+  toggleImagesPreviewListDrawer: (imagesPreviewList: string[], imagetype: string[]) => void
   handleIsLoadingTipChange: (status: boolean, showText: string) => void
 }
 

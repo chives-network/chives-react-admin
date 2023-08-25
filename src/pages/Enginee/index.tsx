@@ -73,6 +73,12 @@ interface AddTableType{
   externalId:string
 }
 
+const ImgStyled = styled('img')(() => ({
+  width: 32,
+  height: 32,
+  borderRadius: 4
+}))
+
 const UserList = ({ backEndApi, externalId }: AddTableType) => {
   // ** Props
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
@@ -90,6 +96,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
   const [addEditViewShowInWindow, setAddEditViewShowInWindow] = useState<boolean>(false)
   const [imagesPreviewOpen, setImagesPreviewOpen] = useState<boolean>(false)
   const [imagesPreviewList, setImagesPreviewList] = useState<string[]>([])
+  const [imagesType, setImagesType] = useState<string[]>([])
 
   const [filterMultiColumns, setFilterMultiColumns] = useState<GridFilterModel>()
   const [searchFieldName, setsearchFieldName] = useState<string>('')
@@ -100,7 +107,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
 
   const [allSubmitFields, setAllSubmitFields] = useState({ 'searchFieldName': '' });
 
-  const [pageSize, setPageSize] = useState<number>(10)
+  const [pageSize, setPageSize] = useState<number>(30)
   const [page, setPage] = useState<number>(0)
 
   //const [filter, setFilter] = useState<any[]>([])
@@ -310,9 +317,10 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
     setImagesPreviewOpen(!imagesPreviewOpen)
   }
 
-  const toggleImagesPreviewListDrawer = (imagesPreviewList: string[]) => {
+  const toggleImagesPreviewListDrawer = (imagesPreviewList: string[], imagesType: string[]) => {
     setImagesPreviewOpen(!imagesPreviewOpen)
     setImagesPreviewList(imagesPreviewList)
+    setImagesType(imagesType)
   }
 
   const togglePageActionDrawer = (action: string, id: string) => {
@@ -600,7 +608,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         return (
           row[column.field] != "" ?
             (
-              <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }}  onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+row[column.field]])}>
+              <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }}  onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+row[column.field]], ['image'])}>
                 <CustomAvatar src={authConfig.backEndApiHost+row[column.field]} sx={{ mr: 3, width: 30, height: 30 }} />
               </Box>
             )
@@ -644,23 +652,26 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
               <ListItem key={FileUrl['name']} style={{padding: "3px"}}>
               <div className='file-details' style={{display: "flex"}}>
                   <div style={{padding: "7px 3px 0 0"}}>
-                  {FileUrl.type.startsWith('image') ? <img width={32} height={32} alt={FileUrl['name']} src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} /> : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
-                  </div>
-                  <div>
-                  {FileUrl['type']=="file" ? 
-                    <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']}>{FileUrl['name']}</CustomLink></Typography>
-                  :
-                    <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']} target="_blank">{FileUrl['name']}</CustomLink></Typography>
-                  }
-                  
-                  {FileUrl['size']>0 ? 
-                    <Typography className='file-size' variant='body2'>
-                        {Math.round(FileUrl['size'] / 100) / 10 > 1000
-                        ? `${(Math.round(FileUrl['size'] / 100) / 10000).toFixed(1)} mb`
-                        : `${(Math.round(FileUrl['size'] / 100) / 10).toFixed(1)} kb`}
-                    </Typography>
-                    : ''
-                  }                                        
+                    {FileUrl.type.startsWith('image') ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+FileUrl['webkitRelativePath']], ['image'])}>
+                      <ImgStyled src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} />
+                    </Box>
+                    : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
+                    </div>
+                    <div>
+                    {FileUrl['type']=="file" ? 
+                      <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']}>{FileUrl['name']}</CustomLink></Typography>
+                    :
+                      ''
+                    }                  
+                    {FileUrl['size']>0 ? 
+                      <Typography className='file-size' variant='body2'>
+                          {Math.round(FileUrl['size'] / 100) / 10 > 1000
+                          ? `${(Math.round(FileUrl['size'] / 100) / 10000).toFixed(1)} mb`
+                          : `${(Math.round(FileUrl['size'] / 100) / 10).toFixed(1)} kb`}
+                      </Typography>
+                      : ''
+                    }                                        
                   </div>
               </div>
               </ListItem>
@@ -847,7 +858,7 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
       {store && store.add_default && store.add_default.defaultValues && addEditActionName.indexOf("add_default") != -1 ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store.add_default} open={addEditActionOpen} toggleAddTableDrawer={toggleAddTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} handleIsLoadingTipChange={handleIsLoadingTipChange} /> : ''}
       {store && store[addEditActionName] && store[addEditActionName]['defaultValues'] && addEditActionName.indexOf("edit_default") != -1 && addEditActionId!='' ? <AddOrEditTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} addEditStructInfo={store[addEditActionName]} open={addEditActionOpen} toggleAddTableDrawer={toggleEditTableDrawer} addUserHandleFilter={addUserHandleFilter} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} IsGetStructureFromEditDefault={0} addEditViewShowInWindow={addEditViewShowInWindow}  CSRF_TOKEN={store.init_default.CSRF_TOKEN} dataGridLanguageCode={store.init_default.dataGridLanguageCode} dialogMaxWidth={store.init_default.dialogMaxWidth} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} handleIsLoadingTipChange={handleIsLoadingTipChange} /> : ''}
       {store && store.view_default && store.view_default.defaultValues && addEditActionName.indexOf("view_default") != -1 && addEditActionId!='' ? <ViewTable externalId={Number(externalId)} id={addEditActionId} action={addEditActionName} pageJsonInfor={store[addEditActionName]} open={viewActionOpen} toggleViewTableDrawer={toggleViewTableDrawer} backEndApi={backEndApi} editViewCounter={editViewCounter + 1} addEditViewShowInWindow={addEditViewShowInWindow} CSRF_TOKEN={store.init_default.CSRF_TOKEN} toggleImagesPreviewListDrawer={toggleImagesPreviewListDrawer} dialogMaxWidth={store.init_default.dialogMaxWidth} /> : ''}
-      <ImagesPreview open={imagesPreviewOpen} toggleImagesPreviewDrawer={toggleImagesPreviewDrawer} imagesList={imagesPreviewList} />
+      <ImagesPreview open={imagesPreviewOpen} toggleImagesPreviewDrawer={toggleImagesPreviewDrawer} imagesList={imagesPreviewList} imagesType={imagesType} />
     </Grid >
   )
 }

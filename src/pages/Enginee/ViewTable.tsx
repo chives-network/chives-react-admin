@@ -35,7 +35,7 @@ interface ViewTableType {
   pageJsonInfor: {}
   addEditViewShowInWindow: boolean
   CSRF_TOKEN: string
-  toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+  toggleImagesPreviewListDrawer: (imagesPreviewList: string[], imagetype: string[]) => void
   dialogMaxWidth: Breakpoint
 }
 

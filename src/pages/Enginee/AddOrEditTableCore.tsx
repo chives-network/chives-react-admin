@@ -159,7 +159,7 @@ interface AddOrEditTableType {
     AddtionalParams: {[key:string]:any}
     CSRF_TOKEN: string
     dataGridLanguageCode: string
-    toggleImagesPreviewListDrawer: (imagesPreviewList: string[]) => void
+    toggleImagesPreviewListDrawer: (imagesPreviewList: string[], imagetype: string[]) => void
     handleIsLoadingTipChange: (status: boolean, showText: string) => void
 }
 
@@ -3093,11 +3093,16 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                             :
                                                                                             ''
                                                                                             }
+                                                                                            {(fileInfor && fileInfor.size>0) ? 
                                                                                             <Typography className='file-size' variant='body2'>
                                                                                                 {Math.round(fileInfor.size / 100) / 10 > 1000
                                                                                                 ? `${(Math.round(fileInfor.size / 100) / 10000).toFixed(1)} mb`
                                                                                                 : `${(Math.round(fileInfor.size / 100) / 10).toFixed(1)} kb`}
                                                                                             </Typography>
+                                                                                            :
+                                                                                            ''
+                                                                                            }
+                                                                                            
                                                                                             </div>
                                                                                         </div>
                                                                                         <IconButton onClick={() => handleRemoveFile(fileInfor)}>
@@ -3239,7 +3244,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                                     {avatorShowArea && avatorShowArea[FieldArray.name] ?
                                                                         (<ImgStyled src={avatorShowArea[FieldArray.name]} alt={FieldArray.helptext} />)
-                                                                        : ( defaultValuesNew[FieldArray.name] ? <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]])}><ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} /></Box> : <Box sx={{ display: 'flex', alignItems: 'center',}} ><ImgStyled src={'/images/avatars/1.png'} alt={FieldArray.helptext} /></Box> )
+                                                                        : ( defaultValuesNew[FieldArray.name] ? <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]], ['image'])}><ImgStyled src={authConfig.backEndApiHost+defaultValuesNew[FieldArray.name]} alt={FieldArray.helptext} /></Box> : <Box sx={{ display: 'flex', alignItems: 'center',}} ><ImgStyled src={'/images/avatars/1.png'} alt={FieldArray.helptext} /></Box> )
                                                                     }
                                                                     <div>
                                                                         <ButtonStyled component='label' variant='contained' htmlFor={FieldArray.name}>

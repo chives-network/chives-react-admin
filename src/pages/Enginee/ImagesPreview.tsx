@@ -26,6 +26,7 @@ import { useKeenSlider } from 'keen-slider/react'
 interface ImagesPreviewType {
     open: boolean
     imagesList: string[]
+    imagesType: string[]
     toggleImagesPreviewDrawer: () => void
   }
 
@@ -37,7 +38,7 @@ const ImagesPreview = (props: ImagesPreviewType) => {
     toggleImagesPreviewDrawer()
   }
 
-  console.log("imagesList",imagesList)
+  //console.log("imagesList",imagesList)
 
   // ** States
   const [loaded, setLoaded] = useState<boolean>(false)
@@ -77,7 +78,7 @@ const ImagesPreview = (props: ImagesPreviewType) => {
                 {imagesList && imagesList.length>0 && imagesList.map((Url: string, UrlIndex: number)=>{
                     return (
                         <Box className='keen-slider__slide' key={UrlIndex}>
-                            <img src={Url} alt='swiper 1' />
+                            <img src={Url} style={{'width':'100%', 'borderRadius': '4px'}}/>
                         </Box>
                     )
                 })}
