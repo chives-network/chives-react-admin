@@ -687,8 +687,11 @@ if( $_GET['action']=="edit_default_data" && in_array('Edit',$Actions_In_List_Row
         else if($FieldValue=="EncryptField"&&$_POST[$FieldName]!="") {
             $FieldsArray[$FieldName]       = addslashes($_POST[$FieldName]);
         }
-        else if($FieldValue=="")   {
+        else if($FieldValue==""&&is_string($_POST[$FieldName]))   {
             $FieldsArray[$FieldName]       = addslashes($_POST[$FieldName]);
+        }
+        else if($FieldValue==""&&is_array($_POST[$FieldName]))   {
+            $FieldsArray[$FieldName]       = $_POST[$FieldName];
         }
         else {
             $FieldsArray[$FieldName]       = $FieldValue;
@@ -1288,19 +1291,21 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         }
     }
 
-    if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","NotificationTemplate1","NotificationTemplate2"]))           {
+    if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","XiaoYouZiXun","NotificationTemplate1","NotificationTemplate2"]))           {
         //News Template
         $RS['MobileEnd']['MobileEndNewsTitle']                = strval($data[$SettingMap['MobileEndNewsTitle']]);
         $RS['MobileEnd']['MobileEndNewsGroup']                = strval($data[$SettingMap['MobileEndNewsGroup']]);
         $RS['MobileEnd']['MobileEndNewsContent']              = strval($data[$SettingMap['MobileEndNewsContent']]);
         $RS['MobileEnd']['MobileEndNewsReadCounter']          = strval($data[$SettingMap['MobileEndNewsReadCounter']]);
+        $RS['MobileEnd']['MobileEndNewsLikeCounter']          = strval($data[$SettingMap['MobileEndNewsLikeCounter']]);
+        $RS['MobileEnd']['MobileEndNewsFavoriteCounter']      = strval($data[$SettingMap['MobileEndNewsFavoriteCounter']]);
         $RS['MobileEnd']['MobileEndNewsReadUsers']            = strval($data[$SettingMap['MobileEndNewsReadUsers']]);
         $RS['MobileEnd']['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);
         $RS['MobileEnd']['MobileEndNewsCreateTime']           = strval($data[$SettingMap['MobileEndNewsCreateTime']]);
         if($data[$SettingMap['MobileEndNewsLeftImage']]=="") {
             $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
         }
-        $RS['MobileEnd']['MobileEndNewsLeftImage']            = strval($data[$SettingMap['MobileEndNewsLeftImage']]);
+        $RS['MobileEnd']['MobileEndNewsLeftImage']            = AttachFieldValueToUrl($TableName,$data['id'],$SettingMap['MobileEndNewsLeftImage'],'avatar',strval($data[$SettingMap['MobileEndNewsLeftImage']]));
     }
 
     print json_encode($RS);

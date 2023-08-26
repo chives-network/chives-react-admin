@@ -593,13 +593,16 @@ $MAP['Icon'] 	            = 'Icon';
 
 $MAP['MenuAndIcon'] 	            = 'Menu And Icon';
 $MAP['NewsTemplate1'] 	            = 'News Template 1';
+$MAP['XiaoYouZiXun'] 	            = 'Xiao You Zi Xun';
 $MAP['NotificationTemplate1'] 	    = 'Notification Template 1';
 $MAP['NotificationTemplate2'] 	    = 'Notification Template 2';
 $MAP['MobileEndShowType'] 	        = 'Show Type';
 $MAP['MobileEndNewsTitle'] 	        = 'Title';
 $MAP['MobileEndNewsGroup'] 	        = 'Group';
 $MAP['MobileEndNewsContent'] 	    = 'Content';
-$MAP['MobileEndNewsReadCounter'] 	= 'Read Counter';
+$MAP['MobileEndNewsReadCounter'] 	    = 'Read Counter';
+$MAP['MobileEndNewsLikeCounter'] 	    = 'Like Counter';
+$MAP['MobileEndNewsFavoriteCounter']    = 'Favorite Counter';
 $MAP['MobileEndNewsReadUsers'] 	    = 'Read Users';
 $MAP['MobileEndNewsCreateTime'] 	= 'Create Time';
 $MAP['MobileEndNewsCreator'] 	    = 'Creator';
