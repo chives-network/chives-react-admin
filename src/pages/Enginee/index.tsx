@@ -648,10 +648,11 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
         return (
           <Fragment>
           {row[column.field] && row[column.field].length>0 && row[column.field].map((FileUrl: any)=>{
+            
             return (
               <ListItem key={FileUrl['name']} style={{padding: "3px"}}>
               <div className='file-details' style={{display: "flex"}}>
-                  <div style={{padding: "7px 3px 0 0"}}>
+                  <div style={{padding: "3px 3px 0 0"}}>
                     {FileUrl.type.startsWith('image') ? 
                     <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+FileUrl['webkitRelativePath']], ['image'])}>
                       <ImgStyled src={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} />
@@ -659,11 +660,18 @@ const UserList = ({ backEndApi, externalId }: AddTableType) => {
                     : <Icon icon='mdi:file-document-outline' fontSize={28}/> }
                     </div>
                     <div>
+                    {FileUrl['type']=="pdf" || FileUrl['type']=="Excel" ? 
+                      <Box sx={{ display: 'flex', alignItems: 'center',cursor: 'pointer',':hover': {cursor: 'pointer',}, }} onClick={() => toggleImagesPreviewListDrawer([authConfig.backEndApiHost+FileUrl['webkitRelativePath']], [FileUrl['type']])}>
+                        {FileUrl['name']}
+                      </Box>
+                    :
+                      ''
+                    }      
                     {FileUrl['type']=="file" ? 
                       <Typography className='file-name'><CustomLink href={authConfig.backEndApiHost+FileUrl['webkitRelativePath']} download={FileUrl['name']}>{FileUrl['name']}</CustomLink></Typography>
                     :
                       ''
-                    }                  
+                    }              
                     {FileUrl['size']>0 ? 
                       <Typography className='file-size' variant='body2'>
                           {Math.round(FileUrl['size'] / 100) / 10 > 1000
