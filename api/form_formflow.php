@@ -928,6 +928,7 @@ $edit_default_5_mode[] = ['value'=>"MenuAndIcon", 'label'=>__("MenuAndIcon")];
 $edit_default_5_mode[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
 $edit_default_5_mode[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
 $edit_default_5_mode[] = ['value'=>"XiaoYouZiXun", 'label'=>__("XiaoYouZiXun")];
+$edit_default_5_mode[] = ['value'=>"Activity", 'label'=>__("Activity")];
 
 
 $MobileEnd = [];
@@ -939,6 +940,7 @@ $MobileEndShowType = [];
 $MobileEndShowType[] = ['value'=>"ListTemplate1", 'label'=>__("ListTemplate1")];
 $MobileEndShowType[] = ['value'=>"NewsTemplate1", 'label'=>__("NewsTemplate1")];
 $MobileEndShowType[] = ['value'=>"XiaoYouZiXun", 'label'=>__("XiaoYouZiXun")];
+$MobileEndShowType[] = ['value'=>"Activity", 'label'=>__("Activity")];
 $MobileEndShowType[] = ['value'=>"NotificationTemplate1", 'label'=>__("NotificationTemplate1")];
 $MobileEndShowType[] = ['value'=>"NotificationTemplate2", 'label'=>__("NotificationTemplate2")];
 $edit_default_5['MenuAndIcon'][] = ['name' => "MobileEndShowType", 'show'=>true, 'type'=>'select', 'options'=>$MobileEndShowType, 'label' => __("MobileEndShowType"), 'value' => 'List', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
@@ -1002,6 +1004,21 @@ $edit_default_5['XiaoYouZiXun'][] = ['name' => "MobileEndNewsCreator", 'show'=>t
 $edit_default_5['XiaoYouZiXun'][] = ['name' => "MobileEndNewsCreateTime", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreateTime"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 $edit_default_5['XiaoYouZiXun'][] = ['name' => "MobileEndNewsLeftImage", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsLeftImage"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
+
+
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsTitle", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsTitle"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsGroup", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsGroup"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsContent", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsContent"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsEnrollment", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsEnrollment"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsLocation", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsLocation"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsProcess", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsProcess"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsTopAvator", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsTopAvator"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsLikeCounter", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsLikeCounter"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsFavoriteCounter", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsFavoriteCounter"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsCreator", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreator"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsCreateTime", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreateTime"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsLeftImage", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsLeftImage"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
 $defaultValues_4 = [];
 foreach($edit_default_4 as $ModeName=>$allFieldItem) {

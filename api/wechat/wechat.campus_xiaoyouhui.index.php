@@ -43,7 +43,7 @@ if($action=="Read"&&$domain="ZiXun"&&$id>0)     {
 }
 
 if($action=="Like"&&$domain="ZiXun"&&$id>0)     {	
-    //CheckAuthUserLoginStatus();
+    CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
 			if($status=="true") {
@@ -70,7 +70,7 @@ if($action=="Like"&&$domain="ZiXun"&&$id>0)     {
 }
 
 if($action=="Favorite"&&$domain="ZiXun"&&$id>0)     {	
-    //CheckAuthUserLoginStatus();
+    CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
 			if($status=="true") {
@@ -108,12 +108,13 @@ if($action=="")     	{
 	$rs 		= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);
 	$rs_a 		= $rs->GetArray();
 	for($i=0;$i<sizeof($rs_a);$i++) {
-		$rs_a[$i]['内容'] = strip_tags($rs_a[$i]['内容']);
-		$rs_a[$i]['图片'] = AttachFieldValueToUrl("data_xiaoyou_news",$rs_a[$i]['id'],'图片','avatar',$rs_a[$i]['图片']);
+		$rs_a[$i]['内容'] 		= strip_tags($rs_a[$i]['内容']);
+		$rs_a[$i]['图片'] 		= AttachFieldValueToUrl("data_xiaoyou_news",$rs_a[$i]['id'],'图片','avatar',$rs_a[$i]['图片']);
+		$rs_a[$i]['ViewUrl']    = "?action=view_default&id=".EncryptID($rs_a[$i]['id']);
 	}
 	$输出数据['ZiXun']['data']  = $rs_a;
 	$输出数据['ZiXun']['title'] = "校友资讯";
-	$输出数据['ZiXun']['more']  = "/page/InterfaceIniit/360";
+	$输出数据['ZiXun']['more']  = "";
 
 	//校友活动
 	$sql 		= "select * from data_xiaoyou_activity where 审核状态='通过' order by id desc limit 3";
@@ -126,7 +127,7 @@ if($action=="")     	{
 	}
 	$输出数据['Activity']['data']   = $rs_a;
 	$输出数据['Activity']['title']  = "校友活动";
-	$输出数据['Activity']['more']   = "/page/InterfaceIniit/360";
+	$输出数据['Activity']['more']   = "";
 
 	//最近活动
 	$最近活动 	= [];

@@ -593,7 +593,8 @@ $MAP['Icon'] 	            = 'Icon';
 
 $MAP['MenuAndIcon'] 	            = 'Menu And Icon';
 $MAP['NewsTemplate1'] 	            = 'News Template 1';
-$MAP['XiaoYouZiXun'] 	            = 'Xiao You Zi Xun';
+$MAP['XiaoYouZiXun'] 	            = 'School Mate News';
+$MAP['Activity'] 	                = 'Activity';
 $MAP['NotificationTemplate1'] 	    = 'Notification Template 1';
 $MAP['NotificationTemplate2'] 	    = 'Notification Template 2';
 $MAP['MobileEndShowType'] 	        = 'Show Type';
