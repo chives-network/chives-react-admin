@@ -30,7 +30,7 @@ $班级名称Array = [];
 $TopRightOptions = [];
 foreach($rs_a as $Line) {
     $班级名称Array[]    = ForSqlInjection($Line['班级名称']);
-    $TopRightOptions[] = ['name'=>ForSqlInjection($Line['班级名称']), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
+    $TopRightOptions[] = ['name'=>ForSqlInjection($Line['班级名称']),'code'=>ForSqlInjection($Line['班级名称']), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
 }
 if($_GET['className']!="")   {
     $班级 = ForSqlInjection($_GET['className']);
@@ -42,7 +42,7 @@ else {
     $班级 = "计算机三班";
 }
 if(sizeof($TopRightOptions)==0)  {
-    $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
+    $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'code'=>ForSqlInjection($班级),'url'=>'/tab/apps_180','fieldname'=>'班级'];
 }
 
 switch($optionsMenuItem) {

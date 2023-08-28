@@ -48,7 +48,6 @@ const AnalyticsTrophy = (props: DataType) => {
             getOptionLabel={option => option.name || ''}
             renderInput={params => <TextField {...params} label='请选择' />}
             onChange={(event: any, newValue: any) => {
-              console.log("newValue",newValue)
               if(newValue && newValue!=undefined && newValue.code) {
                 toggleSetClassName(newValue.code)
               }

@@ -30,7 +30,7 @@ $班级名称Array = [];
 $TopRightOptions = [];
 foreach($rs_a as $Line) {
     $班级名称Array[]    = ForSqlInjection($Line['班级名称']);
-    $TopRightOptions[] = ['name'=>ForSqlInjection($Line['班级名称']), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
+    $TopRightOptions[] = ['name'=>ForSqlInjection($Line['班级名称']),'code'=>ForSqlInjection($Line['班级名称']), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
 }
 if($_GET['className']!="")   {
     $班级 = ForSqlInjection($_GET['className']);
@@ -42,7 +42,7 @@ else {
     $班级 = "计算机三班";
 }
 if(sizeof($TopRightOptions)==0)  {
-    $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'url'=>'/tab/apps_180','fieldname'=>'班级'];
+    $TopRightOptions[] = ['name'=>ForSqlInjection($班级), 'code'=>ForSqlInjection($班级),'url'=>'/tab/apps_180','fieldname'=>'班级'];
 }
 
 switch($optionsMenuItem) {
@@ -213,12 +213,33 @@ $ApexLineChart['grid']                  = 8;
 $ApexLineChart['type']                  = "ApexLineChart";
 
 //输出GoView结构
-$ApexLineChart['GoView']['dimensions']      = [$ApexLineChart['Title'],"积分时间"];
+$ApexLineChart['GoView']['dimensions']      = ["积分时间",$ApexLineChart['Title']];
 $GoViewSource = [];
 foreach($输出数据 as $输出数据X=>$输出数据Y)  {
-    $GoViewSource[] = [$ApexLineChart['Title']=>$输出数据X,'积分时间'=>$输出数据Y];
+    $GoViewSource[] = [$ApexLineChart['Title']=>$输出数据Y,'积分时间'=>$输出数据X];
 }
 $ApexLineChart['GoView']['source']    = $GoViewSource;
+
+//额外一个班级的统计数据 -- 开始
+$额外一个班级的统计数据 = $班级名称Array[1];
+$sql = "select 积分时间,sum(积分分值) AS NUM from data_deyu_geren_record where 班级='$额外一个班级的统计数据' $whereSql and 积分分值>0 group by 积分时间 order by 积分时间 asc";
+$rs = $db->CacheExecute(180,$sql);
+$rs_a = $rs->GetArray();
+$输出数据T = [];
+for($i=0;$i<sizeof($rs_a);$i++) {
+    $输出数据T[$rs_a[$i]['积分时间']] = $rs_a[$i]['NUM'];
+}
+$dataY = [];
+$dataX = array_keys($输出数据T);
+$dataY[] = ["name"=>"班级总积分","data"=>array_values($输出数据T)];
+//输出GoView结构
+$ApexLineChart['GoView2']['dimensions']      = ["积分时间",$班级,$额外一个班级的统计数据];
+$GoViewSource = [];
+foreach($输出数据T as $输出数据X=>$输出数据Y)  {
+    $GoViewSource[] = [$班级=>$输出数据Y, '积分时间'=>$输出数据X, $额外一个班级的统计数据=>rand(1,20)];
+}
+$ApexLineChart['GoView2']['source']    = $GoViewSource;
+//额外一个班级的统计数据 -- 结束
 
 
 //AnalyticsWeeklyOverview
