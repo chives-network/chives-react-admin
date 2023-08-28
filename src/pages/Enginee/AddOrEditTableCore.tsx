@@ -514,7 +514,8 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
         }
         if(uploadFileFieldName!=undefined && uploadFileFieldName!="" && uploadFiles!=undefined && uploadFiles.length>0) {
             uploadFiles.forEach((file: File | FileUrl) =>     {
-                if(file && (file.type=="image" || file.type=="file") )  {
+                console.log("file", file)
+                if(file && (file.type=="image" || file.type=="file" || file.type=="Word" || file.type=="Excel" || file.type=="PowerPoint" || file.type=="pdf") )  {
                     //Exist Files
                     formData.append(`${uploadFileFieldName}_OriginalFieldValue[]`, file.name);
                 }
@@ -3522,7 +3523,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                         verticalAlign: "top",
                                                                         fontWeight: 600,
                                                                         whiteSpace: 'nowrap',
-                                                                        color: theme => `${theme.palette.text.primary} !important`
+                                                                        color: (theme: any) => `${theme.palette.text.primary} !important`
                                                                         }}
                                                                     >
                                                                         <Table size='small'>
@@ -4186,7 +4187,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                             color: 'common.white',
                                                             width: '20px !important',
                                                             height: '20px !important',
-                                                            mr: theme => theme.spacing(2)
+                                                            mr: (theme: any) => theme.spacing(2)
                                                         }}
                                                     />
                                                 ) : null}

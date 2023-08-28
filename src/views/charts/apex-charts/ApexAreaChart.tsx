@@ -102,7 +102,7 @@ const ApexAreaChart = (props: DataType) => {
       <CardHeader
         title={data.Title}
         subheader={data.SubTitle}
-        subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
+        subheaderTypographyProps={{ sx: { color: (theme: any) => `${theme.palette.text.disabled} !important` } }}
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],

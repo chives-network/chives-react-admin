@@ -96,7 +96,7 @@ const TabHeader = ({ tab, allTabs }: { tab: string; allTabs: {[key:string]:any} 
                 }
               </TabList>
             </Grid>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(4)} !important` }}>
+            <Grid item xs={12} sx={{ pt: (theme: any) => `${theme.spacing(4)} !important` }}>
               {isLoading || (activeTab!=tab) ? (
                 <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                   <CircularProgress sx={{ mb: 4 }} />

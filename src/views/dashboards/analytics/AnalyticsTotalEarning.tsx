@@ -69,7 +69,7 @@ const AnalyticsTotalEarning = () => {
           />
         }
       />
-      <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
+      <CardContent sx={{ pt: (theme: any) => `${theme.spacing(2.25)} !important` }}>
         <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
             $24,895
@@ -109,7 +109,7 @@ const AnalyticsTotalEarning = () => {
                   mr: 3,
                   width: 40,
                   height: 40,
-                  backgroundColor: theme => `rgba(${theme.palette.customColors.main}, 0.04)`
+                  backgroundColor: (theme: any) => `rgba(${theme.palette.customColors.main}, 0.04)`
                 }}
               >
                 <img src={item.imgSrc} alt={item.title} height={item.imgHeight} />

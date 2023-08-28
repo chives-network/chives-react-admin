@@ -58,7 +58,7 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
           }}
         />
-        <CardContent sx={{ pb: theme => `${theme.spacing(9)} !important` }}>
+        <CardContent sx={{ pb: (theme: any) => `${theme.spacing(9)} !important` }}>
           {data['加分']['data'].map((item: DataType2, index: number) => {
             return (
               <Box
@@ -110,7 +110,7 @@ const AnalyticsDepositWithdraw = (props: DataType) => {
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
           }}
         />
-        <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
+        <CardContent sx={{ pb: (theme: any) => `${theme.spacing(5.5)} !important` }}>
           {data['扣分']['data'].map((item: DataType2, index: number) => {
             return (
               <Box

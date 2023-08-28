@@ -86,7 +86,7 @@ const AnalyticsTransactionsCard = (props: DataType) => {
           }
         }}
       />
-      <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
+      <CardContent sx={{ pt: (theme: any) => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={[5, 0]}>
           {
             data.data.map((item: DataType2, index: number) => (
