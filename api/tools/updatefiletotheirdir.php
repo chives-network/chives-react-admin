@@ -60,7 +60,7 @@ function 同步库($开发库, $目标库, $子目录=[])  {
 
 
 //更新主机URL
-$dir = "D:\MYEDUDEV\icampus-student-affairs-manage\webroot\_next\static\chunks\pages";
+$dir = "E:\MYEDUDEV\icampus-student-affairs-manage\webroot\_next\static\chunks\pages";
 if (is_dir($dir)) {
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false ) {
