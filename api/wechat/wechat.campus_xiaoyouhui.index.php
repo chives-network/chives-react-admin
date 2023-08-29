@@ -43,7 +43,7 @@ if($action=="Read"&&$domain="ZiXun"&&$id>0)     {
 }
 
 if($action=="Like"&&$domain="ZiXun"&&$id>0)     {	
-    CheckAuthUserLoginStatus();
+    //CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
 			if($status=="true") {
@@ -70,7 +70,7 @@ if($action=="Like"&&$domain="ZiXun"&&$id>0)     {
 }
 
 if($action=="Favorite"&&$domain="ZiXun"&&$id>0)     {	
-    CheckAuthUserLoginStatus();
+    //CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
 			if($status=="true") {
@@ -124,6 +124,8 @@ if($action=="")     	{
 		$rs_a[$i]['描述'] 		= strip_tags($rs_a[$i]['描述']);
 		$rs_a[$i]['活动日期'] 	= substr($rs_a[$i]['活动日期'],5,11);
 		$rs_a[$i]['报名截止'] 	= substr($rs_a[$i]['报名截止'],5,11);
+		$rs_a[$i]['图片'] 		= AttachFieldValueToUrl("data_xiaoyou_activity",$rs_a[$i]['id'],'图片','avatar',$rs_a[$i]['图片']);
+		$rs_a[$i]['ViewUrl']    = "?action=view_default&id=".EncryptID($rs_a[$i]['id']);
 	}
 	$输出数据['Activity']['data']   = $rs_a;
 	$输出数据['Activity']['title']  = "校友活动";
@@ -131,21 +133,21 @@ if($action=="")     	{
 
 	//最近活动
 	$最近活动 	= [];
-	$最近活动[] = "http://localhost/api/data_image.php?DATA=RXZzc1ZTZGRldnZlRWYtZTNEQVNqQ2JiRGU0TGFNZWwyVWFub3U3V3I4SFg0a1Z0YW1MSGNtYkNVUnMxdXZyN2UxcFBJeHNING5XUVBubHQ5akhtNlZSRDBSeHVsRnNXcFFBRzRpZWYxZXRiUzBfczBaWi1tME5sQnVEZ1hWWHlQM2dDSm1RM0N3ZzRKQWVIeTVVcWpiOFZybmNYNDJxWFI0d3pUUHVXeS1Fa1o0OG0zSmxqTjZqMDRWTXR1elZWb0NIaURsQm1oLVRSX0x4VXpfQklPZ3x8OjpJR0VYRkFHbU5LaVZBdWNtOFFYRzhRfHw|";
-	$最近活动[] = "http://localhost/api/data_image.php?DATA=RXZzc1ZTZGRldnZlRWYtZTNEQVNqQ2JiRGU0TGFNZWwyVWFub3U3V3I4SFg0a1Z0YW1MSGNtYkNVUnMxdXZyN2UxcFBJeHNING5XUVBubHQ5akhtNlZSRDBSeHVsRnNXcFFBRzRpZWYxZXRiUzBfczBaWi1tME5sQnVEZ1hWWHlQM2dDSm1RM0N3ZzRKQWVIeTVVcWpiOFZybmNYNDJxWFI0d3pUUHVXeS1Fa1o0OG0zSmxqTjZqMDRWTXR1elZWb0NIaURsQm1oLVRSX0x4VXpfQklPZ3x8OjpJR0VYRkFHbU5LaVZBdWNtOFFYRzhRfHw|";
-	$最近活动[] = "http://localhost/api/data_image.php?DATA=RXZzc1ZTZGRldnZlRWYtZTNEQVNqQ2JiRGU0TGFNZWwyVWFub3U3V3I4SFg0a1Z0YW1MSGNtYkNVUnMxdXZyN2UxcFBJeHNING5XUVBubHQ5akhtNlZSRDBSeHVsRnNXcFFBRzRpZWYxZXRiUzBfczBaWi1tME5sQnVEZ1hWWHlQM2dDSm1RM0N3ZzRKQWVIeTVVcWpiOFZybmNYNDJxWFI0d3pUUHVXeS1Fa1o0OG0zSmxqTjZqMDRWTXR1elZWb0NIaURsQm1oLVRSX0x4VXpfQklPZ3x8OjpJR0VYRkFHbU5LaVZBdWNtOFFYRzhRfHw|";
-	$最近活动[] = "http://localhost/api/data_image.php?DATA=RXZzc1ZTZGRldnZlRWYtZTNEQVNqQ2JiRGU0TGFNZWwyVWFub3U3V3I4SFg0a1Z0YW1MSGNtYkNVUnMxdXZyN2UxcFBJeHNING5XUVBubHQ5akhtNlZSRDBSeHVsRnNXcFFBRzRpZWYxZXRiUzBfczBaWi1tME5sQnVEZ1hWWHlQM2dDSm1RM0N3ZzRKQWVIeTVVcWpiOFZybmNYNDJxWFI0d3pUUHVXeS1Fa1o0OG0zSmxqTjZqMDRWTXR1elZWb0NIaURsQm1oLVRSX0x4VXpfQklPZ3x8OjpJR0VYRkFHbU5LaVZBdWNtOFFYRzhRfHw|";
-	$最近活动[] = "http://localhost/api/data_image.php?DATA=RXZzc1ZTZGRldnZlRWYtZTNEQVNqQ2JiRGU0TGFNZWwyVWFub3U3V3I4SFg0a1Z0YW1MSGNtYkNVUnMxdXZyN2UxcFBJeHNING5XUVBubHQ5akhtNlZSRDBSeHVsRnNXcFFBRzRpZWYxZXRiUzBfczBaWi1tME5sQnVEZ1hWWHlQM2dDSm1RM0N3ZzRKQWVIeTVVcWpiOFZybmNYNDJxWFI0d3pUUHVXeS1Fa1o0OG0zSmxqTjZqMDRWTXR1elZWb0NIaURsQm1oLVRSX0x4VXpfQklPZ3x8OjpJR0VYRkFHbU5LaVZBdWNtOFFYRzhRfHw|";
+	$最近活动[] = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo7eYibA3gLJkRiaaXiaj27wGCXJicvSIyYPfa1cnO0t2tXMibzTFMGg9KicGg8umfbTzgvSlHCKH3LwJHw/132";
+	$最近活动[] = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo7eYibA3gLJkRiaaXiaj27wGCXJicvSIyYPfa1cnO0t2tXMibzTFMGg9KicGg8umfbTzgvSlHCKH3LwJHw/132";
+	$最近活动[] = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo7eYibA3gLJkRiaaXiaj27wGCXJicvSIyYPfa1cnO0t2tXMibzTFMGg9KicGg8umfbTzgvSlHCKH3LwJHw/132";
+	$最近活动[] = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo7eYibA3gLJkRiaaXiaj27wGCXJicvSIyYPfa1cnO0t2tXMibzTFMGg9KicGg8umfbTzgvSlHCKH3LwJHw/132";
+	$最近活动[] = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo7eYibA3gLJkRiaaXiaj27wGCXJicvSIyYPfa1cnO0t2tXMibzTFMGg9KicGg8umfbTzgvSlHCKH3LwJHw/132";
 	$输出数据['LastActivityUser'] = $最近活动;
 
 	//图标列表
 	$图标列表 = [];
 	$图标列表[] = ['name'=>'校友资讯','image'=>"/images/xiaoyou/zixun.png",'url'=>''];
+	$图标列表[] = ['name'=>'各地分会','image'=>"/images/xiaoyou/qunzhushou.png",'url'=>''];
 	$图标列表[] = ['name'=>'找校友','image'=>"/images/xiaoyou/zhaoxiaoyou.png",'url'=>''];
-	$图标列表[] = ['name'=>'活动','image'=>"/images/xiaoyou/huodong.png",'url'=>''];
-	$图标列表[] = ['name'=>'互助','image'=>"/images/xiaoyou/huzhu.png",'url'=>''];
-	$图标列表[] = ['name'=>'相册','image'=>"/images/xiaoyou/xiangce.png",'url'=>''];
-	$图标列表[] = ['name'=>'群助手','image'=>"/images/xiaoyou/qunzhushou.png",'url'=>''];
+	$图标列表[] = ['name'=>'校友活动','image'=>"/images/xiaoyou/huodong.png",'url'=>''];
+	$图标列表[] = ['name'=>'校友互助','image'=>"/images/xiaoyou/huzhu.png",'url'=>''];
+	$图标列表[] = ['name'=>'校友相册','image'=>"/images/xiaoyou/xiangce.png",'url'=>''];
 	$图标列表[] = ['name'=>'我的','image'=>"/images/xiaoyou/wode.png",'url'=>''];
 	$图标列表[] = ['name'=>'关于我们','image'=>"/images/xiaoyou/guanyuwomen.png",'url'=>''];
 	$输出数据['IconList']   = $图标列表;

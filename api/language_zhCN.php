@@ -591,7 +591,7 @@ $MAP['Icon'] 	            = '图标';
 
 $MAP['MenuAndIcon'] 	            = '菜单和图标';
 $MAP['NewsTemplate1'] 	            = '新闻模板1';
-$MAP['XiaoYouZiXun'] 	            = '校友资讯';
+$MAP['ZiXun'] 	            = '校友资讯';
 $MAP['Activity'] 	                = '活动';
 $MAP['NotificationTemplate1'] 	    = '通知模板1';
 $MAP['NotificationTemplate2'] 	    = '通知模板2';
@@ -676,5 +676,13 @@ $MAP['Pre6digitsPlusStar'] 	        = '前六位加*号';
 $MAP['Last6digitsPlusStar'] 	    = '后六位加*号';
 $MAP['DataMask'] 	                = '数据蒙板';
 $MAP['Data Mask for this field'] 	= '如: 123456******';
+
+
+$MAP['MobileEndNewsEnrollment'] 	= '活动报名';
+$MAP['MobileEndNewsLocation'] 	    = '活动地点';
+$MAP['MobileEndNewsProcess'] 	    = '状态';
+$MAP['MobileEndNewsTopAvator'] 	    = '头像';
+$MAP['MobileEndActivityEnrollEndDate'] 	= '报名截止';
+$MAP['MobileEndActivityDate'] 	        = '活动日期';
 
 ?>

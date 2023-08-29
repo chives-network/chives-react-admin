@@ -1291,7 +1291,7 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         }
     }
 
-    if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","XiaoYouZiXun","NotificationTemplate1","NotificationTemplate2"]))           {
+    if(in_array($SettingMap['MobileEndShowType'],["NewsTemplate1","ZiXun","Activity","NotificationTemplate1","NotificationTemplate2"]))           {
         //News Template
         $RS['MobileEnd']['MobileEndNewsTitle']                = strval($data[$SettingMap['MobileEndNewsTitle']]);
         $RS['MobileEnd']['MobileEndNewsGroup']                = strval($data[$SettingMap['MobileEndNewsGroup']]);
@@ -1300,8 +1300,41 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         $RS['MobileEnd']['MobileEndNewsLikeCounter']          = strval($data[$SettingMap['MobileEndNewsLikeCounter']]);
         $RS['MobileEnd']['MobileEndNewsFavoriteCounter']      = strval($data[$SettingMap['MobileEndNewsFavoriteCounter']]);
         $RS['MobileEnd']['MobileEndNewsReadUsers']            = strval($data[$SettingMap['MobileEndNewsReadUsers']]);
-        $RS['MobileEnd']['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);
-        $RS['MobileEnd']['MobileEndNewsCreateTime']           = strval($data[$SettingMap['MobileEndNewsCreateTime']]);
+
+        $MobileEndNewsCreator = strval(returntablefield("data_user","USER_ID",$data[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);;
+        if($MobileEndNewsCreator!="") {
+            $RS['MobileEnd']['MobileEndNewsCreator']          = $MobileEndNewsCreator;
+        }
+        else {
+            $RS['MobileEnd']['MobileEndNewsCreator']          = $data[$SettingMap['MobileEndNewsCreator']];
+        }
+        $RS['MobileEnd']['MobileEndNewsEnrollment']           = strval($data[$SettingMap['MobileEndNewsEnrollment']]);
+        $RS['MobileEnd']['MobileEndNewsLocation']             = strval($data[$SettingMap['MobileEndNewsLocation']]);
+        $RS['MobileEnd']['MobileEndNewsCreateTime']           = substr($data[$SettingMap['MobileEndNewsCreateTime']],5,11);
+        if($RS['MobileEnd']['MobileEndNewsLocation']!="") {
+            $TempArray = explode('-', $RS['MobileEnd']['MobileEndNewsLocation']);
+            $RS['MobileEnd']['MobileEndNewsLocation']         = $TempArray[1]." ".$TempArray[2];
+            $RS['MobileEnd']['MobileEndNewsCreateTime']       = substr($data[$SettingMap['MobileEndNewsCreateTime']],5,5);
+        }
+        $RS['MobileEnd']['MobileEndNewsProcess']                = strval($data[$SettingMap['MobileEndNewsProcess']]);
+        $RS['MobileEnd']['MobileEndNewsTopAvator']              = strval($data[$SettingMap['MobileEndNewsTopAvator']]);
+        $RS['MobileEnd']['MobileEndActivityEnrollEndDate']      = strval($data[$SettingMap['MobileEndActivityEnrollEndDate']]);
+        $RS['MobileEnd']['MobileEndActivityDate']               = strval($data[$SettingMap['MobileEndActivityDate']]);
+        if($RS['MobileEnd']['MobileEndActivityEnrollEndDate']!="") {
+            if($RS['MobileEnd']['MobileEndActivityEnrollEndDate']<date("Y-m-d")) {
+                $RS['MobileEnd']['MobileEndActivityStatus'] = "报名结束";
+            }
+            else {            
+                $RS['MobileEnd']['MobileEndActivityStatus'] = "报名中";
+            }
+        }
+
+        if($RS['MobileEnd']['MobileEndActivityDate']!="") {
+            if($RS['MobileEnd']['MobileEndActivityDate']==date("Y-m-d")) {
+                $RS['MobileEnd']['MobileEndActivityStatus'] = "进行中";
+            }
+        }
+        
         if($data[$SettingMap['MobileEndNewsLeftImage']]=="") {
             $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
         }
@@ -1879,14 +1912,48 @@ foreach ($rs_a as $Line) {
     $MobileEndItem['MobileEndFirstLine']                = strval($SettingMap['MobileEndFirstLine']);
     $MobileEndItem['MobileEndSecondLineLeft']           = strval($SettingMap['MobileEndSecondLineLeft']);
     $MobileEndItem['MobileEndSecondLineRight']          = strval($SettingMap['MobileEndSecondLineRight']);
-    //News Template
+    //News Template 
     $MobileEndItem['MobileEndNewsTitle']                = strval($Line[$SettingMap['MobileEndNewsTitle']]);
     $MobileEndItem['MobileEndNewsGroup']                = strval($Line[$SettingMap['MobileEndNewsGroup']]);
-    $MobileEndItem['MobileEndNewsContent']              = strval($Line[$SettingMap['MobileEndNewsContent']]);
+    $MobileEndItem['MobileEndNewsContent']              = strip_tags($Line[$SettingMap['MobileEndNewsContent']]);
     $MobileEndItem['MobileEndNewsReadCounter']          = strval($Line[$SettingMap['MobileEndNewsReadCounter']]);
+    $MobileEndItem['MobileEndNewsLikeCounter']          = strval($Line[$SettingMap['MobileEndNewsLikeCounter']]);
+    $MobileEndItem['MobileEndNewsFavoriteCounter']      = strval($Line[$SettingMap['MobileEndNewsFavoriteCounter']]);
     $MobileEndItem['MobileEndNewsReadUsers']            = strval($Line[$SettingMap['MobileEndNewsReadUsers']]);
-    $MobileEndItem['MobileEndNewsCreator']              = strval(returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);;
-    $MobileEndItem['MobileEndNewsCreateTime']           = strval($Line[$SettingMap['MobileEndNewsCreateTime']]);
+    
+    $MobileEndNewsCreator = strval(returntablefield("data_user","USER_ID",$Line[$SettingMap['MobileEndNewsCreator']],"USER_NAME")["USER_NAME"]);;
+    if($MobileEndNewsCreator!="") {
+        $MobileEndItem['MobileEndNewsCreator']          = $MobileEndNewsCreator;
+    }
+    else {
+        $MobileEndItem['MobileEndNewsCreator']          = $Line[$SettingMap['MobileEndNewsCreator']];
+    }
+    $MobileEndItem['MobileEndNewsEnrollment']           = strval($Line[$SettingMap['MobileEndNewsEnrollment']]);
+    $MobileEndItem['MobileEndNewsLocation']             = strval($Line[$SettingMap['MobileEndNewsLocation']]);
+    $MobileEndItem['MobileEndNewsCreateTime']           = substr($Line[$SettingMap['MobileEndNewsCreateTime']],5,11);
+    if($MobileEndItem['MobileEndNewsLocation']!="") {
+        $TempArray = explode('-', $MobileEndItem['MobileEndNewsLocation']);
+        $MobileEndItem['MobileEndNewsLocation']         = $TempArray[1]." ".$TempArray[2];
+        $MobileEndItem['MobileEndNewsCreateTime']       = substr($Line[$SettingMap['MobileEndNewsCreateTime']],5,5);
+    }
+    $MobileEndItem['MobileEndNewsProcess']              = strval($Line[$SettingMap['MobileEndNewsProcess']]);
+    $MobileEndItem['MobileEndNewsTopAvator']            = strval($Line[$SettingMap['MobileEndNewsTopAvator']]);
+    $MobileEndItem['MobileEndActivityEnrollEndDate']    = strval($Line[$SettingMap['MobileEndActivityEnrollEndDate']]);
+    $MobileEndItem['MobileEndActivityDate']             = strval($Line[$SettingMap['MobileEndActivityDate']]);
+    if($MobileEndItem['MobileEndActivityEnrollEndDate']!="") {
+        if($MobileEndItem['MobileEndActivityEnrollEndDate']<date("Y-m-d")) {
+            $MobileEndItem['MobileEndActivityStatus'] = "报名结束";
+        }
+        else {            
+            $MobileEndItem['MobileEndActivityStatus'] = "报名中";
+        }
+    }
+    if($MobileEndItem['MobileEndActivityDate']!="") {
+        if($MobileEndItem['MobileEndActivityDate']==date("Y-m-d")) {
+            $MobileEndItem['MobileEndActivityStatus'] = "进行中";
+        }
+    }
+
     if($Line[$SettingMap['MobileEndNewsLeftImage']]=="") {
         $Line[$SettingMap['MobileEndNewsLeftImage']]    = "/images/wechat/logo_icampus_left.png";
     }

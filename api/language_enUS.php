@@ -593,7 +593,7 @@ $MAP['Icon'] 	            = 'Icon';
 
 $MAP['MenuAndIcon'] 	            = 'Menu And Icon';
 $MAP['NewsTemplate1'] 	            = 'News Template 1';
-$MAP['XiaoYouZiXun'] 	            = 'School Mate News';
+$MAP['ZiXun'] 	            = 'School Mate News';
 $MAP['Activity'] 	                = 'Activity';
 $MAP['NotificationTemplate1'] 	    = 'Notification Template 1';
 $MAP['NotificationTemplate2'] 	    = 'Notification Template 2';
@@ -677,6 +677,11 @@ $MAP['Last6digitsPlusStar'] 	    = 'Last 6 digits plus star*号';
 $MAP['DataMask'] 	                = 'Data Mask';
 $MAP['Data Mask for this field'] 	= 'Data Mask for this field';
 
-
+$MAP['MobileEndNewsEnrollment'] 	    = 'Enrollment';
+$MAP['MobileEndNewsLocation'] 	        = 'Location';
+$MAP['MobileEndNewsProcess'] 	        = 'Status';
+$MAP['MobileEndNewsTopAvator'] 	        = 'Avator';
+$MAP['MobileEndActivityEnrollEndDate'] 	= 'Enroll End Date';
+$MAP['MobileEndActivityDate'] 	        = 'Activity Date';
 
 ?>
