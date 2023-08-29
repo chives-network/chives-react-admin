@@ -1308,8 +1308,12 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         else {
             $RS['MobileEnd']['MobileEndNewsCreator']          = $data[$SettingMap['MobileEndNewsCreator']];
         }
+        $RS['MobileEnd']['MobileEndNewsCreatorGroup']         = strval($data[$SettingMap['MobileEndNewsCreatorGroup']]);
+        $RS['MobileEnd']['MobileEndActivityFee']              = strval($data[$SettingMap['MobileEndActivityFee']]);
+        $RS['MobileEnd']['MobileEndActivityContact']          = strval($data[$SettingMap['MobileEndActivityContact']]);
         $RS['MobileEnd']['MobileEndNewsEnrollment']           = strval($data[$SettingMap['MobileEndNewsEnrollment']]);
         $RS['MobileEnd']['MobileEndNewsLocation']             = strval($data[$SettingMap['MobileEndNewsLocation']]);
+        $RS['MobileEnd']['MobileEndNewsLocation2']            = strval($data[$SettingMap['MobileEndNewsLocation2']]);
         $RS['MobileEnd']['MobileEndNewsCreateTime']           = substr($data[$SettingMap['MobileEndNewsCreateTime']],5,11);
         if($RS['MobileEnd']['MobileEndNewsLocation']!="") {
             $TempArray = explode('-', $RS['MobileEnd']['MobileEndNewsLocation']);
@@ -1928,8 +1932,12 @@ foreach ($rs_a as $Line) {
     else {
         $MobileEndItem['MobileEndNewsCreator']          = $Line[$SettingMap['MobileEndNewsCreator']];
     }
+    $MobileEndItem['MobileEndNewsCreatorGroup']         = strval($Line[$SettingMap['MobileEndNewsCreatorGroup']]);
+    $MobileEndItem['MobileEndActivityFee']              = strval($Line[$SettingMap['MobileEndActivityFee']]);
+    $MobileEndItem['MobileEndActivityContact']          = strval($Line[$SettingMap['MobileEndActivityContact']]);
     $MobileEndItem['MobileEndNewsEnrollment']           = strval($Line[$SettingMap['MobileEndNewsEnrollment']]);
     $MobileEndItem['MobileEndNewsLocation']             = strval($Line[$SettingMap['MobileEndNewsLocation']]);
+    $MobileEndItem['MobileEndNewsLocation2']            = strval($Line[$SettingMap['MobileEndNewsLocation2']]);
     $MobileEndItem['MobileEndNewsCreateTime']           = substr($Line[$SettingMap['MobileEndNewsCreateTime']],5,11);
     if($MobileEndItem['MobileEndNewsLocation']!="") {
         $TempArray = explode('-', $MobileEndItem['MobileEndNewsLocation']);

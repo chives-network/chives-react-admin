@@ -678,10 +678,14 @@ $MAP['DataMask'] 	                = 'Data Mask';
 $MAP['Data Mask for this field'] 	= 'Data Mask for this field';
 
 $MAP['MobileEndNewsEnrollment'] 	    = 'Enrollment';
-$MAP['MobileEndNewsLocation'] 	        = 'Location';
+$MAP['MobileEndNewsLocation'] 	        = 'Area';
+$MAP['MobileEndNewsLocation2'] 	        = 'Address';
 $MAP['MobileEndNewsProcess'] 	        = 'Status';
 $MAP['MobileEndNewsTopAvator'] 	        = 'Avator';
 $MAP['MobileEndActivityEnrollEndDate'] 	= 'Enroll End Date';
 $MAP['MobileEndActivityDate'] 	        = 'Activity Date';
+$MAP['MobileEndActivityFee'] 	        = 'Activity Fee';
+$MAP['MobileEndActivityContact']        = 'Activity Contact';
+$MAP['MobileEndNewsCreatorGroup']       = 'Creator Group';
 
 ?>

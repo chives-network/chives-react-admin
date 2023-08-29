@@ -679,10 +679,14 @@ $MAP['Data Mask for this field'] 	= '如: 123456******';
 
 
 $MAP['MobileEndNewsEnrollment'] 	= '活动报名';
-$MAP['MobileEndNewsLocation'] 	    = '活动地点';
+$MAP['MobileEndNewsLocation'] 	    = '活动地区';
+$MAP['MobileEndNewsLocation2'] 	    = '详细地址';
 $MAP['MobileEndNewsProcess'] 	    = '状态';
 $MAP['MobileEndNewsTopAvator'] 	    = '头像';
 $MAP['MobileEndActivityEnrollEndDate'] 	= '报名截止';
 $MAP['MobileEndActivityDate'] 	        = '活动日期';
+$MAP['MobileEndActivityFee'] 	        = '活动费用';
+$MAP['MobileEndActivityContact']        = '联系方式';
+$MAP['MobileEndNewsCreatorGroup']       = '联系人分组';
 
 ?>
