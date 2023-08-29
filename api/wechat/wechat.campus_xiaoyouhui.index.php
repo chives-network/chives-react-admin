@@ -25,7 +25,39 @@ $status = ForSqlInjection($_POST['status']);
 $id		= DecryptID($_POST['id']);
 $输出数据   = [];
 
-if($action=="Read"&&$domain="ZiXun"&&$id>0)     {	
+//活动报名
+if($action=="Enroll"&&$domain=="Activity"&&$id>0)     {	
+    //CheckAuthUserLoginStatus();	 
+	$sql    = "select COUNT(*) AS NUM from data_xiaoyou_activity_record where 活动ID='".intval($id)."' and 用户ID='".$GLOBAL_USER->USER_ID."' ";
+	$rs     = $db->Execute($sql);
+	$NUM    = intval($rs->fields['NUM']);
+	if($NUM==0) {
+		$sql = "insert into data_xiaoyou_activity_record(活动ID,用户ID,报名时间) values('".intval($id)."','$GLOBAL_USER->USER_ID','".date("Y-m-d H:i:s")."');";
+		$db->Execute($sql);
+	}
+	$RS             = [];
+	$RS['status']   = "OK";
+	$RS['msg']      = "成功报名";
+	$RS['sql']   	= $sql;
+	print json_encode($RS);
+	exit;
+}
+
+//活动取消报名
+if($action=="EnrollCancel"&&$domain=="Activity"&&$id>0)     {	
+    //CheckAuthUserLoginStatus();	 
+	$sql    = "delete from data_xiaoyou_activity_record where 活动ID='".intval($id)."' and 用户ID='".$GLOBAL_USER->USER_ID."' ";
+	$rs     = $db->Execute($sql);
+	$RS             = [];
+	$RS['status']   = "OK";
+	$RS['msg']      = "成功取消";
+	$RS['sql']   	= $sql;
+	print json_encode($RS);
+	exit;
+}
+
+//阅读次数加1
+if($action=="Read"&&$id>0)     {	
     //CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
@@ -39,10 +71,24 @@ if($action=="Read"&&$domain="ZiXun"&&$id>0)     {
 				print json_encode($RS);
 				exit;
 			}
+			break;
+		case 'Activity':
+			if($status=="true") {
+				$sql = "update data_xiaoyou_activity set 浏览次数=浏览次数+1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "阅读记录刷新";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			break;
 	}
 }
 
-if($action=="Like"&&$domain="ZiXun"&&$id>0)     {	
+//点赞次数加1
+if($action=="Like"&&$id>0)     {	
     //CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
@@ -66,10 +112,34 @@ if($action=="Like"&&$domain="ZiXun"&&$id>0)     {
 				print json_encode($RS);
 				exit;
 			}
+			break;
+		case 'Activity':
+			if($status=="true") {
+				$sql = "update data_xiaoyou_activity set 点赞次数=点赞次数+1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "点赞成功";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			else {
+				$sql = "update data_xiaoyou_activity set 点赞次数=点赞次数-1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "取消点赞";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			break;
 	}
 }
 
-if($action=="Favorite"&&$domain="ZiXun"&&$id>0)     {	
+//收藏次数加1
+if($action=="Favorite"&&$id>0)     	{	
     //CheckAuthUserLoginStatus();
 	switch($domain) {
 		case 'ZiXun':
@@ -93,6 +163,29 @@ if($action=="Favorite"&&$domain="ZiXun"&&$id>0)     {
 				print json_encode($RS);
 				exit;
 			}
+			break;
+		case 'Activity':
+			if($status=="true") {
+				$sql = "update data_xiaoyou_activity set 收藏次数=收藏次数+1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "收藏成功";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			else {
+				$sql = "update data_xiaoyou_activity set 收藏次数=收藏次数-1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "取消收藏";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			break;
 	}
 	$RS             = [];
 	$RS['status']   = "OK";
@@ -101,8 +194,8 @@ if($action=="Favorite"&&$domain="ZiXun"&&$id>0)     {
 	exit;
 }
 
-if($action=="")     	{
-
+//校友会首页数据
+if($action=="")						{
 	//校友资讯
 	$sql 		= "select * from data_xiaoyou_news where 类别='校友资讯' and 发布状态='是' order by id desc limit 3";
 	$rs 		= $db->CacheExecute($SYSTEM_CACHE_SECOND_TDFORMICAMPUS,$sql);

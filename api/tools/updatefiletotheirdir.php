@@ -31,6 +31,7 @@ $子目录[] 	= "/public/images/screenshot";
 同步库($开发库, $目标库="E:\Github\chives-react-admin", $子目录);
 同步库($开发库, $目标库="E:\MYEDUDEV\Gitee-icampus-student-affairs-manage", $子目录);
 同步库($开发库, $目标库="E:\MYEDUDEV\datacenter", $子目录);
+同步库($开发库, $目标库="E:\MYEDUDEV\datacenter-college", $子目录);
 
 
 function 同步库($开发库, $目标库, $子目录=[])  {

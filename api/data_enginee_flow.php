@@ -1343,6 +1343,18 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
             $data[$SettingMap['MobileEndNewsLeftImage']] = "/images/wechat/logo_icampus_left.png";
         }
         $RS['MobileEnd']['MobileEndNewsLeftImage']            = AttachFieldValueToUrl($TableName,$data['id'],$SettingMap['MobileEndNewsLeftImage'],'avatar',strval($data[$SettingMap['MobileEndNewsLeftImage']]));
+
+        //Extra Logic 
+        if($SettingMap['MobileEndShowType']=="Activity") {
+            $sql    = "select COUNT(*) AS NUM from data_xiaoyou_activity_record where 活动ID='".intval($data['id'])."' ";
+            $rs     = $db->Execute($sql);
+            $NUM    = intval($rs->fields['NUM']);
+            $RS['MobileEnd']['MobileEndActivityHaveEnrollNumber'] = $NUM; 
+            $sql    = "select COUNT(*) AS NUM from data_xiaoyou_activity_record where 活动ID='".intval($data['id'])."' and 用户ID='".$GLOBAL_USER->USER_ID."' ";
+            $rs     = $db->Execute($sql);
+            $NUM    = intval($rs->fields['NUM']);
+            $RS['MobileEnd']['MobileEndActivityMyEnrollStatus'] = $NUM; 
+        }
     }
 
     print json_encode($RS);
