@@ -688,5 +688,7 @@ $MAP['MobileEndActivityDate'] 	        = '活动日期';
 $MAP['MobileEndActivityFee'] 	        = '活动费用';
 $MAP['MobileEndActivityContact']        = '联系方式';
 $MAP['MobileEndNewsCreatorGroup']       = '联系人分组';
+$MAP['MobileEndNewsEnableEnroll']       = '启用报名';
+
 
 ?>

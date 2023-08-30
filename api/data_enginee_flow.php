@@ -1067,6 +1067,15 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         $functionNameIndividual($id);
     }
 
+    //Read Counter ++
+    if(in_array("浏览次数", $MetaColumnNames))  {
+        $sql    = "update `$TableName` set 浏览次数=浏览次数+1 where id = '$id'";
+        $db->Execute($sql);
+    }
+    else if(in_array("阅读次数", $MetaColumnNames))  {
+        $sql    = "update `$TableName` set 阅读次数=阅读次数+1 where id = '$id'";
+        $db->Execute($sql);
+    }
     $sql    = "select * from `$TableName` where id = '$id'";
     $rsf    = $db->Execute($sql);
     $data   = $rsf->fields;
@@ -1326,7 +1335,7 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
         $RS['MobileEnd']['MobileEndActivityDate']               = strval($data[$SettingMap['MobileEndActivityDate']]);
         if($RS['MobileEnd']['MobileEndActivityEnrollEndDate']!="") {
             if($RS['MobileEnd']['MobileEndActivityEnrollEndDate']<date("Y-m-d")) {
-                $RS['MobileEnd']['MobileEndActivityStatus'] = "报名结束";
+                $RS['MobileEnd']['MobileEndActivityStatus'] = "结束";
             }
             else {            
                 $RS['MobileEnd']['MobileEndActivityStatus'] = "报名中";
@@ -1355,6 +1364,18 @@ if( ( ($_GET['action']=="view_default"&&in_array('View',$Actions_In_List_Row_Arr
             $NUM    = intval($rs->fields['NUM']);
             $RS['MobileEnd']['MobileEndActivityMyEnrollStatus'] = $NUM; 
         }
+        $RS['MobileEnd']['MobileEndNewsEnableEnroll']               = $SettingMap['MobileEndNewsEnableEnroll'];
+        $RS['MobileEnd']['MobileEndActionType']                     = $TableName;
+        
+        //Field Name
+        $RS['MobileEnd']['MobileEndActivityFeeName']                = $SettingMap['MobileEndActivityFee'];
+        $RS['MobileEnd']['MobileEndActivityContactName']            = $SettingMap['MobileEndActivityContact'];
+        $RS['MobileEnd']['MobileEndNewsEnrollmentName']             = $SettingMap['MobileEndNewsEnrollment'];
+        $RS['MobileEnd']['MobileEndNewsLocationName']               = $SettingMap['MobileEndNewsLocation'];
+        $RS['MobileEnd']['MobileEndNewsLocation2Name']              = $SettingMap['MobileEndNewsLocation2'];
+        $RS['MobileEnd']['MobileEndNewsCreateTimeName']             = $SettingMap['MobileEndNewsCreateTime'];
+        $RS['MobileEnd']['MobileEndActivityDateName']               = $SettingMap['MobileEndActivityDate'];
+        $RS['MobileEnd']['MobileEndActivityEnrollEndDateName']      = $SettingMap['MobileEndActivityEnrollEndDate'];
     }
 
     print json_encode($RS);

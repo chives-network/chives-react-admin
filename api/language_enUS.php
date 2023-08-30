@@ -687,5 +687,6 @@ $MAP['MobileEndActivityDate'] 	        = 'Activity Date';
 $MAP['MobileEndActivityFee'] 	        = 'Activity Fee';
 $MAP['MobileEndActivityContact']        = 'Activity Contact';
 $MAP['MobileEndNewsCreatorGroup']       = 'Creator Group';
+$MAP['MobileEndNewsEnableEnroll']       = 'Enable Enroll';
 
 ?>

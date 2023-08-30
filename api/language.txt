@@ -1,0 +1,5 @@
+
+$MAP['MobileEndNewsEnableEnroll'] 	= 'MobileEndNewsEnableEnroll';
+$MAP['MobileEndNewsEnableEnroll'] 	= 'MobileEndNewsEnableEnroll';
+$MAP['MobileEndNewsEnableEnroll'] 	= 'MobileEndNewsEnableEnroll';
+$MAP['MobileEndNewsEnableEnroll'] 	= 'MobileEndNewsEnableEnroll';

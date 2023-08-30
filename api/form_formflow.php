@@ -1027,6 +1027,7 @@ $edit_default_5['Activity'][] = ['name' => "MobileEndNewsLeftImage", 'show'=>tru
 $edit_default_5['Activity'][] = ['name' => "MobileEndNewsCreator", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreator"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 $edit_default_5['Activity'][] = ['name' => "MobileEndNewsCreatorGroup", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreatorGroup"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 $edit_default_5['Activity'][] = ['name' => "MobileEndNewsCreateTime", 'show'=>true, 'type'=>'select', 'options'=>$MetaColumnNamesOptionsAll, 'label' => __("MobileEndNewsCreateTime"), 'value' => 'Disable', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
+$edit_default_5['Activity'][] = ['name' => "MobileEndNewsEnableEnroll", 'show'=>true, 'type'=>'select', 'options'=>$YesOrNotOptions, 'label' => __("MobileEndNewsEnableEnroll"), 'value' => 'Yes', 'placeholder' => "", 'helptext' => "", 'rules' => ['required' => false, 'disabled' => false, 'xs'=>12, 'sm'=>6]];
 
 $defaultValues_4 = [];
 foreach($edit_default_4 as $ModeName=>$allFieldItem) {

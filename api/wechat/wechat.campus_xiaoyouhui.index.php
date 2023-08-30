@@ -26,7 +26,7 @@ $id		= DecryptID($_POST['id']);
 $输出数据   = [];
 
 //活动报名
-if($action=="Enroll"&&$domain=="Activity"&&$id>0)     {	
+if($action=="Enroll"&&$domain=="data_xiaoyou_activity"&&$id>0)     {	
     //CheckAuthUserLoginStatus();	 
 	$sql    = "select COUNT(*) AS NUM from data_xiaoyou_activity_record where 活动ID='".intval($id)."' and 用户ID='".$GLOBAL_USER->USER_ID."' ";
 	$rs     = $db->Execute($sql);
@@ -44,7 +44,7 @@ if($action=="Enroll"&&$domain=="Activity"&&$id>0)     {
 }
 
 //活动取消报名
-if($action=="EnrollCancel"&&$domain=="Activity"&&$id>0)     {	
+if($action=="EnrollCancel"&&$domain=="data_xiaoyou_activity"&&$id>0)     {	
     //CheckAuthUserLoginStatus();	 
 	$sql    = "delete from data_xiaoyou_activity_record where 活动ID='".intval($id)."' and 用户ID='".$GLOBAL_USER->USER_ID."' ";
 	$rs     = $db->Execute($sql);
@@ -56,42 +56,11 @@ if($action=="EnrollCancel"&&$domain=="Activity"&&$id>0)     {
 	exit;
 }
 
-//阅读次数加1
-if($action=="Read"&&$id>0)     {	
-    //CheckAuthUserLoginStatus();
-	switch($domain) {
-		case 'ZiXun':
-			if($status=="true") {
-				$sql = "update data_xiaoyou_news set 阅读次数=阅读次数+1 where id='$id'";
-				$db->Execute($sql);
-				$RS             = [];
-				$RS['status']   = "OK";
-				$RS['msg']      = "阅读记录刷新";
-				$RS['sql']   	= $sql;
-				print json_encode($RS);
-				exit;
-			}
-			break;
-		case 'Activity':
-			if($status=="true") {
-				$sql = "update data_xiaoyou_activity set 浏览次数=浏览次数+1 where id='$id'";
-				$db->Execute($sql);
-				$RS             = [];
-				$RS['status']   = "OK";
-				$RS['msg']      = "阅读记录刷新";
-				$RS['sql']   	= $sql;
-				print json_encode($RS);
-				exit;
-			}
-			break;
-	}
-}
-
 //点赞次数加1
 if($action=="Like"&&$id>0)     {	
     //CheckAuthUserLoginStatus();
 	switch($domain) {
-		case 'ZiXun':
+		case 'data_xiaoyou_news':
 			if($status=="true") {
 				$sql = "update data_xiaoyou_news set 点赞次数=点赞次数+1 where id='$id'";
 				$db->Execute($sql);
@@ -113,7 +82,7 @@ if($action=="Like"&&$id>0)     {
 				exit;
 			}
 			break;
-		case 'Activity':
+		case 'data_xiaoyou_activity':
 			if($status=="true") {
 				$sql = "update data_xiaoyou_activity set 点赞次数=点赞次数+1 where id='$id'";
 				$db->Execute($sql);
@@ -135,6 +104,28 @@ if($action=="Like"&&$id>0)     {
 				exit;
 			}
 			break;
+		case 'data_xiaoyou_cooperation':
+			if($status=="true") {
+				$sql = "update data_xiaoyou_cooperation set 点赞次数=点赞次数+1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "点赞成功";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			else {
+				$sql = "update data_xiaoyou_cooperation set 点赞次数=点赞次数-1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "取消点赞";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			break;
 	}
 }
 
@@ -142,7 +133,7 @@ if($action=="Like"&&$id>0)     {
 if($action=="Favorite"&&$id>0)     	{	
     //CheckAuthUserLoginStatus();
 	switch($domain) {
-		case 'ZiXun':
+		case 'data_xiaoyou_news':
 			if($status=="true") {
 				$sql = "update data_xiaoyou_news set 收藏次数=收藏次数+1 where id='$id'";
 				$db->Execute($sql);
@@ -164,7 +155,7 @@ if($action=="Favorite"&&$id>0)     	{
 				exit;
 			}
 			break;
-		case 'Activity':
+		case 'data_xiaoyou_activity':
 			if($status=="true") {
 				$sql = "update data_xiaoyou_activity set 收藏次数=收藏次数+1 where id='$id'";
 				$db->Execute($sql);
@@ -177,6 +168,28 @@ if($action=="Favorite"&&$id>0)     	{
 			}
 			else {
 				$sql = "update data_xiaoyou_activity set 收藏次数=收藏次数-1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "取消收藏";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			break;
+		case 'data_xiaoyou_cooperation':
+			if($status=="true") {
+				$sql = "update data_xiaoyou_cooperation set 收藏次数=收藏次数+1 where id='$id'";
+				$db->Execute($sql);
+				$RS             = [];
+				$RS['status']   = "OK";
+				$RS['msg']      = "收藏成功";
+				$RS['sql']   	= $sql;
+				print json_encode($RS);
+				exit;
+			}
+			else {
+				$sql = "update data_xiaoyou_cooperation set 收藏次数=收藏次数-1 where id='$id'";
 				$db->Execute($sql);
 				$RS             = [];
 				$RS['status']   = "OK";
