@@ -161,6 +161,13 @@ $DataMask[] = ['value'=>'Pre6digitsPlusStar', 'label'=>__('Pre6digitsPlusStar')]
 $DataMask[] = ['value'=>'Last6digitsPlusStar', 'label'=>__('Last6digitsPlusStar')];
 $allFieldsAdd[] = ['name' => 'DataMask', 'show'=>true, 'type'=>'tablefilter', 'options'=>$DataMask, 'label' => __('DataMask'), 'value' => $DataMask[0]['value'], 'placeholder' => __('Data Mask for this field'), 'helptext' => __('Data Mask for this field'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
 
+
+$DataFieldEncryptMethod = [];
+$DataFieldEncryptMethod[] = ['value'=>'0', 'label'=>__('Disable')];
+$DataFieldEncryptMethod[] = ['value'=>'1', 'label'=>__('Enable')];
+$allFieldsAdd[] = ['name' => 'DataFieldEncryptMethod', 'show'=>true, 'type'=>'tablefilter', 'options'=>$DataFieldEncryptMethod, 'label' => __('DataFieldEncryptMethod'), 'value' => $DataFieldEncryptMethod[0]['value'], 'placeholder' => '', 'helptext' => __('Encrypt: AES-256-CBC'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
+$allFieldsAdd[] = ['name' => 'DataFieldEncryptKey', 'show'=>true, 'type'=>'input', 'label' => __('DataFieldEncryptKey'), 'value' => 'DandianDataCenterKey', 'placeholder' => '', 'helptext' => __('Encrypt Key, only change when no record'), 'rules' => ['required' => true,'xs'=>12, 'sm'=>4,'disabled' => false, 'row'=>true]];
+
 //判断是否需要显示远程数据表字段列表
 $远程数据表字段列表 = [];
 $远程数据表字段列表[] = ['value'=>'None', 'label'=>__('None')];

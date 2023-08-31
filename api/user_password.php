@@ -11,8 +11,8 @@ global $GLOBAL_LANGUAGE;
 $allFieldsEdit = [];
 $allFieldsEdit[] = ['name' => 'USER_NAME', 'show'=>true, 'type'=>'readonly', 'label' => __('USER_NAME'), 'value' => $GLOBAL_USER->USER_NAME, 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => true]];
 $allFieldsEdit[] = ['name' => 'Old_Password', 'show'=>true, 'type'=>'password', 'label' => __('Old_Password'), 'value' => '', 'placeholder' => '', 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false]];
-$allFieldsEdit[] = ['name' => 'New_Password', 'show'=>true, 'type'=>'comfirmpassword', 'label' => __('New_Password'), 'value' => '', 'placeholder' => __('New_Password'), 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'format'=>'passwordweak']];
-$allFieldsEdit[] = ['name' => 'Confirm_Password', 'show'=>true, 'type'=>'comfirmpassword', 'label' => __('Confirm_Password'), 'value' => '', 'placeholder' => __('Confirm_Password'), 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'format'=>'passwordweak']];
+$allFieldsEdit[] = ['name' => 'New_Password', 'show'=>true, 'type'=>'comfirmpassword', 'label' => __('New_Password'), 'value' => '', 'placeholder' => __('New_Password'), 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'format'=>'passwordweak','invalidtext'=>__('PasswordMustIncludeNumberAndLetter')]];
+$allFieldsEdit[] = ['name' => 'Confirm_Password', 'show'=>true, 'type'=>'comfirmpassword', 'label' => __('Confirm_Password'), 'value' => '', 'placeholder' => __('Confirm_Password'), 'helptext' => '', 'rules' => ['required' => true,'xs'=>12, 'sm'=>12,'disabled' => false,'format'=>'passwordweak','invalidtext'=>__('PasswordMustIncludeNumberAndLetter')]];
 
 foreach($allFieldsEdit as $ITEM) {
     $defaultValues[$ITEM['name']] = $ITEM['value'];

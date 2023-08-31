@@ -674,8 +674,9 @@ $MAP['Description'] 	            = '描述';
 $MAP['DisableFields'] 	            = '禁用字段';
 $MAP['Pre6digitsPlusStar'] 	        = '前六位加*号';
 $MAP['Last6digitsPlusStar'] 	    = '后六位加*号';
-$MAP['DataMask'] 	                = '数据蒙板';
+$MAP['DataMask'] 	                = '数据脱敏';
 $MAP['Data Mask for this field'] 	= '如: 123456******';
+$MAP['DataFieldEncrypt']            = '数据存储时加密';
 
 
 $MAP['MobileEndNewsEnrollment'] 	= '活动报名';
@@ -689,6 +690,14 @@ $MAP['MobileEndActivityFee'] 	        = '活动费用';
 $MAP['MobileEndActivityContact']        = '联系方式';
 $MAP['MobileEndNewsCreatorGroup']       = '联系人分组';
 $MAP['MobileEndNewsEnableEnroll']       = '启用报名';
+$MAP['MobileEndShowBanners']            = '移动端BANNER图片';
+
+$MAP['PasswordMustIncludeNumberAndLetter']  = '密码必须包含英文字母和数字';
+$MAP['DataFieldEncryptMethod']              = '是否加密当前字段';
+$MAP['DataFieldEncryptKey']                 = '加密字段使用密钥';
+$MAP['Encrypt: AES-256-CBC']                    = '加密算法: AES-256-CBC';
+$MAP['Encrypt Key, only change when no record'] = '只能在当前数据表没有数据的时候进行设置,如果数据表已经有记录时,请不要开启加密当前字段和修改此密码值,不然您的数据将会永久丢失.如果还有疑问请联系厂家.';
+
 
 
 ?>

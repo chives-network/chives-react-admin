@@ -408,7 +408,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     FieldArray.rules.format == 'onlynumber' ? yupCheck = yupCheck.matches(/^[0-9]+$/, FieldArray.rules.invalidtext) : '';
                     FieldArray.rules.format == 'passwordstrong' ? yupCheck = yupCheck.matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/, FieldArray.rules.invalidtext) : '';
                     FieldArray.rules.format == 'passwordmiddle' ? yupCheck = yupCheck.matches(/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/, FieldArray.rules.invalidtext) : '';
-                    FieldArray.rules.format == 'passwordweak' ? yupCheck = yupCheck.matches(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/, FieldArray.rules.invalidtext) : '';
+                    FieldArray.rules.format == 'passwordweak' ? yupCheck = yupCheck.matches(/^(?=.*[a-zA-Z])(?=.*\d).+$/, FieldArray.rules.invalidtext) : '';
                     FieldArray.rules.format == 'chinaidcard' ? yupCheck = yupCheck.test('custom-test', FieldArray.rules.invalidtext, chinaIdCardCheck) : '';
                     FieldArray.rules.format == 'bankcard' ? yupCheck = yupCheck.matches(/^([1-9]{1})(\d{15}|\d{18})$/, FieldArray.rules.invalidtext) : '';
                     FieldArray.rules.format == 'chinamobile' ? yupCheck = yupCheck.matches(/^((\+|00)86)?1[3-9]\d{9}$/, FieldArray.rules.invalidtext) : '';
@@ -443,7 +443,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                     yupCheckMap[FieldArray.name] = yup.string().required().label(FieldArray.label)
                 }
                 else if (FieldArray.type == "comfirmpassword" && FieldArray.rules && FieldArray.rules.required)  {
-                    yupCheckMap[FieldArray.name] = yup.string().required().min(6).matches(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/, FieldArray.rules.invalidtext).label(FieldArray.label)
+                    yupCheckMap[FieldArray.name] = yup.string().required().min(6).matches(/^(?=.*[a-zA-Z])(?=.*\d).+$/, FieldArray.rules.invalidtext).label(FieldArray.label)
                 }
             })
         })
@@ -987,7 +987,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1070,7 +1070,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1134,7 +1134,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1200,7 +1200,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1270,7 +1270,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1691,7 +1691,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1756,7 +1756,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1821,7 +1821,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -1923,7 +1923,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2042,7 +2042,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2107,7 +2107,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2200,7 +2200,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2258,7 +2258,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2332,7 +2332,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2406,7 +2406,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2479,7 +2479,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2552,7 +2552,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2625,7 +2625,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2721,7 +2721,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2801,7 +2801,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2869,7 +2869,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -2952,7 +2952,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3035,7 +3035,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3128,7 +3128,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3216,7 +3216,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                     <HelpIcon />
                                                                                 </IconButton>
                                                                             </Tooltip>
-                                                                            {FieldArray.helptext.substring(0,12)}...
+                                                                            {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                         </FormHelperText>
                                                                     )}
                                                                     {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3274,7 +3274,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3312,7 +3312,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3373,7 +3373,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3432,7 +3432,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                 <HelpIcon />
                                                                             </IconButton>
                                                                         </Tooltip>
-                                                                        {FieldArray.helptext.substring(0,12)}...
+                                                                        {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                     </FormHelperText>
                                                                 )}
                                                                 {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3794,7 +3794,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         <HelpIcon />
                                                                                     </IconButton>
                                                                                 </Tooltip>
-                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                                {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                             </FormHelperText>
                                                                         )}
                                                                         {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3872,7 +3872,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         <HelpIcon />
                                                                                     </IconButton>
                                                                                 </Tooltip>
-                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                                {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                             </FormHelperText>
                                                                         )}
                                                                         {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -3991,7 +3991,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         <HelpIcon />
                                                                                     </IconButton>
                                                                                 </Tooltip>
-                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                                {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                             </FormHelperText>
                                                                         )}
                                                                         {FieldArray.helptext && FieldArray.helptext.length<=12 && (
@@ -4121,7 +4121,7 @@ const AddOrEditTableCore = (props: AddOrEditTableType) => {
                                                                                         <HelpIcon />
                                                                                     </IconButton>
                                                                                 </Tooltip>
-                                                                                {FieldArray.helptext.substring(0,12)}...
+                                                                                {FieldArray.helptext.substring(0,FieldArray.rules.sm==12?56:(FieldArray.rules.sm==6?24:12))}...
                                                                             </FormHelperText>
                                                                         )}
                                                                         {FieldArray.helptext && FieldArray.helptext.length<=12 && (
