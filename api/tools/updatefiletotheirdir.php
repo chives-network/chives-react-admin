@@ -1,6 +1,6 @@
 <?php
 
-$开发库 	= "E:\MYEDUDEV\icampus-student-affairs-manage";
+$开发库 	= "D:\MYEDUDEV\icampus-student-affairs-manage";
 
 $子目录 	= [];
 $子目录[] 	= "/api";
@@ -28,10 +28,10 @@ $子目录[] 	= "/src/views/pages/dialog-examples/create-app-tabs";
 $子目录[] 	= "/public/images/screenshot";
 
 
-同步库($开发库, $目标库="E:\Github\chives-react-admin", $子目录);
-同步库($开发库, $目标库="E:\MYEDUDEV\Gitee-icampus-student-affairs-manage", $子目录);
-同步库($开发库, $目标库="E:\MYEDUDEV\datacenter", $子目录);
-同步库($开发库, $目标库="E:\MYEDUDEV\datacenter-college", $子目录);
+同步库($开发库, $目标库="D:\Github\chives-react-admin", $子目录);
+同步库($开发库, $目标库="D:\MYEDUDEV\Gitee-icampus-student-affairs-manage", $子目录);
+同步库($开发库, $目标库="D:\MYEDUDEV\datacenter", $子目录);
+同步库($开发库, $目标库="D:\MYEDUDEV\datacenter-college", $子目录);
 
 
 function 同步库($开发库, $目标库, $子目录=[])  {
@@ -61,7 +61,7 @@ function 同步库($开发库, $目标库, $子目录=[])  {
 
 
 //更新主机URL
-$dir = "E:\MYEDUDEV\icampus-student-affairs-manage\webroot\_next\static\chunks\pages";
+$dir = "D:\MYEDUDEV\icampus-student-affairs-manage\webroot\_next\static\chunks\pages";
 if (is_dir($dir)) {
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false ) {

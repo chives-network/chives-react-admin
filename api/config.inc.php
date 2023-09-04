@@ -21,9 +21,9 @@ $GLOBAL_LANGUAGE = "zhCN";
 
 //File Storage Method And Location
 $FileStorageMethod      = "disk";
-$FileStorageLocation    = "E:/MYEDU/Attach";
-$ADODB_CACHE_DIR        = "E:/MYEDU/Attach/Cache";
-$FileCacheDir           = "E:/MYEDU/Attach/FileCache";
+$FileStorageLocation    = "D:/MYEDU/Attach";
+$ADODB_CACHE_DIR        = "D:/MYEDU/Attach/Cache";
+$FileCacheDir           = "D:/MYEDU/Attach/FileCache";
 
 //Setting JWT
 $NEXT_PUBLIC_JWT_EXPIRATION = 300;

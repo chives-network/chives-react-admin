@@ -1,8 +1,8 @@
 <?php
 /*
-* Infrastructure: Chives React Admin
-* Author: Chives Network
-* Email: reactchives@gmail.com
+* 基础架构: 单点低代码开发平台
+* 版权所有: 郑州单点科技软件有限公司
+* Email: moodle360@qq.com
 * Copyright (c) 2023
 * License: GPL V3 or Commercial license
 */
@@ -16,15 +16,15 @@ ini_set('max_execution_time', 7200);
 session_start();
 
 function DecryptIDForUserName($data) {
-	$data 		= base64_safe_decode($data);
+	$data 		  = base64_safe_decode($data);
 	$dataArray 	= explode("::",$data);
 	$data 		= $dataArray[0];
-	$iv 		= base64_safe_decode($dataArray[1]);
+	$iv 		  = base64_safe_decode($dataArray[1]);
 	$cipher 	= "AES-256-CBC";
-    $options 	= OPENSSL_RAW_DATA;
+  $options 	= OPENSSL_RAW_DATA;
 	$EncryptAESKey	= "DDKJ2023";
-    $decrypted 	= openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
-    return $decrypted;
+  $decrypted 	= openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
+  return $decrypted;
 }
 
 //$_SESSION['LOGIN_USER_EDUID'] = "admin";

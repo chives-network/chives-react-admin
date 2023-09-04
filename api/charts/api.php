@@ -91,7 +91,7 @@ $id         = DecryptIDFixed($_POST['id']);
 $table      = ForSqlInjection($_POST['table']);
 $sql        = $_POST['sql'];
 $sql        = str_replace('"','',$sql);
-$sql        = str_replace("'",'',$sql);
+//$sql        = str_replace("'",'',$sql);
 $sql        = str_replace("#",'',$sql);
 $Targetsql  = str_replace("@",'',$sql);
 //{"dimensions":["积分时间","班级学生积分之和"],"source":[{"班级学生积分之和":"1.0","积分时间":"2023-06-01"},{"班级学生积分之和":"1.0","积分时间":"2023-06-06"},{"班级学生积分之和":"1.0","积分时间":"2023-06-17"},{"班级学生积分之和":"3.0","积分时间":"2023-06-18"},{"班级学生积分之和":"19.0","积分时间":"2023-06-19"},{"班级学生积分之和":"2.0","积分时间":"2023-06-21"},{"班级学生积分之和":"3.0","积分时间":"2023-06-22"},{"班级学生积分之和":"10.0","积分时间":"2023-06-29"},{"班级学生积分之和":"28.0","积分时间":"2023-07-02"}]}
@@ -104,22 +104,40 @@ if($_POST['action']=="sql"&&$id>0&&$table!=""&&$Targetsql!="") {
         $db_remote->connect($远程数据库信息['数据库主机'], $远程数据库信息['数据库用户名'], DecryptIDFixed($远程数据库信息['数据库密码']), $远程数据库信息['数据库名称']);
         $db_remote->Execute("Set names utf8;");
         $db_remote->setFetchMode(ADODB_FETCH_ASSOC);
+        //重新过滤要执行的SQL语句
+        if(strpos($Targetsql,"[当前学期]")>0) {
+            $sql        = "select 学期名称 from td_edu.edu_xueqiexec where 当前学期='1'";
+            $rs_remote  = $db_remote->Execute($sql);  
+            $当前学期    = $rs_remote->fields['学期名称'];
+            $Targetsql  = str_replace("[当前学期]","'".$当前学期."'",$Targetsql);
+        }
         if($db_remote->database==$远程数据库信息['数据库名称']) {
             $rs_remote          = $db_remote->Execute($Targetsql);            
             if($rs_remote && strpos($Targetsql, "group by")!==false)        {
                 $rs_a_remote        = $rs_remote->GetArray();
-                $dimensions         = array_keys($rs_a_remote[0]);
+                if(is_array($rs_a_remote)&&count($rs_a_remote)>0) {
+					$dimensions         = @array_keys(@$rs_a_remote[0]);
+				}
+				else {
+					$dimensions = [];
+				}
                 $RS = [];
                 //$RS['rs_a_remote']  = $rs_a_remote;
                 $RS['status']       = "OK";
                 $RS['data']         = ['dimensions'=>$dimensions,'source'=>$rs_a_remote];
+                $RS['Targetsql']    = $Targetsql;
                 $RS['msg']          = "获取远程数据成功";
                 print json_encode($RS);
                 exit;
             }
             if($rs_remote && strpos($Targetsql, "group by")===false)        {
                 $rs_a_remote        = $rs_remote->GetArray();
-                $dimensions         = array_keys($rs_a_remote[0]);
+                if(is_array($rs_a_remote)&&count($rs_a_remote)>0) {
+					$dimensions         = @array_keys(@$rs_a_remote[0]);
+				}
+				else {
+					$dimensions = [];
+				}
                 $RS         = [];
                 $NewRSA     = [];
                 foreach($rs_a_remote as $Line) {
@@ -128,6 +146,7 @@ if($_POST['action']=="sql"&&$id>0&&$table!=""&&$Targetsql!="") {
                 //$RS['rs_a_remote']  = $rs_a_remote;
                 $RS['status']       = "OK";
                 $RS['data']         = $NewRSA;
+                $RS['Targetsql']    = $Targetsql;
                 $RS['msg']          = "获取远程数据成功";
                 print json_encode($RS);
                 exit;

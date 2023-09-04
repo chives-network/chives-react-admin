@@ -66,7 +66,7 @@ function DecryptID($data) {
 	$cipher = "AES-256-CBC";
     $options = OPENSSL_RAW_DATA;
     $decrypted = openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
-    return $decrypted;
+    return strval($decrypted);
 }
 
 function EncryptIDFixed($data) {
@@ -88,7 +88,25 @@ function DecryptIDFixed($data) {
 	$cipher = "AES-256-CBC";
     $options = OPENSSL_RAW_DATA;
     $decrypted = openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
-    return $decrypted;
+    return strval($decrypted);
+}
+
+function EncryptIDStorage($data, $EncryptAESKey) {
+	$cipher = "SM4-CBC";
+    $options = OPENSSL_RAW_DATA;
+	global $EncryptAESIV;
+    $encrypted = openssl_encrypt($data, $cipher, $EncryptAESKey, $options, $EncryptAESIV);
+    return base64_safe_encode(base64_safe_encode($encrypted)."::".base64_safe_encode($EncryptAESIV));
+}
+function DecryptIDStorage($data, $EncryptAESKey) {
+	$data = base64_safe_decode($data);
+	$dataArray = explode("::",$data);
+	$data = $dataArray[0];
+	$iv = base64_safe_decode($dataArray[1]);
+	$cipher = "SM4-CBC";
+    $options = OPENSSL_RAW_DATA;
+    $decrypted = openssl_decrypt(base64_safe_decode($data), $cipher, $EncryptAESKey, $options, $iv);
+    return strval($decrypted);
 }
 
 function ParamsFilter($str) {

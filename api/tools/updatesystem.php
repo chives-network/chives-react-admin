@@ -1,8 +1,8 @@
 <?php
 /*
-* Infrastructure: Chives React Admin
-* Author: Chives Network
-* Email: reactchives@gmail.com
+* 基础架构: 单点低代码开发平台
+* 版权所有: 郑州单点科技软件有限公司
+* Email: moodle360@qq.com
 * Copyright (c) 2023
 * License: GPL V3 or Commercial license
 */
@@ -71,6 +71,7 @@ function 核心代码($id) {
                     <input type=button class='layui-btn layui-btn-xs layui-btn' name='Plugins' value='Plugins' Onclick=\"location='?".strval("asdfa&id=".$_GET['id']."&action=".$_GET['action']."&ChooseDir=plugins&RootDir=../../api&ds")."'\">
                     <input type=button class='layui-btn layui-btn-xs layui-btn' name='Tools' value='Tools' Onclick=\"location='?".strval("asdfa&id=".$_GET['id']."&action=".$_GET['action']."&ChooseDir=tools&RootDir=../../api&ds")."'\">
                     <input type=button class='layui-btn layui-btn-xs layui-btn' name='Webroot' value='Webroot' Onclick=\"location='?".strval("asdfa&id=".$_GET['id']."&action=".$_GET['action']."&ChooseDir=Webroot&RootDir=../../&ds")."'\">
+                    <input type=button class='layui-btn layui-btn-xs layui-btn' name='Goview' value='Goview' Onclick=\"location='?".strval("asdfa&id=".$_GET['id']."&action=".$_GET['action']."&ChooseDir=Goview&RootDir=../../&ds")."'\">
                     </TD>
                 </TR>
                 ";

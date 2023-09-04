@@ -692,12 +692,19 @@ $MAP['MobileEndNewsCreatorGroup']       = '联系人分组';
 $MAP['MobileEndNewsEnableEnroll']       = '启用报名';
 $MAP['MobileEndShowBanners']            = '移动端BANNER图片';
 
-$MAP['PasswordMustIncludeNumberAndLetter']  = '密码必须包含英文字母和数字';
-$MAP['DataFieldEncryptMethod']              = '是否加密当前字段';
-$MAP['DataFieldEncryptKey']                 = '加密字段使用密钥';
-$MAP['Encrypt: AES-256-CBC']                    = '加密算法: AES-256-CBC';
+$MAP['PasswordMustIncludeNumberAndLetter']      = '密码必须包含英文字母和数字';
+$MAP['DataFieldEncryptMethod']                  = '是否加密当前字段';
+$MAP['DataFieldEncryptKey']                     = '加密字段使用密钥';
+$MAP['Encrypt: SM4-CBC']                        = '加密算法: SM4-CBC';
 $MAP['Encrypt Key, only change when no record'] = '只能在当前数据表没有数据的时候进行设置,如果数据表已经有记录时,请不要开启加密当前字段和修改此密码值,不然您的数据将会永久丢失.如果还有疑问请联系厂家.';
-
+$MAP['MobileEndSchoolmateCity']            = '城市';
+$MAP['MobileEndSchoolmateCompany']         = '公司';
+$MAP['MobileEndSchoolmateIndustry']        = '行业';
+$MAP['MobileEndSchoolmateFirstYear']       = '入学年份';
+$MAP['MobileEndSchoolmateLastYear']        = '毕业年份';
+$MAP['MobileEndSchoolmateLastActivity']    = '最近活跃';
+$MAP['MobileEndSchoolmateAcademic']        = '获得学历';
+$MAP['Schoolmate']                         = '校友成员';
 
 
 ?>

@@ -693,8 +693,16 @@ $MAP['MobileEndShowBanners']            = 'Mobile Banner';
 $MAP['PasswordMustIncludeNumberAndLetter']  = 'Password Must Include Number And Letter';
 $MAP['DataFieldEncryptMethod']              = 'Encrypt Current Method';
 $MAP['DataFieldEncryptKey']                 = 'Encrypt Key';
-$MAP['Encrypt: AES-256-CBC']                    = 'Encrypt: AES-256-CBC';
+$MAP['Encrypt: SM4-CBC']                    = 'Encrypt: SM4-CBC';
 $MAP['Encrypt Key, only change when no record'] = 'Encrypt Key, only change when no record, other wise you data will lost permanently';
 
+$MAP['MobileEndSchoolmateCity']            = 'City';
+$MAP['MobileEndSchoolmateCompany']         = 'Company';
+$MAP['MobileEndSchoolmateIndustry']        = 'Industry';
+$MAP['MobileEndSchoolmateFirstYear']       = 'First Year';
+$MAP['MobileEndSchoolmateLastYear']        = 'Last Year';
+$MAP['MobileEndSchoolmateLastActivity']    = 'Last Activity';
+$MAP['MobileEndSchoolmateAcademic']        = 'Academic';
+$MAP['Schoolmate']                         = 'Schoolmate';
 
 ?>
