@@ -89,8 +89,8 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 }))
 
 const schema = yup.object().shape({
-  username: yup.string().min(3).required().label('用户名'),
-  password: yup.string().min(6).required().label('密码')
+  username: yup.string().min(3).required().label('Username'),
+  password: yup.string().min(6).required().label('Password')
 })
 
 const defaultValues = {
@@ -133,7 +133,7 @@ const LoginPage = () => {
     auth.login({ username, password, rememberMe }, () => {
       setError('username', {
         type: 'manual',
-        message: '用户名或密码错误'
+        message: 'Username或Password错误'
       })
     })
   }
@@ -248,8 +248,8 @@ const LoginPage = () => {
               </Typography>
             </Box>
             <Box sx={{ mb: 6 }}>
-              <TypographyStyled variant='h5'>欢迎来到 {themeConfig.templateName}! 👋🏻</TypographyStyled>
-              <Typography variant='body2'>单点职校数据中心</Typography>
+              <TypographyStyled variant='h5'>Welcome {themeConfig.templateName}! 👋🏻</TypographyStyled>
+              <Typography variant='body2'>Chives React Admin</Typography>
             </Box>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <FormControl fullWidth sx={{ mb: 4 }}>
@@ -260,7 +260,7 @@ const LoginPage = () => {
                   render={({ field: { value, onChange, onBlur } }) => (
                     <TextField
                       autoFocus
-                      label='用户名'
+                      label='Username'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
@@ -273,7 +273,7 @@ const LoginPage = () => {
               </FormControl>
               <FormControl fullWidth>
                 <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
-                  密码
+                  Password
                 </InputLabel>
                 <Controller
                   name='password'
@@ -283,7 +283,7 @@ const LoginPage = () => {
                     <OutlinedInput
                       value={value}
                       onBlur={onBlur}
-                      label='密码'
+                      label='Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
                       error={Boolean(errors.password)}
